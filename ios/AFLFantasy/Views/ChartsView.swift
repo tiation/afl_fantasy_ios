@@ -102,16 +102,22 @@ struct PlayerPerformanceChart: View {
     }
 
     private var trendIndicator: String {
-        guard chartData.count >= 3 else { return "–" }
-        let recent = Array(chartData.suffix(3))
-        let trend = recent.last!.score - recent.first!.score
+        guard chartData.count >= 3,
+              let lastScore = chartData.suffix(3).last?.score,
+              let firstScore = chartData.suffix(3).first?.score
+        else { return "–" }
+        
+        let trend = lastScore - firstScore
         return trend > 5 ? "↗" : trend < -5 ? "↘" : "→"
     }
 
     private var trendColor: Color {
-        guard chartData.count >= 3 else { return .gray }
-        let recent = Array(chartData.suffix(3))
-        let trend = recent.last!.score - recent.first!.score
+        guard chartData.count >= 3,
+              let lastScore = chartData.suffix(3).last?.score,
+              let firstScore = chartData.suffix(3).first?.score
+        else { return .gray }
+        
+        let trend = lastScore - firstScore
         return trend > 5 ? .green : trend < -5 ? .red : .gray
     }
 }

@@ -641,8 +641,13 @@ struct CaptainSuggestionCard: View {
 // MARK: - TradeCalculatorView
 
 struct TradeCalculatorView: View {
+    @EnvironmentObject var appState: AppState
     @State private var selectedPlayerIn: EnhancedPlayer?
     @State private var selectedPlayerOut: EnhancedPlayer?
+    @State private var showingPlayerInPicker = false
+    @State private var showingPlayerOutPicker = false
+    @State private var availablePlayersIn: [EnhancedPlayer] = []
+    @State private var availablePlayersOut: [EnhancedPlayer] = []
 
     // Native iOS Haptic Feedback
     private let selectionFeedback = UISelectionFeedbackGenerator()
@@ -652,53 +657,70 @@ struct TradeCalculatorView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    Text("🔄 Trade Calculator")
-                        .font(.title)
-                        .bold()
-                        .padding()
+                    // Header with AI Analysis
+                    VStack {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .font(.system(size: 50))
+                            .foregroundColor(.orange)
+
+                        Text("Trade Analyzer")
+                            .font(.title2)
+                            .bold()
+
+                        Text("AI-powered trade analysis and optimization")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
 
                     // Trade OUT section
-                    VStack(alignment: .leading) {
-                        Text("TRADE OUT")
-                            .font(.headline)
-                            .foregroundColor(.red)
-
-                        Button("Select Player to Trade Out") {
+                    TradePlayerSection(
+                        title: "TRADE OUT",
+                        subtitle: "Select player to sell",
+                        color: .red,
+                        selectedPlayer: selectedPlayerOut,
+                        onTap: {
                             selectionFeedback.selectionChanged()
-                            // TODO: Show player picker
+                            availablePlayersOut = appState.players.filter { !$0.isCashCow }
+                            showingPlayerOutPicker = true
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.red)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(12)
+                    )
 
-                    Image(systemName: "arrow.up.arrow.down")
-                        .font(.title)
-                        .foregroundColor(.orange)
+                    // Trade Direction Indicator
+                    VStack {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .font(.title2)
+                            .foregroundColor(.orange)
+                            .padding(.vertical, 8)
+                        
+                        if let playerOut = selectedPlayerOut, let playerIn = selectedPlayerIn {
+                            Text("Net Cost: \(formatNetCost(playerIn: playerIn, playerOut: playerOut))")
+                                .font(.caption)
+                                .foregroundColor(getNetCostColor(playerIn: playerIn, playerOut: playerOut))
+                                .bold()
+                        }
+                    }
 
                     // Trade IN section
-                    VStack(alignment: .leading) {
-                        Text("TRADE IN")
-                            .font(.headline)
-                            .foregroundColor(.green)
-
-                        Button("Select Player to Trade In") {
+                    TradePlayerSection(
+                        title: "TRADE IN",
+                        subtitle: "Select player to buy",
+                        color: .green,
+                        selectedPlayer: selectedPlayerIn,
+                        onTap: {
                             selectionFeedback.selectionChanged()
-                            // TODO: Show player picker
+                            availablePlayersIn = appState.players
+                            showingPlayerInPicker = true
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.green)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(12)
+                    )
 
-                    // Trade Score
-                    TradeScoreView()
+                    // Trade Analysis
+                    if let playerOut = selectedPlayerOut, let playerIn = selectedPlayerIn {
+                        TradeAnalysisView(playerOut: playerOut, playerIn: playerIn)
+                    } else {
+                        TradePromptView()
+                    }
 
                     Spacer()
                 }
@@ -706,44 +728,418 @@ struct TradeCalculatorView: View {
             }
             .navigationTitle("🔄 Trades")
             .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $showingPlayerOutPicker) {
+                PlayerPickerView(
+                    title: "Select Player to Trade Out",
+                    players: availablePlayersOut,
+                    selectedPlayer: $selectedPlayerOut
+                )
+            }
+            .sheet(isPresented: $showingPlayerInPicker) {
+                PlayerPickerView(
+                    title: "Select Player to Trade In",
+                    players: availablePlayersIn,
+                    selectedPlayer: $selectedPlayerIn
+                )
+            }
         }
+    }
+    
+    private func formatNetCost(playerIn: EnhancedPlayer, playerOut: EnhancedPlayer) -> String {
+        let netCost = playerIn.price - playerOut.price
+        let prefix = netCost >= 0 ? "+" : ""
+        return "\(prefix)$\(abs(netCost) / 1000)k"
+    }
+    
+    private func getNetCostColor(playerIn: EnhancedPlayer, playerOut: EnhancedPlayer) -> Color {
+        let netCost = playerIn.price - playerOut.price
+        return netCost >= 0 ? .red : .green
     }
 }
 
-// MARK: - TradeScoreView
+// MARK: - TradePlayerSection
 
-struct TradeScoreView: View {
+struct TradePlayerSection: View {
+    let title: String
+    let subtitle: String
+    let color: Color
+    let selectedPlayer: EnhancedPlayer?
+    let onTap: () -> Void
+    
     var body: some View {
-        VStack {
-            Text("Trade Score")
-                .font(.headline)
-
-            ZStack {
-                Circle()
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 8)
-                    .frame(width: 120, height: 120)
-
-                Circle()
-                    .trim(from: 0, to: 0.75)
-                    .stroke(Color.orange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                    .frame(width: 120, height: 120)
-                    .rotationEffect(.degrees(-90))
-                    .animation(.easeInOut(duration: 1), value: 0.75)
-
-                VStack {
-                    Text("75")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(.orange)
-                    Text("Good Trade")
+        VStack(spacing: 16) {
+            // Header
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(color)
+                    Text(subtitle)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+                Spacer()
+            }
+            
+            // Player Selection
+            if let player = selectedPlayer {
+                TradePlayerCard(player: player, color: color)
+                    .onTapGesture {
+                        onTap()
+                    }
+            } else {
+                Button(action: onTap) {
+                    HStack {
+                        Image(systemName: "plus.circle")
+                            .font(.title2)
+                        Text("Select Player")
+                            .font(.headline)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .opacity(0.6)
+                    }
+                    .foregroundColor(color)
+                    .padding()
+                    .background(color.opacity(0.1))
+                    .cornerRadius(12)
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }
         .padding()
         .background(Color(.secondarySystemBackground))
+        .cornerRadius(16)
+    }
+}
+
+// MARK: - TradePlayerCard
+
+struct TradePlayerCard: View {
+    let player: EnhancedPlayer
+    let color: Color
+    
+    var body: some View {
+        HStack {
+            // Position indicator
+            RoundedRectangle(cornerRadius: 4)
+                .fill(player.position.color)
+                .frame(width: 6, height: 50)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(player.name)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                
+                HStack(spacing: 8) {
+                    Text(player.position.rawValue)
+                        .font(.caption)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(player.position.color.opacity(0.2))
+                        .cornerRadius(4)
+                    
+                    Text("Avg: \(Int(player.averageScore))")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    if player.injuryRisk.riskLevel != .low {
+                        Text("⚠️")
+                            .font(.caption2)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(player.formattedPrice)
+                    .font(.title3)
+                    .bold()
+                    .foregroundColor(color)
+                
+                Text("BE: \(player.breakeven)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding()
+        .background(color.opacity(0.05))
         .cornerRadius(12)
+    }
+}
+
+// MARK: - PlayerPickerView
+
+struct PlayerPickerView: View {
+    let title: String
+    let players: [EnhancedPlayer]
+    @Binding var selectedPlayer: EnhancedPlayer?
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            List(players) { player in
+                Button(action: {
+                    selectedPlayer = player
+                    dismiss()
+                }) {
+                    HStack {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(player.position.color)
+                            .frame(width: 4, height: 40)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(player.name)
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            HStack {
+                                Text(player.position.rawValue)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text("•")
+                                    .foregroundColor(.secondary)
+                                Text("Avg: \(Int(player.averageScore))")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        Text(player.formattedPrice)
+                            .font(.headline)
+                            .foregroundColor(.orange)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                trailing: Button("Cancel") {
+                    dismiss()
+                }
+            )
+        }
+    }
+}
+
+// MARK: - TradeAnalysisView
+
+struct TradeAnalysisView: View {
+    let playerOut: EnhancedPlayer
+    let playerIn: EnhancedPlayer
+    
+    private var tradeScore: Int {
+        calculateTradeScore()
+    }
+    
+    private var tradeRating: String {
+        switch tradeScore {
+        case 90...: "Excellent"
+        case 80..<90: "Very Good"
+        case 70..<80: "Good"
+        case 60..<70: "Fair"
+        case 50..<60: "Poor"
+        default: "Very Poor"
+        }
+    }
+    
+    private var tradeColor: Color {
+        switch tradeScore {
+        case 80...: .green
+        case 70..<80: .blue
+        case 60..<70: .orange
+        default: .red
+        }
+    }
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            // Trade Score Circle
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 8)
+                    .frame(width: 120, height: 120)
+                
+                Circle()
+                    .trim(from: 0, to: CGFloat(tradeScore) / 100.0)
+                    .stroke(tradeColor, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                    .frame(width: 120, height: 120)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeInOut(duration: 1), value: tradeScore)
+                
+                VStack {
+                    Text("\(tradeScore)")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(tradeColor)
+                    Text(tradeRating)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(16)
+            
+            // Analysis Factors
+            VStack(spacing: 16) {
+                Text("Trade Analysis")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                TradeFactorRow(
+                    title: "Score Differential",
+                    value: formatScoreDifferential(),
+                    color: getScoreDifferentialColor()
+                )
+                
+                TradeFactorRow(
+                    title: "Price Efficiency",
+                    value: formatPriceEfficiency(),
+                    color: getPriceEfficiencyColor()
+                )
+                
+                TradeFactorRow(
+                    title: "Injury Risk",
+                    value: formatInjuryRisk(),
+                    color: getInjuryRiskColor()
+                )
+                
+                TradeFactorRow(
+                    title: "Consistency",
+                    value: formatConsistency(),
+                    color: getConsistencyColor()
+                )
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(16)
+        }
+    }
+    
+    private func calculateTradeScore() -> Int {
+        var score = 50 // Base score
+        
+        // Score differential (40% weight)
+        let scoreDiff = playerIn.averageScore - playerOut.averageScore
+        score += Int(scoreDiff * 0.4)
+        
+        // Price efficiency (30% weight)
+        let priceEfficiency = scoreDiff / (Double(playerIn.price - playerOut.price) / 10000.0)
+        score += Int(priceEfficiency * 0.3)
+        
+        // Injury risk (20% weight)
+        let injuryPenalty = (playerIn.injuryRisk.riskScore - playerOut.injuryRisk.riskScore) * 20
+        score -= Int(injuryPenalty)
+        
+        // Consistency (10% weight)
+        let consistencyBonus = (playerIn.consistency - playerOut.consistency) * 0.1
+        score += Int(consistencyBonus)
+        
+        return max(0, min(100, score))
+    }
+    
+    private func formatScoreDifferential() -> String {
+        let diff = playerIn.averageScore - playerOut.averageScore
+        let prefix = diff >= 0 ? "+" : ""
+        return "\(prefix)\(String(format: "%.1f", diff)) pts"
+    }
+    
+    private func getScoreDifferentialColor() -> Color {
+        let diff = playerIn.averageScore - playerOut.averageScore
+        return diff >= 0 ? .green : .red
+    }
+    
+    private func formatPriceEfficiency() -> String {
+        let scoreDiff = playerIn.averageScore - playerOut.averageScore
+        let priceDiff = Double(playerIn.price - playerOut.price) / 1000.0
+        if priceDiff == 0 { return "N/A" }
+        let efficiency = scoreDiff / priceDiff
+        return String(format: "%.2f pts/$k", efficiency)
+    }
+    
+    private func getPriceEfficiencyColor() -> Color {
+        let scoreDiff = playerIn.averageScore - playerOut.averageScore
+        let priceDiff = Double(playerIn.price - playerOut.price) / 1000.0
+        if priceDiff == 0 { return .gray }
+        let efficiency = scoreDiff / priceDiff
+        return efficiency >= 0.5 ? .green : efficiency >= 0 ? .orange : .red
+    }
+    
+    private func formatInjuryRisk() -> String {
+        let inRisk = playerIn.injuryRisk.riskLevel
+        let outRisk = playerOut.injuryRisk.riskLevel
+        return "\(outRisk.rawValue) → \(inRisk.rawValue)"
+    }
+    
+    private func getInjuryRiskColor() -> Color {
+        let inRisk = playerIn.injuryRisk.riskScore
+        let outRisk = playerOut.injuryRisk.riskScore
+        return inRisk <= outRisk ? .green : .red
+    }
+    
+    private func formatConsistency() -> String {
+        let diff = playerIn.consistency - playerOut.consistency
+        let prefix = diff >= 0 ? "+" : ""
+        return "\(prefix)\(String(format: "%.1f", diff))%"
+    }
+    
+    private func getConsistencyColor() -> Color {
+        let diff = playerIn.consistency - playerOut.consistency
+        return diff >= 0 ? .green : .red
+    }
+}
+
+// MARK: - TradeFactorRow
+
+struct TradeFactorRow: View {
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.subheadline)
+                .foregroundColor(.primary)
+            
+            Spacer()
+            
+            Text(value)
+                .font(.subheadline)
+                .bold()
+                .foregroundColor(color)
+        }
+    }
+}
+
+// MARK: - TradePromptView
+
+struct TradePromptView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "arrow.triangle.2.circlepath.circle")
+                .font(.system(size: 60))
+                .foregroundColor(.gray.opacity(0.6))
+            
+            Text("Select Two Players")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            Text("Choose a player to trade out and a player to trade in to see detailed analysis and trade scoring.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+        }
+        .padding(.vertical, 40)
+        .frame(maxWidth: .infinity)
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(16)
     }
 }
 

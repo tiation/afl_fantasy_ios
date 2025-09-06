@@ -355,110 +355,66 @@ extension NotificationManager {
     }
 
     private func createNotificationCategories() -> [UNNotificationCategory] {
-        var categories: [UNNotificationCategory] = []
-
-        // Player Alert Category
-        let playerAlertActions = [
-            UNNotificationAction(
-                identifier: NotificationAction.viewPlayer.rawValue,
-                title: NotificationAction.viewPlayer.title,
-                options: [.foreground]
-            ),
-            UNNotificationAction(
-                identifier: NotificationAction.dismiss.rawValue,
-                title: NotificationAction.dismiss.title,
-                options: []
-            )
+        [
+            createPlayerAlertCategory(),
+            createBreakevenAlertCategory(),
+            createPriceAlertCategory(),
+            createCaptainSuggestionCategory(),
+            createLockoutReminderCategory(),
+            createTradeSuggestionCategory()
         ]
-        categories.append(UNNotificationCategory(
-            identifier: NotificationCategory.playerAlert.rawValue,
-            actions: playerAlertActions,
-            intentIdentifiers: [],
-            options: []
-        ))
+    }
 
-        // Breakeven Alert Category
-        let breakevenActions = [
-            UNNotificationAction(
-                identifier: NotificationAction.viewPlayer.rawValue,
-                title: NotificationAction.viewPlayer.title,
-                options: [.foreground]
-            ),
-            UNNotificationAction(
-                identifier: NotificationAction.makeChange.rawValue,
-                title: NotificationAction.makeChange.title,
-                options: [.foreground]
-            )
+    private func createPlayerAlertCategory() -> UNNotificationCategory {
+        let actions = [
+            createNotificationAction(.viewPlayer, options: [.foreground]),
+            createNotificationAction(.dismiss)
         ]
-        categories.append(UNNotificationCategory(
-            identifier: NotificationCategory.breakevenAlert.rawValue,
-            actions: breakevenActions,
-            intentIdentifiers: [],
-            options: []
-        ))
+        return createNotificationCategory(.playerAlert, actions: actions)
+    }
 
-        // Price Alert Category
-        let priceActions = [
-            UNNotificationAction(
-                identifier: NotificationAction.viewPlayer.rawValue,
-                title: NotificationAction.viewPlayer.title,
-                options: [.foreground]
-            ),
-            UNNotificationAction(
-                identifier: NotificationAction.dismiss.rawValue,
-                title: NotificationAction.dismiss.title,
-                options: []
-            )
+    private func createBreakevenAlertCategory() -> UNNotificationCategory {
+        let actions = [
+            createNotificationAction(.viewPlayer, options: [.foreground]),
+            createNotificationAction(.makeChange, options: [.foreground])
         ]
-        categories.append(UNNotificationCategory(
-            identifier: NotificationCategory.priceAlert.rawValue,
-            actions: priceActions,
-            intentIdentifiers: [],
-            options: []
-        ))
+        return createNotificationCategory(.breakevenAlert, actions: actions)
+    }
 
-        // Captain Suggestion Category
-        let captainActions = [
+    private func createPriceAlertCategory() -> UNNotificationCategory {
+        let actions = [
+            createNotificationAction(.viewPlayer, options: [.foreground]),
+            createNotificationAction(.dismiss)
+        ]
+        return createNotificationCategory(.priceAlert, actions: actions)
+    }
+
+    private func createCaptainSuggestionCategory() -> UNNotificationCategory {
+        let actions = [
             UNNotificationAction(
                 identifier: NotificationAction.makeChange.rawValue,
                 title: "Set Captain",
                 options: [.foreground]
             ),
-            UNNotificationAction(
-                identifier: NotificationAction.viewPlayer.rawValue,
-                title: NotificationAction.viewPlayer.title,
-                options: [.foreground]
-            )
+            createNotificationAction(.viewPlayer, options: [.foreground])
         ]
-        categories.append(UNNotificationCategory(
-            identifier: NotificationCategory.captainSuggestion.rawValue,
-            actions: captainActions,
-            intentIdentifiers: [],
-            options: []
-        ))
+        return createNotificationCategory(.captainSuggestion, actions: actions)
+    }
 
-        // Lockout Reminder Category
-        let lockoutActions = [
+    private func createLockoutReminderCategory() -> UNNotificationCategory {
+        let actions = [
             UNNotificationAction(
                 identifier: NotificationAction.makeChange.rawValue,
                 title: "Review Team",
                 options: [.foreground]
             ),
-            UNNotificationAction(
-                identifier: NotificationAction.remindLater.rawValue,
-                title: NotificationAction.remindLater.title,
-                options: []
-            )
+            createNotificationAction(.remindLater)
         ]
-        categories.append(UNNotificationCategory(
-            identifier: NotificationCategory.lockoutReminder.rawValue,
-            actions: lockoutActions,
-            intentIdentifiers: [],
-            options: []
-        ))
+        return createNotificationCategory(.lockoutReminder, actions: actions)
+    }
 
-        // Trade Suggestion Category
-        let tradeActions = [
+    private func createTradeSuggestionCategory() -> UNNotificationCategory {
+        let actions = [
             UNNotificationAction(
                 identifier: NotificationAction.makeChange.rawValue,
                 title: "Make Trade",
@@ -470,13 +426,29 @@ extension NotificationManager {
                 options: [.foreground]
             )
         ]
-        categories.append(UNNotificationCategory(
-            identifier: NotificationCategory.tradeSuggestion.rawValue,
-            actions: tradeActions,
+        return createNotificationCategory(.tradeSuggestion, actions: actions)
+    }
+
+    private func createNotificationAction(
+        _ action: NotificationAction,
+        options: UNNotificationActionOptions = []
+    ) -> UNNotificationAction {
+        UNNotificationAction(
+            identifier: action.rawValue,
+            title: action.title,
+            options: options
+        )
+    }
+
+    private func createNotificationCategory(
+        _ category: NotificationCategory,
+        actions: [UNNotificationAction]
+    ) -> UNNotificationCategory {
+        UNNotificationCategory(
+            identifier: category.rawValue,
+            actions: actions,
             intentIdentifiers: [],
             options: []
-        ))
-
-        return categories
+        )
     }
 }

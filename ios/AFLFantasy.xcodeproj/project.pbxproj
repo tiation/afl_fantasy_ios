@@ -115,7 +115,7 @@
 		F28FA07BD92099EC6AE4765F /* AFLFantasyToolsClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyToolsClient.swift; path = AFLFantasy/Services/AFLFantasyToolsClient.swift; sourceTree = "<group>"; };
 		FF9831582C4796F62F0C2918 /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
 		FFBB8EBAF7C898C53E4AD5E7 /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
-		81ED2FD03ECB1F8BB408A9F6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models/AppState.swift"; sourceTree = "<group>"; };
+		81ED2FD03ECB1F8BB408A9F6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFLFantasy/Models/AppState.swift"; sourceTree = "<group>"; };
 		/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -122,7 +122,7 @@ struct AdvancedCashCowTracker: View {
 
     private var activeCashCows: [EnhancedPlayer] {
         appState.players
-            .filter { $0.isCashCow || ($0.price < 600_000 && $0.averageScore > Double($0.breakeven + 5)) }
+            .filter { $0.isCashCow || ($0.currentPrice < 600_000 && $0.averageScore > Double($0.breakeven + 5)) }
     }
 
     @MainActor
@@ -170,7 +170,7 @@ struct AdvancedCashCowTracker: View {
 
     private func determineSellTiming(_ player: EnhancedPlayer) -> SellTiming {
         let performanceVsBreakeven = player.averageScore - Double(player.breakeven)
-        let injuryRisk = Double(player.injuryRisk.riskScore)
+        let injuryRisk = Double(player.injuryRiskScore)
         let consistency = player.consistency
 
         // Multiple factors determine timing
@@ -194,7 +194,7 @@ struct AdvancedCashCowTracker: View {
         }
 
         // Lower confidence for injury-prone players
-        confidence -= Double(player.injuryRisk.riskScore) / 200
+        confidence -= Double(player.injuryRiskScore) / 200
 
         // Higher confidence for historically strong cash generators
         if player.cashGenerated > 80000 {
@@ -224,7 +224,7 @@ struct AdvancedCashCowTracker: View {
     }
 
     private func generatePriceTrajectory(_ player: EnhancedPlayer) -> [PricePoint] {
-        let currentPrice = player.price
+        let currentPrice = player.currentPrice
         let weeklyIncrease = calculateWeeklyPriceIncrease(player)
         let optimalWeek = calculateOptimalSellWeek(player)
 
@@ -243,7 +243,7 @@ struct AdvancedCashCowTracker: View {
     private func identifyRiskFactors(_ player: EnhancedPlayer) -> [String] {
         var risks: [String] = []
 
-        if player.injuryRisk.riskScore > 25 {
+        if player.injuryRiskScore > 25 {
             risks.append("Elevated injury risk")
         }
 
@@ -279,7 +279,7 @@ struct AdvancedCashCowTracker: View {
             opportunities.append("High ceiling potential")
         }
 
-        let currentPriceValue = Double(player.price) / player.averageScore
+        let currentPriceValue = Double(player.currentPrice) / player.averageScore
         if currentPriceValue < 8000 { // Good value threshold
             opportunities.append("Excellent value pick")
         }
@@ -323,7 +323,7 @@ struct AdvancedCashCowTracker: View {
         activeCashCows.map { player in
             PriceProjection(
                 player: player,
-                currentPrice: player.price,
+                currentPrice: player.currentPrice,
                 projectedPrices: generatePriceTrajectory(player),
                 peakPrice: calculatePeakPrice(player),
                 peakWeek: calculateOptimalSellWeek(player)
@@ -340,7 +340,7 @@ struct AdvancedCashCowTracker: View {
     private func calculatePeakPrice(_ player: EnhancedPlayer) -> Int {
         let optimalWeek = calculateOptimalSellWeek(player)
         let weeklyIncrease = calculateWeeklyPriceIncrease(player)
-        return player.price + (weeklyIncrease * optimalWeek)
+        return player.currentPrice + (weeklyIncrease * optimalWeek)
     }
 
     private func calculateTotalCashGenerated() {

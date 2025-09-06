@@ -23,15 +23,6 @@ enum Position: String, CaseIterable, Codable {
         case .forward: .red
         }
     }
-    
-    var shortName: String {
-        switch self {
-        case .defender: "DEF"
-        case .midfielder: "MID"
-        case .ruck: "RUC"
-        case .forward: "FWD"
-        }
-    }
 }
 
 
@@ -59,23 +50,6 @@ struct EnhancedPlayer: Identifiable, Codable {
     let isDoubtful: Bool
     let contractYear: Bool
     let gamesPlayed: Int
-    
-    // Add missing properties that views expect
-    var highScore: Int {
-        Int(averageScore * 1.3) // estimated 30% above average
-    }
-    
-    var lowScore: Int {
-        Int(averageScore * 0.6) // estimated 40% below average
-    }
-    
-    var isSuspended: Bool {
-        false // default to false for now
-    }
-    
-    var nextRoundProjection: (opponent: String, venue: String) {
-        (opponent: opponent, venue: venue)
-    }
 
     var formattedPrice: String {
         "$\(currentPrice / 1000)k"

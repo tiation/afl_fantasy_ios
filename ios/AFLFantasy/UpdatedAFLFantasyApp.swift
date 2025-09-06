@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-// MARK: - Updated AFL Fantasy App
+// MARK: - UpdatedAFLFantasyApp
 
 @main
 struct UpdatedAFLFantasyApp: App {
@@ -16,7 +16,7 @@ struct UpdatedAFLFantasyApp: App {
     @StateObject private var networkService = NetworkService.shared
     @StateObject private var audioManager = AFLAudioManager()
     @StateObject private var hapticsManager = AFLHapticsManager()
-    
+
     var body: some Scene {
         WindowGroup {
             UpdatedContentView()
@@ -30,13 +30,13 @@ struct UpdatedAFLFantasyApp: App {
                 }
         }
     }
-    
+
     private func setupApp() {
         // Start performance monitoring
         PerformanceMonitor.shared.startColdStartTimer()
-        
+
         print("🚀 AFL Fantasy Intelligence Platform started with live features")
-        
+
         // Trigger AFL experience launch
         Task {
             try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -49,11 +49,11 @@ struct UpdatedAFLFantasyApp: App {
     }
 }
 
-// MARK: - Updated Content View
+// MARK: - UpdatedContentView
 
 struct UpdatedContentView: View {
     @EnvironmentObject var appState: LiveAppState
-    
+
     var body: some View {
         TabView(selection: $appState.selectedTab) {
             // Dashboard with live data
@@ -63,7 +63,7 @@ struct UpdatedContentView: View {
                     Text("Dashboard")
                 }
                 .tag(TabItem.dashboard)
-            
+
             // Enhanced Trade Calculator
             EnhancedTradeCalculatorView()
                 .tabItem {
@@ -71,7 +71,7 @@ struct UpdatedContentView: View {
                     Text("Trades")
                 }
                 .tag(TabItem.trades)
-            
+
             // Captain Advisor with AI
             LiveCaptainView()
                 .tabItem {
@@ -79,7 +79,7 @@ struct UpdatedContentView: View {
                     Text("Captain")
                 }
                 .tag(TabItem.captain)
-            
+
             // Cash Cow Tracker with analytics
             LiveCashCowView()
                 .tabItem {
@@ -87,7 +87,7 @@ struct UpdatedContentView: View {
                     Text("Cash Cow")
                 }
                 .tag(TabItem.cashCow)
-            
+
             // Advanced Analytics
             AdvancedAnalyticsView()
                 .tabItem {
@@ -102,10 +102,10 @@ struct UpdatedContentView: View {
             alignment: .top
         )
     }
-    
+
     @ViewBuilder
     private var connectionStatusOverlay: some View {
-        if !appState.isConnected && !appState.isRefreshing {
+        if !appState.isConnected, !appState.isRefreshing {
             HStack {
                 Image(systemName: "wifi.slash")
                     .foregroundColor(.white)
@@ -122,27 +122,27 @@ struct UpdatedContentView: View {
     }
 }
 
-// MARK: - Live Dashboard View
+// MARK: - LiveDashboardView
 
 struct LiveDashboardView: View {
     @EnvironmentObject var appState: LiveAppState
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // Connection Status & Last Update
                     connectionStatusCard
-                    
+
                     // Team Score Header with live data
                     teamScoreCard
-                    
+
                     // Quick Stats Grid
                     quickStatsGrid
-                    
+
                     // Players List with live data
                     playersSection
-                    
+
                     // Error Display
                     if let error = appState.errorMessage {
                         errorCard(error)
@@ -165,7 +165,7 @@ struct LiveDashboardView: View {
                         Image(systemName: appState.isRefreshing ? "arrow.clockwise" : "arrow.clockwise.circle")
                             .rotationEffect(.degrees(appState.isRefreshing ? 360 : 0))
                             .animation(
-                                appState.isRefreshing ? 
+                                appState.isRefreshing ?
                                     .linear(duration: 1).repeatForever(autoreverses: false) : .default,
                                 value: appState.isRefreshing
                             )
@@ -174,19 +174,19 @@ struct LiveDashboardView: View {
             }
         }
     }
-    
+
     private var connectionStatusCard: some View {
         HStack {
             Circle()
                 .fill(appState.isConnected ? Color.green : Color.red)
                 .frame(width: 12, height: 12)
-            
+
             Text(appState.isConnected ? "Connected to live data" : "Offline mode")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            
+
             Spacer()
-            
+
             if let lastUpdate = appState.lastUpdateTime {
                 Text("Updated \\(lastUpdate, formatter: timeFormatter)")
                     .font(.caption)
@@ -197,7 +197,7 @@ struct LiveDashboardView: View {
         .background(Color(.tertiarySystemBackground))
         .cornerRadius(8)
     }
-    
+
     private var teamScoreCard: some View {
         VStack(spacing: 12) {
             HStack {
@@ -210,9 +210,9 @@ struct LiveDashboardView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.orange)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing) {
                     Text("Overall Rank")
                         .font(.headline)
@@ -223,7 +223,7 @@ struct LiveDashboardView: View {
                         .foregroundColor(.blue)
                 }
             }
-            
+
             HStack {
                 VStack(alignment: .leading) {
                     Text("Team Value")
@@ -233,9 +233,9 @@ struct LiveDashboardView: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing) {
                     Text("Bank")
                         .font(.caption)
@@ -250,7 +250,7 @@ struct LiveDashboardView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
     }
-    
+
     private var quickStatsGrid: some View {
         LazyVGrid(columns: [
             GridItem(.flexible()),
@@ -263,7 +263,7 @@ struct LiveDashboardView: View {
                 color: .green,
                 icon: "dollarsign.circle.fill"
             )
-            
+
             QuickStatCard(
                 title: "Trades Left",
                 value: "\\(appState.tradesRemaining)",
@@ -273,27 +273,27 @@ struct LiveDashboardView: View {
             )
         }
     }
-    
+
     private var playersSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Your Players")
                     .font(.headline)
                     .fontWeight(.bold)
-                
+
                 Spacer()
-                
+
                 Text("\\(appState.players.count) players")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             if appState.players.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "person.crop.circle.badge.plus")
                         .font(.title2)
                         .foregroundColor(.secondary)
-                    
+
                     Text(appState.isRefreshing ? "Loading players..." : "No player data available")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -309,18 +309,18 @@ struct LiveDashboardView: View {
             }
         }
     }
-    
+
     private func errorCard(_ message: String) -> some View {
         HStack {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundColor(.red)
-            
+
             Text(message)
                 .font(.caption)
                 .foregroundColor(.primary)
-            
+
             Spacer()
-            
+
             Button("Dismiss") {
                 appState.clearError()
             }
@@ -335,7 +335,7 @@ struct LiveDashboardView: View {
                 .stroke(Color.red, lineWidth: 1)
         )
     }
-    
+
     private var timeFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
@@ -343,32 +343,32 @@ struct LiveDashboardView: View {
     }
 }
 
-// MARK: - Live Player Card
+// MARK: - LivePlayerCard
 
 struct LivePlayerCard: View {
     let player: EnhancedPlayer
-    
+
     var body: some View {
         HStack(spacing: 12) {
             // Position indicator
             RoundedRectangle(cornerRadius: 4)
                 .fill(player.position.color)
                 .frame(width: 6, height: 50)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(player.name)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
+
                     Spacer()
-                    
+
                     Text(player.formattedPrice)
                         .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundColor(.orange)
                 }
-                
+
                 HStack {
                     Text(player.position.rawValue)
                         .font(.caption)
@@ -376,19 +376,19 @@ struct LivePlayerCard: View {
                         .padding(.vertical, 2)
                         .background(player.position.color.opacity(0.2))
                         .cornerRadius(4)
-                    
+
                     Text("Avg: \\(String(format: "%.1f", player.averageScore))")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     if player.priceChange != 0 {
                         Text(player.priceChangeText)
                             .font(.caption)
                             .foregroundColor(player.priceChange > 0 ? .green : .red)
                     }
-                    
+
                     Spacer()
-                    
+
                     // Status indicators
                     HStack(spacing: 4) {
                         if player.isCashCow {
@@ -396,13 +396,13 @@ struct LivePlayerCard: View {
                                 .foregroundColor(.green)
                                 .font(.caption)
                         }
-                        
+
                         if player.isDoubtful {
                             Image(systemName: "questionmark.circle.fill")
                                 .foregroundColor(.orange)
                                 .font(.caption)
                         }
-                        
+
                         if !player.alertFlags.isEmpty {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundColor(.red)
@@ -418,18 +418,18 @@ struct LivePlayerCard: View {
     }
 }
 
-// MARK: - Live Captain View
+// MARK: - LiveCaptainView
 
 struct LiveCaptainView: View {
     @EnvironmentObject var appState: LiveAppState
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // AI Captain Advisor Header
                     aiAdvisorHeader
-                    
+
                     // Captain Suggestions
                     if appState.captainSuggestions.isEmpty {
                         loadingCaptainSuggestions
@@ -446,17 +446,17 @@ struct LiveCaptainView: View {
             }
         }
     }
-    
+
     private var aiAdvisorHeader: some View {
         VStack(spacing: 12) {
             Image(systemName: "brain.head.profile")
                 .font(.largeTitle)
                 .foregroundColor(.blue)
-            
+
             Text("AI Captain Recommendations")
                 .font(.headline)
                 .fontWeight(.bold)
-            
+
             Text("Based on form, fixtures, venue bias, and injury risk")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -466,12 +466,12 @@ struct LiveCaptainView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
     }
-    
+
     private var loadingCaptainSuggestions: some View {
         VStack(spacing: 12) {
             ProgressView()
                 .scaleEffect(1.2)
-            
+
             Text("Analyzing captain options...")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -479,7 +479,7 @@ struct LiveCaptainView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
     }
-    
+
     private var captainSuggestionsSection: some View {
         LazyVStack(spacing: 16) {
             ForEach(Array(appState.captainSuggestions.enumerated()), id: \\.offset) { index, suggestion in
@@ -492,12 +492,12 @@ struct LiveCaptainView: View {
     }
 }
 
-// MARK: - Live Captain Card
+// MARK: - LiveCaptainCard
 
 struct LiveCaptainCard: View {
     let suggestion: CaptainSuggestion
     let rank: Int
-    
+
     var body: some View {
         VStack(spacing: 12) {
             HStack {
@@ -506,18 +506,18 @@ struct LiveCaptainCard: View {
                     Circle()
                         .fill(rankColor)
                         .frame(width: 32, height: 32)
-                    
+
                     Text("\\(rank)")
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text(suggestion.player.name)
                         .font(.headline)
                         .fontWeight(.bold)
-                    
+
                     HStack {
                         Text(suggestion.player.position.rawValue)
                             .font(.caption)
@@ -525,44 +525,44 @@ struct LiveCaptainCard: View {
                             .padding(.vertical, 2)
                             .background(suggestion.player.position.color.opacity(0.2))
                             .cornerRadius(4)
-                        
+
                         Text("vs \\(suggestion.opponent)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("\\(suggestion.confidence)%")
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(rankColor)
-                    
+
                     Text("Confidence")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             HStack {
                 StatItem(
                     title: "Projected",
                     value: "\\(suggestion.projectedPoints) pts",
                     color: .orange
                 )
-                
+
                 Spacer()
-                
+
                 StatItem(
                     title: "Form",
                     value: String(format: "%.1f/5", suggestion.formRating * 5),
                     color: .green
                 )
-                
+
                 Spacer()
-                
+
                 StatItem(
                     title: "Fixture",
                     value: String(format: "%.1f/5", suggestion.fixtureRating * 5),
@@ -574,28 +574,28 @@ struct LiveCaptainCard: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
     }
-    
+
     private var rankColor: Color {
         switch rank {
-        case 1: return .green
-        case 2: return .orange
-        default: return .gray
+        case 1: .green
+        case 2: .orange
+        default: .gray
         }
     }
 }
 
-// MARK: - Live Cash Cow View
+// MARK: - LiveCashCowView
 
 struct LiveCashCowView: View {
     @EnvironmentObject var appState: LiveAppState
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // Cash generation summary
                     cashGenerationSummary
-                    
+
                     // Cash cow recommendations
                     cashCowRecommendations
                 }
@@ -608,18 +608,18 @@ struct LiveCashCowView: View {
             }
         }
     }
-    
+
     private var cashGenerationSummary: some View {
         VStack(spacing: 12) {
             Text("Total Cash Generated")
                 .font(.headline)
                 .fontWeight(.bold)
-            
+
             Text("$\\(Int(appState.players.map(\\.cashGenerated).reduce(0, +) / 1000))K")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .foregroundColor(.green)
-            
+
             Text("From \\(appState.players.filter(\\.isCashCow).count) cash cows")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -628,19 +628,19 @@ struct LiveCashCowView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
     }
-    
+
     private var cashCowRecommendations: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Smart Sell Signals")
                 .font(.headline)
                 .fontWeight(.bold)
-            
+
             if appState.cashCows.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "dollarsign.circle")
                         .font(.title2)
                         .foregroundColor(.secondary)
-                    
+
                     Text("Loading cash cow analysis...")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -658,7 +658,7 @@ struct LiveCashCowView: View {
     }
 }
 
-// MARK: - Helper Views
+// MARK: - QuickStatCard
 
 struct QuickStatCard: View {
     let title: String
@@ -666,29 +666,29 @@ struct QuickStatCard: View {
     let subtitle: String
     let color: Color
     let icon: String
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(color)
                     .font(.title3)
-                
+
                 Spacer()
             }
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(value)
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(color)
-                
+
                 Text(subtitle)
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            
+
             Text(title)
                 .font(.caption)
                 .fontWeight(.medium)
@@ -700,18 +700,20 @@ struct QuickStatCard: View {
     }
 }
 
+// MARK: - StatItem
+
 struct StatItem: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 2) {
             Text(value)
                 .font(.subheadline)
                 .fontWeight(.bold)
                 .foregroundColor(color)
-            
+
             Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -719,34 +721,36 @@ struct StatItem: View {
     }
 }
 
+// MARK: - CashCowRecommendationCard
+
 struct CashCowRecommendationCard: View {
     let recommendation: CashCowRecommendation
-    
+
     var body: some View {
         HStack(spacing: 12) {
             // Sell urgency indicator
             Circle()
                 .fill(urgencyColor)
                 .frame(width: 12, height: 12)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(recommendation.playerName)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Text(recommendation.sellUrgency)
                     .font(.caption)
                     .foregroundColor(urgencyColor)
             }
-            
+
             Spacer()
-            
+
             VStack(alignment: .trailing, spacing: 2) {
                 Text("+$\\(recommendation.cashGenerated / 1000)K")
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundColor(.green)
-                
+
                 Text("\\(Int(recommendation.confidence * 100))% confidence")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -756,15 +760,15 @@ struct CashCowRecommendationCard: View {
         .background(Color(.tertiarySystemBackground))
         .cornerRadius(12)
     }
-    
+
     private var urgencyColor: Color {
         switch recommendation.sellUrgency {
         case "SELL NOW":
-            return .red
+            .red
         case "HOLD":
-            return .orange
+            .orange
         default:
-            return .green
+            .green
         }
     }
 }

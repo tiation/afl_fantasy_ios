@@ -602,22 +602,3 @@ struct SimpleSettingsView: View {
     }
 }
 
-// MARK: - TabItem
-
-enum TabItem: String, CaseIterable {
-    case dashboard = "Dashboard"
-    case captain = "Captain"
-    case trades = "Trades"
-    case cashCow = "Cash Cow"
-    case settings = "Settings"
-
-    var systemImage: String {
-        switch self {
-        case .dashboard: "house.fill"
-        case .captain: "star.fill"
-        case .trades: "arrow.triangle.2.circlepath"
-        case .cashCow: "dollarsign.circle.fill"
-        case .settings: "gearshape.fill"
-        }
-    }
-}

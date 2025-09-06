@@ -343,12 +343,3 @@ class LiveAppState: ObservableObject {
     }
 }
 
-// MARK: - TabItem
-
-enum TabItem: String, CaseIterable {
-    case dashboard = "Dashboard"
-    case captain = "Captain"
-    case trades = "Trades"
-    case cashCow = "Cash Cow"
-    case settings = "Settings"
-}

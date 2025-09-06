@@ -50,6 +50,7 @@
 		F5BF82A30A3745F01C553C4C /* AdvancedCaptainAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938608D4C2D1453069A5845 /* AdvancedCaptainAI.swift */; };
 		FC07EF92B5131F1AF937C6A7 /* AFLFantasyDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90BB8E4AC595B8300E3C14B /* AFLFantasyDataService.swift */; };
 		C991600844DAE7DF854FDEBD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ED2FD03ECB1F8BB408A9F6 /* AppState.swift */; };
+				8F7EBF463BE22BC71A53DE10 /* SimpleAFLFantasyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B279F5D9965553DAB744B08A /* SimpleAFLFantasyApp.swift */; };
 		/* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +117,7 @@
 		FF9831582C4796F62F0C2918 /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
 		FFBB8EBAF7C898C53E4AD5E7 /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
 		81ED2FD03ECB1F8BB408A9F6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFLFantasy/Models/AppState.swift"; sourceTree = "<group>"; };
+				B279F5D9965553DAB744B08A /* SimpleAFLFantasyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAFLFantasyApp.swift; sourceTree = "<group>"; };
 		/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 				1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */,
 				1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */,
 				1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */,
+							B279F5D9965553DAB744B08A /* SimpleAFLFantasyApp.swift */,
 			);
 			path = AFLFantasy;
 			sourceTree = "<group>";
@@ -402,7 +405,8 @@
 				CB70703CCB0B6764866F32B2 /* IntelligentTradesView.swift in Sources */,
 				A26D3C3D6E96902F5D075EDC /* AdvancedCashCowTracker.swift in Sources */,
 							C991600844DAE7DF854FDEBD /* AppState.swift in Sources */,
-);
+				8F7EBF463BE22BC71A53DE10 /* SimpleAFLFantasyApp.swift in Sources */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1A2B3C4D5E6F70819A0B1C50 /* Sources */ = {

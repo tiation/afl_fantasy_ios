@@ -494,6 +494,7 @@ struct SplashView: View {
                     .buttonStyle(OnboardingButtonStyle())
                     .accessibilityLabel("Set up your AFL Fantasy team")
                     .accessibilityHint("Start the setup process to connect your team and get personalized insights")
+                    .accessibilityIdentifier("splash_setup_button")
 
                     // Secondary CTA
                     Button("Preview Features") {

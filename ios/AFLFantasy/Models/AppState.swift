@@ -39,6 +39,12 @@ enum Position: String, CaseIterable, Codable {
 struct InjuryRisk: Codable {
     let riskScore: Double
 }
+
+// MARK: - EnhancedPlayer
+
+struct EnhancedPlayer: Identifiable, Codable {
+    var id = UUID()
+    let name: String
     let position: Position
     let currentPrice: Int
     let currentScore: Int

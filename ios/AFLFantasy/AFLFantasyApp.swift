@@ -28,8 +28,6 @@ struct AFLFantasyApp: App {
     }
 }
 
-// MARK: - AppState
-
 @MainActor
 class AppState: ObservableObject {
     @Published var selectedTab: TabItem = .dashboard

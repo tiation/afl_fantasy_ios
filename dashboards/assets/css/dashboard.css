@@ -15,11 +15,13 @@
   --status-loading: #8B5CF6;
 
   /* Background - Rich Dark Theme */
-  --bg-primary: #0F172A;      /* Slate 900 */
-  --bg-surface: #1E293B;      /* Slate 800 */
-  --bg-elevated: #334155;     /* Slate 700 */
-  --bg-overlay: rgba(15, 23, 42, 0.95);
-  --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  --bg-primary: #0B1426;      /* Deep Navy */
+  --bg-surface: #1A2332;      /* Slate 800 */
+  --bg-elevated: #2A3441;     /* Slate 700 */
+  --bg-overlay: rgba(11, 20, 38, 0.95);
+  --bg-gradient: linear-gradient(135deg, #0B1426 0%, #1A2332 50%, #2A3441 100%);
+  --bg-card-gradient: linear-gradient(145deg, rgba(26, 35, 50, 0.8) 0%, rgba(42, 52, 65, 0.6) 100%);
+  --bg-glow: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
 
   /* Text - High Readability */
   --text-primary: #F8FAFC;    /* Slate 50 */
@@ -96,7 +98,8 @@ body {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--text-primary);
-  background-color: var(--bg-primary);
+  background: var(--bg-gradient);
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

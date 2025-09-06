@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - UpdatedAFLFantasyApp
 
-@main
+// @main DISABLED - using SimpleAFLFantasyApp.swift instead
 struct UpdatedAFLFantasyApp: App {
     @StateObject private var liveAppState = LiveAppState()
     @StateObject private var networkService = NetworkService.shared

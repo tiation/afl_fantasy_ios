@@ -439,6 +439,8 @@ struct CaptainSuggestion: Identifiable, Codable, Hashable {
     let riskFactors: [String]
     let upside: String
     let ownership: Double
+    let opponent: String?
+    let venue: String?
 
     var confidenceColor: Color {
         switch confidence {

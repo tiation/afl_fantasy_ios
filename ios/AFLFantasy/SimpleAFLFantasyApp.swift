@@ -19,7 +19,7 @@ struct AFLFantasyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SimpleContentView()
                 .environmentObject(appState)
                 .environmentObject(dataService)
                 .environmentObject(toolsClient)

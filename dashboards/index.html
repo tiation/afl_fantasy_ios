@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 AFL Fantasy Platform - Operations Dashboard</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="./assets/css/dashboard.css" as="style">
+    <link rel="preload" href="./assets/js/dashboard.js" as="script">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMTA5OTZBIi8+Cjwvc3ZnPgo=">
+    
+    <!-- Fonts and critical CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./assets/css/dashboard.css">
+    
+    <!-- Reduced motion support -->
+    <style>
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link for screen readers -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50">
+        Skip to main content
+    </a>
+
+    <!-- Header Navigation -->
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div class="logo-section">
+                <h1 class="logo">
+                    <span class="logo-icon" aria-hidden="true">🏆</span>
+                    AFL Fantasy
+                </h1>
+                <p class="tagline">Operations Dashboard</p>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav class="nav-primary" role="navigation" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><button class="nav-item active" data-section="overview" aria-current="page">Overview</button></li>
+                    <li><button class="nav-item" data-section="health">System Health</button></li>
+                    <li><button class="nav-item" data-section="data">Data Pipeline</button></li>
+                    <li><button class="nav-item" data-section="performance">Performance</button></li>
+                    <li><button class="nav-item" data-section="debug">Debug Tools</button></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn md:hidden" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="hamburger"></span>
+            </button>
+            
+            <!-- Settings and Help -->
+            <div class="header-actions">
+                <button class="btn-icon" aria-label="Toggle theme" title="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="btn-icon help-btn" aria-label="Open help panel" title="Help">
+                    <span aria-hidden="true">❓</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <nav class="nav-mobile hidden" role="navigation" aria-label="Mobile navigation">
+            <ul class="mobile-nav-list">
+                <li><a href="#overview" class="mobile-nav-item">📊 Overview</a></li>
+                <li><a href="#health" class="mobile-nav-item">💚 System Health</a></li>
+                <li><a href="#data" class="mobile-nav-item">📡 Data Pipeline</a></li>
+                <li><a href="#performance" class="mobile-nav-item">⚡ Performance</a></li>
+                <li><a href="#debug" class="mobile-nav-item">🔧 Debug Tools</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        
+        <!-- Overview Section -->
+        <section id="overview" class="dashboard-section active" role="region" aria-labelledby="overview-title">
+            <header class="section-header">
+                <h2 id="overview-title" class="section-title">System Overview</h2>
+                <p class="section-subtitle">Real-time status and quick actions for your AFL Fantasy Platform</p>
+            </header>
+            
+            <!-- System Status Cards -->
+            <div class="status-grid" role="grid" aria-label="System status overview">
+                <div class="status-card loading" id="system-status-api" role="gridcell">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span class="card-icon" aria-hidden="true">🚀</span>
+                            API Server
+                        </h3>
+                        <button class="help-btn" data-help-id="system-status-api" aria-label="Help for API Server">?</button>
+                    </header>
+                    <div class="card-body">
+                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <span class="metric-label">Response Time</span>
+                                <span class="metric-value loading-text">--</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Uptime</span>
+                                <span class="metric-value loading-text">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="card-actions">
+                        <button class="btn-sm" disabled>Restart</button>
+                    </footer>
+                </div>
+                
+                <div class="status-card loading" id="system-status-db" role="gridcell">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span class="card-icon" aria-hidden="true">🗄️</span>
+                            Database
+                        </h3>
+                        <button class="help-btn" data-help-id="system-status-db" aria-label="Help for Database">?</button>
+                    </header>
+                    <div class="card-body">
+                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <span class="metric-label">Connections</span>
+                                <span class="metric-value loading-text">--/--</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Query Time</span>
+                                <span class="metric-value loading-text">-- ms</span>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="card-actions">
+                        <button class="btn-sm" disabled>Monitor</button>
+                    </footer>
+                </div>
+                
+                <div class="status-card loading" id="system-status-python" role="gridcell">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span class="card-icon" aria-hidden="true">🐍</span>
+                            Python Services
+                        </h3>
+                        <button class="help-btn" data-help-id="system-status-python" aria-label="Help for Python Services">?</button>
+                    </header>
+                    <div class="card-body">
+                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <span class="metric-label">Queue Depth</span>
+                                <span class="metric-value loading-text">--</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Last Scrape</span>
+                                <span class="metric-value loading-text">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="card-actions">
+                        <button class="btn-sm" disabled>Refresh</button>
+                    </footer>
+                </div>
+                
+                <div class="status-card loading" id="system-status-ios" role="gridcell">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span class="card-icon" aria-hidden="true">📱</span>
+                            iOS Build
+                        </h3>
+                        <button class="help-btn" data-help-id="system-status-ios" aria-label="Help for iOS Build">?</button>
+                    </header>
+                    <div class="card-body">
+                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <span class="metric-label">Status</span>
+                                <span class="metric-value loading-text">--</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Last Build</span>
+                                <span class="metric-value loading-text">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="card-actions">
+                        <button class="btn-sm" disabled>Build</button>
+                    </footer>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions" role="toolbar" aria-label="Quick actions">
+                <h3 class="actions-title">Quick Actions</h3>
+                <div class="actions-grid">
+                    <button class="action-btn primary" id="refresh-all" aria-describedby="refresh-desc">
+                        <span class="btn-icon" aria-hidden="true">🔄</span>
+                        Refresh All
+                    </button>
+                    <div id="refresh-desc" class="sr-only">Refresh status for all system components</div>
+                    
+                    <button class="action-btn secondary" id="view-logs">
+                        <span class="btn-icon" aria-hidden="true">📋</span>
+                        View Logs
+                    </button>
+                    
+                    <button class="action-btn warning" id="restart-services">
+                        <span class="btn-icon" aria-hidden="true">🔁</span>
+                        Restart Services
+                    </button>
+                    
+                    <button class="action-btn info" id="api-health">
+                        <span class="btn-icon" aria-hidden="true">🏥</span>
+                        API Health
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Recent Activity Feed -->
+            <div class="activity-feed">
+                <h3 class="feed-title">Recent Activity</h3>
+                <div class="activity-list" id="recent-activity" role="log" aria-live="polite" aria-label="Recent system activity">
+                    <div class="activity-item loading">
+                        <span class="activity-time">--:--:--</span>
+                        <span class="activity-message">Loading recent activity...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Other sections will be loaded dynamically -->
+        <section id="health" class="dashboard-section" role="region" aria-labelledby="health-title" aria-hidden="true">
+            <header class="section-header">
+                <h2 id="health-title" class="section-title">System Health</h2>
+                <p class="section-subtitle">Detailed monitoring and resource usage</p>
+            </header>
+            <div class="coming-soon">
+                <h3>Coming Soon</h3>
+                <p>Detailed system health monitoring is being implemented...</p>
+            </div>
+        </section>
+        
+        <section id="data" class="dashboard-section" role="region" aria-labelledby="data-title" aria-hidden="true">
+            <header class="section-header">
+                <h2 id="data-title" class="section-title">Data Pipeline</h2>
+                <p class="section-subtitle">AFL data scraping and processing status</p>
+            </header>
+            <div class="coming-soon">
+                <h3>Coming Soon</h3>
+                <p>Data pipeline monitoring is being implemented...</p>
+            </div>
+        </section>
+        
+        <section id="performance" class="dashboard-section" role="region" aria-labelledby="performance-title" aria-hidden="true">
+            <header class="section-header">
+                <h2 id="performance-title" class="section-title">Performance</h2>
+                <p class="section-subtitle">API metrics and performance analytics</p>
+            </header>
+            <div class="coming-soon">
+                <h3>Coming Soon</h3>
+                <p>Performance analytics are being implemented...</p>
+            </div>
+        </section>
+        
+        <section id="debug" class="dashboard-section" role="region" aria-labelledby="debug-title" aria-hidden="true">
+            <header class="section-header">
+                <h2 id="debug-title" class="section-title">Debug Tools</h2>
+                <p class="section-subtitle">System diagnostics and troubleshooting</p>
+            </header>
+            <div class="coming-soon">
+                <h3>Coming Soon</h3>
+                <p>Debug tools are being implemented...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Help Panel (Slide-over) -->
+    <div class="help-panel" id="help-panel" role="dialog" aria-labelledby="help-title" aria-modal="true" aria-hidden="true">
+        <div class="help-backdrop" aria-label="Close help panel"></div>
+        <div class="help-content">
+            <header class="help-header">
+                <h2 id="help-title" class="help-title">Dashboard Help</h2>
+                <button class="help-close" aria-label="Close help panel">✕</button>
+            </header>
+            <div class="help-body" id="help-body">
+                <p>Loading help content...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container" role="region" aria-label="Notifications" aria-live="assertive">
+        <!-- Toast messages will be inserted here -->
+    </div>
+
+    <!-- Loading Scripts -->
+    <script type="module" src="./assets/js/dashboard.js"></script>
+    
+    <!-- Initialize Dashboard -->
+    <script type="module">
+        import { Dashboard } from './assets/js/dashboard.js';
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboard = new Dashboard();
+            window.dashboard.init();
+        });
+    </script>
+</body>
+</html>

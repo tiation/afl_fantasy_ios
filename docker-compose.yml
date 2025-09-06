@@ -1,27 +1,17 @@
+# AFL Fantasy Platform - Docker Compose
+# This extends the unified configuration with production-ready settings
+
+include:
+  - docker-compose.unified.yml
+
 services:
-  # Main application
-  afl-fantasy-app:
-    build:
-      context: .
-      target: production
-    ports:
-      - "5000:5000"
+  # Production overrides for backend service
+  backend:
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/afl_fantasy
-      - REDIS_URL=redis://redis:6379
       - PORT=5000
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    volumes:
-      - app_data:/app/uploads
-      - app_logs:/app/logs
-    networks:
-      - afl-network
-    restart: unless-stopped
+    ports:
+      - "5000:5000"
     deploy:
       resources:
         limits:
@@ -30,49 +20,12 @@ services:
         reservations:
           memory: 512M
           cpus: '0.25'
+    profiles: ["default", "production"]
 
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=afl_fantasy
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    ports:
-      - "5432:5432"
-    networks:
-      - afl-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d afl_fantasy"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Redis for caching and session management
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - afl-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
-
-  # Nginx reverse proxy and load balancer
+  # Nginx reverse proxy for production
   nginx:
     image: nginx:alpine
+    profiles: ["production", "proxy"]
     ports:
       - "80:80"
       - "443:443"
@@ -80,68 +33,8 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
     depends_on:
-      - afl-fantasy-app
+      - backend
+      - frontend
     networks:
       - afl-network
     restart: unless-stopped
-
-  # Data scraper service (separate microservice)
-  data-scraper:
-    build:
-      context: .
-      target: base
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/afl_fantasy
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - postgres
-      - redis
-    volumes:
-      - app_data:/app/uploads
-      - app_logs:/app/logs
-    networks:
-      - afl-network
-    restart: unless-stopped
-    command: python3 data_scraper_service.py
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.25'
-
-  # Monitoring and logging
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    networks:
-      - afl-network
-    restart: unless-stopped
-
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3001:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - afl-network
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-  redis_data:
-  app_data:
-  app_logs:
-  prometheus_data:
-  grafana_data:
-
-networks:
-  afl-network:
-    driver: bridge

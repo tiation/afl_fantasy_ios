@@ -23,6 +23,24 @@
 
 ---
 
+## 📱 Application Screenshots
+
+### iOS App Screenshots
+<div align="center">
+  <img src="docs/screenshots/dashboard_screen.png" alt="Dashboard Screen" width="200" style="margin: 10px;"/>
+  <img src="docs/screenshots/captain_ai_screen.png" alt="Captain AI Screen" width="200" style="margin: 10px;"/>
+  <img src="docs/screenshots/cash_cows_screen.png" alt="Cash Cows Screen" width="200" style="margin: 10px;"/>
+  <img src="docs/screenshots/settings_screen.png" alt="Settings Screen" width="200" style="margin: 10px;"/>
+</div>
+
+### Key Features Showcased:
+- **📊 Dashboard**: Real-time player analytics with projected scores and price changes
+- **🧠 Captain AI**: Advanced AI-powered captain recommendations with confidence metrics
+- **💰 Cash Cows**: Optimized rookie tracking for cash generation strategies  
+- **⚙️ Settings**: Comprehensive team management and data controls
+
+---
+
 ## 🏗️ Enterprise Architecture Overview
 
 ### **Technology Stack**

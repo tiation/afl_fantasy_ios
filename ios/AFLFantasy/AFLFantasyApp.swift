@@ -354,8 +354,8 @@ enum AFLTeam: String, CaseIterable, Codable {
 
 // MARK: - AFLFantasyApp
 
-@main
-struct AFLFantasyApp: App {
+// Alternative main app implementation
+struct AFLFantasyAppAlternative: App {
     // MARK: - State Objects
 
     @StateObject private var dataService = AFLFantasyDataService()
@@ -410,6 +410,9 @@ struct AFLFantasyApp: App {
     }
 
     private func setupApp() {
+        // Start performance monitoring
+        PerformanceMonitor.shared.startColdStartTimer()
+        
         // Configure any app-level settings here
         print("🚀 AFL Fantasy Intelligence Platform started")
 
@@ -424,10 +427,13 @@ struct AFLFantasyApp: App {
         
         // Trigger AFL experience launch
         Task {
-            await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
             await MainActor.run {
                 audioManager.onAppLaunch()
                 hapticsManager.onAppLaunch()
+                
+                // End performance monitoring after app is ready
+                PerformanceMonitor.shared.endColdStartTimer()
             }
         }
 

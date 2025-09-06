@@ -25,29 +25,48 @@ struct DashboardView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    // Live Performance Header
-                    livePerformanceHeader
+            Group {
+                if viewModel.hasError {
+                    errorStateView
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: 20) {
+                            // Live Performance Header
+                            livePerformanceHeader
 
-                    // Quick Stats Cards
-                    quickStatsSection
+                            // Quick Stats Cards
+                            quickStatsSection
 
-                    // Weekly Projection Summary
-                    weeklyProjectionSection
+                            // Weekly Projection Summary
+                            weeklyProjectionSection
 
-                    // AI Insights Panel
-                    aiInsightsSection
+                            // AI Insights Panel
+                            aiInsightsSection
 
-                    // Critical Alerts
-                    criticalAlertsSection
+                            // Critical Alerts
+                            criticalAlertsSection
+                        }
+                        .padding()
+                        .opacity(viewModel.isRefreshing ? 0.6 : 1.0)
+                    }
+                    .refreshable {
+                        await viewModel.refresh()
+                    }
                 }
-                .padding()
             }
             .navigationTitle("🏆 Dashboard")
             .navigationBarTitleDisplayMode(.large)
-            .refreshable {
-                await viewModel.refresh()
+            .overlay {
+                if viewModel.isRefreshing && !viewModel.hasError {
+                    VStack {
+                        AFLLoadingAnimation()
+                        Text("Updating...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.ultraThinMaterial)
+                }
             }
         }
     }
@@ -63,12 +82,15 @@ struct DashboardView: View {
                             .fill(.green)
                             .frame(width: 8, height: 8)
                             .opacity(viewModel.isLive ? 1.0 : 0.3)
+                            .accessibilityHidden(true)
 
                         Text("LIVE")
                             .font(.caption2)
                             .fontWeight(.bold)
                             .foregroundColor(.secondary)
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(viewModel.isLive ? "Live scores updating" : "Scores not live")
 
                     Text("Team Score")
                         .font(.subheadline)
@@ -79,11 +101,15 @@ struct DashboardView: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
+                            .accessibilityLabel("\(viewModel.currentScore) points")
 
                         Text("pts")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                            .accessibilityHidden(true)
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Current team score: \(viewModel.currentScore) points")
 
                     HStack(spacing: 4) {
                         Image(systemName: viewModel.scoreChange >= 0 ? "arrow.up" : "arrow.down")
@@ -331,6 +357,46 @@ struct DashboardView: View {
             )
         }
     }
+    
+    // MARK: - Error State View
+    
+    private var errorStateView: some View {
+        VStack(spacing: 24) {
+            Spacer()
+            
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 60))
+                .foregroundColor(.orange)
+            
+            VStack(spacing: 12) {
+                Text("Something went wrong")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+            }
+            
+            AFLButton(
+                title: "Try Again",
+                style: .primary
+            ) {
+                Task {
+                    await viewModel.refresh()
+                }
+            }
+            .padding(.horizontal, 40)
+            
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+    }
 }
 
 // MARK: - StatCard
@@ -347,6 +413,7 @@ struct StatCard: View {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(color)
+                    .accessibilityHidden(true)
                 Spacer()
             }
 
@@ -368,6 +435,9 @@ struct StatCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(.ultraThinMaterial)
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value). \(subtitle)")
+        .accessibilityAddTraits(.isStaticText)
     }
 }
 
@@ -384,6 +454,7 @@ struct ProjectionCard: View {
             Image(systemName: icon)
                 .font(.title2)
                 .foregroundColor(color)
+                .accessibilityHidden(true)
 
             Text(value)
                 .font(.headline)
@@ -400,6 +471,9 @@ struct ProjectionCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(.ultraThinMaterial)
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
+        .accessibilityAddTraits(.isStaticText)
     }
 }
 

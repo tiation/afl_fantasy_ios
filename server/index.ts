@@ -21,8 +21,14 @@ app.use('/data', express.static(path.join(__dirname, '../data')));
 // ✅ Serve guernsey images
 app.use('/guernseys', express.static(path.join(__dirname, '../public/guernseys')));
 
-// ✅ Serve status dashboard files statically
-app.use('/dashboards', express.static(path.join(__dirname, '../'), {
+// ✅ Serve dashboard assets statically
+app.use('/dashboards/assets', express.static(path.join(__dirname, '../dashboards/assets'), {
+  maxAge: '1d',
+  etag: true
+}));
+
+// ✅ Serve other dashboard files
+app.use('/dashboards', express.static(path.join(__dirname, '../dashboards'), {
   index: false,
   dotfiles: 'deny'
 }));
@@ -38,18 +44,30 @@ app.use(metricsMiddleware);
 app.get('/api/health', healthCheck);
 app.get('/metrics', metricsEndpoint);
 
-// Serve status dashboard (fixes CORS issues)
+// Serve new consolidated dashboard
 app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, '../status.html'));
+  res.sendFile(path.join(__dirname, '../dashboards/index.html'));
 });
 
-// Serve debug status page for troubleshooting
-app.get('/debug', (req, res) => {
+// Legacy dashboard redirects with deprecation notice
+app.get('/status', (req, res) => {
+  res.redirect(301, '/dashboard');
+});
+
+app.get('/debug-status', (req, res) => {
+  res.redirect(301, '/dashboard#debug');
+});
+
+app.get('/simple-status', (req, res) => {
+  res.redirect(301, '/dashboard');
+});
+
+// Legacy file access (for backwards compatibility)
+app.get('/legacy-debug', (req, res) => {
   res.sendFile(path.join(__dirname, '../debug-status.html'));
 });
 
-// Serve simple status page for testing
-app.get('/simple', (req, res) => {
+app.get('/legacy-simple', (req, res) => {
   res.sendFile(path.join(__dirname, '../simple-status.html'));
 });
 
@@ -104,7 +122,7 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 5174;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
   
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);

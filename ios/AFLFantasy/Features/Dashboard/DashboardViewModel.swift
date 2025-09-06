@@ -18,6 +18,9 @@ class DashboardViewModel: ObservableObject {
     // MARK: - Published Properties
 
     @Published var isLoading = false
+    @Published var isRefreshing = false
+    @Published var hasError = false
+    @Published var errorMessage: String?
     @Published var isLive = true
     @Published var currentScore = 2145
     @Published var currentRank = 3247
@@ -53,14 +56,33 @@ class DashboardViewModel: ObservableObject {
     // MARK: - Public Methods
 
     func refresh() async {
-        isLoading = true
+        isRefreshing = true
+        hasError = false
+        errorMessage = nil
 
-        // Simulate API delay
-        try? await Task.sleep(nanoseconds: 1_500_000_000)
+        do {
+            // Simulate API delay
+            try await Task.sleep(nanoseconds: 1_500_000_000)
+            
+            // Simulate occasional network error
+            if Bool.random() && Bool.random() {
+                throw AFLFantasyError.networkError("Unable to connect to AFL Fantasy servers")
+            }
+            
+            await loadDashboardData()
+            
+        } catch {
+            await MainActor.run {
+                hasError = true
+                if let aflError = error as? AFLFantasyError {
+                    errorMessage = aflError.localizedDescription
+                } else {
+                    errorMessage = "An unexpected error occurred. Please try again."
+                }
+            }
+        }
 
-        await loadDashboardData()
-
-        isLoading = false
+        isRefreshing = false
     }
 
     func refreshLiveData() async {
@@ -91,17 +113,29 @@ class DashboardViewModel: ObservableObject {
     }
 
     private func loadDashboardData() async {
-        // Load AI insights
-        aiInsights = generateAIInsights()
+        do {
+            // Load AI insights
+            aiInsights = generateAIInsights()
 
-        // Load critical alerts
-        criticalAlerts = generateCriticalAlerts()
+            // Load critical alerts
+            criticalAlerts = generateCriticalAlerts()
 
-        // Load team analysis
-        teamAnalysis = generateTeamAnalysis()
+            // Load team analysis
+            teamAnalysis = generateTeamAnalysis()
 
-        // Update live scores
-        await loadLiveScores()
+            // Update live scores
+            await loadLiveScores()
+            
+            // Clear any previous errors on successful load
+            hasError = false
+            errorMessage = nil
+            
+        } catch {
+            await MainActor.run {
+                hasError = true
+                errorMessage = "Failed to load dashboard data"
+            }
+        }
     }
 
     private func loadLiveScores() async {
@@ -252,4 +286,44 @@ struct AIInsight: Identifiable {
     let description: String
     let icon: String
     let color: Color
+}
+
+// MARK: - AFLFantasyError
+
+enum AFLFantasyError: LocalizedError {
+    case networkError(String)
+    case dataParsingError
+    case authenticationError
+    case serverError(Int)
+    case unknownError
+    
+    var errorDescription: String? {
+        switch self {
+        case .networkError(let message):
+            return message
+        case .dataParsingError:
+            return "Unable to process server response"
+        case .authenticationError:
+            return "Authentication required. Please log in again."
+        case .serverError(let code):
+            return "Server error (\(code)). Please try again later."
+        case .unknownError:
+            return "An unexpected error occurred"
+        }
+    }
+    
+    var recoverySuggestion: String? {
+        switch self {
+        case .networkError:
+            return "Check your internet connection and try again."
+        case .dataParsingError:
+            return "Please try refreshing the data."
+        case .authenticationError:
+            return "Please log in to continue."
+        case .serverError:
+            return "The server is temporarily unavailable. Please try again in a few minutes."
+        case .unknownError:
+            return "Please restart the app and try again."
+        }
+    }
 }

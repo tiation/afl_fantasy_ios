@@ -137,32 +137,48 @@ enum EnhancedDesignSystem {
         static var quick: SwiftUI.Animation {
             UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .easeInOut(duration: 0.2)
         }
-        
+
         static var standard: SwiftUI.Animation {
             UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .easeInOut(duration: 0.3)
         }
-        
+
         static var slow: SwiftUI.Animation {
             UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .easeInOut(duration: 0.5)
         }
-        
+
         static var bounce: SwiftUI.Animation {
-            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.2)
+            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(
+                response: 0.5,
+                dampingFraction: 0.7,
+                blendDuration: 0.2
+            )
         }
-        
+
         static var elastic: SwiftUI.Animation {
-            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0.1)
+            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(
+                response: 0.3,
+                dampingFraction: 0.6,
+                blendDuration: 0.1
+            )
         }
 
         // AFL specific - accessibility aware
         static var scoreUpdate: SwiftUI.Animation {
-            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(response: 0.6, dampingFraction: 0.8, blendDuration: 0.3)
+            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(
+                response: 0.6,
+                dampingFraction: 0.8,
+                blendDuration: 0.3
+            )
         }
-        
+
         static var celebration: SwiftUI.Animation {
-            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2)
+            UIAccessibility.isReduceMotionEnabled ? .linear(duration: 0.01) : .spring(
+                response: 0.4,
+                dampingFraction: 0.5,
+                blendDuration: 0.2
+            )
         }
-        
+
         // HIG-compliant animation durations
         static let hig200ms: SwiftUI.Animation = .easeInOut(duration: 0.2)
         static let hig250ms: SwiftUI.Animation = .easeInOut(duration: 0.25)

@@ -14,18 +14,18 @@ final class PerformanceMonitor {
 
     func startColdStartTimer() {
         coldStartStartTime = Date()
-#if DEBUG
-        print("[PerformanceMonitor] Cold start timer started at \(coldStartStartTime!)")
-#endif
+        #if DEBUG
+            print("[PerformanceMonitor] Cold start timer started at \(coldStartStartTime!)")
+        #endif
     }
 
     func endColdStartTimer() {
         coldStartEndTime = Date()
         if let start = coldStartStartTime, let end = coldStartEndTime {
             let elapsed = end.timeIntervalSince(start)
-#if DEBUG
-            print("[PerformanceMonitor] Cold start completed in \(String(format: "%.2f", elapsed)) seconds")
-#endif
+            #if DEBUG
+                print("[PerformanceMonitor] Cold start completed in \(String(format: "%.2f", elapsed)) seconds")
+            #endif
         }
     }
 }

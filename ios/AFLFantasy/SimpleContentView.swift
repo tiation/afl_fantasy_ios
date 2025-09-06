@@ -58,7 +58,7 @@ struct SimpleContentView: View {
 
 struct SimpleDashboardView: View {
     @EnvironmentObject var appState: AppState
-    @State private var cashGenerated = 120000
+    @State private var cashGenerated = 120_000
 
     var body: some View {
         NavigationView {
@@ -70,11 +70,11 @@ struct SimpleDashboardView: View {
                             Image(systemName: "trophy.fill")
                                 .font(.system(size: 28))
                                 .foregroundColor(.orange)
-                            
+
                             Text("Dashboard")
                                 .font(.title2)
                                 .fontWeight(.bold)
-                            
+
                             Spacer()
                         }
                         .padding(.horizontal)
@@ -82,9 +82,9 @@ struct SimpleDashboardView: View {
                     .padding(.bottom)
 
                     // Players List
-                    ForEach(Array(appState.players.enumerated()), id: \.offset) { index, player in
+                    ForEach(Array(appState.players.enumerated()), id: \.offset) { _, player in
                         EnhancedPlayerCard(
-                            player: player, 
+                            player: player,
                             showCashGenerated: player.position == .defender && player.name.contains("Young")
                         )
                         .padding(.horizontal)
@@ -105,62 +105,62 @@ struct SimpleDashboardView: View {
 struct EnhancedPlayerCard: View {
     let player: EnhancedPlayer
     let showCashGenerated: Bool
-    
+
     private var positionColor: Color {
         switch player.position {
-        case .defender: return .blue
-        case .midfielder: return .green  
-        case .ruck: return .purple
-        case .forward: return .red
+        case .defender: .blue
+        case .midfielder: .green
+        case .ruck: .purple
+        case .forward: .red
         }
     }
-    
+
     private var consistencyGrade: String {
         // Mock data - would be calculated from actual form
-        return ["A", "A", "B", "A"].randomElement() ?? "A"
+        ["A", "A", "B", "A"].randomElement() ?? "A"
     }
-    
+
     private var averageScore: Int {
         // Mock data - would be calculated from season stats
-        return Int.random(in: 85...115)
+        Int.random(in: 85 ... 115)
     }
-    
+
     private var priceChange: Int {
         // Mock data - would come from actual price tracking
         let changes = [-15, 20, 30, 35, -10]
         return changes.randomElement() ?? 0
     }
-    
+
     private var projectedScore: Int {
         // Mock data - would be AI prediction
-        return Int.random(in: 88...118)
+        Int.random(in: 88 ... 118)
     }
-    
+
     private var breakEven: Int {
         // Mock data - would be calculated
-        return player.position == .defender ? (showCashGenerated ? 45 : 90) : Int.random(in: 75...95)
+        player.position == .defender ? (showCashGenerated ? 45 : 90) : Int.random(in: 75 ... 95)
     }
-    
+
     private var riskLevel: String {
         // Mock data - would be calculated from injury/form data
-        return ["Low", "Moderate", "High"].randomElement() ?? "Low"
+        ["Low", "Moderate", "High"].randomElement() ?? "Low"
     }
-    
+
     private var riskColor: Color {
         switch riskLevel {
-        case "Low": return .green
-        case "Moderate": return .orange
-        case "High": return .red
-        default: return .gray
+        case "Low": .green
+        case "Moderate": .orange
+        case "High": .red
+        default: .gray
         }
     }
-    
+
     private var leftBorderColor: Color {
         switch riskLevel {
-        case "Low": return .green
-        case "Moderate": return .purple  // Purple for moderate like in screenshot
-        case "High": return .red
-        default: return .gray
+        case "Low": .green
+        case "Moderate": .purple // Purple for moderate like in screenshot
+        case "High": .red
+        default: .gray
         }
     }
 
@@ -176,22 +176,22 @@ struct EnhancedPlayerCard: View {
                         .frame(width: 4)
                         .cornerRadius(2, corners: .topLeft)
                         .cornerRadius(2, corners: .bottomLeft)
-                    
+
                     VStack(spacing: 8) {
                         // Name and position row
                         HStack {
                             Text(player.name)
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(.primary)
-                            
+
                             Spacer()
-                            
+
                             // Current score - large and prominent
                             VStack(alignment: .trailing, spacing: 2) {
                                 Text("\(player.currentScore)")
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.orange)
-                                
+
                                 if showCashGenerated {
                                     Text("BE: \(breakEven)")
                                         .font(.system(size: 11, weight: .medium))
@@ -203,7 +203,7 @@ struct EnhancedPlayerCard: View {
                                 }
                             }
                         }
-                        
+
                         // Position, price, and risk level
                         HStack {
                             Text(player.position.rawValue.uppercased())
@@ -213,11 +213,11 @@ struct EnhancedPlayerCard: View {
                                 .padding(.vertical, 2)
                                 .background(positionColor)
                                 .cornerRadius(4)
-                            
+
                             Text(player.formattedPrice)
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(.secondary)
-                            
+
                             HStack(spacing: 4) {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .font(.system(size: 10))
@@ -226,10 +226,10 @@ struct EnhancedPlayerCard: View {
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundColor(riskColor)
                             }
-                            
+
                             Spacer()
                         }
-                        
+
                         // Stats row
                         HStack(spacing: 20) {
                             // Consistency
@@ -237,48 +237,48 @@ struct EnhancedPlayerCard: View {
                                 Text("Consistency")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundColor(.secondary)
-                                
+
                                 Text(consistencyGrade)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.blue)
                             }
-                            
+
                             // Average
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Average")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundColor(.secondary)
-                                
+
                                 Text("\(averageScore)")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.primary)
                             }
-                            
+
                             // Price Change
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Price Δ")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundColor(.secondary)
-                                
+
                                 Text(priceChange >= 0 ? "+\(priceChange)k" : "\(priceChange)k")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(priceChange >= 0 ? .green : .red)
                             }
-                            
+
                             // Projected
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Projected")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundColor(.secondary)
-                                
+
                                 Text("\(projectedScore)")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.blue)
                             }
-                            
+
                             Spacer()
                         }
-                        
+
                         // Cash generated indicator (only for specific players)
                         if showCashGenerated {
                             HStack {
@@ -343,15 +343,15 @@ struct SimpleCaptainView: View {
                             Image(systemName: "brain.head.profile")
                                 .font(.system(size: 28))
                                 .foregroundColor(.orange)
-                            
+
                             Text("AI Captain Advisor")
                                 .font(.title2)
                                 .fontWeight(.bold)
-                            
+
                             Spacer()
                         }
                         .padding(.horizontal)
-                        
+
                         Text("Based on venue, form, and opponent analysis")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
@@ -381,24 +381,24 @@ struct EnhancedCaptainCard: View {
     let suggestion: CaptainSuggestion
     let rank: Int
     let isTopPick: Bool
-    
+
     private var confidenceColor: Color {
         switch suggestion.confidence {
-        case 90...100: return .green
-        case 80..<90: return Color.green.opacity(0.8)
-        case 70..<80: return .blue
-        default: return .orange
+        case 90 ... 100: .green
+        case 80 ..< 90: Color.green.opacity(0.8)
+        case 70 ..< 80: .blue
+        default: .orange
         }
     }
-    
+
     private var formFactorIcon: String {
         // Placeholder - would be based on actual form data
-        return "arrow.right.circle.fill"
+        "arrow.right.circle.fill"
     }
-    
+
     private var venueBias: String {
         // Placeholder - would calculate actual venue advantage
-        return "+\(Int.random(in: 1...10)).\(Int.random(in: 0...9))"
+        "+\(Int.random(in: 1 ... 10)).\(Int.random(in: 0 ... 9))"
     }
 
     var body: some View {
@@ -412,19 +412,19 @@ struct EnhancedCaptainCard: View {
                         Circle()
                             .fill(isTopPick ? Color.orange : Color.gray.opacity(0.3))
                             .frame(width: 32, height: 32)
-                        
+
                         Text("\(rank)")
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(isTopPick ? .white : .primary)
                     }
-                    
+
                     // Player info
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
                             Text(suggestion.player.name)
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(.primary)
-                            
+
                             if isTopPick {
                                 HStack(spacing: 4) {
                                     Text("🔥")
@@ -437,10 +437,10 @@ struct EnhancedCaptainCard: View {
                                 .background(Color.orange.opacity(0.1))
                                 .cornerRadius(8)
                             }
-                            
+
                             Spacer()
                         }
-                        
+
                         HStack {
                             Text(suggestion.player.position.rawValue.uppercased())
                                 .font(.system(size: 12, weight: .medium))
@@ -449,11 +449,11 @@ struct EnhancedCaptainCard: View {
                                 .padding(.vertical, 2)
                                 .background(suggestion.player.position.color)
                                 .cornerRadius(4)
-                            
+
                             Text("vs \(suggestion.player.opponent)")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(.secondary)
-                            
+
                             Text("@ \(suggestion.player.venue)")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(.secondary)
@@ -461,19 +461,19 @@ struct EnhancedCaptainCard: View {
                                 .truncationMode(.tail)
                         }
                     }
-                    
+
                     // Projected points - large and prominent
                     VStack(alignment: .trailing, spacing: 2) {
                         Text("\(suggestion.projectedPoints)")
                             .font(.system(size: 32, weight: .bold))
                             .foregroundColor(.orange)
-                        
+
                         Text("proj. pts")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 // Stats row
                 HStack(spacing: 24) {
                     // AI Confidence
@@ -481,44 +481,44 @@ struct EnhancedCaptainCard: View {
                         Text("AI Confidence")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.secondary)
-                        
+
                         Text("\(suggestion.confidence)%")
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(confidenceColor)
                     }
-                    
+
                     // Form Factor
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Form Factor")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.secondary)
-                        
+
                         Image(systemName: formFactorIcon)
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(.blue)
                     }
-                    
+
                     // Venue Bias
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Venue Bias")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.secondary)
-                        
+
                         Text(venueBias)
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(.green)
                     }
-                    
+
                     // Weather
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Weather")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.secondary)
-                        
+
                         Text("☀️")
                             .font(.system(size: 16))
                     }
-                    
+
                     Spacer()
                 }
             }

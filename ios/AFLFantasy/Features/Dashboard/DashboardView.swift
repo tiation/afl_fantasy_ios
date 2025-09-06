@@ -57,7 +57,7 @@ struct DashboardView: View {
             .navigationTitle("🏆 Dashboard")
             .navigationBarTitleDisplayMode(.large)
             .overlay {
-                if viewModel.isRefreshing && !viewModel.hasError {
+                if viewModel.isRefreshing, !viewModel.hasError {
                     VStack {
                         AFLLoadingAnimation()
                         Text("Updating...")
@@ -357,22 +357,22 @@ struct DashboardView: View {
             )
         }
     }
-    
+
     // MARK: - Error State View
-    
+
     private var errorStateView: some View {
         VStack(spacing: 24) {
             Spacer()
-            
+
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 60))
                 .foregroundColor(.orange)
-            
+
             VStack(spacing: 12) {
                 Text("Something went wrong")
                     .font(.title2)
                     .fontWeight(.semibold)
-                
+
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .font(.body)
@@ -381,7 +381,7 @@ struct DashboardView: View {
                         .padding(.horizontal)
                 }
             }
-            
+
             AFLButton(
                 title: "Try Again",
                 style: .primary
@@ -391,7 +391,7 @@ struct DashboardView: View {
                 }
             }
             .padding(.horizontal, 40)
-            
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

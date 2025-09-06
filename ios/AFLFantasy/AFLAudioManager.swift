@@ -2,8 +2,8 @@
 // AFL Fantasy Intelligence Platform
 // Created automatically to resolve missing symbol error
 
-import Foundation
 import AVFoundation
+import Foundation
 
 @MainActor
 class AFLAudioManager: ObservableObject {

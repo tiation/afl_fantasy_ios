@@ -89,16 +89,39 @@ class OnboardingCoordinator: ObservableObject {
     @Published var isValidating: Bool = false
     @Published var validationError: String? = nil
     @Published var isCompleted: Bool = false
+    @Published var hasExistingTeam: Bool = true // Track user choice
 
     private let keychainManager = KeychainManager()
 
-    enum OnboardingStep {
+    // Progress calculation
+    var progress: Double {
+        Double(currentStep.stepNumber) / Double(currentStep.totalSteps)
+    }
+
+    enum OnboardingStep: CaseIterable {
         case splash
         case welcome
+        case teamChoice
         case personalInfo
+        case createTeamGuide
         case credentials
         case validation
         case complete
+
+        var stepNumber: Int {
+            switch self {
+            case .splash: 0
+            case .welcome: 1
+            case .teamChoice: 2
+            case .personalInfo: 3
+            case .createTeamGuide: 3 // Same as personalInfo for progress
+            case .credentials: 4
+            case .validation: 5
+            case .complete: 6
+            }
+        }
+
+        var totalSteps: Int { 6 }
     }
 
     func nextStep() {
@@ -106,9 +129,18 @@ class OnboardingCoordinator: ObservableObject {
         case .splash:
             currentStep = .welcome
         case .welcome:
-            currentStep = .personalInfo
+            currentStep = .teamChoice
+        case .teamChoice:
+            // Branch based on user choice
+            if hasExistingTeam {
+                currentStep = .personalInfo
+            } else {
+                currentStep = .createTeamGuide
+            }
         case .personalInfo:
             currentStep = .credentials
+        case .createTeamGuide:
+            currentStep = .personalInfo
         case .credentials:
             currentStep = .validation
             validateCredentials()
@@ -123,8 +155,12 @@ class OnboardingCoordinator: ObservableObject {
         switch currentStep {
         case .welcome:
             currentStep = .splash
-        case .personalInfo:
+        case .teamChoice:
             currentStep = .welcome
+        case .personalInfo:
+            currentStep = .teamChoice
+        case .createTeamGuide:
+            currentStep = .teamChoice
         case .credentials:
             currentStep = .personalInfo
         case .validation:
@@ -132,6 +168,21 @@ class OnboardingCoordinator: ObservableObject {
         default:
             break
         }
+    }
+
+    // New helper methods for team choice flow
+    func selectHasExistingTeam() {
+        hasExistingTeam = true
+        nextStep()
+    }
+
+    func selectNeedsToCreateTeam() {
+        hasExistingTeam = false
+        nextStep()
+    }
+
+    func returnFromCreateGuide() {
+        currentStep = .personalInfo
     }
 
     private func validateCredentials() {
@@ -222,8 +273,12 @@ struct OnboardingView: View {
                     SplashView()
                 case .welcome:
                     WelcomeView()
+                case .teamChoice:
+                    TeamChoiceView()
                 case .personalInfo:
                     PersonalInfoView()
+                case .createTeamGuide:
+                    CreateTeamGuideView()
                 case .credentials:
                     CredentialsView()
                 case .validation:
@@ -346,6 +401,354 @@ struct WelcomeView: View {
             }
         }
         .padding()
+    }
+}
+
+// MARK: - TeamChoiceView
+
+struct TeamChoiceView: View {
+    @EnvironmentObject var coordinator: OnboardingCoordinator
+    @State private var selectedFeature = 0
+    
+    private let features = [
+        ("🧠", "AI Trade Insights", "Smart recommendations powered by real-time data"),
+        ("⭐", "Captain Advisor", "Advanced analytics for captain selection"), 
+        ("📊", "Performance Tracking", "Detailed player stats and projections"),
+        ("💰", "Cash Cow Alerts", "Never miss optimal buy/sell windows")
+    ]
+    
+    var body: some View {
+        VStack(spacing: 40) {
+            // Progress indicator
+            OnboardingProgressBar(
+                progress: coordinator.progress,
+                totalSteps: coordinator.currentStep.totalSteps
+            )
+            .padding(.horizontal)
+            // Header
+            VStack(spacing: 16) {
+                Text("🏈")
+                    .font(.system(size: 60))
+                
+                Text("Let's Set Up Your Team")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                
+                Text("Do you already have an AFL Fantasy team for this season?")
+                    .font(.body)
+                    .foregroundColor(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+            }
+            
+            // Feature Carousel
+            VStack(spacing: 12) {
+                TabView(selection: $selectedFeature) {
+                    ForEach(0..<features.count, id: \.self) { index in
+                        FeatureCard(feature: features[index])
+                            .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(height: 120)
+                
+                // Custom page indicator
+                HStack(spacing: 8) {
+                    ForEach(0..<features.count, id: \.self) { index in
+                        Circle()
+                            .fill(selectedFeature == index ? .white : .white.opacity(0.3))
+                            .frame(width: 8, height: 8)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            // Choice Buttons
+            VStack(spacing: 20) {
+                Button {
+                    coordinator.selectHasExistingTeam()
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Connect Existing Team")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            
+                            Text("I already have an AFL Fantasy team")
+                                .font(.caption)
+                                .opacity(0.8)
+                        }
+                        
+                        Spacer()
+                        
+                        Image(systemName: "link")
+                            .font(.title2)
+                    }
+                    .foregroundColor(.orange)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                    .padding(.horizontal)
+                    .background(.white)
+                    .cornerRadius(16)
+                }
+                .accessibilityLabel("Connect existing AFL Fantasy team")
+                .accessibilityHint("Tap to connect your existing team and get personalized insights")
+                
+                Button {
+                    coordinator.selectNeedsToCreateTeam()
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("I Need to Create One")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            
+                            Text("Show me how to set up a new team")
+                                .font(.caption)
+                                .opacity(0.8)
+                        }
+                        
+                        Spacer()
+                        
+                        Image(systemName: "plus.circle")
+                            .font(.title2)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                    .padding(.horizontal)
+                    .background(.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(.white.opacity(0.5), lineWidth: 2)
+                    )
+                }
+                .accessibilityLabel("Create new AFL Fantasy team")
+                .accessibilityHint("Tap to get guided instructions for creating your first team")
+                
+                // Back button
+                Button("Back") {
+                    coordinator.previousStep()
+                }
+                .foregroundColor(.white.opacity(0.7))
+                .font(.body)
+                .padding(.top)
+            }
+        }
+        .padding()
+        .onAppear {
+            // Auto-advance feature carousel
+            Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    selectedFeature = (selectedFeature + 1) % features.count
+                }
+            }
+        }
+    }
+}
+
+// MARK: - FeatureCard
+
+struct FeatureCard: View {
+    let feature: (String, String, String)
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(feature.0)
+                .font(.title)
+            
+            Text(feature.1)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+            
+            Text(feature.2)
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.8))
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(.white.opacity(0.1))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(.white.opacity(0.2), lineWidth: 1)
+        )
+    }
+}
+
+// MARK: - CreateTeamGuideView
+
+struct CreateTeamGuideView: View {
+    @EnvironmentObject var coordinator: OnboardingCoordinator
+    @State private var showCompletedSteps: Set<Int> = []
+    @State private var timeSpent: Date = Date()
+    
+    private let setupSteps = [
+        ("🌐", "Visit AFL Fantasy Website", "Go to fantasy.afl.com.au to get started"),
+        ("📝", "Create Your Account", "Sign up with your email and create a password"),
+        ("🏈", "Join or Create a League", "Either join an existing league or start your own"),
+        ("⭐", "Draft Your Team", "Select your starting squad within the salary cap"),
+        ("🔢", "Find Your Team ID", "Note the number in the URL after '/team/' - you'll need this")
+    ]
+    
+    var body: some View {
+        VStack(spacing: 30) {
+            // Header
+            VStack(spacing: 16) {
+                Text("📋")
+                    .font(.system(size: 60))
+                
+                Text("Let's Create Your AFL Fantasy Team")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                
+                Text("Follow these steps to set up your team. It only takes a few minutes!")
+                    .font(.body)
+                    .foregroundColor(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+            }
+            
+            // Setup Steps Checklist
+            VStack(spacing: 16) {
+                ForEach(Array(setupSteps.enumerated()), id: \.offset) { index, step in
+                    SetupStepRow(
+                        step: step,
+                        isCompleted: showCompletedSteps.contains(index),
+                        onToggle: {
+                            if showCompletedSteps.contains(index) {
+                                showCompletedSteps.remove(index)
+                            } else {
+                                showCompletedSteps.insert(index)
+                            }
+                        }
+                    )
+                }
+            }
+            
+            // Open Website Button
+            Link(destination: URL(string: "https://fantasy.afl.com.au")!) {
+                HStack {
+                    Image(systemName: "safari")
+                        .font(.title2)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Open AFL Fantasy Website")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                        
+                        Text("Opens in Safari browser")
+                            .font(.caption)
+                            .opacity(0.8)
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: "arrow.up.right")
+                        .font(.caption)
+                }
+                .foregroundColor(.orange)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .padding(.horizontal)
+                .background(.white)
+                .cornerRadius(12)
+            }
+            .accessibilityLabel("Open AFL Fantasy website in Safari")
+            
+            Spacer()
+            
+            // Navigation Buttons
+            VStack(spacing: 16) {
+                Button("I've Created My Team") {
+                    coordinator.returnFromCreateGuide()
+                }
+                .buttonStyle(OnboardingButtonStyle())
+                .disabled(showCompletedSteps.count < 4) // Need at least 4 steps completed
+                
+                HStack(spacing: 16) {
+                    Button("Back") {
+                        coordinator.previousStep()
+                    }
+                    .buttonStyle(OnboardingSecondaryButtonStyle())
+                    
+                    Button("Skip This Step") {
+                        coordinator.returnFromCreateGuide()
+                    }
+                    .foregroundColor(.white.opacity(0.7))
+                    .font(.caption)
+                }
+            }
+        }
+        .padding()
+        .onDisappear {
+            // Track analytics - time spent on team creation guide
+            let timeSpent = Date().timeIntervalSince(self.timeSpent)
+            print("CreateTeamGuide: User spent \(Int(timeSpent)) seconds on guide")
+        }
+    }
+}
+
+// MARK: - SetupStepRow
+
+struct SetupStepRow: View {
+    let step: (String, String, String)
+    let isCompleted: Bool
+    let onToggle: () -> Void
+    
+    var body: some View {
+        Button(action: onToggle) {
+            HStack(spacing: 16) {
+                // Step emoji and checkbox
+                ZStack {
+                    Circle()
+                        .fill(isCompleted ? .white : .white.opacity(0.1))
+                        .frame(width: 44, height: 44)
+                    
+                    if isCompleted {
+                        Image(systemName: "checkmark")
+                            .font(.title2)
+                            .foregroundColor(.orange)
+                            .fontWeight(.bold)
+                    } else {
+                        Text(step.0)
+                            .font(.title2)
+                    }
+                }
+                
+                // Step content
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(step.1)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
+                    
+                    Text(step.2)
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                        .multilineTextAlignment(.leading)
+                }
+                
+                Spacer()
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isCompleted ? .white.opacity(0.1) : .clear)
+                    .stroke(.white.opacity(0.2), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(step.1): \(step.2)")
+        .accessibilityValue(isCompleted ? "Completed" : "Not completed")
+        .accessibilityHint("Tap to mark as completed")
     }
 }
 
@@ -740,6 +1143,44 @@ struct OnboardingTextFieldStyle: TextFieldStyle {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(.white.opacity(0.3), lineWidth: 1)
             )
+    }
+}
+
+// MARK: - OnboardingProgressBar
+
+struct OnboardingProgressBar: View {
+    let progress: Double
+    let totalSteps: Int
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            // Progress dots
+            HStack(spacing: 12) {
+                ForEach(0..<totalSteps, id: \.self) { step in
+                    Circle()
+                        .fill(Double(step) <= progress * Double(totalSteps) ? .white : .white.opacity(0.3))
+                        .frame(width: 8, height: 8)
+                        .animation(.easeInOut(duration: 0.3), value: progress)
+                }
+            }
+            
+            // Progress bar
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    // Background bar
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(.white.opacity(0.3))
+                        .frame(height: 4)
+                    
+                    // Progress fill
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(.white)
+                        .frame(width: geometry.size.width * progress, height: 4)
+                        .animation(.easeInOut(duration: 0.5), value: progress)
+                }
+            }
+            .frame(height: 4)
+        }
     }
 }
 

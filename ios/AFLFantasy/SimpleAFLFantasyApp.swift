@@ -249,7 +249,7 @@ class AppState: ObservableObject {
 // MARK: - EnhancedPlayer
 
 struct EnhancedPlayer: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let name: String
     let position: Position
     let currentPrice: Int
@@ -312,7 +312,7 @@ struct EnhancedPlayer: Identifiable, Codable {
 // MARK: - CaptainSuggestion
 
 struct CaptainSuggestion: Identifiable {
-    let id = UUID()
+    var id = UUID()
     let player: EnhancedPlayer
     let confidence: Int
     let projectedPoints: Int
@@ -359,7 +359,7 @@ enum TabItem: String, CaseIterable {
 // MARK: - TradeRecord
 
 struct TradeRecord: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let playerOut: EnhancedPlayer
     let playerIn: EnhancedPlayer
     let executedAt: Date

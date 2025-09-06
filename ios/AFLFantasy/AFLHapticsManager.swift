@@ -13,8 +13,8 @@ class AFLHapticsManager: ObservableObject {
     func onAppLaunch() {
         // You can add real haptic feedback here if needed.
         #if os(iOS)
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
         #endif
     }
 }

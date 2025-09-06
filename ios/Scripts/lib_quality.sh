@@ -118,7 +118,7 @@ run_swiftlint() {
 # Run tests with coverage
 run_tests_with_coverage() {
     local scheme="${1:-AFLFantasy}"
-    local destination="${2:-platform=iOS Simulator,name=iPhone 15}"
+    local destination="${2:-platform=iOS Simulator,name=iPhone 15,OS=18.6}"
     
     log_section "Running Tests with Coverage"
     

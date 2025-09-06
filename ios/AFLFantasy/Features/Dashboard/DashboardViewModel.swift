@@ -63,14 +63,14 @@ class DashboardViewModel: ObservableObject {
         do {
             // Simulate API delay
             try await Task.sleep(nanoseconds: 1_500_000_000)
-            
+
             // Simulate occasional network error
-            if Bool.random() && Bool.random() {
+            if Bool.random(), Bool.random() {
                 throw AFLFantasyError.networkError("Unable to connect to AFL Fantasy servers")
             }
-            
+
             await loadDashboardData()
-            
+
         } catch {
             await MainActor.run {
                 hasError = true
@@ -125,11 +125,11 @@ class DashboardViewModel: ObservableObject {
 
             // Update live scores
             await loadLiveScores()
-            
+
             // Clear any previous errors on successful load
             hasError = false
             errorMessage = nil
-            
+
         } catch {
             await MainActor.run {
                 hasError = true
@@ -296,34 +296,34 @@ enum AFLFantasyError: LocalizedError {
     case authenticationError
     case serverError(Int)
     case unknownError
-    
+
     var errorDescription: String? {
         switch self {
-        case .networkError(let message):
-            return message
+        case let .networkError(message):
+            message
         case .dataParsingError:
-            return "Unable to process server response"
+            "Unable to process server response"
         case .authenticationError:
-            return "Authentication required. Please log in again."
-        case .serverError(let code):
-            return "Server error (\(code)). Please try again later."
+            "Authentication required. Please log in again."
+        case let .serverError(code):
+            "Server error (\(code)). Please try again later."
         case .unknownError:
-            return "An unexpected error occurred"
+            "An unexpected error occurred"
         }
     }
-    
+
     var recoverySuggestion: String? {
         switch self {
         case .networkError:
-            return "Check your internet connection and try again."
+            "Check your internet connection and try again."
         case .dataParsingError:
-            return "Please try refreshing the data."
+            "Please try refreshing the data."
         case .authenticationError:
-            return "Please log in to continue."
+            "Please log in to continue."
         case .serverError:
-            return "The server is temporarily unavailable. Please try again in a few minutes."
+            "The server is temporarily unavailable. Please try again in a few minutes."
         case .unknownError:
-            return "Please restart the app and try again."
+            "Please restart the app and try again."
         }
     }
 }

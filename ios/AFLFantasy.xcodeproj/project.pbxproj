@@ -10,7 +10,6 @@
 		02E6DE5EC317772C3C842112 /* AdvancedCaptainAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161FF39413D5191B38144FB7 /* AdvancedCaptainAI.swift */; };
 		06D9624B036B0667438B6C40 /* CaptainAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D35BFDD4CB0567F5D7AA28 /* CaptainAnalysisView.swift */; };
 		143BDD18E2BD596228184899 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FC36386597468BA584038A /* TabItem.swift */; };
-		1A2B3C4D5E6F70819A0B1C2D /* AFLFantasyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C2E /* AFLFantasyApp.swift */; };
 		1A2B3C4D5E6F70819A0B1C2F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */; };
 		1A2B3C4D5E6F70819A0B1C31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */; };
 		1A2B3C4D5E6F70819A0B1C33 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C34 /* Preview Assets.xcassets */; };
@@ -20,7 +19,7 @@
 		1E3D91FD2E6C74DC00D0B80B /* AFLAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */; };
 		1E3D91FF2E6C74E200D0B80B /* AFLHapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */; };
 		1E988A832E6C929800BA44A4 /* PerformanceMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */; };
-		1E988A852E6C96A800BA44A4 /* AFLFantasyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E988A842E6C96A800BA44A4 /* AFLFantasyApp.swift */; };
+		1E988A872E6C980B00BA44A4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E988A862E6C980B00BA44A4 /* AppState.swift */; };
 		4185C610773AB530EAAC0F29 /* AdvancedCashCowTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1F732C920D936198BF944 /* AdvancedCashCowTracker.swift */; };
 		4C71DC19B2326061FF3EA268 /* EnhancedDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092D1D98DBF3AA8BF0503D32 /* EnhancedDashboardView.swift */; };
 		5F3F90C39C7B62A75DBE6872 /* AFLFantasyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */; };
@@ -51,7 +50,6 @@
 /* Begin PBXFileReference section */
 		092D1D98DBF3AA8BF0503D32 /* EnhancedDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnhancedDashboardView.swift; path = AFLFantasy/Views/EnhancedDashboardView.swift; sourceTree = "<group>"; };
 		161FF39413D5191B38144FB7 /* AdvancedCaptainAI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCaptainAI.swift; path = AFLFantasy/Views/AdvancedCaptainAI.swift; sourceTree = "<group>"; };
-		1A2B3C4D5E6F70819A0B1C2E /* AFLFantasyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyApp.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819A0B1C34 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -64,7 +62,7 @@
 		1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLAudioManager.swift; sourceTree = "<group>"; };
 		1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLHapticsManager.swift; sourceTree = "<group>"; };
 		1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceMonitor.swift; sourceTree = "<group>"; };
-		1E988A842E6C96A800BA44A4 /* AFLFantasyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyApp.swift; sourceTree = "<group>"; };
+		1E988A862E6C980B00BA44A4 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		37D35BFDD4CB0567F5D7AA28 /* CaptainAnalysisView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptainAnalysisView.swift; path = AFLFantasy/Views/CaptainAnalysisView.swift; sourceTree = "<group>"; };
 		3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyAPIClient.swift; path = AFLFantasy/Services/AFLFantasyAPIClient.swift; sourceTree = "<group>"; };
 		45FC36386597468BA584038A /* TabItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TabItem.swift; path = AFLFantasy/Models/TabItem.swift; sourceTree = "<group>"; };
@@ -125,14 +123,13 @@
 		1A2B3C4D5E6F70819A0B1C46 /* AFLFantasy */ = {
 			isa = PBXGroup;
 			children = (
-				1A2B3C4D5E6F70819A0B1C2E /* AFLFantasyApp.swift */,
 				1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */,
 				1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */,
 				1A2B3C4D5E6F70819A0B1C4A /* Preview Content */,
 				1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */,
 				1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */,
 				1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */,
-				1E988A842E6C96A800BA44A4 /* AFLFantasyApp.swift */,
+				1E988A862E6C980B00BA44A4 /* AppState.swift */,
 			);
 			path = AFLFantasy;
 			sourceTree = "<group>";
@@ -305,7 +302,6 @@
 				1E3D91FD2E6C74DC00D0B80B /* AFLAudioManager.swift in Sources */,
 				1E3D91FF2E6C74E200D0B80B /* AFLHapticsManager.swift in Sources */,
 				1A2B3C4D5E6F70819A0B1C2F /* ContentView.swift in Sources */,
-				1A2B3C4D5E6F70819A0B1C2D /* AFLFantasyApp.swift in Sources */,
 				FC07EF92B5131F1AF937C6A7 /* AFLFantasyDataService.swift in Sources */,
 				73CB61FA33568ED1608AD19B /* AFLFantasyToolsClient.swift in Sources */,
 				5F3F90C39C7B62A75DBE6872 /* AFLFantasyAPIClient.swift in Sources */,
@@ -314,7 +310,7 @@
 				143BDD18E2BD596228184899 /* TabItem.swift in Sources */,
 				4C71DC19B2326061FF3EA268 /* EnhancedDashboardView.swift in Sources */,
 				06D9624B036B0667438B6C40 /* CaptainAnalysisView.swift in Sources */,
-				1E988A852E6C96A800BA44A4 /* AFLFantasyApp.swift in Sources */,
+				1E988A872E6C980B00BA44A4 /* AppState.swift in Sources */,
 				02E6DE5EC317772C3C842112 /* AdvancedCaptainAI.swift in Sources */,
 				1E988A832E6C929800BA44A4 /* PerformanceMonitor.swift in Sources */,
 				8AF494114EF70DD2D6B36838 /* IntelligentTradesView.swift in Sources */,

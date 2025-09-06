@@ -990,7 +990,7 @@ struct AdvancedSettingsSheet: View {
 #Preview {
     let state = AppState()
     // Try to extract a real captain from suggestions if present
-    let captain = if let suggestion = state.captainSuggestions.first {
+    _ = if let suggestion = state.captainSuggestions.first {
         CaptainData(
             playerName: suggestion.player.name,
             score: suggestion.projectedPoints / 2,
@@ -999,6 +999,6 @@ struct AdvancedSettingsSheet: View {
     } else {
         CaptainData()
     }
-    return AdvancedCaptainAI()
+    AdvancedCaptainAI()
         .environmentObject(state)
 }

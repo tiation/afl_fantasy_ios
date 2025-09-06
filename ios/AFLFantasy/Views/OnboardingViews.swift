@@ -8,7 +8,57 @@
 
 import SwiftUI
 
-// MARK: - AFLTeam
+// MARK: - OnboardingError
+
+enum OnboardingError: LocalizedError {
+    case networkError(String)
+    case invalidCredentials(String)
+    case emptyFields
+    case serverError(Int)
+    case timeout
+    case unknownError
+    
+    var errorDescription: String? {
+        switch self {
+        case .networkError(let message):
+            return "Network Error: \(message)"
+        case .invalidCredentials(let message):
+            return message.isEmpty ? "Invalid team credentials. Please check your Team ID and Session Cookie." : message
+        case .emptyFields:
+            return "Please fill in both your Team ID and Session Cookie."
+        case .serverError(let code):
+            return "Server error (\(code)). Please try again later."
+        case .timeout:
+            return "Request timed out. Please check your internet connection and try again."
+        case .unknownError:
+            return "Something went wrong. Please try again."
+        }
+    }
+    
+    var recoveryMessage: String {
+        switch self {
+        case .networkError, .timeout:
+            return "Check your internet connection and try again."
+        case .invalidCredentials:
+            return "Double-check your credentials in the AFL Fantasy app or website."
+        case .emptyFields:
+            return "Make sure both fields are filled in completely."
+        case .serverError:
+            return "This is usually temporary. Try again in a few minutes."
+        case .unknownError:
+            return "If this persists, try restarting the app."
+        }
+    }
+    
+    var canRetry: Bool {
+        switch self {
+        case .emptyFields:
+            return false
+        default:
+            return true
+        }
+    }
+}
 
 enum AFLTeam: String, CaseIterable {
     case adelaide = "Adelaide Crows"
@@ -87,11 +137,14 @@ class OnboardingCoordinator: ObservableObject {
     @Published var teamId: String = ""
     @Published var sessionCookie: String = ""
     @Published var isValidating: Bool = false
-    @Published var validationError: String? = nil
+    @Published var validationError: OnboardingError? = nil
     @Published var isCompleted: Bool = false
     @Published var hasExistingTeam: Bool = true // Track user choice
-
+    @Published var showValidationAlert: Bool = false
+    
     private let keychainManager = KeychainManager()
+    private var validationRetryCount: Int = 0
+    private let maxRetries = 3
 
     // Progress calculation
     var progress: Double {
@@ -186,13 +239,16 @@ class OnboardingCoordinator: ObservableObject {
     }
 
     private func validateCredentials() {
-        guard !teamId.isEmpty, !sessionCookie.isEmpty else {
-            validationError = "Please fill in all credential fields"
+        guard !teamId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              !sessionCookie.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            validationError = .emptyFields
+            showValidationAlert = true
             return
         }
 
         isValidating = true
         validationError = nil
+        showValidationAlert = false
 
         // Create validation request
         let validationData = [
@@ -207,34 +263,93 @@ class OnboardingCoordinator: ObservableObject {
                 request.httpMethod = "POST"
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.httpBody = try JSONSerialization.data(withJSONObject: validationData)
+                request.timeoutInterval = 15.0 // 15 second timeout
 
                 let (data, response) = try await URLSession.shared.data(for: request)
 
                 if let httpResponse = response as? HTTPURLResponse {
-                    let result = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-
                     await MainActor.run {
                         isValidating = false
-
-                        if httpResponse.statusCode == 200,
-                           let isValid = result?["valid"] as? Bool,
-                           isValid
-                        {
-                            // Credentials are valid, proceed to next step
-                            nextStep()
-                        } else {
-                            // Show validation error
-                            validationError = result?["error"] as? String ?? "Invalid credentials"
-                        }
+                        handleValidationResponse(httpResponse: httpResponse, data: data)
+                    }
+                } else {
+                    await MainActor.run {
+                        isValidating = false
+                        validationError = .unknownError
+                        showValidationAlert = true
                     }
                 }
             } catch {
                 await MainActor.run {
                     isValidating = false
-                    validationError = "Network error: \(error.localizedDescription)"
+                    handleValidationError(error)
                 }
             }
         }
+    }
+    
+    private func handleValidationResponse(httpResponse: HTTPURLResponse, data: Data) {
+        do {
+            let result = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            
+            switch httpResponse.statusCode {
+            case 200:
+                if let isValid = result?["valid"] as? Bool, isValid {
+                    // Credentials are valid, reset retry count and proceed
+                    validationRetryCount = 0
+                    nextStep()
+                } else {
+                    // Invalid credentials
+                    let errorMessage = result?["error"] as? String ?? ""
+                    validationError = .invalidCredentials(errorMessage)
+                    showValidationAlert = true
+                }
+            case 400:
+                let errorMessage = result?["error"] as? String ?? ""
+                validationError = .invalidCredentials(errorMessage)
+                showValidationAlert = true
+            case 429:
+                validationError = .serverError(429)
+                showValidationAlert = true
+            case 500...599:
+                validationError = .serverError(httpResponse.statusCode)
+                showValidationAlert = true
+            default:
+                validationError = .unknownError
+                showValidationAlert = true
+            }
+        } catch {
+            validationError = .unknownError
+            showValidationAlert = true
+        }
+    }
+    
+    private func handleValidationError(_ error: Error) {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .timedOut:
+                validationError = .timeout
+            case .notConnectedToInternet, .networkConnectionLost:
+                validationError = .networkError("No internet connection")
+            case .cannotFindHost, .cannotConnectToHost:
+                validationError = .networkError("Cannot reach server")
+            default:
+                validationError = .networkError(urlError.localizedDescription)
+            }
+        } else {
+            validationError = .networkError(error.localizedDescription)
+        }
+        showValidationAlert = true
+    }
+    
+    func retryValidation() {
+        validationRetryCount += 1
+        showValidationAlert = false
+        validateCredentials()
+    }
+    
+    func shouldShowSupportOption() -> Bool {
+        return validationRetryCount >= maxRetries
     }
 
     private func completeOnboarding() {
@@ -303,29 +418,63 @@ struct SplashView: View {
     @EnvironmentObject var coordinator: OnboardingCoordinator
     @State private var logoScale: CGFloat = 0.8
     @State private var showContent = false
+    @State private var showFeaturePreview = false
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    
+    private let keyBenefits = [
+        "🧠 AI-powered trade recommendations",
+        "⭐ Smart captain selection advice", 
+        "💰 Never miss cash cow opportunities",
+        "📊 Real-time performance tracking"
+    ]
 
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 32) {
             Spacer()
 
-            // App Logo/Icon
-            VStack(spacing: 20) {
+            // App Logo/Icon with reduced motion support
+            VStack(spacing: 24) {
                 Image(systemName: "football.fill")
                     .font(.system(size: 80))
                     .foregroundColor(.white)
                     .scaleEffect(logoScale)
-                    .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: logoScale)
+                    .animation(
+                        reduceMotion ? .none : .easeInOut(duration: 2).repeatForever(autoreverses: true), 
+                        value: logoScale
+                    )
 
                 if showContent {
-                    VStack(spacing: 12) {
-                        Text("AFL Fantasy")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+                    VStack(spacing: 16) {
+                        // Main headline
+                        VStack(spacing: 8) {
+                            Text("AFL Fantasy")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
 
-                        Text("Intelligence Platform")
-                            .font(.title2)
-                            .foregroundColor(.white.opacity(0.9))
+                            Text("Intelligence Platform")
+                                .font(.title2)
+                                .fontWeight(.medium)
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                        
+                        // Value proposition
+                        Text("Dominate your league with AI-powered insights and real-time data")
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .foregroundColor(.white.opacity(0.85))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 16)
+                        
+                        // Key benefits list
+                        VStack(spacing: 8) {
+                            ForEach(keyBenefits, id: \.self) { benefit in
+                                Text(benefit)
+                                    .font(.caption)
+                                    .foregroundColor(.white.opacity(0.75))
+                            }
+                        }
+                        .padding(.top, 8)
                     }
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
                 }
@@ -334,25 +483,190 @@ struct SplashView: View {
             Spacer()
 
             if showContent {
-                Button("Get Started") {
-                    coordinator.nextStep()
+                VStack(spacing: 16) {
+                    // Primary CTA
+                    Button("Let's Set Up Your Team") {
+                        coordinator.nextStep()
+                    }
+                    .buttonStyle(OnboardingButtonStyle())
+                    .accessibilityLabel("Set up your AFL Fantasy team")
+                    .accessibilityHint("Start the setup process to connect your team and get personalized insights")
+                    
+                    // Secondary CTA
+                    Button("Preview Features") {
+                        showFeaturePreview = true
+                    }
+                    .font(.body)
+                    .foregroundColor(.white.opacity(0.8))
+                    .underline()
+                    .accessibilityLabel("Preview app features")
+                    .accessibilityHint("See what the app can do before setting up your team")
                 }
-                .buttonStyle(OnboardingButtonStyle())
                 .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         }
         .padding()
+        .sheet(isPresented: $showFeaturePreview) {
+            FeaturePreviewModal()
+        }
         .onAppear {
-            // Start logo animation
-            logoScale = 1.1
+            // Start logo animation (respects reduce motion)
+            if !reduceMotion {
+                logoScale = 1.1
+            }
 
             // Show content after delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                withAnimation(.easeOut(duration: 0.8)) {
+            let delay = reduceMotion ? 0.3 : 1.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                let duration = reduceMotion ? 0.2 : 0.8
+                withAnimation(.easeOut(duration: duration)) {
                     showContent = true
                 }
             }
         }
+    }
+}
+
+// MARK: - FeaturePreviewModal
+
+struct FeaturePreviewModal: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var selectedTab = 0
+    
+    private let features = [
+        FeaturePreview(
+            title: "AI Trade Insights",
+            description: "Get smart recommendations based on player form, fixtures, and advanced analytics. Never make a bad trade again.",
+            icon: "brain.head.profile",
+            color: .blue
+        ),
+        FeaturePreview(
+            title: "Captain Advisor",
+            description: "Advanced algorithm analyzes venue performance, weather conditions, and matchup data to suggest the optimal captain choice.",
+            icon: "star.fill",
+            color: .yellow
+        ),
+        FeaturePreview(
+            title: "Cash Cow Tracker",
+            description: "Identify breakout players before they peak in price. Automated alerts for optimal buy/sell windows.",
+            icon: "dollarsign.circle.fill",
+            color: .green
+        ),
+        FeaturePreview(
+            title: "Performance Analytics",
+            description: "Deep dive into player stats, consistency scores, and injury risk assessments with interactive charts.",
+            icon: "chart.bar.fill",
+            color: .purple
+        )
+    ]
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Tab selector
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(0..<features.count, id: \.self) { index in
+                            Button {
+                                selectedTab = index
+                            } label: {
+                                VStack(spacing: 8) {
+                                    Image(systemName: features[index].icon)
+                                        .font(.title2)
+                                        .foregroundColor(selectedTab == index ? features[index].color : .secondary)
+                                    
+                                    Text(features[index].title)
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(selectedTab == index ? .primary : .secondary)
+                                }
+                                .padding(.vertical, 12)
+                                .padding(.horizontal, 16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(selectedTab == index ? features[index].color.opacity(0.1) : Color.clear)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.vertical)
+                
+                // Feature content
+                TabView(selection: $selectedTab) {
+                    ForEach(0..<features.count, id: \.self) { index in
+                        FeaturePreviewCard(feature: features[index])
+                            .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                
+                // CTA
+                VStack(spacing: 16) {
+                    Button("Start Using AFL Fantasy Intelligence") {
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    
+                    Text("Ready to dominate your league?")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+            }
+            .navigationTitle("App Features")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                trailing: Button("Close") {
+                    dismiss()
+                }
+            )
+        }
+    }
+}
+
+// MARK: - FeaturePreview
+
+struct FeaturePreview {
+    let title: String
+    let description: String
+    let icon: String
+    let color: Color
+}
+
+// MARK: - FeaturePreviewCard
+
+struct FeaturePreviewCard: View {
+    let feature: FeaturePreview
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            // Icon
+            Image(systemName: feature.icon)
+                .font(.system(size: 60))
+                .foregroundColor(feature.color)
+                .padding(.top)
+            
+            // Content
+            VStack(spacing: 16) {
+                Text(feature.title)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                
+                Text(feature.description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
+            
+            Spacer()
+        }
+        .padding()
     }
 }
 
@@ -409,14 +723,14 @@ struct WelcomeView: View {
 struct TeamChoiceView: View {
     @EnvironmentObject var coordinator: OnboardingCoordinator
     @State private var selectedFeature = 0
-    
+
     private let features = [
         ("🧠", "AI Trade Insights", "Smart recommendations powered by real-time data"),
-        ("⭐", "Captain Advisor", "Advanced analytics for captain selection"), 
+        ("⭐", "Captain Advisor", "Advanced analytics for captain selection"),
         ("📊", "Performance Tracking", "Detailed player stats and projections"),
         ("💰", "Cash Cow Alerts", "Never miss optimal buy/sell windows")
     ]
-    
+
     var body: some View {
         VStack(spacing: 40) {
             // Progress indicator
@@ -429,42 +743,42 @@ struct TeamChoiceView: View {
             VStack(spacing: 16) {
                 Text("🏈")
                     .font(.system(size: 60))
-                
+
                 Text("Let's Set Up Your Team")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
-                
+
                 Text("Do you already have an AFL Fantasy team for this season?")
                     .font(.body)
                     .foregroundColor(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
             }
-            
+
             // Feature Carousel
             VStack(spacing: 12) {
                 TabView(selection: $selectedFeature) {
-                    ForEach(0..<features.count, id: \.self) { index in
+                    ForEach(0 ..< features.count, id: \.self) { index in
                         FeatureCard(feature: features[index])
                             .tag(index)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .frame(height: 120)
-                
+
                 // Custom page indicator
                 HStack(spacing: 8) {
-                    ForEach(0..<features.count, id: \.self) { index in
+                    ForEach(0 ..< features.count, id: \.self) { index in
                         Circle()
                             .fill(selectedFeature == index ? .white : .white.opacity(0.3))
                             .frame(width: 8, height: 8)
                     }
                 }
             }
-            
+
             Spacer()
-            
+
             // Choice Buttons
             VStack(spacing: 20) {
                 Button {
@@ -475,14 +789,14 @@ struct TeamChoiceView: View {
                             Text("Connect Existing Team")
                                 .font(.headline)
                                 .fontWeight(.semibold)
-                            
+
                             Text("I already have an AFL Fantasy team")
                                 .font(.caption)
                                 .opacity(0.8)
                         }
-                        
+
                         Spacer()
-                        
+
                         Image(systemName: "link")
                             .font(.title2)
                     }
@@ -495,7 +809,7 @@ struct TeamChoiceView: View {
                 }
                 .accessibilityLabel("Connect existing AFL Fantasy team")
                 .accessibilityHint("Tap to connect your existing team and get personalized insights")
-                
+
                 Button {
                     coordinator.selectNeedsToCreateTeam()
                 } label: {
@@ -504,14 +818,14 @@ struct TeamChoiceView: View {
                             Text("I Need to Create One")
                                 .font(.headline)
                                 .fontWeight(.semibold)
-                            
+
                             Text("Show me how to set up a new team")
                                 .font(.caption)
                                 .opacity(0.8)
                         }
-                        
+
                         Spacer()
-                        
+
                         Image(systemName: "plus.circle")
                             .font(.title2)
                     }
@@ -527,7 +841,7 @@ struct TeamChoiceView: View {
                 }
                 .accessibilityLabel("Create new AFL Fantasy team")
                 .accessibilityHint("Tap to get guided instructions for creating your first team")
-                
+
                 // Back button
                 Button("Back") {
                     coordinator.previousStep()
@@ -553,17 +867,17 @@ struct TeamChoiceView: View {
 
 struct FeatureCard: View {
     let feature: (String, String, String)
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Text(feature.0)
                 .font(.title)
-            
+
             Text(feature.1)
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
-            
+
             Text(feature.2)
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.8))
@@ -585,8 +899,8 @@ struct FeatureCard: View {
 struct CreateTeamGuideView: View {
     @EnvironmentObject var coordinator: OnboardingCoordinator
     @State private var showCompletedSteps: Set<Int> = []
-    @State private var timeSpent: Date = Date()
-    
+    @State private var timeSpent: Date = .init()
+
     private let setupSteps = [
         ("🌐", "Visit AFL Fantasy Website", "Go to fantasy.afl.com.au to get started"),
         ("📝", "Create Your Account", "Sign up with your email and create a password"),
@@ -594,26 +908,26 @@ struct CreateTeamGuideView: View {
         ("⭐", "Draft Your Team", "Select your starting squad within the salary cap"),
         ("🔢", "Find Your Team ID", "Note the number in the URL after '/team/' - you'll need this")
     ]
-    
+
     var body: some View {
         VStack(spacing: 30) {
             // Header
             VStack(spacing: 16) {
                 Text("📋")
                     .font(.system(size: 60))
-                
+
                 Text("Let's Create Your AFL Fantasy Team")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
-                
+
                 Text("Follow these steps to set up your team. It only takes a few minutes!")
                     .font(.body)
                     .foregroundColor(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
             }
-            
+
             // Setup Steps Checklist
             VStack(spacing: 16) {
                 ForEach(Array(setupSteps.enumerated()), id: \.offset) { index, step in
@@ -630,25 +944,25 @@ struct CreateTeamGuideView: View {
                     )
                 }
             }
-            
+
             // Open Website Button
             Link(destination: URL(string: "https://fantasy.afl.com.au")!) {
                 HStack {
                     Image(systemName: "safari")
                         .font(.title2)
-                    
+
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Open AFL Fantasy Website")
                             .font(.headline)
                             .fontWeight(.semibold)
-                        
+
                         Text("Opens in Safari browser")
                             .font(.caption)
                             .opacity(0.8)
                     }
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "arrow.up.right")
                         .font(.caption)
                 }
@@ -660,9 +974,9 @@ struct CreateTeamGuideView: View {
                 .cornerRadius(12)
             }
             .accessibilityLabel("Open AFL Fantasy website in Safari")
-            
+
             Spacer()
-            
+
             // Navigation Buttons
             VStack(spacing: 16) {
                 Button("I've Created My Team") {
@@ -670,13 +984,13 @@ struct CreateTeamGuideView: View {
                 }
                 .buttonStyle(OnboardingButtonStyle())
                 .disabled(showCompletedSteps.count < 4) // Need at least 4 steps completed
-                
+
                 HStack(spacing: 16) {
                     Button("Back") {
                         coordinator.previousStep()
                     }
                     .buttonStyle(OnboardingSecondaryButtonStyle())
-                    
+
                     Button("Skip This Step") {
                         coordinator.returnFromCreateGuide()
                     }
@@ -688,7 +1002,7 @@ struct CreateTeamGuideView: View {
         .padding()
         .onDisappear {
             // Track analytics - time spent on team creation guide
-            let timeSpent = Date().timeIntervalSince(self.timeSpent)
+            let timeSpent = Date().timeIntervalSince(timeSpent)
             print("CreateTeamGuide: User spent \(Int(timeSpent)) seconds on guide")
         }
     }
@@ -700,7 +1014,7 @@ struct SetupStepRow: View {
     let step: (String, String, String)
     let isCompleted: Bool
     let onToggle: () -> Void
-    
+
     var body: some View {
         Button(action: onToggle) {
             HStack(spacing: 16) {
@@ -709,7 +1023,7 @@ struct SetupStepRow: View {
                     Circle()
                         .fill(isCompleted ? .white : .white.opacity(0.1))
                         .frame(width: 44, height: 44)
-                    
+
                     if isCompleted {
                         Image(systemName: "checkmark")
                             .font(.title2)
@@ -720,7 +1034,7 @@ struct SetupStepRow: View {
                             .font(.title2)
                     }
                 }
-                
+
                 // Step content
                 VStack(alignment: .leading, spacing: 4) {
                     Text(step.1)
@@ -728,13 +1042,13 @@ struct SetupStepRow: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)
-                    
+
                     Text(step.2)
                         .font(.caption)
                         .foregroundColor(.white.opacity(0.8))
                         .multilineTextAlignment(.leading)
                 }
-                
+
                 Spacer()
             }
             .padding(.vertical, 8)
@@ -875,6 +1189,13 @@ struct CredentialsView: View {
 
     var body: some View {
         VStack(spacing: 30) {
+            // Progress indicator
+            OnboardingProgressBar(
+                progress: coordinator.progress,
+                totalSteps: coordinator.currentStep.totalSteps
+            )
+            .padding(.horizontal)
+            
             // Header
             VStack(spacing: 16) {
                 Text("🔐")
@@ -903,8 +1224,12 @@ struct CredentialsView: View {
                         Button("?") {
                             showHelp.toggle()
                         }
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.white.opacity(0.7))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.white.opacity(0.2))
+                        .clipShape(Circle())
                     }
 
                     TextField("e.g., 123456", text: $coordinator.teamId)
@@ -914,21 +1239,25 @@ struct CredentialsView: View {
 
                 // Session Cookie Input
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Session Cookie")
-                        .font(.headline)
-                        .foregroundColor(.white)
+                    HStack {
+                        Text("Session Cookie")
+                            .font(.headline)
+                            .foregroundColor(.white)
+
+                        Button("?") {
+                            showHelp.toggle()
+                        }
+                        .font(.caption2)
+                        .foregroundColor(.white.opacity(0.7))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.white.opacity(0.2))
+                        .clipShape(Circle())
+                    }
 
                     TextField("Paste your session cookie here", text: $coordinator.sessionCookie)
                         .textFieldStyle(OnboardingTextFieldStyle())
                 }
-            }
-
-            if let error = coordinator.validationError {
-                Text(error)
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .padding(.horizontal)
-                    .multilineTextAlignment(.center)
             }
 
             Spacer()
@@ -950,6 +1279,39 @@ struct CredentialsView: View {
         .padding()
         .sheet(isPresented: $showHelp) {
             CredentialHelpView()
+        }
+        .alert("Validation Error", isPresented: $coordinator.showValidationAlert) {
+            if let error = coordinator.validationError {
+                if error.canRetry && !coordinator.shouldShowSupportOption() {
+                    Button("Try Again") {
+                        coordinator.retryValidation()
+                    }
+                    Button("Edit Credentials") {
+                        coordinator.showValidationAlert = false
+                    }
+                } else if coordinator.shouldShowSupportOption() {
+                    Button("Edit Credentials") {
+                        coordinator.showValidationAlert = false
+                    }
+                    Button("Get Help") {
+                        // Open support email or help
+                        showHelp = true
+                        coordinator.showValidationAlert = false
+                    }
+                } else {
+                    Button("OK") {
+                        coordinator.showValidationAlert = false
+                    }
+                }
+            }
+        } message: {
+            if let error = coordinator.validationError {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(error.errorDescription ?? "Unknown error")
+                    Text(error.recoveryMessage)
+                        .font(.caption)
+                }
+            }
         }
     }
 }
@@ -1151,19 +1513,19 @@ struct OnboardingTextFieldStyle: TextFieldStyle {
 struct OnboardingProgressBar: View {
     let progress: Double
     let totalSteps: Int
-    
+
     var body: some View {
         VStack(spacing: 8) {
             // Progress dots
             HStack(spacing: 12) {
-                ForEach(0..<totalSteps, id: \.self) { step in
+                ForEach(0 ..< totalSteps, id: \.self) { step in
                     Circle()
                         .fill(Double(step) <= progress * Double(totalSteps) ? .white : .white.opacity(0.3))
                         .frame(width: 8, height: 8)
                         .animation(.easeInOut(duration: 0.3), value: progress)
                 }
             }
-            
+
             // Progress bar
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
@@ -1171,7 +1533,7 @@ struct OnboardingProgressBar: View {
                     RoundedRectangle(cornerRadius: 2)
                         .fill(.white.opacity(0.3))
                         .frame(height: 4)
-                    
+
                     // Progress fill
                     RoundedRectangle(cornerRadius: 2)
                         .fill(.white)

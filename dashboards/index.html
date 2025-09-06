@@ -208,25 +208,25 @@
             <div class="quick-actions" role="toolbar" aria-label="Quick actions">
                 <h3 class="actions-title">Quick Actions</h3>
                 <div class="actions-grid">
-                    <button class="action-btn primary" id="refresh-all" aria-describedby="refresh-desc">
+                    <button class="action-btn primary" aria-describedby="refresh-desc">
                         <span class="btn-icon" aria-hidden="true">🔄</span>
-                        Refresh All
+                        Refresh All Data
                     </button>
                     <div id="refresh-desc" class="sr-only">Refresh status for all system components</div>
                     
-                    <button class="action-btn secondary" id="view-logs">
-                        <span class="btn-icon" aria-hidden="true">📋</span>
-                        View Logs
+                    <button class="action-btn secondary">
+                        <span class="btn-icon" aria-hidden="true">📄</span>
+                        Export Logs
                     </button>
                     
-                    <button class="action-btn warning" id="restart-services">
-                        <span class="btn-icon" aria-hidden="true">🔁</span>
-                        Restart Services
+                    <button class="action-btn info">
+                        <span class="btn-icon" aria-hidden="true">🔍</span>
+                        Run Health Check
                     </button>
                     
-                    <button class="action-btn info" id="api-health">
-                        <span class="btn-icon" aria-hidden="true">🏥</span>
-                        API Health
+                    <button class="action-btn warning">
+                        <span class="btn-icon" aria-hidden="true">📖</span>
+                        View Documentation
                     </button>
                 </div>
             </div>
@@ -309,17 +309,6 @@
     </div>
 
     <!-- Loading Scripts -->
-    <script type="module" src="/dashboards/assets/js/dashboard.js"></script>
-    
-    <!-- Initialize Dashboard -->
-    <script type="module">
-        import { Dashboard } from '/dashboards/assets/js/dashboard.js';
-        
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            window.dashboard = new Dashboard();
-            window.dashboard.init();
-        });
-    </script>
+    <script src="/dashboards/assets/js/dashboard.js"></script>
 </body>
 </html>

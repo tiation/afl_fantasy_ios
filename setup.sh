@@ -433,7 +433,13 @@ startup_services() {
     fi
     
     print_step "Starting services with profiles: $PROFILES"
-    docker compose -f "$COMPOSE_FILE" "${profile_args[@]}" up "${up_args[@]}"
+    
+    # Handle empty up_args array to avoid unbound variable error
+    if [ ${#up_args[@]} -eq 0 ]; then
+        docker compose -f "$COMPOSE_FILE" "${profile_args[@]}" up
+    else
+        docker compose -f "$COMPOSE_FILE" "${profile_args[@]}" up "${up_args[@]}"
+    fi
     
     if [ "$DETACH_MODE" = "true" ]; then
         print_success "Services started in background"

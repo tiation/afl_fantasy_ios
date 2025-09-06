@@ -22,6 +22,8 @@ class PersistentAppState: ObservableObject {
     @Published var captainSuggestions: [CaptainSuggestion] = []
     @Published var cashCows: [EnhancedPlayer] = []
     @Published var favoritePlayers: [EnhancedPlayer] = []
+    @Published var tradeHistory: [TradeRecord] = []
+    @Published var tradesUsed: Int = 0
 
     // Persistence State
     @Published var isLoading = false

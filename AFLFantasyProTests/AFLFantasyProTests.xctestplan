@@ -1,0 +1,62 @@
+{
+  "configurations" : [
+    {
+      "id" : "4A3B5C2D-1E2F-3A4B-5C6D-7E8F9A0B1C2D",
+      "name" : "Test Scheme Action",
+      "options" : {
+        "addressSanitizer" : {
+          "enabled" : false
+        },
+        "codeCoverage" : {
+          "enabled" : true,
+          "targets" : [
+            {
+              "containerPath" : "container:AFLFantasyPro.xcodeproj",
+              "identifier" : "AFLFantasyPro",
+              "name" : "AFLFantasyPro"
+            }
+          ]
+        },
+        "commandLineArguments" : {
+
+        },
+        "diagnosticsEnabled" : false,
+        "environmentVariables" : {
+          "SQLITE_ENABLE_THREAD_ASSERTIONS" : "1"
+        },
+        "language" : "en",
+        "mainThreadCheckerEnabled" : false,
+        "region" : "US",
+        "testExecutionOrdering" : "random",
+        "testTimeoutsEnabled" : false,
+        "threadSanitizer" : {
+          "enabled" : false
+        },
+        "undefinedBehaviorSanitizerEnabled" : false
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:AFLFantasyPro.xcodeproj",
+          "identifier" : "AFLFantasyPro",
+          "name" : "AFLFantasyPro"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AFLFantasyPro.xcodeproj",
+        "identifier" : "AFLFantasyProTests",
+        "name" : "AFLFantasyProTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -43,6 +43,11 @@ struct EnhancedPlayer: Identifiable, Codable {
         return "\(prefix)\(priceChange)"
     }
 
+    var formattedPriceChange: String {
+        let prefix = priceChange >= 0 ? "+" : ""
+        return "\(prefix)$\(abs(priceChange))"
+    }
+
     var consistencyGrade: String {
         switch consistency {
         case 90...: "A+"
@@ -68,6 +73,15 @@ enum Position: String, CaseIterable, Codable {
         case .midfielder: .green
         case .ruck: .purple
         case .forward: .red
+        }
+    }
+
+    var shortName: String {
+        switch self {
+        case .defender: "DEF"
+        case .midfielder: "MID"
+        case .ruck: "RUC"
+        case .forward: "FWD"
         }
     }
 }
@@ -212,6 +226,33 @@ struct CaptainSuggestion: Identifiable, Codable {
     }
 }
 
+// MARK: - TradeRecord
+
+struct TradeRecord: Identifiable, Codable {
+    let id: UUID
+    let playerOut: EnhancedPlayer
+    let playerIn: EnhancedPlayer
+    let executedAt: Date
+    let netCost: Int
+    let projectedImpact: Double
+
+    init(
+        id: UUID = UUID(),
+        playerOut: EnhancedPlayer,
+        playerIn: EnhancedPlayer,
+        executedAt: Date,
+        netCost: Int,
+        projectedImpact: Double
+    ) {
+        self.id = id
+        self.playerOut = playerOut
+        self.playerIn = playerIn
+        self.executedAt = executedAt
+        self.netCost = netCost
+        self.projectedImpact = projectedImpact
+    }
+}
+
 // MARK: - TabItem
 
 enum TabItem: String, CaseIterable {
@@ -276,7 +317,7 @@ extension PersistentAppState {
     @Published var errorMessage: String?
 
     // Team management
-    @Published var tradesRemaining: Int = 8
+    var tradesRemaining: Int { max(0, 8 - tradesUsed) }
     @Published var teamValue: Int = 12_000_000
     @Published var bankBalance: Int = 300_000
 

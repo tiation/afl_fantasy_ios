@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: afl-fantasy
+  labels:
+    name: afl-fantasy
+    environment: production

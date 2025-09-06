@@ -1,0 +1,152 @@
+# AFL Fantasy Platform Helm Values
+replicaCount: 3
+
+image:
+  repository: afl-fantasy
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1001
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1001
+
+service:
+  type: ClusterIP
+  port: 5000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: afl-fantasy.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: afl-fantasy-tls
+      hosts:
+        - afl-fantasy.local
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Application configuration
+config:
+  nodeEnv: production
+  port: 5000
+  logLevel: info
+  apiRateLimit: 1000
+  sessionTimeout: 3600
+
+# External services
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "password"
+    database: "afl_fantasy"
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: "fast-ssd"
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 250m
+      limits:
+        memory: 512Mi
+        cpu: 500m
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClass: "fast-ssd"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
+
+# Persistent volumes
+persistence:
+  enabled: true
+  storageClass: "fast-ssd"
+  accessMode: ReadWriteMany
+  size: 10Gi
+
+# Secrets (override in production)
+secrets:
+  aflFantasyUsername: ""
+  aflFantasyPassword: ""
+  dfsAustraliaApiKey: ""
+  openaiApiKey: ""
+  sessionSecret: "change-this-in-production"
+  jwtSecret: "change-this-in-production"
+
+# Monitoring
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+  grafana:
+    enabled: true
+
+# Data scraper microservice
+dataScraper:
+  enabled: true
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi

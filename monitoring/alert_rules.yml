@@ -1,0 +1,102 @@
+groups:
+- name: afl_fantasy_alerts
+  rules:
+  # Application Health
+  - alert: AppDown
+    expr: up{job="afl-fantasy-app"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "AFL Fantasy application is down"
+      description: "AFL Fantasy application has been down for more than 1 minute."
+
+  # High Response Time
+  - alert: HighResponseTime
+    expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="afl-fantasy-app"}[5m])) > 2
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High response time detected"
+      description: "95th percentile response time is above 2 seconds for 5 minutes."
+
+  # High Error Rate
+  - alert: HighErrorRate
+    expr: rate(http_requests_total{job="afl-fantasy-app",status=~"5.."}[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate detected"
+      description: "Error rate is above 10% for 5 minutes."
+
+  # Database Connection Issues
+  - alert: DatabaseConnectionIssues
+    expr: postgres_up{job="postgres-exporter"} == 0
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Database connection issues"
+      description: "PostgreSQL database is not responding."
+
+  # High Memory Usage
+  - alert: HighMemoryUsage
+    expr: (container_memory_usage_bytes{pod=~"afl-fantasy-app-.*"} / container_spec_memory_limit_bytes{pod=~"afl-fantasy-app-.*"}) * 100 > 90
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage"
+      description: "Memory usage is above 90% for 5 minutes."
+
+  # High CPU Usage
+  - alert: HighCPUUsage
+    expr: rate(container_cpu_usage_seconds_total{pod=~"afl-fantasy-app-.*"}[5m]) * 100 > 80
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage"
+      description: "CPU usage is above 80% for 5 minutes."
+
+  # Data Scraper Issues
+  - alert: DataScrapingFailure
+    expr: increase(scraper_errors_total[1h]) > 5
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Data scraping failures"
+      description: "More than 5 scraping errors in the last hour."
+
+  # Redis Issues
+  - alert: RedisDown
+    expr: redis_up{job="redis-exporter"} == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Redis is down"
+      description: "Redis cache server is not responding."
+
+  # Disk Space
+  - alert: LowDiskSpace
+    expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 10
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Low disk space"
+      description: "Available disk space is below 10%."
+
+  # Pod Restarts
+  - alert: PodRestartLoop
+    expr: increase(kube_pod_container_status_restarts_total{pod=~"afl-fantasy-app-.*"}[1h]) > 3
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Pod restart loop detected"
+      description: "Pod has restarted more than 3 times in the last hour."

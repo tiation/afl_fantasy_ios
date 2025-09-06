@@ -1,0 +1,34 @@
+apiVersion: v2
+name: afl-fantasy-platform
+description: Enterprise AFL Fantasy Intelligence Platform
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - afl
+  - fantasy
+  - sports
+  - analytics
+  - nodejs
+  - python
+home: https://github.com/your-org/afl-fantasy-platform
+sources:
+  - https://github.com/your-org/afl-fantasy-platform
+maintainers:
+  - name: AFL Fantasy Team
+    email: team@afl-fantasy.com
+annotations:
+  category: Analytics
+dependencies:
+  - name: postgresql
+    version: 12.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: 17.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+  - name: nginx-ingress
+    version: 4.x.x
+    repository: https://kubernetes.github.io/ingress-nginx
+    condition: ingress.enabled

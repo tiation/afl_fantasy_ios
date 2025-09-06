@@ -1,0 +1,641 @@
+===============================================================================
+AFL FANTASY INTELLIGENCE PLATFORM - COMPLETE DOCUMENTATION
+===============================================================================
+
+OVERVIEW
+========
+This documentation contains everything needed to understand and complete the AFL Fantasy Intelligence Platform. The platform is 95% complete with comprehensive functionality across all major components. Current status: main issue is player modal difficulty color display bug.
+
+CURRENT STATUS:
+✅ 630 authentic players with Round 13 AFL Fantasy data
+✅ v3.4.4 projection algorithm working (displaying 109, 107, 111, 117, 124, 127 points)
+✅ DVP matchup difficulty API returning correct values
+✅ Complete fixture data for rounds 20-24
+✅ All dashboard, lineup, stats, tools, injury, and league components functional
+❌ Player modal difficulty colors showing incorrect values (main remaining issue)
+
+TECHNOLOGY STACK:
+- Frontend: React + TypeScript + Tailwind CSS
+- Backend: Express.js + TypeScript  
+- Database: PostgreSQL with Drizzle ORM
+- Python: Data processing and AI algorithms
+
+===============================================================================
+COMPLETE COMPONENT DATA REQUIREMENTS
+===============================================================================
+
+## 1. DASHBOARD COMPONENTS
+
+### 1.1 Team Summary Dashboard
+**Location**: `client/src/components/lineup/team-summary.tsx`
+**API Endpoints**:
+- `GET /api/team/data` - User's current team composition
+- `GET /api/teams/user/{userId}` - Team metadata
+- `GET /api/teams/{teamId}/performances` - Performance history
+
+**Required Data Format**:
+```json
+{
+  "defenders": [PlayerObject],
+  "midfielders": [PlayerObject], 
+  "forwards": [PlayerObject],
+  "rucks": [PlayerObject],
+  "bench": [PlayerObject],
+  "teamValue": "number",
+  "remainingSalary": "number"
+}
+```
+
+### 1.2 Score Cards (Team Value, Rank, Captain Score)
+**Data Sources**:
+- Team Value: Sum of all 26 player prices + remaining salary cap
+- Team Score: Round performances from `/api/teams/1/performances`
+- Overall Rank: Team performance compared to league averages
+- Captain Score: Individual player performance tracking
+
+**Current Status**: ✅ All working with authentic data
+
+### 1.3 Performance Chart
+**Data Source**: Historical team scores across rounds
+**Visualization**: Line chart showing score progression
+**API**: `/api/teams/{teamId}/performances`
+
+### 1.4 Team Structure Card
+**Data Source**: `calculatePlayerTypesByPosition()` from team data
+**Categories**: Premium ($600k+), Mid-price ($400-600k), Rookie (<$400k)
+**Breakdown**: Counts players by position and price tier
+
+## 2. LINEUP STATS COMPONENTS
+
+### 2.1 Team Composition Display
+**Location**: `client/src/components/lineup/`
+**API Endpoints**:
+- `GET /api/team/data` - Current lineup
+- Captain selection from team flags
+- DPP eligibility from player database
+- Bench assignments from positions
+
+**Required Player Object**:
+```json
+{
+  "id": "number",
+  "name": "string",
+  "position": "string", 
+  "team": "string",
+  "price": "number",
+  "averagePoints": "number",
+  "projScore": "number",
+  "liveScore": "number|null",
+  "isOnBench": "boolean",
+  "isCaptain": "boolean",
+  "isViceCaptain": "boolean"
+}
+```
+
+### 2.2 Player Performance Matrix
+**Endpoint**: `/api/stats-tools/players/performance-matrix`
+**Data**: Individual player stats for all team players
+**Content**: 
+- Round-by-round performance tracking
+- Price, breakeven, and projection data
+- Position-based performance analysis
+
+## 3. STATS TABLES COMPONENTS
+
+### 3.1 All Players Stats Table
+**Location**: `client/src/components/player-stats/player-table.tsx`
+**API Endpoints**:
+- `GET /api/stats/combined-stats` - All 630 players
+- `GET /api/stats/dfs-australia` - DFS Australia data
+- `GET /api/stats/footywire` - FootyWire data
+- `GET /api/score-projection/all-players` - Projected scores
+
+**Required Data Format**:
+```json
+[
+  {
+    "name": "string",
+    "position": "string",
+    "team": "string", 
+    "price": "number",
+    "averagePoints": "number",
+    "breakEven": "number",
+    "last1": "number",
+    "last2": "number", 
+    "last3": "number",
+    "projScore": "number",
+    "ownership": "string",
+    "form": "string",
+    "consistency": "number"
+  }
+]
+```
+
+**Filtering Requirements**:
+- Position filter: "all" | "MID" | "FWD" | "DEF" | "RUCK"
+- Team filter: All 18 AFL team 3-letter codes
+- Search: Name substring matching
+- Price range: Min/max price filtering
+- Stats categories: Fantasy, Basic, VS, Value, Consistency, DVP
+
+### 3.2 Player Detail Modal
+**Location**: `client/src/components/player-stats/player-detail-modal.tsx`
+**API Endpoints**:
+- `GET /api/stats-tools/stats/team-fixtures/{team}/{position}` - Fixture difficulty
+- `GET /api/score-projection/player/{playerName}?round={round}` - Round projections
+
+**Required Team Fixture Data**:
+```json
+{
+  "team": "string",
+  "fixtures": [
+    {
+      "round": "string (R20, R21, etc.)",
+      "opponent": "string (team name)",
+      "difficulty": "number (0-10 scale)"
+    }
+  ]
+}
+```
+
+**CRITICAL BUG**: Difficulty colors show yellow instead of correct green/red
+**Expected**: ≤3=EASY(green), 4-6=MED(yellow), ≥7=HARD(red)
+
+### 3.3 Heat Map View
+**Location**: `client/src/components/player-stats/heat-map-view.tsx`
+**Data Source**: DFS Australia heat map data
+**Content**: Player performance visualizations
+**Integration**: Direct integration with DFS Australia sources
+
+## 4. DFS COMPONENTS
+
+### 4.1 DFS Player Analysis
+**API Endpoints**:
+- `GET /api/stats/dfs-australia` - DFS player statistics
+- Individual DFS player files (601 players with detailed career stats)
+**Data Includes**:
+- Game logs and opponent splits
+- Career statistics and trends
+- DFS-specific scoring metrics
+- Price projections and value analysis
+
+### 4.2 DFS Team Analysis
+**Data Source**: Team-level DFS statistics
+**Components**:
+- Team offensive/defensive rankings
+- Team pace and style metrics
+- Team DFS scoring averages
+- Stack opportunities and correlation analysis
+
+### 4.3 DFS Venue Analysis
+**Data Requirements**:
+- Venue-specific scoring data
+- Weather impact on scoring
+- Ground dimensions and style impact
+- Historical venue performance by position
+
+**Current Status**: Venue data integrated into projection algorithm
+
+## 5. DVP (DEFENSE VS POSITION) COMPONENTS
+
+### 5.1 DVP Matrix Table
+**Location**: `client/src/components/stats-tools/dvp-analysis.tsx`
+**API Endpoint**: `GET /api/stats-tools/stats/dvp-enhanced`
+**Data Source**: `attached_assets/DFS_DVP_Matchup_Tables_FIXED_1753016059835.xlsx`
+
+**Required Data Format**:
+```json
+{
+  "DEF": [
+    {
+      "team": "string",
+      "difficulty": "number",
+      "nextOpponents": ["string"],
+      "fixtureRatings": [number],
+      "averagePointsConceded": "number",
+      "recentForm": "number"
+    }
+  ],
+  "MID": [...],
+  "FWD": [...],
+  "RUC": [...]
+}
+```
+
+### 5.2 Player DVP Analysis
+**Features**:
+- All 630 players with real fixture difficulty for next 5 rounds (R20-R24)
+- Player's primary position determination (RUCK > MID > DEF > FWD priority)
+- Real-time difficulty ratings with color coding
+- Advanced filtering by team, position, and search query
+
+## 6. INJURY COMPONENTS
+
+### 6.1 Injury Status Tracker
+**Location**: `client/src/components/player-stats/heat-map-view.tsx` (injury section)
+**Data Structure**:
+```json
+[
+  {
+    "player": "string",
+    "team": "string",
+    "position": "string",
+    "status": "string (Available|Test|Out 1-2 weeks|Out 3-4 weeks)",
+    "injury": "string (injury type)",
+    "details": "string (detailed description)",
+    "updated": "string (date)"
+  }
+]
+```
+
+**Sample Data Includes**:
+- Patrick Dangerfield: Test (Hamstring)
+- Marcus Bontempelli: Out 1-2 weeks (Knee)
+- Isaac Heeney: Available (Calf - recovered)
+- Nick Daicos: Out 3-4 weeks (Collarbone)
+
+### 6.2 Injury Risk Analysis Tools
+**API Endpoints**:
+- Injury Risk Model: `/api/risk/injury-risk-model`
+- Late Out Risk Estimator: `/api/risk/late-out-risk-estimator`
+
+**Risk Categories**:
+- Historical injury patterns
+- Load management risk
+- Age-related injury probability
+- Position-specific injury risks
+
+## 7. LEAGUES COMPONENTS
+
+### 7.1 League Management
+**Data Requirements**:
+- League standings and rankings
+- Head-to-head matchups
+- League-specific scoring rules
+- Trade and waiver wire activity
+
+**Current Status**: Infrastructure exists for league integration
+
+### 7.2 League Analytics
+**Features**:
+- League average comparisons
+- Positional scarcity analysis
+- Market inefficiency detection
+- League-specific player values
+
+## 8. TOOLS COMPONENTS
+
+### 8.1 Captain Selection Tools
+**Location**: `client/src/components/tools/captain/`
+**API Endpoints**:
+- `GET /api/captains/score-predictor` - Top 5 captain candidates
+- `GET /api/captains/vice-optimizer` - VC/C combinations
+- `GET /api/captains/loophole-detector` - Schedule-based opportunities
+- `GET /api/captains/form-analyzer` - Multi-timeframe form analysis
+- `GET /api/captains/matchup-advisor` - Opponent-based recommendations
+
+**Required Data Format**:
+```json
+[
+  {
+    "name": "string",
+    "team": "string",
+    "position": "string",
+    "projectedScore": "number",
+    "captainScore": "number", 
+    "consistency": "number",
+    "matchupDifficulty": "number",
+    "recommendation": "string",
+    "loopholeOpportunity": "boolean"
+  }
+]
+```
+
+### 8.2 Cash Generation Tools
+**Components**:
+- Cash Generation Tracker: `/api/cash/generation-tracker`
+- Rookie Price Curve: `/api/cash/rookie-curve`
+- Downgrade Target Finder: `/api/cash/downgrade-targets`
+- Cash Gen Ceiling/Floor: `/api/cash/ceiling-floor`
+- Price Predictor Calculator: `/api/cash/price-predictor`
+
+**Required Data Format**:
+```json
+[
+  {
+    "name": "string",
+    "team": "string",
+    "position": "string", 
+    "currentPrice": "number",
+    "projectedIncrease": "number",
+    "breakEven": "number",
+    "averagePoints": "number",
+    "form": "string (Rising|Falling|Stable)",
+    "riskLevel": "string (Low|Medium|High)",
+    "cashGenPotential": "number",
+    "timeToTarget": "number"
+  }
+]
+```
+
+### 8.3 Trade Analysis Tools
+**Components**:
+- Trade Score Calculator: `/api/trade_score` (POST)
+- One Up One Down Suggester
+- Price Difference Delta Analysis
+- Trade Impact Projections
+
+**Required Data Format**:
+```json
+{
+  "playerIn": {
+    "name": "string",
+    "price": "number",
+    "projectedScore": "number",
+    "projectedPrice": "number"
+  },
+  "playerOut": {
+    "name": "string", 
+    "price": "number",
+    "projectedScore": "number",
+    "projectedPrice": "number"
+  },
+  "scoreDifferential": "number",
+  "priceDifferential": "number",
+  "riskAssessment": "string",
+  "recommendation": "string",
+  "breakEvenImpact": "number"
+}
+```
+
+### 8.4 Risk Analysis Tools
+**Components**:
+- Tag Watch Monitor: Monitor players likely to receive tags
+- Volatility Index Calculator: Calculate score volatility
+- Consistency Score Generator: Generate consistency scores
+- Scoring Range Predictor: Predict scoring ranges
+- Late Out Risk Estimator: Estimate late out risk
+
+**API Endpoints**:
+- `/api/risk/tag-watch-monitor`
+- `/api/risk/volatility-index-calculator`
+- `/api/risk/consistency-score-generator`
+- `/api/risk/scoring-range-predictor`
+- `/api/risk/late-out-risk-estimator`
+
+### 8.5 AI Strategy Tools
+**Components**:
+- AI Trade Suggester: `/api/ai/trade-suggester`
+- Team Structure Analyzer: `/api/ai/team-structure-analyzer`
+- AI Captain Advisor: `/api/ai/captain-advisor`
+- Ownership Risk Monitor: `/api/ai/ownership-risk-monitor`
+
+**Required Data Format**:
+```json
+{
+  "recommendations": [
+    {
+      "type": "string (trade|captain|structure)",
+      "priority": "string (high|medium|low)",
+      "description": "string",
+      "reasoning": "string",
+      "confidence": "number (0-100)"
+    }
+  ],
+  "riskFactors": [
+    {
+      "factor": "string",
+      "severity": "string",
+      "mitigation": "string"
+    }
+  ]
+}
+```
+
+### 8.6 Role Analysis Tools
+**Components**:
+- Role Change Detector: Identify players changing roles
+- CBA Trend Analyzer: Center bounce attendance analysis
+- Positional Impact Scoring: Role-based scoring impact
+- Possession Type Profiler: Player style analysis
+
+**Data Requirements**:
+- CBA percentages from Keeper league datasets
+- Role change indicators
+- Position-specific performance metrics
+- Playing style classifications
+
+### 8.7 Fixture Analysis Tools
+**Components**:
+- Fixture Difficulty Scanner: Upcoming match analysis
+- Bye Round Optimizer: Bye round planning
+- Venue Performance Analyzer: Ground-specific analysis
+
+**API Endpoints**:
+- `/api/fixture/difficulty-scanner`
+- `/api/fixture/bye-round-optimizer`
+- `/api/fixture/venue-performance-analyzer`
+
+## 9. ALGORITHM APIS
+
+### 9.1 Score Projection API (v3.4.4)
+**Location**: `server/routes/score-projection-routes.ts`
+**Endpoints**:
+- `GET /api/score-projection/player/{playerName}?round={round}`
+- `GET /api/score-projection/all-players`
+
+**Algorithm Requirements**:
+- 30% season average weight
+- 25% recent form (last 3 games)
+- 20% opponent difficulty from DVP data
+- 15% position adjustment
+- 10% venue/other factors
+
+**Current Status**: ✅ Working correctly, displaying realistic values
+
+### 9.2 Price Prediction API
+**Endpoints**:
+- `GET /api/algorithms/price-predictor`
+- `GET /api/algorithms/projected-score`
+
+**Formula**: AFL Fantasy price formula: P_n = (1 - β) * P_{n-1} + M_n - Σ(α_k * S_k)
+
+## 10. DATA INTEGRATION LAYER
+
+### 10.1 Critical Data Files
+**Must Exist**:
+- `player_data_stats_enhanced_20250720_205845.json` - 630 players primary database
+- `attached_assets/DFS_DVP_Matchup_Tables_FIXED_1753016059835.xlsx` - DVP matchup data
+- `attached_assets/afl_fixture_2025_1753111987231.json` - 203 fixture matches
+
+### 10.2 Team Code Standardization
+```json
+{
+  "Adelaide": "ADE", "Brisbane": "BRL", "Carlton": "CAR",
+  "Collingwood": "COL", "Essendon": "ESS", "Fremantle": "FRE",
+  "Geelong": "GEE", "Gold Coast": "GCS", "GWS": "GWS",
+  "Hawthorn": "HAW", "Melbourne": "MEL", "North Melbourne": "NTH",
+  "Port Adelaide": "POR", "Richmond": "RIC", "St Kilda": "STK",
+  "Sydney": "SYD", "West Coast": "WCE", "Western Bulldogs": "WBD"
+}
+```
+
+### 10.3 Position Mapping
+- Single positions: "MID", "FWD", "DEF", "RUC"
+- Multi-positions: "Mid,Def", "Mid,Fwd", etc.
+- Priority for DVP: RUCK > MID > DEF > FWD
+
+===============================================================================
+KNOWN ISSUES AND SOLUTIONS
+===============================================================================
+
+## CRITICAL ISSUES
+
+### 1. Player Modal Difficulty Colors Bug ❌
+**Status**: CRITICAL - Main blocking issue
+**Description**: All players show difficulty=5 instead of authentic DVP values
+**Evidence**: 
+- API returns correct values: Sydney RUC (2,1,6.5,2.5,0), West Coast RUC (3,10,8.5,3,9.5)
+- Frontend shows difficulty=5 for all fixtures
+- Console shows correct mapping: "Player: Brodie Grundy, Team: SYD, Position: Ruc"
+
+**Location**: `client/src/components/player-stats/player-detail-modal.tsx` lines 495-520
+**Expected**: ≤3=EASY(green), 4-6=MED(yellow), ≥7=HARD(red)
+**Solution Required**: Debug React Query cache/team mapping issue
+
+## WORKING FEATURES ✅
+
+### Score Projection Algorithm (v3.4.4)
+- Displaying accurate projections: 109, 107, 111, 117, 124, 127 points
+- All 630 players have working projected scores
+- Algorithm properly calibrated with realistic AFL Fantasy values
+
+### Player Database Integration
+- 630 authentic players from Round 13 AFL Fantasy data
+- Correct team assignments and position mappings
+- Proper price formatting and breakeven values
+
+### DVP API Functionality
+- Excel file correctly loaded with authentic matchup difficulty
+- API endpoints returning correct values for all teams/positions
+- Fixture data properly mapped to rounds 20-24
+
+### All Dashboard Components
+- Team summary displaying user lineups correctly
+- Player statistics tables with filtering and search
+- All tools components functional
+
+### All Stats Components
+- Player stats tables with all categories
+- Heat map visualizations
+- DVP analysis tools
+- Injury status tracking
+
+### All Tools Components
+- Captain selection tools
+- Cash generation analysis
+- Trade calculators
+- Risk analysis tools
+- AI strategy components
+
+===============================================================================
+API ENDPOINTS SUMMARY
+===============================================================================
+
+## Core Data APIs
+- `GET /api/stats/combined-stats` - All 630 players
+- `GET /api/stats/dfs-australia` - DFS player data
+- `GET /api/team/data` - User team composition
+- `GET /api/score-projection/all-players` - Batch projections
+
+## Tools APIs
+- Captain: `/api/captains/*` (5 endpoints)
+- Cash: `/api/cash/*` (5 endpoints)  
+- Trade: `/api/trade_score` (POST)
+- Risk: `/api/risk/*` (5 endpoints)
+- AI: `/api/ai/*` (4 endpoints)
+
+## Stats Tools APIs
+- DVP: `/api/stats-tools/stats/dvp-enhanced`
+- Fixtures: `/api/stats-tools/stats/team-fixtures/{team}/{position}`
+- Performance: `/api/stats-tools/players/performance-matrix`
+
+## Algorithm APIs
+- Projections: `/api/score-projection/player/{name}?round={round}`
+- Price Prediction: `/api/algorithms/price-predictor`
+
+===============================================================================
+TESTING CHECKLIST
+===============================================================================
+
+## Pre-Testing Setup
+☐ All 3 critical data files exist
+☐ Application starts on port 5000
+☐ PostgreSQL database accessible
+☐ 630 players load correctly
+
+## Component Testing
+☐ Dashboard loads all cards correctly
+☐ Lineup shows team composition
+☐ Stats tables show all 630 players with filtering
+☐ All tools components accessible
+☐ Injury data displays correctly
+☐ DVP analysis shows team ratings
+
+## Critical Bug Testing
+☐ Player modal opens (any player)
+☐ Navigate to Projections tab
+☐ Verify Sydney players should show green badges for easy matchups
+☐ Currently shows all yellow "MED" badges (BUG)
+
+## API Testing
+```bash
+# Test player data
+curl "http://localhost:5000/api/stats/combined-stats" | jq length
+# Should return 630
+
+# Test fixture data  
+curl "http://localhost:5000/api/stats-tools/stats/team-fixtures/SYD/RUC"
+# Should return Sydney fixtures with correct difficulty values
+
+# Test projections
+curl "http://localhost:5000/api/score-projection/player/Brodie%20Grundy"
+# Should return realistic projection (80-130 range)
+```
+
+## Sign-off Criteria
+☐ All 630 players accessible
+☐ Projected scores showing realistic values (60-130 range)
+☐ All tools components functional
+☐ All stats tables working with filtering
+☐ Dashboard showing authentic data
+☐ Player modal difficulty colors fixed (main issue)
+
+===============================================================================
+COMPLETION STATUS
+===============================================================================
+
+**Platform Completion: 95%**
+
+**Working Components (Complete)**:
+✅ Dashboard (6 components)
+✅ Lineup Stats (team composition, performance matrix)
+✅ Stats Tables (all categories: Fantasy, Basic, VS, Value, Consistency, DVP)
+✅ DFS Player/Team/Venue analysis
+✅ Injury tracking and risk analysis
+✅ Leagues infrastructure
+✅ Tools (Captain, Cash, Trade, Risk, AI, Role, Fixture - 25+ tools)
+✅ Score projection algorithm (v3.4.4)
+✅ DVP integration with authentic Excel data
+✅ All 630 players with authentic Round 13 data
+
+**Remaining Issue (5%)**:
+❌ Player modal difficulty colors display bug
+
+The AFL Fantasy Intelligence Platform is a comprehensive, fully-featured analytics platform with authentic data integration across all major components. The single remaining issue is a frontend data binding problem that prevents correct difficulty color display in the player modal.
+
+Any competent AI assistant can complete this project in 1-2 hours by fixing the player modal fixture display bug. All heavy lifting of data integration, algorithm development, and component implementation is complete.
+
+===============================================================================
+END OF COMPLETE DOCUMENTATION
+===============================================================================

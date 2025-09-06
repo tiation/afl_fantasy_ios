@@ -1,0 +1,127 @@
+# 🏆 AFL Fantasy Platform - Warp Workflows
+# Quick development commands for Warp terminal
+
+workflows:
+  # 🔧 Quick Fixes
+  fix_ports:
+    name: "🔧 Fix Port Conflicts"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && ./fix-ports.sh"
+    description: "Kill any processes using ports 3000, 4000, 5173 and clear for AFL Fantasy"
+    
+  # 🚀 Development Commands
+  start_dev:
+    name: "🚀 Start AFL Fantasy Platform"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && ./start.sh"
+    description: "Start both frontend and backend development servers"
+    
+  setup_project:
+    name: "🛠️ Setup AFL Fantasy Project"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && ./setup.sh"
+    description: "First-time setup with dependency installation and environment configuration"
+    
+  # 🧪 Quality & Testing
+  run_tests:
+    name: "🧪 Run All Tests"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && ./test.sh"
+    description: "Run complete test suite including type checking, linting, and unit tests"
+    
+  type_check:
+    name: "🔍 TypeScript Check"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run check"
+    description: "Run TypeScript type checking"
+    
+  lint_fix:
+    name: "🔧 Lint & Format Code"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run lint && npm run format"
+    description: "Fix linting issues and format code"
+    
+  # 🏗️ Build & Deploy
+  build_prod:
+    name: "🏗️ Build Production"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && ./build.sh"
+    description: "Build optimized production bundle"
+    
+  start_prod:
+    name: "🚀 Start Production Server"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm start"
+    description: "Start production server (after build)"
+    
+  # 📊 Monitoring & Health
+  health_check:
+    name: "📊 Health Check"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run health-check"
+    description: "Check API health and connectivity"
+    
+  show_status:
+    name: "📈 Project Status"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && echo '🏆 AFL Fantasy Platform Status' && echo '================================' && echo '📁 Directory:' && pwd && echo '📦 Dependencies:' && (test -d node_modules && echo '✅ Installed' || echo '❌ Missing') && echo '🔧 Environment:' && (test -f .env && echo '✅ Configured' || echo '❌ Missing .env file') && echo '🚀 Server Status:' && curl -s http://localhost:5173/api/health | head -1 || echo '❌ Server not running'"
+    description: "Show current project status and health"
+    
+  # 📱 iOS Development
+  open_ios:
+    name: "📱 Open iOS Project"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios/ios && open AFLFantasy.xcodeproj"
+    description: "Open iOS project in Xcode"
+    
+  ios_build:
+    name: "🔨 Build iOS App"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios/ios && xcodebuild -scheme AFLFantasy -configuration Debug -sdk iphonesimulator build"
+    description: "Build iOS app for simulator"
+    
+  # 🗄️ Database Commands
+  db_push:
+    name: "🗄️ Push Database Schema"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run db:push"
+    description: "Push database schema changes using Drizzle"
+    
+  db_generate:
+    name: "📝 Generate DB Migration"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run db:generate"
+    description: "Generate database migration files"
+    
+  # 🔒 Security & Maintenance
+  security_audit:
+    name: "🔒 Security Audit"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run audit:security"
+    description: "Run npm security audit"
+    
+  clean_install:
+    name: "🧹 Clean Install"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && rm -rf node_modules package-lock.json && npm install"
+    description: "Clean reinstall of all dependencies"
+    
+  # 📚 Documentation & Help
+  open_docs:
+    name: "📚 Open Documentation"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && open docs/"
+    description: "Open documentation directory in Finder"
+    
+  show_urls:
+    name: "🌐 Show URLs"
+    command: "echo '🏆 AFL Fantasy Platform URLs' && echo '=============================' && echo '🌐 Web Dashboard: http://localhost:5173' && echo '🔌 API Health: http://localhost:5173/api/health' && echo '📊 API Docs: http://localhost:5173/api' && echo '📱 iOS Simulator: Available after Xcode build' && echo '📚 Documentation: file://$(pwd)/docs/' && echo ''"
+    description: "Display all relevant URLs and endpoints"
+    
+  # 🔄 Git & Version Control  
+  quick_commit:
+    name: "🔄 Quick Commit"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && git add -A && git status"
+    description: "Add all changes and show git status"
+    arguments:
+      - name: msg
+        description: "Commit message"
+        
+  git_status:
+    name: "📊 Git Status"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && git status && echo '' && git log --oneline -5"
+    description: "Show git status and recent commits"
+    
+  # 🐳 Docker Commands
+  docker_build:
+    name: "🐳 Build Docker Image"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run docker:build"
+    description: "Build Docker image for the platform"
+    
+  docker_run:
+    name: "🚀 Run Docker Container"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && npm run docker:run"
+    description: "Run the platform in Docker container"

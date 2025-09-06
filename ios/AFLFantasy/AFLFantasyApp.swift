@@ -6,474 +6,139 @@
 //  Copyright © 2025 AFL AI. All rights reserved.
 //
 
-import CoreData
-import os.log
 import SwiftUI
 import UserNotifications
 
-// MARK: - NotificationManager
+// MARK: - Position
 
-class NotificationManager {
-    static let shared = NotificationManager()
-    private init() {}
-
-    func requestAuthorization() async -> Bool {
-        let center = UNUserNotificationCenter.current()
-        do {
-            let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
-            return granted
-        } catch {
-            print("Notification authorization error: \(error)")
-            return false
-        }
-    }
-
-    func scheduleCaptainSuggestion(_ suggestion: CaptainSuggestion) async {
-        let content = UNMutableNotificationContent()
-        content.title = "Captain Suggestion"
-        content.body = "Consider \(suggestion.player.name) for captain - \(suggestion.confidence)% confidence"
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        let request = UNNotificationRequest(
-            identifier: "captain-\(suggestion.player.id)",
-            content: content,
-            trigger: trigger
-        )
-
-        try? await UNUserNotificationCenter.current().add(request)
-    }
-
-    func scheduleRoundLockoutReminder(round: Int) async {
-        let content = UNMutableNotificationContent()
-        content.title = "Round Lockout Soon!"
-        content.body = "Round \(round) locks out in 1 hour. Check your team!"
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-        let request = UNNotificationRequest(identifier: "lockout-\(round)", content: content, trigger: trigger)
-
-        try? await UNUserNotificationCenter.current().add(request)
-    }
-
-    func schedulePlayerAlert(_ alert: AlertFlag, for player: EnhancedPlayer) async {
-        let content = UNMutableNotificationContent()
-        content.title = "Player Alert"
-        content.body = "\(player.name): \(alert.message)"
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
-        let request = UNNotificationRequest(
-            identifier: "alert-\(player.id)-\(alert.type.rawValue)",
-            content: content,
-            trigger: trigger
-        )
-
-        try? await UNUserNotificationCenter.current().add(request)
-    }
-
-    func scheduleInjuryAlert(for player: EnhancedPlayer) async {
-        let content = UNMutableNotificationContent()
-        content.title = "Injury Risk Alert"
-        content.body = "\(player.name) has \(player.injuryRisk.riskLevel.rawValue.lowercased()) injury risk"
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 20, repeats: false)
-        let request = UNNotificationRequest(identifier: "injury-\(player.id)", content: content, trigger: trigger)
-
-        try? await UNUserNotificationCenter.current().add(request)
-    }
+// Position enum
+enum Position: String, CaseIterable, Codable {
+    case defender = "DEF"
+    case midfielder = "MID"
+    case ruck = "RUC"
+    case forward = "FWD"
 }
 
-// MARK: - NotificationDelegate
+// MARK: - RoundProjection
 
-class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
-    func setupWithApp(_ app: UIApplication) {
-        UNUserNotificationCenter.current().delegate = self
-    }
+// Supporting types for EnhancedPlayer
+struct RoundProjection: Identifiable, Codable {
+    let id = UUID()
+    let round: Int
+    let opponent: String
+    let venue: String
+    let projectedScore: Double
+    let confidence: Double
+    let conditions: WeatherConditions
 
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification,
-        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-    ) {
-        completionHandler([.banner, .sound])
-    }
-
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        print("Notification tapped: \(response.notification.request.identifier)")
-        completionHandler()
-    }
-}
-
-// MARK: - AFLFantasyApp
-
-@main
-struct AFLFantasyApp: App {
-    @StateObject private var appState = AppState()
-    private let notificationDelegate = NotificationDelegate()
-
-    // Core Data Stack (inline for simplicity)
-    private let persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "AFLFantasy")
-        container.loadPersistentStores { _, error in
-            if let error {
-                print("Core Data error: \(error.localizedDescription)")
-            } else {
-                print("Core Data loaded successfully")
-            }
-        }
-        return container
-    }()
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(appState)
-                .environment(\.managedObjectContext, persistentContainer.viewContext)
-                .preferredColorScheme(.dark)
-                .onAppear {
-                    // Setup notifications when app launches
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let app = windowScene.delegate as? UIApplicationDelegate
-                    {
-                        notificationDelegate.setupWithApp(UIApplication.shared)
-                    }
-
-                    // Schedule some demo notifications for testing
-                    Task {
-                        await scheduleDemoNotifications()
-                    }
-                }
-        }
-    }
-
-    // MARK: - Demo Notifications
-
-    private func scheduleDemoNotifications() async {
-        let notificationManager = NotificationManager.shared
-
-        // Request authorization first
-        _ = await notificationManager.requestAuthorization()
-
-        // Schedule demo notifications for the first few players
-        if !appState.players.isEmpty {
-            // Demo captain suggestion
-            if let captainSuggestion = appState.captainSuggestions.first {
-                await notificationManager.scheduleCaptainSuggestion(captainSuggestion)
-            }
-        }
-
-        // Schedule a lockout reminder
-        await notificationManager.scheduleRoundLockoutReminder(round: 15)
-
-        // Schedule alerts for players with alert flags
-        for player in appState.players {
-            for alert in player.alertFlags {
-                await notificationManager.schedulePlayerAlert(alert, for: player)
-            }
-
-            // Schedule injury alerts for high-risk players
-            if player.injuryRisk.riskLevel == .moderate || player.injuryRisk.riskLevel == .high {
-                await notificationManager.scheduleInjuryAlert(for: player)
-            }
-        }
-    }
-}
-
-// MARK: - AppState
-
-// Note: PersistentAppState is now the primary state management class
-// This AppState is kept for backward compatibility if needed
-
-@MainActor
-class AppState: ObservableObject {
-    @Published var selectedTab: TabItem = .dashboard
-    @Published var teamScore: Int = 1987
-    @Published var teamRank: Int = 5432
-    @Published var players: [EnhancedPlayer] = []
-    @Published var captainSuggestions: [CaptainSuggestion] = []
-    @Published var cashCows: [EnhancedPlayer] = []
-
-    init() {
-        loadEnhancedData()
-        generateCaptainSuggestions()
-    }
-
-    private func loadEnhancedData() {
-        players = [
-            createBontempelliPlayer(),
-            createGawnPlayer(),
-            createMillerPlayer(),
-            createYoungPlayer(),
-            createWalshPlayer()
-        ]
-
-        cashCows = players.filter(\.isCashCow)
-    }
-
-    private func createBontempelliPlayer() -> EnhancedPlayer {
-        EnhancedPlayer(
-            id: "1",
-            name: "Marcus Bontempelli",
-            position: .midfielder,
-            price: 850_000,
-            currentScore: 125,
-            averageScore: 118.5,
-            breakeven: 85,
-            consistency: 92.0,
-            highScore: 156,
-            lowScore: 85,
-            priceChange: 25000,
-            isCashCow: false,
-            isDoubtful: false,
-            isSuspended: false,
-            cashGenerated: 0,
-            projectedPeakPrice: 0,
-            nextRoundProjection: createRoundProjection(
-                opponent: "Richmond",
-                venue: "Marvel Stadium",
-                projectedScore: 130.0,
-                confidence: 0.88,
-                weather: WeatherConditions(temperature: 18.0, rainProbability: 0.2, windSpeed: 15.0, humidity: 65.0)
-            ),
-            seasonProjection: SeasonProjection(
-                projectedTotalScore: 2370.0,
-                projectedAverage: 118.5,
-                premiumPotential: 0.95
-            ),
-            injuryRisk: InjuryRisk(
-                riskLevel: .low,
-                riskScore: 0.15,
-                riskFactors: []
-            ),
-            venuePerformance: [
-                VenuePerformance(venue: "Marvel Stadium", gamesPlayed: 6, averageScore: 125.2, bias: 6.7),
-                VenuePerformance(venue: "MCG", gamesPlayed: 4, averageScore: 112.8, bias: -5.7)
-            ],
-            alertFlags: []
-        )
-    }
-
-    private func createGawnPlayer() -> EnhancedPlayer {
-        EnhancedPlayer(
-            id: "2",
-            name: "Max Gawn",
-            position: .ruck,
-            price: 780_000,
-            currentScore: 98,
-            averageScore: 105.2,
-            breakeven: 90,
-            consistency: 88.0,
-            highScore: 144,
-            lowScore: 65,
-            priceChange: -15000,
-            isCashCow: false,
-            isDoubtful: true,
-            isSuspended: false,
-            cashGenerated: 0,
-            projectedPeakPrice: 0,
-            nextRoundProjection: createRoundProjection(
-                opponent: "Collingwood",
-                venue: "MCG",
-                projectedScore: 105.0,
-                confidence: 0.75,
-                weather: WeatherConditions(temperature: 14.0, rainProbability: 0.1, windSpeed: 20.0, humidity: 70.0)
-            ),
-            seasonProjection: SeasonProjection(
-                projectedTotalScore: 2104.0,
-                projectedAverage: 105.2,
-                premiumPotential: 0.88
-            ),
-            injuryRisk: InjuryRisk(
-                riskLevel: .moderate,
-                riskScore: 0.35,
-                riskFactors: ["Knee soreness", "Age concern"]
-            ),
-            venuePerformance: [
-                VenuePerformance(venue: "MCG", gamesPlayed: 8, averageScore: 108.5, bias: 3.3),
-                VenuePerformance(venue: "Marvel Stadium", gamesPlayed: 2, averageScore: 98.0, bias: -7.2)
-            ],
-            alertFlags: [
-                AlertFlag(type: .injuryRisk, priority: .high, message: "Knee soreness reported at training")
-            ]
-        )
-    }
-
-    private func createMillerPlayer() -> EnhancedPlayer {
-        EnhancedPlayer(
-            id: "3",
-            name: "Touk Miller",
-            position: .midfielder,
-            price: 720_000,
-            currentScore: 110,
-            averageScore: 108.8,
-            breakeven: 75,
-            consistency: 89.0,
-            highScore: 141,
-            lowScore: 78,
-            priceChange: 20000,
-            isCashCow: false,
-            isDoubtful: false,
-            isSuspended: false,
-            cashGenerated: 0,
-            projectedPeakPrice: 0,
-            nextRoundProjection: createRoundProjection(
-                opponent: "Geelong",
-                venue: "GMHBA Stadium",
-                projectedScore: 115.0,
-                confidence: 0.82,
-                weather: WeatherConditions(temperature: 16.0, rainProbability: 0.4, windSpeed: 25.0, humidity: 68.0)
-            ),
-            seasonProjection: SeasonProjection(
-                projectedTotalScore: 2176.0,
-                projectedAverage: 108.8,
-                premiumPotential: 0.91
-            ),
-            injuryRisk: InjuryRisk(
-                riskLevel: .low,
-                riskScore: 0.12,
-                riskFactors: []
-            ),
-            venuePerformance: [
-                VenuePerformance(venue: "GMHBA Stadium", gamesPlayed: 3, averageScore: 118.7, bias: 9.9),
-                VenuePerformance(venue: "Gabba", gamesPlayed: 5, averageScore: 105.2, bias: -3.6)
-            ],
-            alertFlags: [
-                AlertFlag(type: .contractYear, priority: .medium, message: "Contract year motivation boost")
-            ]
-        )
-    }
-
-    private func createYoungPlayer() -> EnhancedPlayer {
-        EnhancedPlayer(
-            id: "4",
-            name: "Hayden Young",
-            position: .defender,
-            price: 550_000,
-            currentScore: 78,
-            averageScore: 85.2,
-            breakeven: 45,
-            consistency: 76.0,
-            highScore: 112,
-            lowScore: 45,
-            priceChange: 35000,
-            isCashCow: true,
-            isDoubtful: false,
-            isSuspended: false,
-            cashGenerated: 120_000,
-            projectedPeakPrice: 680_000,
-            nextRoundProjection: createRoundProjection(
-                opponent: "Sydney",
-                venue: "Optus Stadium",
-                projectedScore: 88.0,
-                confidence: 0.78,
-                weather: WeatherConditions(temperature: 22.0, rainProbability: 0.0, windSpeed: 12.0, humidity: 55.0)
-            ),
-            seasonProjection: SeasonProjection(
-                projectedTotalScore: 1704.0,
-                projectedAverage: 85.2,
-                premiumPotential: 0.65
-            ),
-            injuryRisk: InjuryRisk(
-                riskLevel: .low,
-                riskScore: 0.14,
-                riskFactors: []
-            ),
-            venuePerformance: [
-                VenuePerformance(venue: "Optus Stadium", gamesPlayed: 6, averageScore: 89.4, bias: 4.2),
-                VenuePerformance(venue: "MCG", gamesPlayed: 2, averageScore: 75.5, bias: -9.7)
-            ],
-            alertFlags: [
-                AlertFlag(type: .cashCowSell, priority: .high, message: "Approaching breakeven - consider selling")
-            ]
-        )
-    }
-
-    private func createWalshPlayer() -> EnhancedPlayer {
-        EnhancedPlayer(
-            id: "5",
-            name: "Sam Walsh",
-            position: .midfielder,
-            price: 750_000,
-            currentScore: 115,
-            averageScore: 112.4,
-            breakeven: 80,
-            consistency: 87.0,
-            highScore: 148,
-            lowScore: 82,
-            priceChange: 30000,
-            isCashCow: false,
-            isDoubtful: false,
-            isSuspended: false,
-            cashGenerated: 0,
-            projectedPeakPrice: 0,
-            nextRoundProjection: createRoundProjection(
-                opponent: "Hawthorn",
-                venue: "MCG",
-                projectedScore: 118.0,
-                confidence: 0.85,
-                weather: WeatherConditions(temperature: 15.0, rainProbability: 0.3, windSpeed: 18.0, humidity: 72.0)
-            ),
-            seasonProjection: SeasonProjection(
-                projectedTotalScore: 2248.0,
-                projectedAverage: 112.4,
-                premiumPotential: 0.93
-            ),
-            injuryRisk: InjuryRisk(
-                riskLevel: .low,
-                riskScore: 0.18,
-                riskFactors: []
-            ),
-            venuePerformance: [
-                VenuePerformance(venue: "MCG", gamesPlayed: 5, averageScore: 116.2, bias: 3.8),
-                VenuePerformance(venue: "Marvel Stadium", gamesPlayed: 3, averageScore: 106.7, bias: -5.7)
-            ],
-            alertFlags: [
-                AlertFlag(type: .contractYear, priority: .low, message: "Contract year - extra motivation expected")
-            ]
-        )
-    }
-
-    private func createRoundProjection(
+    init(
+        round: Int,
         opponent: String,
         venue: String,
         projectedScore: Double,
         confidence: Double,
-        weather: WeatherConditions
-    ) -> RoundProjection {
-        RoundProjection(
-            round: 15,
-            opponent: opponent,
-            venue: venue,
-            projectedScore: projectedScore,
-            confidence: confidence,
-            conditions: weather
-        )
+        conditions: WeatherConditions
+    ) {
+        self.round = round
+        self.opponent = opponent
+        self.venue = venue
+        self.projectedScore = projectedScore
+        self.confidence = confidence
+        self.conditions = conditions
     }
+}
 
-    private func generateCaptainSuggestions() {
-        let topPlayers = players.sorted { $0.averageScore > $1.averageScore }.prefix(3)
+// MARK: - WeatherConditions
 
-        captainSuggestions = topPlayers.enumerated().map { index, player in
-            let confidence = Int(90 - Double(index) * 5 + player.consistency * 0.1)
-            let projectedPoints = Int(player.nextRoundProjection.projectedScore * 2 + Double.random(in: -10 ... 10))
+struct WeatherConditions: Codable {
+    let temperature: Double
+    let rainProbability: Double
+    let windSpeed: Double
+    let humidity: Double
+}
 
-            return CaptainSuggestion(
-                player: player,
-                confidence: confidence,
-                projectedPoints: projectedPoints
-            )
-        }
+// MARK: - SeasonProjection
+
+struct SeasonProjection: Codable {
+    let projectedTotalScore: Double
+    let projectedAverage: Double
+    let premiumPotential: Double
+}
+
+// MARK: - InjuryRisk
+
+struct InjuryRisk: Codable {
+    let riskLevel: InjuryRiskLevel
+    let riskScore: Double
+    let riskFactors: [String]
+}
+
+// MARK: - InjuryRiskLevel
+
+enum InjuryRiskLevel: String, CaseIterable, Codable {
+    case low = "Low"
+    case medium = "Medium"
+    case high = "High"
+    case critical = "Critical"
+}
+
+// MARK: - VenuePerformance
+
+struct VenuePerformance: Identifiable, Codable {
+    let id = UUID()
+    let venue: String
+    let gamesPlayed: Int
+    let averageScore: Double
+    let bias: Double
+
+    init(venue: String, gamesPlayed: Int, averageScore: Double, bias: Double) {
+        self.venue = venue
+        self.gamesPlayed = gamesPlayed
+        self.averageScore = averageScore
+        self.bias = bias
     }
+}
+
+// MARK: - AlertFlag
+
+struct AlertFlag: Identifiable, Codable {
+    let id = UUID()
+    let type: AlertType
+    let priority: AlertPriority
+    let message: String
+
+    init(type: AlertType, priority: AlertPriority, message: String) {
+        self.type = type
+        self.priority = priority
+        self.message = message
+    }
+}
+
+// MARK: - AlertType
+
+enum AlertType: String, CaseIterable, Codable {
+    case priceDrop
+    case breakEvenCliff
+    case cashCowSell
+    case injuryRisk
+    case roleChange
+    case weatherRisk
+    case contractYear
+    case premiumBreakout
+}
+
+// MARK: - AlertPriority
+
+enum AlertPriority: String, CaseIterable, Codable {
+    case critical
+    case high
+    case medium
+    case low
 }
 
 // MARK: - EnhancedPlayer
 
+// EnhancedPlayer model
 struct EnhancedPlayer: Identifiable, Codable {
     let id: String
     let name: String
@@ -497,268 +162,417 @@ struct EnhancedPlayer: Identifiable, Codable {
     let venuePerformance: [VenuePerformance]
     let alertFlags: [AlertFlag]
 
-    var formattedPrice: String {
-        "$\(price / 1000)k"
+    // Computed property for projected score
+    var projectedScore: Double {
+        nextRoundProjection.projectedScore
     }
-
-    var priceChangeText: String {
-        let prefix = priceChange >= 0 ? "+" : ""
-        return "\(prefix)\(priceChange / 1000)k"
-    }
-
-    var consistencyGrade: String {
-        switch consistency {
-        case 90...: "A+"
-        case 80 ..< 90: "A"
-        case 70 ..< 80: "B"
-        case 60 ..< 70: "C"
-        default: "D"
-        }
-    }
-}
-
-// MARK: - RoundProjection
-
-struct RoundProjection: Codable {
-    let round: Int
-    let opponent: String
-    let venue: String
-    let projectedScore: Double
-    let confidence: Double
-    let conditions: WeatherConditions
-}
-
-// MARK: - SeasonProjection
-
-struct SeasonProjection: Codable {
-    let projectedTotalScore: Double
-    let projectedAverage: Double
-    let premiumPotential: Double
-}
-
-// MARK: - InjuryRisk
-
-struct InjuryRisk: Codable {
-    let riskLevel: RiskLevel
-    let riskScore: Double
-    let riskFactors: [String]
-}
-
-// MARK: - RiskLevel
-
-enum RiskLevel: String, Codable {
-    case low = "Low"
-    case moderate = "Moderate"
-    case high = "High"
-    case extreme = "Extreme"
-
-    var color: Color {
-        switch self {
-        case .low: .green
-        case .moderate: .yellow
-        case .high: .orange
-        case .extreme: .red
-        }
-    }
-}
-
-// MARK: - VenuePerformance
-
-struct VenuePerformance: Codable {
-    let venue: String
-    let gamesPlayed: Int
-    let averageScore: Double
-    let bias: Double
-}
-
-// MARK: - AlertFlag
-
-struct AlertFlag: Codable {
-    let type: AlertType
-    let priority: AlertPriority
-    let message: String
-}
-
-// MARK: - AlertType
-
-enum AlertType: String, Codable {
-    case priceDrop = "Price Drop"
-    case breakEvenCliff = "Breakeven Cliff"
-    case cashCowSell = "Cash Cow Sell"
-    case injuryRisk = "Injury Risk"
-    case roleChange = "Role Change"
-    case weatherRisk = "Weather Risk"
-    case contractYear = "Contract Year"
-    case premiumBreakout = "Premium Breakout"
-}
-
-// MARK: - AlertPriority
-
-enum AlertPriority: String, Codable {
-    case critical = "Critical"
-    case high = "High"
-    case medium = "Medium"
-    case low = "Low"
-}
-
-// MARK: - WeatherConditions
-
-struct WeatherConditions: Codable {
-    let temperature: Double
-    let rainProbability: Double
-    let windSpeed: Double
-    let humidity: Double
 }
 
 // MARK: - CaptainSuggestion
 
-struct CaptainSuggestion: Identifiable {
+// CaptainSuggestion model
+struct CaptainSuggestion: Identifiable, Codable {
     let id = UUID()
     let player: EnhancedPlayer
     let confidence: Int
     let projectedPoints: Int
+
+    init(player: EnhancedPlayer, confidence: Int, projectedPoints: Int) {
+        self.player = player
+        self.confidence = confidence
+        self.projectedPoints = projectedPoints
+    }
 }
 
-// MARK: - ConnectionStatusBar
+// MARK: - TradeRecord
 
-struct ConnectionStatusBar: View {
-    @State private var connectionStatus: ConnectionStatus = .live
-    @State private var animateConnection = false
+// TradeRecord model
+struct TradeRecord: Identifiable, Codable {
+    let id: UUID
+    let playerOut: EnhancedPlayer
+    let playerIn: EnhancedPlayer
+    let executedAt: Date
+    let netCost: Int
+    let projectedImpact: Double
 
-    var body: some View {
-        HStack {
-            Image(systemName: connectionStatus.systemImage)
-                .foregroundColor(connectionStatus.color)
-                .scaleEffect(animateConnection ? 1.2 : 1.0)
-                .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: animateConnection)
+    init(
+        id: UUID = UUID(),
+        playerOut: EnhancedPlayer,
+        playerIn: EnhancedPlayer,
+        executedAt: Date,
+        netCost: Int,
+        projectedImpact: Double
+    ) {
+        self.id = id
+        self.playerOut = playerOut
+        self.playerIn = playerIn
+        self.executedAt = executedAt
+        self.netCost = netCost
+        self.projectedImpact = projectedImpact
+    }
+}
 
-            Text(connectionStatus.rawValue)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundColor(connectionStatus.color)
+// MARK: - AFLFantasyApp
 
-            Spacer()
+@main
+struct AFLFantasyApp: App {
+    // MARK: - State Objects
 
-            Text("Last updated: now")
-                .font(.caption2)
-                .foregroundColor(.secondary)
+    @StateObject private var dataService = AFLFantasyDataService()
+    @StateObject private var appState = AppState()
+
+    // MARK: - Scene
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(dataService)
+                .environmentObject(appState)
+                .preferredColorScheme(.dark)
+                .onAppear {
+                    setupApp()
+                }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(connectionStatus.color.opacity(0.1))
+    }
+
+    // MARK: - Setup
+
+    private func setupApp() {
+        // Configure any app-level settings here
+        print("🚀 AFL Fantasy Intelligence Platform started")
+
+        // Debug information
+        #if DEBUG
+            print("📱 Running in DEBUG mode")
+            if dataService.authenticated {
+                print("✅ User is authenticated")
+            } else {
+                print("❌ User not authenticated")
+            }
+        #endif
+    }
+}
+
+// MARK: - AppState
+
+@MainActor
+class AppState: ObservableObject {
+    @Published var selectedTab: TabItem = .dashboard
+    @Published var teamScore: Int = 1987
+    @Published var teamRank: Int = 5432
+    @Published var players: [EnhancedPlayer] = []
+    @Published var captainSuggestions: [CaptainSuggestion] = []
+    @Published var cashCows: [EnhancedPlayer] = []
+
+    // Trade management
+    @Published var tradesUsed: Int = 2
+    @Published var tradesRemaining: Int = 8
+    @Published var tradeHistory: [TradeRecord] = []
+
+    // Team financials
+    @Published var teamValue: Int = 12_000_000
+    @Published var bankBalance: Int = 300_000
+
+    // Connection and sync
+    @Published var isRefreshing: Bool = false
+    @Published var lastUpdateTime: Date? = Date()
+    @Published var errorMessage: String?
+
+    init() {
+        loadEnhancedData()
+        generateCaptainSuggestions()
+    }
+
+    private func loadEnhancedData() {
+        players = createSamplePlayers()
+        cashCows = players.filter(\.isCashCow)
+    }
+
+    private func createSamplePlayers() -> [EnhancedPlayer] {
+        let samplePlayers = [
+            createPremiumMidfielder(),
+            createPremiumRuck(),
+            createConsistentMidfielder(),
+            createCashCowDefender(),
+            createContractYearMidfielder()
+        ]
+        return samplePlayers
+    }
+
+    private func createPremiumMidfielder() -> EnhancedPlayer {
+        EnhancedPlayer(
+            id: UUID().uuidString,
+            name: "Marcus Bontempelli",
+            position: .midfielder,
+            price: 850_000,
+            currentScore: 125,
+            averageScore: 118.5,
+            breakeven: 85,
+            consistency: 92.0,
+            highScore: 156,
+            lowScore: 85,
+            priceChange: 25000,
+            isCashCow: false,
+            isDoubtful: false,
+            isSuspended: false,
+            cashGenerated: 0,
+            projectedPeakPrice: 900_000,
+            nextRoundProjection: RoundProjection(
+                round: 15,
+                opponent: "Richmond",
+                venue: "Marvel Stadium",
+                projectedScore: 130.0,
+                confidence: 0.85,
+                conditions: WeatherConditions(temperature: 18.0, rainProbability: 0.2, windSpeed: 12.0, humidity: 65.0)
+            ),
+            seasonProjection: SeasonProjection(
+                projectedTotalScore: 2368.0,
+                projectedAverage: 118.4,
+                premiumPotential: 0.92
+            ),
+            injuryRisk: InjuryRisk(
+                riskLevel: .low,
+                riskScore: 0.15,
+                riskFactors: []
+            ),
+            venuePerformance: [
+                VenuePerformance(venue: "Marvel Stadium", gamesPlayed: 8, averageScore: 122.3, bias: 3.5)
+            ],
+            alertFlags: []
         )
-        .onAppear {
-            animateConnection = connectionStatus == .live
+    }
+
+    private func createPremiumRuck() -> EnhancedPlayer {
+        EnhancedPlayer(
+            id: UUID().uuidString,
+            name: "Max Gawn",
+            position: .ruck,
+            price: 780_000,
+            currentScore: 98,
+            averageScore: 105.2,
+            breakeven: 90,
+            consistency: 88.0,
+            highScore: 135,
+            lowScore: 68,
+            priceChange: -15000,
+            isCashCow: false,
+            isDoubtful: true,
+            isSuspended: false,
+            cashGenerated: 0,
+            projectedPeakPrice: 800_000,
+            nextRoundProjection: RoundProjection(
+                round: 15,
+                opponent: "Collingwood",
+                venue: "MCG",
+                projectedScore: 105.0,
+                confidence: 0.78,
+                conditions: WeatherConditions(temperature: 16.0, rainProbability: 0.1, windSpeed: 8.0, humidity: 58.0)
+            ),
+            seasonProjection: SeasonProjection(
+                projectedTotalScore: 2104.0,
+                projectedAverage: 105.2,
+                premiumPotential: 0.88
+            ),
+            injuryRisk: InjuryRisk(
+                riskLevel: .medium,
+                riskScore: 0.35,
+                riskFactors: ["Previous knee injury", "Heavy ruck load"]
+            ),
+            venuePerformance: [
+                VenuePerformance(venue: "MCG", gamesPlayed: 12, averageScore: 107.3, bias: 2.0)
+            ],
+            alertFlags: [
+                AlertFlag(type: .injuryRisk, priority: .medium, message: "Monitor knee condition")
+            ]
+        )
+    }
+
+    private func createConsistentMidfielder() -> EnhancedPlayer {
+        EnhancedPlayer(
+            id: UUID().uuidString,
+            name: "Touk Miller",
+            position: .midfielder,
+            price: 720_000,
+            currentScore: 110,
+            averageScore: 108.8,
+            breakeven: 75,
+            consistency: 89.0,
+            highScore: 132,
+            lowScore: 88,
+            priceChange: 20000,
+            isCashCow: false,
+            isDoubtful: false,
+            isSuspended: false,
+            cashGenerated: 0,
+            projectedPeakPrice: 740_000,
+            nextRoundProjection: RoundProjection(
+                round: 15,
+                opponent: "Geelong",
+                venue: "GMHBA Stadium",
+                projectedScore: 115.0,
+                confidence: 0.82,
+                conditions: WeatherConditions(temperature: 14.0, rainProbability: 0.4, windSpeed: 18.0, humidity: 75.0)
+            ),
+            seasonProjection: SeasonProjection(
+                projectedTotalScore: 2176.0,
+                projectedAverage: 108.8,
+                premiumPotential: 0.89
+            ),
+            injuryRisk: InjuryRisk(
+                riskLevel: .low,
+                riskScore: 0.12,
+                riskFactors: []
+            ),
+            venuePerformance: [
+                VenuePerformance(venue: "GMHBA Stadium", gamesPlayed: 6, averageScore: 103.2, bias: -1.5)
+            ],
+            alertFlags: [
+                AlertFlag(
+                    type: .premiumBreakout,
+                    priority: .high,
+                    message: "Contract year motivation - monitor performance"
+                )
+            ]
+        )
+    }
+
+    private func createCashCowDefender() -> EnhancedPlayer {
+        EnhancedPlayer(
+            id: UUID().uuidString,
+            name: "Hayden Young",
+            position: .defender,
+            price: 550_000,
+            currentScore: 78,
+            averageScore: 85.2,
+            breakeven: 45,
+            consistency: 76.0,
+            highScore: 98,
+            lowScore: 62,
+            priceChange: 35000,
+            isCashCow: true,
+            isDoubtful: false,
+            isSuspended: false,
+            cashGenerated: 120_000,
+            projectedPeakPrice: 620_000,
+            nextRoundProjection: RoundProjection(
+                round: 15,
+                opponent: "Sydney",
+                venue: "Optus Stadium",
+                projectedScore: 88.0,
+                confidence: 0.74,
+                conditions: WeatherConditions(temperature: 20.0, rainProbability: 0.0, windSpeed: 22.0, humidity: 45.0)
+            ),
+            seasonProjection: SeasonProjection(
+                projectedTotalScore: 1704.0,
+                projectedAverage: 85.2,
+                premiumPotential: 0.76
+            ),
+            injuryRisk: InjuryRisk(
+                riskLevel: .low,
+                riskScore: 0.14,
+                riskFactors: []
+            ),
+            venuePerformance: [
+                VenuePerformance(venue: "Optus Stadium", gamesPlayed: 5, averageScore: 89.4, bias: 4.2)
+            ],
+            alertFlags: [
+                AlertFlag(
+                    type: .cashCowSell,
+                    priority: .high,
+                    message: "Cash cow approaching peak price - consider selling soon"
+                )
+            ]
+        )
+    }
+
+    private func createContractYearMidfielder() -> EnhancedPlayer {
+        EnhancedPlayer(
+            id: UUID().uuidString,
+            name: "Sam Walsh",
+            position: .midfielder,
+            price: 750_000,
+            currentScore: 115,
+            averageScore: 112.4,
+            breakeven: 80,
+            consistency: 87.0,
+            highScore: 145,
+            lowScore: 92,
+            priceChange: 30000,
+            isCashCow: false,
+            isDoubtful: false,
+            isSuspended: false,
+            cashGenerated: 0,
+            projectedPeakPrice: 780_000,
+            nextRoundProjection: RoundProjection(
+                round: 15,
+                opponent: "Hawthorn",
+                venue: "MCG",
+                projectedScore: 118.0,
+                confidence: 0.80,
+                conditions: WeatherConditions(temperature: 15.0, rainProbability: 0.3, windSpeed: 15.0, humidity: 68.0)
+            ),
+            seasonProjection: SeasonProjection(
+                projectedTotalScore: 2248.0,
+                projectedAverage: 112.4,
+                premiumPotential: 0.87
+            ),
+            injuryRisk: InjuryRisk(
+                riskLevel: .low,
+                riskScore: 0.18,
+                riskFactors: ["Minor shoulder concern"]
+            ),
+            venuePerformance: [
+                VenuePerformance(venue: "MCG", gamesPlayed: 9, averageScore: 115.1, bias: 1.8)
+            ],
+            alertFlags: [
+                AlertFlag(type: .contractYear, priority: .high, message: "Contract year - motivated for strong finish")
+            ]
+        )
+    }
+
+    private func generateCaptainSuggestions() {
+        let topPlayers = players.sorted { $0.averageScore > $1.averageScore }.prefix(3)
+
+        captainSuggestions = topPlayers.enumerated().map { index, player in
+            let confidence = Int(90 - Double(index) * 5 + player.consistency * 0.1)
+            let projectedPoints = Int(player.projectedScore * 2 + Double.random(in: -10 ... 10))
+
+            return CaptainSuggestion(
+                player: player,
+                confidence: confidence,
+                projectedPoints: projectedPoints
+            )
         }
     }
-}
 
-// MARK: - DesignSystem
+    // MARK: - Public Methods
 
-enum DesignSystem {
-    enum Colors {
-        static let primary = Color.orange
-        static let onSurfaceSecondary = Color.secondary
-        static let success = Color.green
-    }
+    func refreshData() {
+        Task {
+            await MainActor.run {
+                isRefreshing = true
+                errorMessage = nil
+            }
 
-    enum Spacing {
-        case s, m, l, xl
+            // Simulate API call
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
 
-        var value: CGFloat {
-            switch self {
-            case .s: 8
-            case .m: 16
-            case .l: 24
-            case .xl: 32
+            await MainActor.run {
+                isRefreshing = false
+                lastUpdateTime = Date()
+
+                // Update some sample data
+                teamScore = Int.random(in: 1800 ... 2200)
+                teamRank = Int.random(in: 1000 ... 15000)
             }
         }
     }
-}
 
-// MARK: - TypographyModifier
-
-struct TypographyModifier: ViewModifier {
-    let style: Font.TextStyle
-
-    func body(content: Content) -> some View {
-        content
-            .font(.system(style))
-    }
-}
-
-extension View {
-    func typography(_ style: Font.TextStyle) -> some View {
-        modifier(TypographyModifier(style: style))
-    }
-}
-
-// MARK: - Position
-
-enum Position: String, CaseIterable, Codable {
-    case defender = "DEF"
-    case midfielder = "MID"
-    case ruck = "RUC"
-    case forward = "FWD"
-
-    var color: Color {
-        switch self {
-        case .defender: .blue
-        case .midfielder: .green
-        case .ruck: .purple
-        case .forward: .red
-        }
-    }
-}
-
-// MARK: - ConnectionStatus
-
-enum ConnectionStatus: String, CaseIterable {
-    case disconnected = "Disconnected"
-    case connecting = "Connecting"
-    case connected = "Connected"
-    case live = "Live"
-    case error = "Error"
-
-    var color: Color {
-        switch self {
-        case .disconnected: .gray
-        case .connecting: .orange
-        case .connected: .green
-        case .live: .red
-        case .error: .red
-        }
+    func simulateError(_ message: String) {
+        errorMessage = message
     }
 
-    var systemImage: String {
-        switch self {
-        case .disconnected: "wifi.slash"
-        case .connecting: "wifi.exclamationmark"
-        case .connected: "wifi"
-        case .live: "dot.radiowaves.left.and.right"
-        case .error: "exclamationmark.triangle"
-        }
-    }
-}
-
-// MARK: - TabItem
-
-enum TabItem: String, CaseIterable {
-    case dashboard = "Dashboard"
-    case captain = "Captain"
-    case trades = "Trades"
-    case cashCow = "Cash Cow"
-    case settings = "Settings"
-
-    var systemImage: String {
-        switch self {
-        case .dashboard: "chart.line.uptrend.xyaxis"
-        case .captain: "star.fill"
-        case .trades: "arrow.triangle.2.circlepath"
-        case .cashCow: "dollarsign.circle.fill"
-        case .settings: "gearshape.fill"
-        }
+    func clearError() {
+        errorMessage = nil
     }
 }

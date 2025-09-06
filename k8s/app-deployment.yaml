@@ -1,0 +1,149 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: afl-fantasy-app
+  namespace: afl-fantasy
+  labels:
+    app: afl-fantasy-app
+    version: v1
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: afl-fantasy-app
+  template:
+    metadata:
+      labels:
+        app: afl-fantasy-app
+        version: v1
+    spec:
+      containers:
+      - name: afl-fantasy-app
+        image: afl-fantasy:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: afl-fantasy-config
+              key: NODE_ENV
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: afl-fantasy-config
+              key: PORT
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: afl-fantasy-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: afl-fantasy-secrets
+              key: REDIS_URL
+        - name: AFL_FANTASY_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: afl-fantasy-secrets
+              key: AFL_FANTASY_USERNAME
+        - name: AFL_FANTASY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: afl-fantasy-secrets
+              key: AFL_FANTASY_PASSWORD
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: afl-fantasy-secrets
+              key: OPENAI_API_KEY
+        volumeMounts:
+        - name: app-data
+          mountPath: /app/uploads
+        - name: app-logs
+          mountPath: /app/logs
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+      volumes:
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: app-data-pvc
+      - name: app-logs
+        persistentVolumeClaim:
+          claimName: app-logs-pvc
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-data-pvc
+  namespace: afl-fantasy
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-logs-pvc
+  namespace: afl-fantasy
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: afl-fantasy-service
+  namespace: afl-fantasy
+  labels:
+    app: afl-fantasy-app
+spec:
+  selector:
+    app: afl-fantasy-app
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+  type: ClusterIP

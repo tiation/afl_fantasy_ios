@@ -1,0 +1,231 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'afl-fantasy-alerts@sxc.codes'
+  smtp_auth_username: 'alerts@sxc.codes'
+  smtp_auth_password: 'your-app-password'  # Configure via secrets
+  smtp_require_tls: true
+
+# Email notification templates
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'tiation-team'
+  routes:
+    # Critical alerts - immediate notification
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 10s
+      repeat_interval: 1h
+    
+    # Warning alerts - standard notification
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      group_wait: 2m
+      repeat_interval: 6h
+    
+    # Database specific alerts
+    - match:
+        service: database
+      receiver: 'database-alerts'
+    
+    # Security alerts
+    - match:
+        alertname: 'SecurityVulnerability'
+      receiver: 'security-alerts'
+
+receivers:
+  # Main team notifications
+  - name: 'tiation-team'
+    email_configs:
+      - to: 'tiatheone@protonmail.com,garrett@sxc.codes,garrett.dillman@gmail.com'
+        subject: '🚨 AFL Fantasy Alert: {{ .GroupLabels.alertname }}'
+        html: |
+          <h2>🚨 AFL Fantasy Platform Alert</h2>
+          <p><strong>Alert:</strong> {{ .GroupLabels.alertname }}</p>
+          <p><strong>Severity:</strong> {{ .GroupLabels.severity }}</p>
+          <p><strong>Time:</strong> {{ .CommonAnnotations.timestamp }}</p>
+          
+          <h3>📋 Alert Details</h3>
+          {{ range .Alerts }}
+          <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0;">
+            <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+            <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+            <p><strong>Instance:</strong> {{ .Labels.instance }}</p>
+            <p><strong>Started:</strong> {{ .StartsAt }}</p>
+          </div>
+          {{ end }}
+          
+          <h3>🔧 Quick Actions</h3>
+          <ul>
+            <li><strong>SSH to Docker Host:</strong> <code>ssh root@145.223.22.7</code></li>
+            <li><strong>Check Grafana:</strong> <a href="https://grafana.sxc.codes">https://grafana.sxc.codes</a></li>
+            <li><strong>Check Logs:</strong> <code>docker logs afl-fantasy-app</code></li>
+            <li><strong>Restart Service:</strong> <code>docker-compose restart</code></li>
+          </ul>
+
+  # Critical alerts with immediate escalation
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'tiatheone@protonmail.com,garrett@sxc.codes,garrett.dillman@gmail.com'
+        subject: '🚨 CRITICAL: AFL Fantasy Platform Issue'
+        html: |
+          <h1 style="color: red;">🚨 CRITICAL ALERT - IMMEDIATE ACTION REQUIRED</h1>
+          
+          <div style="background: #ffebee; padding: 20px; border-left: 5px solid #f44336;">
+            <h2>Critical Issue Detected</h2>
+            <p><strong>Service:</strong> AFL Fantasy Platform</p>
+            <p><strong>Alert:</strong> {{ .GroupLabels.alertname }}</p>
+            <p><strong>Started:</strong> {{ .CommonAnnotations.timestamp }}</p>
+          </div>
+          
+          <h3>🔥 Affected Systems</h3>
+          {{ range .Alerts }}
+          <div style="background: #fff3e0; padding: 10px; margin: 5px 0; border-radius: 4px;">
+            <p><strong>{{ .Annotations.summary }}</strong></p>
+            <p>{{ .Annotations.description }}</p>
+            <p><em>Instance: {{ .Labels.instance }}</em></p>
+          </div>
+          {{ end }}
+          
+          <h3>🚀 Emergency Response</h3>
+          <div style="background: #e8f5e8; padding: 15px; border-radius: 4px;">
+            <h4>1. Immediate Checks</h4>
+            <ul>
+              <li>SSH to main server: <code>ssh root@145.223.22.7</code></li>
+              <li>Check container status: <code>docker ps -a</code></li>
+              <li>View recent logs: <code>docker logs --tail=100 afl-fantasy-app</code></li>
+            </ul>
+            
+            <h4>2. Infrastructure Status</h4>
+            <ul>
+              <li><strong>Docker:</strong> docker.sxc.codes (145.223.22.7)</li>
+              <li><strong>Database:</strong> supabase.sxc.codes (93.127.167.157)</li>
+              <li><strong>Monitoring:</strong> grafana.sxc.codes (153.92.214.1)</li>
+            </ul>
+            
+            <h4>3. Quick Recovery</h4>
+            <ul>
+              <li>Restart services: <code>docker-compose restart</code></li>
+              <li>Check disk space: <code>df -h</code></li>
+              <li>Monitor recovery: <a href="https://grafana.sxc.codes">Grafana Dashboard</a></li>
+            </ul>
+          </div>
+
+  # Warning alerts
+  - name: 'warning-alerts'
+    email_configs:
+      - to: 'tiatheone@protonmail.com,garrett@sxc.codes,garrett.dillman@gmail.com'
+        subject: '⚠️ AFL Fantasy Warning: {{ .GroupLabels.alertname }}'
+        html: |
+          <h2>⚠️ AFL Fantasy Platform Warning</h2>
+          
+          <p>A warning condition has been detected that requires attention:</p>
+          
+          <div style="background: #fff8e1; padding: 15px; border-left: 4px solid #ff9800;">
+            <h3>Warning Details</h3>
+            {{ range .Alerts }}
+            <p><strong>{{ .Annotations.summary }}</strong></p>
+            <p>{{ .Annotations.description }}</p>
+            <p><em>Instance: {{ .Labels.instance }} | Started: {{ .StartsAt }}</em></p>
+            {{ end }}
+          </div>
+          
+          <h3>📊 Recommended Actions</h3>
+          <ul>
+            <li>Review system metrics in <a href="https://grafana.sxc.codes">Grafana</a></li>
+            <li>Check application logs for errors</li>
+            <li>Monitor for escalation to critical levels</li>
+            <li>Consider scaling resources if needed</li>
+          </ul>
+
+  # Database specific alerts
+  - name: 'database-alerts'
+    email_configs:
+      - to: 'tiatheone@protonmail.com,garrett@sxc.codes,garrett.dillman@gmail.com'
+        subject: '🗄️ AFL Fantasy Database Alert: {{ .GroupLabels.alertname }}'
+        html: |
+          <h2>🗄️ Database Alert - AFL Fantasy Platform</h2>
+          
+          <div style="background: #f3e5f5; padding: 15px; border-left: 4px solid #9c27b0;">
+            <h3>Database Issue Detected</h3>
+            {{ range .Alerts }}
+            <p><strong>{{ .Annotations.summary }}</strong></p>
+            <p>{{ .Annotations.description }}</p>
+            {{ end }}
+          </div>
+          
+          <h3>🔧 Database Troubleshooting</h3>
+          <ul>
+            <li><strong>Check Supabase Status:</strong> <code>ssh root@93.127.167.157</code></li>
+            <li><strong>Database Logs:</strong> <code>docker logs supabase-db</code></li>
+            <li><strong>Connection Test:</strong> Test from application server</li>
+            <li><strong>Backup Status:</strong> Verify recent backups are available</li>
+          </ul>
+          
+          <h3>📱 Quick Access</h3>
+          <ul>
+            <li><strong>Supabase Dashboard:</strong> Access via web interface</li>
+            <li><strong>Database Metrics:</strong> <a href="https://grafana.sxc.codes">Grafana DB Dashboard</a></li>
+          </ul>
+
+  # Security alerts
+  - name: 'security-alerts'
+    email_configs:
+      - to: 'tiatheone@protonmail.com,garrett@sxc.codes,garrett.dillman@gmail.com'
+        subject: '🔒 SECURITY ALERT: AFL Fantasy Platform'
+        html: |
+          <h1 style="color: #d32f2f;">🔒 SECURITY ALERT</h1>
+          
+          <div style="background: #ffebee; padding: 20px; border: 2px solid #f44336; border-radius: 8px;">
+            <h2>Security Issue Detected</h2>
+            <p><strong>Alert Type:</strong> {{ .GroupLabels.alertname }}</p>
+            <p><strong>Severity:</strong> {{ .GroupLabels.severity }}</p>
+            <p><strong>Detection Time:</strong> {{ .CommonAnnotations.timestamp }}</p>
+            
+            {{ range .Alerts }}
+            <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 4px;">
+              <p><strong>{{ .Annotations.summary }}</strong></p>
+              <p>{{ .Annotations.description }}</p>
+            </div>
+            {{ end }}
+          </div>
+          
+          <h3>🚨 Immediate Security Response</h3>
+          <ol>
+            <li><strong>Isolate:</strong> If needed, temporarily restrict access</li>
+            <li><strong>Investigate:</strong> Check logs for suspicious activity</li>
+            <li><strong>Document:</strong> Record all findings for analysis</li>
+            <li><strong>Remediate:</strong> Apply security patches/updates</li>
+            <li><strong>Monitor:</strong> Watch for continued threats</li>
+          </ol>
+          
+          <h3>🔍 Investigation Commands</h3>
+          <ul>
+            <li><strong>Check Access Logs:</strong> <code>tail -f /var/log/nginx/access.log</code></li>
+            <li><strong>System Activity:</strong> <code>last -n 20</code></li>
+            <li><strong>Running Processes:</strong> <code>ps aux | grep suspicious</code></li>
+            <li><strong>Network Connections:</strong> <code>netstat -tulpn</code></li>
+          </ul>
+
+# Inhibit rules to prevent spam
+inhibit_rules:
+  # Inhibit warning alerts if critical alerts are firing
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
+  
+  # Inhibit duplicate alerts
+  - source_match:
+      alertname: 'AppDown'
+    target_match:
+      alertname: 'HighResponseTime'
+    equal: ['instance']

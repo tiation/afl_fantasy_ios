@@ -1,0 +1,156 @@
+Got it! Below is the detailed prompt for Replit Agent based on your specifications, now including **DVP line graph** for player/team match-up difficulty and **player roles** in the top table, with additional category breaks for reducing clutter. Let's make sure to include all the details you’ve requested:
+
+---
+
+### **Project Overview for Replit Agent**
+
+#### **AFL Fantasy Stats Dashboard - Enhanced Version**
+
+This dashboard will display a variety of AFL Fantasy stats and visualizations in a clear, mobile-optimized interface with enhanced interactivity and customization. Key updates include the addition of **DVP Line Graph**, **Player Roles**, and better organization of the top table to reduce clutter.
+
+---
+
+### **1. Top Stats Table (Collapsible Categories & Role Data)**
+
+The table should be scrollable both horizontally and vertically. It will display detailed stats for each player, organized into clearly labeled categories. These categories can be **expanded or collapsed** based on user selection.
+
+#### **First Column (Sticky & Stacked)**:
+
+This first column should be sticky across all tables and visible when scrolling. The data in this column should be stacked vertically, with no header to minimize clutter:
+
+* **Player Name (First & Last)**
+* **Price**
+* **Team**
+* **Position**
+* **Games Played**
+* **Role** (Player's fantasy role: e.g., Midfield, Forward, Defender)
+
+---
+
+#### **Categories for Stats Table**:
+
+1. **Basic Stats** (Include for each player):
+
+   * **Average (L3, L5, L10, and Season)**
+   * **Break-Even (BE)**
+   * **Points per \$ Index (PP\$)**
+   * **Total Points Scored**
+   * **Points per Minute (PPM)**
+   * **Kick-In %**
+   * **CBA %**
+   * **Contested Marks**
+   * **Uncontested Marks**
+   * **Goals**
+   * **Behinds**
+   * **Tackles**
+   * **Hit-Outs**
+   * **Kicks**
+   * **Handballs**
+
+2. **Injury & Availability**:
+
+   * **Injury Status** (Active/Out)
+   * **Expected Return** (with link to external injury list source)
+
+3. **Player Value/Consistency**:
+
+   * **Consistency Rating**: A transparent line graph showing performance volatility for the last 5 rounds.
+   * **Points per \$ Index**: A visual bar-style indicator for comparing value at a glance.
+
+4. **Matchup Difficulty (DVP)**:
+
+   * **Line Graph**: Display a **DVP line graph** showing the player/team matchup difficulty for the next 5 rounds for various player positions (Midfield, Forward, Defender, Ruck).
+   * The **DVP line graph** should be toggleable between **Player-based** and **Team-based** views, displaying difficulty levels for both player positions and teams.
+
+---
+
+### **2. Interactive Heat Maps**
+
+#### **Heat Map Options**:
+
+* **Player Heat Map**: Toggleable between contested and uncontested disposals.
+
+  * **Contested Disposals**: Dark purple color for contested disposals, darkening based on the number of disposals in that region.
+  * **Uncontested Disposals**: Light blue to dark blue for uncontested disposals, darkening as the number of disposals increases.
+
+* **Team Heat Map**: A team-based heat map with similar features for displaying contested/uncontested disposals across the field.
+
+#### **Tabs for Heat Map and Search**:
+
+* **Search Bar 1: Player Selection**: A search bar where users can type the player’s name, and the system suggests players after typing two letters (even with small spelling mistakes).
+* **Search Bar 2: Team Selection**: A dropdown menu showing all 18 AFL teams for the user to select.
+* **Tab 3: Disposals Type**: Users can toggle between **Contested/Uncontested Disposals**, which will switch the heat map to show either player disposals or team disposals.
+
+---
+
+### **3. Points per \$ Index Transparent Line Graph**
+
+The **Points per \$ Index** will be shown as a transparent line graph with a gradient scale. This will allow users to quickly compare the value of players.
+
+---
+
+### **4. Player Matchup Difficulty (DVP) Line Graph**
+
+Display a **DVP line graph** showing the matchup difficulty for each player in the next 5 rounds. This should be color-coded by **position** (Midfield, Forward, Defender, Ruck), and users should be able to toggle between viewing **Player-based** or **Team-based** DVP data.
+
+---
+
+### **5. Interactivity & Usability Features**
+
+#### **Round Display**:
+
+When the user clicks on a round (e.g., Round 8), a small box will pop up displaying the exact projected score, BE, and price change for that round.
+
+#### **Dropdown Filter**
+
+The top section will have a **dropdown filter** for sorting by:
+
+* Team
+* Position
+* Price
+* Break-Even
+* Form
+* Role (e.g., Mid, Forward, etc.)
+
+#### **Color Themes**
+
+Each stat will be color-coded for clarity:
+
+* **Red** = Very Bad
+* **Orange** = Bad
+* **Light Green** = Good
+* **Dark Green** = Very Good
+* **White** = Neutral
+* **Blue** = Bye
+
+Icons (📈, 🩹, 🔥) will be used for easy mobile readability.
+
+---
+
+### **6. Consistency & Volatility Indicators**
+
+Include a **consistency rating** section showing the **last 5 rounds** of a player’s score volatility. This will be displayed as a **transparent line graph** for score consistency, where:
+
+* **Tag**: “🔒 Reliable” / “🎲 Risky” / “📈 Rising”
+
+---
+
+### **7. Injury Report Section**
+
+Display injury information for each player, including:
+
+* **Current Status**: Whether the player is active or injured
+* **Expected Return Date**: If applicable
+* **Link to External Injury Source**: A clickable link to an external injury report (optional).
+
+---
+
+### **Next Steps**
+
+1. **UI Layout**: Design the layout for the **collapsible categories** in the top table and **heat maps** with **search bar functionality** for players and teams.
+2. **DVP Line Graph**: Implement the **DVP line graph** for player/team match-up difficulty in the next 5 rounds.
+3. **Points per \$ Index**: Add the **Points per \$ Index** as a **transparent line graph**.
+4. **Player Consistency Graph**: Design the **consistency/volatility graph** for each player.
+5. **Scraping Integration**: After UI setup, integrate the necessary scraping logic for data fetching (player stats, DVP data, injury information, etc.).
+6. **Mobile Optimization**: Ensure the layout is fully optimized for mobile devices, ensuring all stats and graphs are displayed clearly.
+

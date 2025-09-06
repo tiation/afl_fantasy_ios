@@ -1,0 +1,1142 @@
+import { useState, useEffect, useMemo } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useQuery } from "@tanstack/react-query";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  ResponsiveContainer, 
+  Tooltip,
+  AreaChart,
+  Area,
+  CartesianGrid,
+  ScatterChart,
+  Scatter,
+  ZAxis,
+  Legend
+} from "recharts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  RotateCw,
+  Info
+} from "lucide-react";
+
+// Interface for player data
+interface Player {
+  id: number;
+  name: string;
+  team: string;
+  position: string;
+  price: number;
+  breakEven?: number;
+  averagePoints: number;
+  projScore?: number;
+}
+
+interface DVPData {
+  DEF: Array<{
+    team: string;
+    dvpRating: number;
+    rank: number;
+    difficulty: string;
+    trend: string;
+  }>;
+  MID: Array<{
+    team: string;
+    dvpRating: number;
+    rank: number;
+    difficulty: string;
+    trend: string;
+  }>;
+  RUC: Array<{
+    team: string;
+    dvpRating: number;
+    rank: number;
+    difficulty: string;
+    trend: string;
+  }>;
+  FWD: Array<{
+    team: string;
+    dvpRating: number;
+    rank: number;
+    difficulty: string;
+    trend: string;
+  }>;
+}
+
+// Teams for dropdowns
+const teams = [
+  "Adelaide", "Brisbane", "Carlton", "Collingwood", "Essendon", "Fremantle", "Geelong", 
+  "Gold Coast", "GWS Giants", "Hawthorn", "Melbourne", "North Melbourne", "Port Adelaide", 
+  "Richmond", "St Kilda", "Sydney", "West Coast", "Western Bulldogs"
+];
+
+// Positions for dropdowns
+const positions = ["DEF", "MID", "RUC", "FWD"];
+
+
+
+// Player value data - Sample scores vs BE for a player over last 5 rounds
+const playerValueData = [
+  { round: "R3", score: 96, breakeven: 90, value: 6 },
+  { round: "R4", score: 112, breakeven: 92, value: 20 },
+  { round: "R5", score: 105, breakeven: 95, value: 10 },
+  { round: "R6", score: 88, breakeven: 105, value: -17 },
+  { round: "R7", score: 124, breakeven: 100, value: 24 },
+];
+
+// Player price per point data
+const playerPPPData = [
+  { round: "R3", points: 96, price: 815000, ppp: 8490 },
+  { round: "R4", points: 112, price: 820000, ppp: 7321 },
+  { round: "R5", points: 105, price: 835000, ppp: 7952 },
+  { round: "R6", points: 88, price: 825000, ppp: 9375 },
+  { round: "R7", points: 124, price: 860000, ppp: 6935 },
+];
+
+// Sample team DVP data
+const teamDVPData = [
+  { round: "R8", opponent: "Richmond", position: "MID", dvp: 95, difficulty: "MED" },
+  { round: "R9", opponent: "Essendon", position: "MID", dvp: 105, difficulty: "EASY" },
+  { round: "R10", opponent: "Geelong", position: "MID", dvp: 78, difficulty: "HARD" },
+  { round: "R11", opponent: "Gold Coast", position: "MID", dvp: 110, difficulty: "EASY" },
+  { round: "R12", opponent: "Sydney", position: "MID", dvp: 88, difficulty: "MED" },
+];
+
+// Sample venue data
+const venueData = [
+  { venue: "MCG", average: 105, matches: 12 },
+  { venue: "Marvel Stadium", average: 95, matches: 8 },
+  { venue: "Optus Stadium", average: 97, matches: 15 },
+  { venue: "GMHBA Stadium", average: 78, matches: 5 },
+  { venue: "SCG", average: 92, matches: 4 },
+];
+
+// Injury data
+const injuryData = [
+  { 
+    player: "Patrick Dangerfield", 
+    team: "Geelong", 
+    position: "MID", 
+    status: "Test", 
+    injury: "Hamstring", 
+    details: "Dangerfield suffered a hamstring strain in Round 6. Scans have revealed a low-grade strain, and the club is optimistic about a Round 8 return. He has resumed light training and will be a test for the upcoming match.",
+    updated: "May 3, 2025"
+  },
+  { 
+    player: "Marcus Bontempelli", 
+    team: "Western Bulldogs", 
+    position: "MID", 
+    status: "Out (1-2 weeks)", 
+    injury: "Knee", 
+    details: "Bontempelli sustained a minor knee injury in the fourth quarter against Richmond. Scans confirmed a low-grade MCL sprain that will keep him sidelined for 1-2 weeks. Coach Luke Beveridge confirmed he won't be risked until fully recovered.",
+    updated: "May 2, 2025"
+  },
+  { 
+    player: "Isaac Heeney", 
+    team: "Sydney", 
+    position: "FWD/MID", 
+    status: "Available", 
+    injury: "Calf", 
+    details: "Heeney has recovered from the calf tightness that saw him on limited minutes last week. He completed a full training session on Tuesday and has been cleared to play without restrictions in Round 8.",
+    updated: "May 4, 2025"
+  },
+  { 
+    player: "Nick Daicos", 
+    team: "Collingwood", 
+    position: "MID/DEF", 
+    status: "Out (3-4 weeks)", 
+    injury: "Collarbone", 
+    details: "Daicos fractured his collarbone in a collision during the third quarter against West Coast. He underwent surgery on Monday, with the procedure deemed a success. Expected recovery timeline is 3-4 weeks before return to play.",
+    updated: "May 1, 2025"
+  },
+  { 
+    player: "Zach Merrett", 
+    team: "Essendon", 
+    position: "MID", 
+    status: "Test", 
+    injury: "Ankle", 
+    details: "Merrett rolled his ankle at training but completed the session. He has responded well to treatment and will face a fitness test later in the week. Coach Brad Scott indicated they'll take a cautious approach given the short turnaround to the next game.",
+    updated: "May 3, 2025"
+  }
+];
+
+export default function HeatMapView() {
+  // Helper function to get player's primary position for DVP analysis
+  // Implements standard priority hierarchy: RUCK > MID > DEF > FWD (as per requirements)
+  const getPlayerPrimaryPosition = (positions: string) => {
+    if (!positions) return 'FWD';
+    const posArray = positions.split(/[,/]/).map(p => p.trim());
+    // Priority: RUCK > MID > DEF > FWD
+    if (posArray.includes('RUCK') || posArray.includes('RUC')) return 'RUC';
+    if (posArray.includes('MID')) return 'MID';
+    if (posArray.includes('DEF')) return 'DEF';
+    if (posArray.includes('FWD')) return 'FWD';
+    return posArray[0] || 'FWD';
+  };
+
+  // Fetch real player data with cache invalidation
+  const { data: players = [], isLoading: playersLoading } = useQuery<Player[]>({
+    queryKey: ['/api/stats/combined-stats'],
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
+    cacheTime: 1000 * 60 * 10, // 10 minutes in cache
+    refetchOnWindowFocus: false, // Don't refetch player list on focus
+  });
+
+  // State for player selection
+  const [selectedTeam, setSelectedTeam] = useState<string>("Any Team");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  
+  // State for input focus to show suggestions
+  const [inputFocused, setInputFocused] = useState<boolean>(false);
+  
+  // State for DVP selections
+  const [dvpSelectedTeam, setDvpSelectedTeam] = useState<string>("Adelaide");
+  const [dvpSelectedPosition, setDvpSelectedPosition] = useState<string>("MID");
+
+  // Fetch real DVP data with cache invalidation
+  const { data: dvpData, isLoading: dvpLoading } = useQuery<DVPData>({
+    queryKey: ['/api/stats-tools/stats/dvp-enhanced'],
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
+    cacheTime: 1000 * 60 * 15, // 15 minutes in cache
+    refetchOnWindowFocus: true, // Refetch DVP data on focus for freshness
+  });
+
+  // Fetch team fixtures data with cache invalidation
+  const { data: teamFixtures, isLoading: fixturesLoading } = useQuery({
+    queryKey: [`/api/stats-tools/stats/team-fixtures/${dvpSelectedTeam}/${dvpSelectedPosition}`],
+    enabled: !!dvpSelectedTeam && !!dvpSelectedPosition,
+    staleTime: 1000 * 60 * 2, // 2 minutes cache (fresh fixture data)
+    cacheTime: 1000 * 60 * 8, // 8 minutes in cache
+    refetchOnWindowFocus: true, // Refetch fixture data on focus
+  });
+  
+  // State for value metrics
+  const [valueMetric, setValueMetric] = useState<string>("value-index");
+  
+  // State for match heatmap
+  const [activeQuarter, setActiveQuarter] = useState<string>("Q1");
+  
+  // State for injury dialog
+  const [selectedInjury, setSelectedInjury] = useState<any>(null);
+
+  // Set default player when data loads
+  useEffect(() => {
+    if (players.length > 0 && !selectedPlayer) {
+      setSelectedPlayer(players[0]);
+    }
+  }, [players, selectedPlayer]);
+
+  // Get real fixture data for selected player
+  const selectedPlayerPrimaryPos = selectedPlayer ? getPlayerPrimaryPosition(selectedPlayer.position) : 'MID';
+  const selectedPlayerTeam = selectedPlayer?.team || 'Adelaide';
+  
+  const { data: playerFixtureData } = useQuery({
+    queryKey: [`/api/stats-tools/stats/team-fixtures/${selectedPlayerTeam}/${selectedPlayerPrimaryPos}`],
+    enabled: !!selectedPlayer,
+    staleTime: 1000 * 60 * 2, // 2 minutes cache for fresh fixture data
+    cacheTime: 1000 * 60 * 8, // 8 minutes in cache
+    refetchOnWindowFocus: true, // Refetch on focus for fresh data
+  });
+  
+  // Transform fixture data for chart display
+  const getPlayerOpponents = () => {
+    if (!playerFixtureData?.fixtures) {
+      return [
+        { round: "R20", opponent: "Loading", venue: "...", average: 75, matchDifficulty: "MED" },
+        { round: "R21", opponent: "Loading", venue: "...", average: 75, matchDifficulty: "MED" },
+        { round: "R22", opponent: "Loading", venue: "...", average: 75, matchDifficulty: "MED" },
+        { round: "R23", opponent: "Loading", venue: "...", average: 75, matchDifficulty: "MED" },
+        { round: "R24", opponent: "Loading", venue: "...", average: 75, matchDifficulty: "MED" }
+      ];
+    }
+    
+    return playerFixtureData.fixtures.map((fixture: any) => {
+      // Calculate projected score based on difficulty (inverse relationship)
+      const baseAverage = selectedPlayer?.average || 75;
+      const difficultyMultiplier = 1 + (5 - fixture.difficulty) * 0.05; // Easier = higher score
+      const projectedScore = Math.round(baseAverage * difficultyMultiplier);
+      
+      // Convert numeric difficulty to category using correct mapping (Easy, Medium, Hard)
+      let difficultyCategory = "MED";
+      if (fixture.difficulty <= 3) difficultyCategory = "EASY";
+      else if (fixture.difficulty >= 7) difficultyCategory = "HARD";
+      
+      return {
+        round: fixture.round,
+        opponent: fixture.opponent,
+        venue: fixture.venue || "TBD",
+        average: projectedScore,
+        matchDifficulty: difficultyCategory
+      };
+    });
+  };
+  
+  const playerOpponents = getPlayerOpponents();
+
+
+
+
+
+  // Early return while loading or no player selected
+  if (playersLoading || !selectedPlayer) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-white text-xl">Loading player data...</div>
+      </div>
+    );
+  }
+  
+  // Handle player search input change
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    if (query.length >= 1 && players.length > 0) {
+      let filtered = players;
+      
+      // Filter by team if a specific team is selected
+      if (selectedTeam !== "Any Team") {
+        filtered = filtered.filter(player => player.team === selectedTeam);
+      }
+      
+      // Then filter by search query
+      filtered = filtered.filter(player => 
+        player.name.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      setFilteredPlayers(filtered.slice(0, 15)); // Show more suggestions
+    } else {
+      setFilteredPlayers([]);
+    }
+  };
+  
+  // Handle selecting a player from dropdown
+  const handleSelectPlayer = (player: Player) => {
+    setSelectedPlayer(player);
+    setSearchQuery(player.name);
+    setFilteredPlayers([]);
+    setInputFocused(false);
+  };
+
+  // Handle DVP team search
+  const handleDvpTeamSearch = (searchTerm: string) => {
+    if (!dvpData) return [];
+    
+    const positionData = dvpData[dvpSelectedPosition as keyof DVPData] || [];
+    return positionData.filter(team =>
+      team.team.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+  
+  // Custom tooltip for charts
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-gray-900/90 border border-gray-700 text-white p-2 rounded-md text-xs">
+          <p className="font-bold text-white">{label || payload[0]?.payload?.name}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} style={{ color: entry.color || "#22c55e" }}>
+              {entry.name}: {entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+  
+  // Get difficulty color for DVP
+  const getDifficultyColor = (difficulty: string) => {
+    if (difficulty === "EASY") return "text-green-400";
+    if (difficulty === "HARD") return "text-red-400";
+    return "text-yellow-400";
+  };
+
+  // Get status color for injuries
+  const getStatusColor = (status: string) => {
+    if (status.includes("Out")) return "text-red-500";
+    if (status.includes("Test")) return "text-yellow-500";
+    if (status.includes("Available")) return "text-green-500";
+    return "text-gray-400";
+  };
+
+
+
+  // Get difficulty color for numeric values
+  const getDifficultyColorClass = (difficulty: number) => {
+    if (difficulty <= 3) return "text-green-400";
+    if (difficulty <= 6) return "text-yellow-400";
+    return "text-red-400";
+  };
+
+
+  
+  return (
+    <div className="space-y-6">
+      {/* 1. PLAYER DVP Analysis */}
+      <Card className="bg-gray-900 border-l-4 border-l-blue-500 border-t border-r border-b border-gray-700 text-white overflow-hidden">
+        <div className="p-3 border-b border-gray-700">
+          <h3 className="text-lg font-bold text-blue-300">🎯 PLAYER DVP ANALYSIS</h3>
+          
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div>
+              <Select value={selectedTeam} onValueChange={setSelectedTeam}>
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white">
+                  <SelectValue placeholder="Select Team" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem value="Any Team">Any Team</SelectItem>
+                  {teams.map(team => (
+                    <SelectItem key={team} value={team}>{team}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="relative">
+              <Input 
+                placeholder="Search player..."
+                className="bg-gray-800 border-gray-700 text-white"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setTimeout(() => setInputFocused(false), 200)}
+              />
+              
+              {inputFocused && filteredPlayers.length > 0 && (
+                <div className="absolute top-full left-0 w-full bg-gray-800 border border-gray-700 rounded-md mt-1 max-h-48 overflow-y-auto z-10">
+                  {filteredPlayers.map((player, index) => (
+                    <div 
+                      key={`${player.name}-${player.team}-${index}`}
+                      className="px-3 py-2 hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSelectPlayer(player)}
+                    >
+                      <div className="font-medium">{player.name}</div>
+                      <div className="text-xs text-gray-400">{player.position} | {player.team}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <CardContent className="p-4">
+          <div className="h-[250px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={playerOpponents}
+                margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
+              >
+                <defs>
+                  <linearGradient id="colorPDVP" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8} />
+                    <stop offset="50%" stopColor="#22c55e" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="#333" opacity={0.2} vertical={false} />
+                <XAxis 
+                  dataKey="round" 
+                  tick={{ fill: '#fff', fontSize: 12 }}
+                  axisLine={{ stroke: '#444' }}
+                />
+                <YAxis 
+                  tick={{ fill: '#fff', fontSize: 12 }}
+                  axisLine={{ stroke: '#444' }}
+                  tickLine={false}
+                  domain={[60, 120]}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Line
+                  name="Avg vs Opponent"
+                  type="monotone"
+                  dataKey="average"
+                  stroke="#22c55e"
+                  strokeWidth={3}
+                  dot={{ fill: "#121212", stroke: "#22c55e", strokeWidth: 2, r: 5 }}
+                  activeDot={{ r: 7, fill: "#22c55e" }}
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(34, 197, 94, 0.8))' }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="average"
+                  stroke="none"
+                  fill="url(#colorPDVP)"
+                  fillOpacity={1}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          
+          <div className="mt-4 grid grid-cols-5 gap-2">
+            {playerOpponents.map((match, index) => (
+              <div key={index} className="bg-gray-800 p-2 rounded-md">
+                <div className="text-xs text-gray-400">{match.round}</div>
+                <div className="font-medium text-sm">{match.opponent}</div>
+                <div className="text-xs text-gray-400">{match.venue}</div>
+                <div className={`text-sm font-bold mt-1 ${getDifficultyColor(match.matchDifficulty)}`}>
+                  {match.average} ({match.matchDifficulty})
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* 2. TEAM DVP Analysis */}
+      <Card className="bg-gray-900 border-l-4 border-l-red-500 border-t border-r border-b border-gray-700 text-white overflow-hidden">
+        <div className="p-3 border-b border-gray-700">
+          <h3 className="text-lg font-bold text-red-300">🛡️ TEAM DVP ANALYSIS</h3>
+          
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div>
+              <Select value={dvpSelectedTeam} onValueChange={setDvpSelectedTeam}>
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white">
+                  <SelectValue placeholder="Select Team" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem value="Any Team">Any Team</SelectItem>
+                  {teams.map(team => (
+                    <SelectItem key={team} value={team}>{team}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Select value={dvpSelectedPosition} onValueChange={setDvpSelectedPosition}>
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white">
+                  <SelectValue placeholder="Select Position" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  {positions.map(position => (
+                    <SelectItem key={position} value={position}>{position}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+        
+        <CardContent className="p-4">
+          {/* Team Fixture Analysis with Real DVP Data */}
+          {dvpSelectedTeam === "Any Team" ? (
+            <div className="text-center py-8 text-gray-400">
+              Please select a team to view fixture analysis
+            </div>
+          ) : fixturesLoading ? (
+            <div className="text-center py-8 text-gray-400">Loading fixture data...</div>
+          ) : teamFixtures ? (
+            <div className="space-y-4">
+              <div className="text-sm text-gray-400 mb-4">
+                Fixture Difficulty Analysis • {dvpSelectedTeam} {dvpSelectedPosition} • Scale: 0 (Easiest) → 10 (Hardest)
+              </div>
+              
+              {/* Chart visualization */}
+              <div className="h-48 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={teamFixtures.fixtures}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis 
+                      dataKey="round" 
+                      stroke="#9ca3af"
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      stroke="#9ca3af"
+                      fontSize={12}
+                      domain={[0, 10]}
+                    />
+                    <Tooltip 
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="bg-gray-900/90 border border-gray-700 text-white p-2 rounded-md text-xs">
+                              <p className="font-bold">{label}</p>
+                              <p>vs {data.opponent}</p>
+                              <p style={{ color: payload[0].color }}>
+                                Difficulty: {data.difficulty} ({data.difficultyLabel})
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="difficulty"
+                      stroke="#22c55e"
+                      strokeWidth={3}
+                      dot={{ fill: "#121212", stroke: "#22c55e", strokeWidth: 2, r: 5 }}
+                      activeDot={{ r: 7, fill: "#22c55e" }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              
+              {/* Fixture cards */}
+              <div className="grid grid-cols-5 gap-2">
+                {teamFixtures.fixtures.map((fixture: any, index: number) => (
+                  <div key={index} className="bg-gray-800 p-2 rounded-md">
+                    <div className="text-xs text-gray-400">{fixture.round}</div>
+                    <div className="font-medium text-sm text-white">{fixture.opponent}</div>
+                    <div className="text-xs text-gray-400">{fixture.venue}</div>
+                    <div className={`text-sm font-bold mt-1 ${
+                      fixture.difficultyLabel === 'HARD' ? 'text-red-500' :
+                      fixture.difficultyLabel === 'MED' ? 'text-yellow-500' : 'text-green-500'
+                    }`}>
+                      {fixture.difficulty} ({fixture.difficultyLabel})
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-400">No fixture data available</div>
+          )}
+        </CardContent>
+      </Card>
+      
+      {/* 3. VENUE HISTORY Analysis */}
+      <Card className="bg-gray-900 border-l-4 border-l-green-500 border-t border-r border-b border-gray-700 text-white overflow-hidden">
+        <div className="p-3 border-b border-gray-700">
+          <h3 className="text-lg font-bold text-green-300">🏟️ VENUE HISTORY ANALYSIS</h3>
+          
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div>
+              <Select value={selectedTeam} onValueChange={setSelectedTeam}>
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white">
+                  <SelectValue placeholder="Select Team" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem value="Any Team">Any Team</SelectItem>
+                  {teams.map(team => (
+                    <SelectItem key={team} value={team}>{team}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="relative">
+              <Input 
+                placeholder="Search player..."
+                className="bg-gray-800 border-gray-700 text-white"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              
+              {filteredPlayers.length > 0 && (
+                <div className="absolute top-full left-0 w-full bg-gray-800 border border-gray-700 rounded-md mt-1 max-h-48 overflow-y-auto z-10">
+                  {filteredPlayers.map(player => (
+                    <div 
+                      key={player.id}
+                      className="px-3 py-2 hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSelectPlayer(player)}
+                    >
+                      <div className="font-medium">{player.name}</div>
+                      <div className="text-xs text-gray-400">{player.position} | {player.team}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <CardContent className="p-4">
+          <div className="h-[250px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={venueData.map((venue, index) => ({
+                  ...venue,
+                  round: `R${8 + index}`,
+                }))}
+                margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
+              >
+                <defs>
+                  <linearGradient id="colorVenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                    <stop offset="50%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="#333" opacity={0.2} vertical={false} />
+                <XAxis 
+                  dataKey="venue" 
+                  tick={{ fill: '#fff', fontSize: 12 }}
+                  axisLine={{ stroke: '#444' }}
+                />
+                <YAxis 
+                  tick={{ fill: '#fff', fontSize: 12 }}
+                  axisLine={{ stroke: '#444' }}
+                  tickLine={false}
+                  domain={[60, 120]}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Line
+                  name="Average at venue"
+                  type="monotone"
+                  dataKey="average"
+                  stroke="#8b5cf6"
+                  strokeWidth={3}
+                  dot={{ fill: "#121212", stroke: "#8b5cf6", strokeWidth: 2, r: 5 }}
+                  activeDot={{ r: 7, fill: "#8b5cf6" }}
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.8))' }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="average"
+                  stroke="none"
+                  fill="url(#colorVenue)"
+                  fillOpacity={1}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          
+          <div className="mt-4 grid grid-cols-5 gap-2">
+            {venueData.map((venue, index) => (
+              <div key={index} className="bg-gray-800 p-2 rounded-md">
+                <div className="text-xs text-gray-400">R{8 + index}</div>
+                <div className="font-medium text-sm">{venue.venue}</div>
+                <div className="text-xs text-gray-400">{venue.matches} games</div>
+                <div className="text-sm font-bold mt-1 text-purple-400">
+                  {venue.average} pts
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* 4. PLAYER VALUE Analysis */}
+      <Card className="bg-gray-900 border-l-4 border-l-purple-500 border-t border-r border-b border-gray-700 text-white overflow-hidden">
+        <div className="p-3 border-b border-gray-700">
+          <h3 className="text-lg font-bold text-purple-300">💰 PLAYER VALUE ANALYSIS</h3>
+          
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div>
+              <Select value={selectedTeam} onValueChange={setSelectedTeam}>
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white">
+                  <SelectValue placeholder="Select Team" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                  <SelectItem value="Any Team">Any Team</SelectItem>
+                  {teams.map(team => (
+                    <SelectItem key={team} value={team}>{team}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="relative">
+              <Input 
+                placeholder="Search player..."
+                className="bg-gray-800 border-gray-700 text-white"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              
+              {filteredPlayers.length > 0 && (
+                <div className="absolute top-full left-0 w-full bg-gray-800 border border-gray-700 rounded-md mt-1 max-h-48 overflow-y-auto z-10">
+                  {filteredPlayers.map(player => (
+                    <div 
+                      key={player.id}
+                      className="px-3 py-2 hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSelectPlayer(player)}
+                    >
+                      <div className="font-medium">{player.name}</div>
+                      <div className="text-xs text-gray-400">{player.position} | {player.team}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="mt-2 flex justify-center">
+            <div className="inline-flex rounded-md shadow-sm border border-gray-700 overflow-hidden">
+              <button
+                className={`px-4 py-2 text-sm font-medium ${
+                  valueMetric === 'value-index' 
+                    ? 'bg-blue-900 text-white border-r border-gray-700' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border-r border-gray-700'
+                }`}
+                onClick={() => setValueMetric('value-index')}
+              >
+                Value Index
+              </button>
+              <button
+                className={`px-4 py-2 text-sm font-medium ${
+                  valueMetric === 'points-per-dollar' 
+                    ? 'bg-blue-900 text-white' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+                onClick={() => setValueMetric('points-per-dollar')}
+              >
+                Points/$1000
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <CardContent className="p-4">
+          {valueMetric === 'value-index' ? (
+            <>
+              <div className="h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={playerValueData}
+                    margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
+                  >
+                    <defs>
+                      <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8} />
+                        <stop offset="50%" stopColor="#22c55e" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke="#333" opacity={0.2} vertical={false} />
+                    <XAxis 
+                      dataKey="round" 
+                      tick={{ fill: '#fff', fontSize: 12 }}
+                      axisLine={{ stroke: '#444' }}
+                    />
+                    <YAxis 
+                      tick={{ fill: '#fff', fontSize: 12 }}
+                      axisLine={{ stroke: '#444' }}
+                      tickLine={false}
+                      domain={[-20, 30]}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Line
+                      name="Value (Score - BE)"
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#22c55e"
+                      strokeWidth={3}
+                      dot={{ fill: "#121212", stroke: "#22c55e", strokeWidth: 2, r: 5 }}
+                      activeDot={{ r: 7, fill: "#22c55e" }}
+                      style={{ filter: 'drop-shadow(0 0 8px rgba(34, 197, 94, 0.8))' }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="value"
+                      stroke="none"
+                      fill="url(#colorValue)"
+                      fillOpacity={1}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              
+              <div className="mt-4 grid grid-cols-5 gap-2">
+                {playerValueData.map((round, index) => (
+                  <div key={index} className="bg-gray-800 p-2 rounded-md">
+                    <div className="text-xs text-gray-400">{round.round}</div>
+                    <div className="grid grid-cols-2 gap-1 mt-1">
+                      <div>
+                        <div className="text-xs text-gray-400">Score</div>
+                        <div className="font-bold text-white">{round.score}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-400">BE</div>
+                        <div className="font-bold text-white">{round.breakeven}</div>
+                      </div>
+                    </div>
+                    <div className={`text-sm font-bold mt-1 ${round.value > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {round.value > 0 ? '+' : ''}{round.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={playerPPPData}
+                    margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
+                  >
+                    <defs>
+                      <linearGradient id="colorPPP" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8} />
+                        <stop offset="50%" stopColor="#f59e0b" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke="#333" opacity={0.2} vertical={false} />
+                    <XAxis 
+                      dataKey="round" 
+                      tick={{ fill: '#fff', fontSize: 12 }}
+                      axisLine={{ stroke: '#444' }}
+                    />
+                    <YAxis 
+                      tick={{ fill: '#fff', fontSize: 12 }}
+                      axisLine={{ stroke: '#444' }}
+                      tickLine={false}
+                      domain={[6000, 10000]}
+                      tickFormatter={(value) => `$${Math.round(value/1000)}k`}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Line
+                      name="Price per point"
+                      type="monotone"
+                      dataKey="ppp"
+                      stroke="#f59e0b"
+                      strokeWidth={3}
+                      dot={{ fill: "#121212", stroke: "#f59e0b", strokeWidth: 2, r: 5 }}
+                      activeDot={{ r: 7, fill: "#f59e0b" }}
+                      style={{ filter: 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.8))' }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="ppp"
+                      stroke="none"
+                      fill="url(#colorPPP)"
+                      fillOpacity={1}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              
+              <div className="mt-4 grid grid-cols-5 gap-2">
+                {playerPPPData.map((round, index) => (
+                  <div key={index} className="bg-gray-800 p-2 rounded-md">
+                    <div className="text-xs text-gray-400">{round.round}</div>
+                    <div className="grid grid-cols-2 gap-1 mt-1">
+                      <div>
+                        <div className="text-xs text-gray-400">Points</div>
+                        <div className="font-bold text-white">{round.points}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-400">Price</div>
+                        <div className="font-bold text-white">${Math.round(round.price/1000)}k</div>
+                      </div>
+                    </div>
+                    <div className="text-sm font-bold mt-1 text-amber-500">
+                      ${Math.round(round.ppp/1000)}k/pt
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+      
+      {/* 5. HEAT MAP */}
+      <Card className="bg-gray-900 border-l-4 border-l-yellow-500 border-t border-r border-b border-gray-700 text-white overflow-hidden">
+        <div className="p-3 border-b border-gray-700 flex justify-between items-center">
+          <h3 className="text-lg font-bold text-yellow-300">🔥 MATCH HEATMAP</h3>
+          
+          <div className="flex items-center">
+            <button 
+              className={`px-3 py-1 text-sm font-medium ${activeQuarter === 'Q1' ? 'bg-gray-600 text-white' : 'bg-gray-800 text-gray-300'} mr-1`}
+              onClick={() => setActiveQuarter('Q1')}
+            >
+              Q1
+            </button>
+            <button 
+              className={`px-3 py-1 text-sm font-medium ${activeQuarter === 'Q2' ? 'bg-gray-600 text-white' : 'bg-gray-800 text-gray-300'} mr-1`}
+              onClick={() => setActiveQuarter('Q2')}
+            >
+              Q2
+            </button>
+            <button 
+              className={`px-3 py-1 text-sm font-medium ${activeQuarter === 'Q3' ? 'bg-gray-600 text-white' : 'bg-gray-800 text-gray-300'} mr-1`}
+              onClick={() => setActiveQuarter('Q3')}
+            >
+              Q3
+            </button>
+            <button 
+              className={`px-3 py-1 text-sm font-medium ${activeQuarter === 'Q4' ? 'bg-gray-600 text-white' : 'bg-gray-800 text-gray-300'}`}
+              onClick={() => setActiveQuarter('Q4')}
+            >
+              Q4
+            </button>
+          </div>
+        </div>
+        
+        <CardContent className="p-0">
+          <div className="w-full relative">
+            {/* Dynamic Title Block */}
+            <div className="w-full bg-blue-900 py-3 px-4 text-center">
+              <h2 className="text-3xl font-bold tracking-wider text-white">
+                {selectedPlayer?.name?.toUpperCase() || "MATT PRIDDIS"}
+              </h2>
+            </div>
+            
+            {/* Heat Map Visualization */}
+            <div className="relative aspect-square w-full bg-gray-900">
+              {/* Player image and number */}
+              <div className="absolute top-4 left-4 flex flex-col items-center">
+                <div className="w-24 h-24 rounded-md overflow-hidden bg-gray-700">
+                  <img 
+                    src={selectedPlayer?.id === 1 ? 
+                      "https://s.afl.com.au/staticfile/AFL%20Tenant/WestCoast/Player%20Profiles/2015%20-%20Profiles/PRIDDIS%20Matt.png" : 
+                      "https://s.afl.com.au/staticfile/AFL%20Tenant/WestCoast/Player%20Profiles/2015%20-%20Profiles/LAMB%20Tom.png"}
+                    alt={selectedPlayer?.name || "Player"} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://via.placeholder.com/150?text=Player";
+                    }}
+                  />
+                </div>
+                <div className="bg-white w-24 h-24 flex items-center justify-center mt-2">
+                  <span className="text-red-600 text-7xl font-bold">{selectedPlayer?.id === 1 ? "11" : "28"}</span>
+                </div>
+              </div>
+              
+              {/* Oval heatmap visualization */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-3/4 aspect-square relative">
+                  {/* Oval field outline */}
+                  <div className="absolute inset-0 rounded-full overflow-hidden">
+                    <div 
+                      className="w-full h-full"
+                      style={{
+                        background: selectedPlayer?.id === 1 ? 
+                        'radial-gradient(circle at 50% 65%, rgba(255,0,0,0.8) 10%, rgba(255,255,0,0.8) 40%, rgba(60,179,113,0.8) 80%)' :
+                        'radial-gradient(circle at 75% 65%, rgba(255,0,0,0.8) 10%, rgba(255,255,0,0.8) 30%, rgba(60,179,113,0.8) 80%, rgba(60,179,113,0.8) 90%)'
+                      }}
+                    >
+                      {/* Blue dots overlay */}
+                      {Array.from({ length: 25 }).map((_, i) => {
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = Math.random() * 0.8; // 0-80% from center
+                        const x = Math.cos(angle) * distance * 50 + 50; // convert to percentage
+                        const y = Math.sin(angle) * distance * 50 + 50; // convert to percentage
+                        
+                        return (
+                          <div 
+                            key={i}
+                            className="absolute w-2 h-2 bg-blue-600 rounded-full"
+                            style={{
+                              left: `${x}%`,
+                              top: `${y}%`,
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                  
+                  {/* Center line */}
+                  <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gray-300 -translate-x-1/2"></div>
+                </div>
+              </div>
+              
+              {/* Bottom info - Left side */}
+              <div className="absolute bottom-6 left-6 text-white">
+                <div className="text-xl font-bold mb-1">DEFENSIVE HALF</div>
+                <div className="text-5xl font-bold">{selectedPlayer?.id === 1 ? "68%" : "40%"}</div>
+              </div>
+              
+              {/* Bottom info - Right side */}
+              <div className="absolute bottom-6 right-6 text-white text-right">
+                <div className="text-xl font-bold mb-1">FORWARD HALF</div>
+                <div className="text-5xl font-bold">{selectedPlayer?.id === 1 ? "32%" : "60%"}</div>
+              </div>
+              
+              {/* Navigation arrows */}
+              <button className="absolute left-10 top-1/2 transform -translate-y-1/2 text-white">
+                <ChevronLeft size={40} />
+              </button>
+              <button className="absolute right-10 top-1/2 transform -translate-y-1/2 text-white">
+                <ChevronRight size={40} />
+              </button>
+              
+              {/* Stats */}
+              <div className="absolute bottom-2 left-1/4 transform -translate-x-1/2 text-white text-xl font-bold">
+                {selectedPlayer?.id === 1 ? "16" : "1"}
+              </div>
+              <div className="absolute bottom-2 right-1/4 transform translate-x-1/2 text-white text-xl font-bold">
+                {selectedPlayer?.id === 1 ? "8" : "1"}
+              </div>
+              
+              {/* Rotate to view button */}
+              <div className="absolute top-10 right-10 text-gray-400 text-right">
+                <div className="text-sm mb-1">Rotate to view<br/>Stats</div>
+                <RotateCw size={30} className="ml-auto" />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* 6. INJURY UPDATES */}
+      <Card className="bg-gray-900 border-l-4 border-l-orange-500 border-t border-r border-b border-gray-700 text-white overflow-hidden">
+        <div className="p-3 border-b border-gray-700">
+          <h3 className="text-lg font-bold text-orange-300">🏥 INJURY UPDATES</h3>
+          <div className="text-xs text-gray-400 mt-1">Click on player name for detailed injury report</div>
+        </div>
+        <CardContent className="p-0">
+          <div className="divide-y divide-gray-800">
+            {injuryData.map((injury, index) => (
+              <div key={index} className="p-3 hover:bg-gray-800/50">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="text-white font-semibold hover:text-blue-400 transition-colors flex items-center">
+                          {injury.player}
+                          <Info className="ml-1 h-3 w-3 text-gray-400" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="bg-gray-900 border-gray-700 text-white">
+                        <DialogHeader>
+                          <DialogTitle className="text-blue-400">{injury.player} | {injury.team}</DialogTitle>
+                          <DialogDescription className="text-gray-400">
+                            <span className={getStatusColor(injury.status)}>{injury.status}</span> - {injury.injury}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="mt-2 space-y-2">
+                          <div className="text-sm">{injury.details}</div>
+                          <div className="text-xs text-gray-400">Last updated: {injury.updated}</div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    <div className="text-xs text-gray-400">{injury.team} | {injury.position}</div>
+                  </div>
+                  <div>
+                    <div className={`text-sm font-semibold ${getStatusColor(injury.status)}`}>
+                      {injury.status}
+                    </div>
+                    <div className="text-xs text-gray-400 text-right">{injury.injury}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

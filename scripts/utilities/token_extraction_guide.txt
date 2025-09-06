@@ -1,0 +1,38 @@
+
+🎯 AFL FANTASY TOKEN EXTRACTION GUIDE
+
+STEP 1: Open AFL Fantasy
+→ Go to https://fantasy.afl.com.au
+→ Login with your credentials
+
+STEP 2: Open Developer Tools
+→ Press F12 (or right-click → Inspect)
+→ Click on "Network" tab
+→ Check "Preserve log" option
+
+STEP 3: Navigate to Team Page
+→ Go to your team/lineup page
+→ Watch for new network requests
+
+STEP 4: Find API Calls
+Look for requests to these patterns:
+→ fantasy.afl.com.au/api/*
+→ Requests returning JSON data
+→ Requests with your team information
+
+STEP 5: Extract Headers
+For successful API requests, copy these headers:
+→ Authorization: Bearer [token]
+→ Cookie: [session_data]
+→ X-Auth-Token: [token]
+→ Any other authentication headers
+
+STEP 6: Common Token Locations
+→ Authorization header (most common)
+→ Cookie values (session tokens)
+→ Custom X-* headers
+→ Query parameters (?token=...)
+
+STEP 7: Test the Token
+→ Look for responses containing your actual team data
+→ Player names, prices, scores should match your team

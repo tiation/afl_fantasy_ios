@@ -46,7 +46,13 @@ final class NetworkClientTests: XCTestCase {
         mockClient.shouldFail = true
         mockClient.mockError = NetworkError.noData
 
-        let request = try! APIRequestBuilder().buildRequest(endpoint: "/test")
+        let request: URLRequest
+        do {
+            request = try APIRequestBuilder().buildRequest(endpoint: "/test")
+        } catch {
+            XCTFail("Failed to build request: \(error)")
+            return
+        }
 
         // When/Then
         do {
@@ -473,7 +479,12 @@ extension NetworkError: Equatable {
 final class PerformanceTests: XCTestCase {
     func testNetworkClientPerformance() {
         let mockClient = MockNetworkClient()
-        mockClient.mockData = try! JSONEncoder().encode(TestData.samplePlayerStats)
+        do {
+            mockClient.mockData = try JSONEncoder().encode(TestData.samplePlayerStats)
+        } catch {
+            XCTFail("Failed to encode test data: \(error)")
+            return
+        }
 
         measure {
             let expectation = XCTestExpectation(description: "Network performance")

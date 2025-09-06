@@ -1,0 +1,81 @@
+Here's the formula and an explanation of the required information needed to calculate AFL Fantasy player prices and breakevens, ensuring all key details from your last prompt are included:
+
+### Formula for Calculating Player Price:
+
+$$
+P_n = (1 - \beta) \cdot P_{n-1} + M_n - \sum (\alpha_k \cdot S_k)
+$$
+
+Where:
+
+* $P_n$ = **New Price** after the round (price at the end of the current round)
+* $P_{n-1}$ = **Price before the round** (price at the end of the last round, before the current game is played)
+* $\beta$ = **Weight of the last game's price** (This adjusts how much influence the last price has on the new price)
+* $M_n$ = **Magic number** for the round (A value used to balance the total prices of all players after the round)
+* $\alpha_k$ = **Weighting for the kth most recent game score** (A series of fixed weights for each recent game, e.g., the most recent game has the highest weight)
+* $S_k$ = **Score** for the kth most recent game (The performance of the player in each game, typically measured by AFL Fantasy points)
+
+### Step-by-Step Explanation:
+
+To calculate a player’s **new price** and **breakeven** after each round, you need to gather and process the following data:
+
+1. **Player Price Before the Round ($P_{n-1}$)**:
+
+   * This is the player's current price at the end of the previous round.
+   * **Required data**: Previous round's price, which is provided in the player data.
+
+2. **Magic Number ($M_n$)**:
+
+   * The **magic number** ensures that the total price of all players is balanced after each round.
+   * This value adjusts based on how well players are scoring and ensures that the collective price change is equal across all players.
+   * **Required data**: You need the total aggregate price changes from all players and their recent scores to calculate the magic number. This is generally calculated by the AFL Fantasy system and isn’t easily available externally unless you calculate it from the aggregated data.
+
+3. **Weighting for Recent Games ($\alpha_k$)**:
+
+   * The model assigns different weights to each of the player’s recent scores.
+   * **Most recent game** receives the highest weight, and this decreases with each earlier game.
+   * The weights typically follow this pattern (for 5 recent games):
+
+     * $k=1$: Weight = 5
+     * $k=2$: Weight = 4
+     * $k=3$: Weight = 3
+     * $k=4$: Weight = 2
+     * $k=5$: Weight = 1
+   * **Required data**: The most recent 5 game scores for the player. If the player has played less than 5 games, use the scores from available games.
+
+4. **Player Scores ($S_k$)**:
+
+   * These are the scores of the player from their recent games.
+   * **Required data**: The scores of the player for the most recent games. You’ll typically need at least 1–5 rounds of scores, and these scores will be used in the equation with their corresponding weights $\alpha_k$.
+
+5. **Breakeven Calculation**:
+
+   * The **breakeven** is calculated based on how much the player's price should increase (or decrease) to justify their performance.
+   * The breakeven is typically calculated as:
+
+     $$
+     \text{Breakeven} = \frac{(P_n - P_{n-1})}{\text{Price Sensitivity Factor}}
+     $$
+
+     * The **Price Sensitivity Factor** is used to adjust the impact of scoring changes on the player’s price. This factor depends on the league’s scoring system and the player's price band.
+     * **Required data**: Current and new price, as well as the average fantasy points needed to achieve the desired price increase.
+
+### Summary of Required Information:
+
+* **Previous Price ($P_{n-1}$)**: The player's price from the last round.
+* **Recent Scores ($S_k$)**: The scores for the most recent 1–5 rounds, depending on how many games the player has played.
+* **Magic Number ($M_n$)**: This needs to be calculated based on the aggregate prices and scores for all players (this is often set by the system).
+* **Weighting for Scores ($\alpha_k$)**: This follows the fixed weight structure for the most recent 5 games (most recent game gets the highest weight).
+
+### Breakeven Calculation:
+
+To calculate the breakeven, you’ll need to track how much the player’s price has changed relative to their performance and determine the points required to justify that price change.
+
+* **Price Sensitivity Factor**: This is often part of the AFL Fantasy system's internal model, but you could adjust based on the price range the player falls into. Generally, the lower the price, the more points are needed to justify a price increase.
+
+### Key Assumptions in the Model:
+
+* **Fixed Weights**: The weights for the most recent games are assumed to be fixed, with most recent games carrying more influence on price changes.
+* **Linear Relationship**: The model assumes a linear relationship between price changes and game scores, with the magic number balancing the aggregate scores and prices.
+
+If you provide actual player data (prices, scores), I can now walk through the calculation process with specific values.

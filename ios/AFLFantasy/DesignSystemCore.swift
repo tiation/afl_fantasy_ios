@@ -119,24 +119,132 @@ enum DesignSystem {
         static let priceDrop = Color.red
         static let priceStable = Color.gray
 
+        // Enhanced Performance-based Colors
+        static func performanceColor(for value: Double, baseline: Double) -> Color {
+            let ratio = value / baseline
+            switch ratio {
+            case 1.2...: return Color.green.opacity(0.8)
+            case 1.1 ..< 1.2: return Color.blue.opacity(0.8)
+            case 0.9 ..< 1.1: return Color.gray.opacity(0.8)
+            case 0.8 ..< 0.9: return Color.orange.opacity(0.8)
+            default: return Color.red.opacity(0.8)
+            }
+        }
+
+        // Smart Alert Colors
+        static func alertColor(for type: AlertType, priority: AlertPriority) -> Color {
+            let baseColor: Color = switch priority {
+            case .critical: .red
+            case .high: .orange
+            case .medium: .yellow
+            case .low: .blue
+            }
+
+            // Adjust opacity based on alert type importance
+            let opacity = switch type {
+            case .injuryRisk, .breakEvenCliff: 0.9
+            case .priceDrop, .cashCowSell: 0.8
+            case .premiumBreakout, .roleChange: 0.7
+            default: 0.6
+            }
+
+            return baseColor.opacity(opacity)
+        }
+
+        // Card Importance Colors
+        static func cardBackground(for importance: CardImportance) -> Color {
+            switch importance {
+            case .primary: Color(.secondarySystemBackground)
+            case .secondary: Color(.tertiarySystemBackground)
+            case .tertiary: Color(.quaternarySystemBackground)
+            }
+        }
+
+        static func cardBorder(for importance: CardImportance, isPressed: Bool = false) -> Color {
+            let baseColor: Color = switch importance {
+            case .primary: primary
+            case .secondary: Color(.systemGray2)
+            case .tertiary: Color(.systemGray4)
+            }
+
+            return isPressed ? baseColor.opacity(0.8) : baseColor.opacity(0.3)
+        }
+
         enum ButtonState {
             case normal, pressed, disabled
         }
     }
 
-    // MARK: - Motion System
+    // MARK: - Card Importance Enum
+
+    enum CardImportance {
+        case primary, secondary, tertiary
+
+        var shadowLevel: Shadows {
+            switch self {
+            case .primary: .medium
+            case .secondary: .low
+            case .tertiary: .low
+            }
+        }
+
+        var cornerRadius: CornerRadius {
+            switch self {
+            case .primary: .medium
+            case .secondary: .medium
+            case .tertiary: .small
+            }
+        }
+    }
+
+    // MARK: - Interaction Styles
+
+    enum InteractionStyle {
+        case tap, longPress, contextMenu, none
+
+        var feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle {
+            switch self {
+            case .tap: .light
+            case .longPress: .medium
+            case .contextMenu: .heavy
+            case .none: .light
+            }
+        }
+    }
+
+    // MARK: - Enhanced Motion System
 
     enum Motion {
         // Standard Durations (respects Reduce Motion)
-        static let quick: TimeInterval = 0.15 // 120-160ms
-        static let standard: TimeInterval = 0.2 // 200ms
-        static let enter: TimeInterval = 0.22 // 220ms
-        static let exit: TimeInterval = 0.18 // 180ms
+        static let microInteraction: TimeInterval = 0.1 // Button press
+        static let quick: TimeInterval = 0.15 // Quick transitions
+        static let standard: TimeInterval = 0.2 // Standard transitions
+        static let contentTransition: TimeInterval = 0.3 // Content changes
+        static let enter: TimeInterval = 0.22 // Enter animations
+        static let exit: TimeInterval = 0.18 // Exit animations
+        static let slowTransition: TimeInterval = 0.5 // Loading states
 
-        // Easing Functions
+        // Enhanced Easing Functions
         static let easeInOut = Animation.easeInOut(duration: standard)
         static let bouncy = Animation.interpolatingSpring(
             mass: 1, stiffness: 100, damping: 10, initialVelocity: 0
+        )
+
+        // Context-specific animations
+        static let cardPress = Animation.interpolatingSpring(
+            mass: 0.8, stiffness: 300, damping: 20
+        )
+
+        static let scoreUpdate = Animation.spring(
+            response: 0.6, dampingFraction: 0.7, blendDuration: 0.3
+        )
+
+        static let priceChange = Animation.interpolatingSpring(
+            mass: 1, stiffness: 200, damping: 15
+        )
+
+        static let contextual = Animation.interpolatingSpring(
+            mass: 0.8, stiffness: 120, damping: 15
         )
 
         // Reduce Motion Aware Animations
@@ -150,6 +258,24 @@ enum DesignSystem {
             UIAccessibility.isReduceMotionEnabled
                 ? .linear(duration: 0.01)
                 : bouncy
+        }
+
+        static var smartCardPress: Animation {
+            UIAccessibility.isReduceMotionEnabled
+                ? .linear(duration: 0.01)
+                : cardPress
+        }
+
+        static var smartScoreUpdate: Animation {
+            UIAccessibility.isReduceMotionEnabled
+                ? .linear(duration: 0.01)
+                : scoreUpdate
+        }
+
+        static var smartPriceChange: Animation {
+            UIAccessibility.isReduceMotionEnabled
+                ? .linear(duration: 0.01)
+                : priceChange
         }
     }
 
@@ -254,7 +380,36 @@ extension View {
         animation(DesignSystem.Motion.gentleSpring, value: condition)
     }
 
-    // MARK: - Performance-optimized modifiers
+    // MARK: - Enhanced Card Modifiers
+
+    func smartCard(
+        importance: DesignSystem.CardImportance = .secondary,
+        interactionStyle: DesignSystem.InteractionStyle = .tap
+    ) -> some View {
+        modifier(SmartCardModifier(importance: importance, interactionStyle: interactionStyle))
+    }
+
+    func skeletonLoading(_ isLoading: Bool = true) -> some View {
+        modifier(SkeletonLoadingModifier(isLoading: isLoading))
+    }
+
+    func shimmerEffect(_ isActive: Bool = true) -> some View {
+        modifier(ShimmerEffectModifier(isActive: isActive))
+    }
+
+    func enhancedButton(
+        style: AFLButtonStyle.Variant = .primary,
+        isLoading: Bool = false,
+        hapticFeedback: Bool = true
+    ) -> some View {
+        modifier(EnhancedButtonModifier(
+            style: style,
+            isLoading: isLoading,
+            hapticFeedback: hapticFeedback
+        ))
+    }
+
+    // MARK: - Legacy Performance-optimized modifiers
 
     func performantCard() -> some View {
         background(DesignSystem.Colors.surface)

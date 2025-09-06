@@ -67,9 +67,13 @@ class BackgroundSyncService: ObservableObject {
             using: nil
         ) { [weak self] task in
             guard let self else { return }
+            guard let refreshTask = task as? BGAppRefreshTask else {
+                logger.error("❌ Invalid task type received in background sync")
+                return
+            }
 
             Task {
-                await self.handleBackgroundSync(task: task as! BGAppRefreshTask)
+                await self.handleBackgroundSync(task: refreshTask)
             }
         }
 

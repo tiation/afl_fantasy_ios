@@ -1,0 +1,1220 @@
+[
+ {
+    "round": 1,
+    "teams": "RIC vs CAR",
+    "date": "13/03/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 1,
+    "teams": "HAW vs ESS",
+    "date": "14/03/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 1,
+    "teams": "GEE vs FRE",
+    "date": "15/03/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 1,
+    "teams": "SYD vs BRI",
+    "date": "15/03/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 1,
+    "teams": "WBD vs NTH",
+    "date": "15/03/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 1,
+    "teams": "COL vs PTA",
+    "date": "15/03/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 1,
+    "teams": "ADE vs STK",
+    "date": "16/03/2025",
+    "time": "12:35"
+  },
+  {
+    "round": 1,
+    "teams": "MEL vs GWS",
+    "date": "16/03/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 1,
+    "teams": "WCE vs GCS",
+    "date": "16/03/2025",
+    "time": "18:10"
+  },
+  {
+    "round": 2,
+    "teams": "CAR vs HAW",
+    "date": "20/03/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 2,
+    "teams": "WBD vs COL",
+    "date": "21/03/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 2,
+    "teams": "ESS vs ADE",
+    "date": "22/03/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 2,
+    "teams": "PTA vs RIC",
+    "date": "22/03/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 2,
+    "teams": "STK vs GEE",
+    "date": "22/03/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 2,
+    "teams": "BRI vs WCE",
+    "date": "23/03/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 2,
+    "teams": "NTH vs MEL",
+    "date": "23/03/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 2,
+    "teams": "FRE vs SYD",
+    "date": "23/03/2025",
+    "time": "18:10"
+  },
+  {
+    "round": 3,
+    "teams": "ESS vs PTA",
+    "date": "27/03/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 3,
+    "teams": "CAR vs WBD",
+    "date": "28/03/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 3,
+    "teams": "MEL vs GCS",
+    "date": "29/03/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 3,
+    "teams": "STK vs RIC",
+    "date": "29/03/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 3,
+    "teams": "HAW vs GWS",
+    "date": "29/03/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 3,
+    "teams": "ADE vs NTH",
+    "date": "30/03/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 3,
+    "teams": "WCE vs FRE",
+    "date": "30/03/2025",
+    "time": "18:10"
+  },
+  {
+    "round": 4,
+    "teams": "COL vs CAR",
+    "date": "3/04/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 4,
+    "teams": "GEE vs MEL",
+    "date": "4/04/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 4,
+    "teams": "GCS vs ADE",
+    "date": "5/04/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 4,
+    "teams": "RIC vs BRI",
+    "date": "5/04/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 4,
+    "teams": "NTH vs SYD",
+    "date": "5/04/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 4,
+    "teams": "GWS vs WCE",
+    "date": "6/04/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 4,
+    "teams": "PTA vs STK",
+    "date": "6/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 4,
+    "teams": "FRE vs WBD",
+    "date": "6/04/2025",
+    "time": "17:10"
+  },
+  {
+    "round": 5,
+    "teams": "ADE vs GEE",
+    "date": "10/04/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 5,
+    "teams": "COL vs SYD",
+    "date": "11/04/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 5,
+    "teams": "NTH vs GCS",
+    "date": "12/04/2025",
+    "time": "12:35"
+  },
+  {
+    "round": 5,
+    "teams": "CAR vs WCE",
+    "date": "12/04/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 5,
+    "teams": "WBD vs BRI",
+    "date": "12/04/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 5,
+    "teams": "MEL vs ESS",
+    "date": "12/04/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 5,
+    "teams": "RIC vs FRE",
+    "date": "13/04/2025",
+    "time": "12:35"
+  },
+  {
+    "round": 5,
+    "teams": "STK vs GWS",
+    "date": "13/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 5,
+    "teams": "PTA vs HAW",
+    "date": "13/04/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 6,
+    "teams": "BRI vs COL",
+    "date": "17/04/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 6,
+    "teams": "NTH vs CAR",
+    "date": "18/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 6,
+    "teams": "WCE vs ESS",
+    "date": "18/04/2025",
+    "time": "18:10"
+  },
+  {
+    "round": 6,
+    "teams": "MEL vs FRE",
+    "date": "19/04/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 6,
+    "teams": "ADE vs GWS",
+    "date": "19/04/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 6,
+    "teams": "RIC vs GCS",
+    "date": "19/04/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 6,
+    "teams": "SYD vs PTA",
+    "date": "20/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 6,
+    "teams": "WBD vs STK",
+    "date": "20/04/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 6,
+    "teams": "GEE vs HAW",
+    "date": "21/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 7,
+    "teams": "MEL vs RIC",
+    "date": "24/04/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 7,
+    "teams": "COL vs ESS",
+    "date": "25/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 7,
+    "teams": "FRE vs ADE",
+    "date": "25/04/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 7,
+    "teams": "STK vs BRI",
+    "date": "26/04/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 7,
+    "teams": "PTA vs NTH",
+    "date": "26/04/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 7,
+    "teams": "GWS vs WBD",
+    "date": "26/04/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 7,
+    "teams": "GCS vs SYD",
+    "date": "27/04/2025",
+    "time": "13:15"
+  },
+  {
+    "round": 7,
+    "teams": "CAR vs GEE",
+    "date": "27/04/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 7,
+    "teams": "HAW vs WCE",
+    "date": "27/04/2025",
+    "time": "16:45"
+  },
+  {
+    "round": 8,
+    "teams": "ESS vs NTH",
+    "date": "1/05/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 8,
+    "teams": "STK vs FRE",
+    "date": "2/05/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 8,
+    "teams": "WBD vs PTA",
+    "date": "3/05/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 8,
+    "teams": "ADE vs CAR",
+    "date": "3/05/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 8,
+    "teams": "COL vs GEE",
+    "date": "3/05/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 8,
+    "teams": "WCE vs MEL",
+    "date": "3/05/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 8,
+    "teams": "SYD vs GWS",
+    "date": "4/05/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 8,
+    "teams": "HAW vs RIC",
+    "date": "4/05/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 8,
+    "teams": "BRI vs GCS",
+    "date": "4/05/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 9,
+    "teams": "FRE vs COL",
+    "date": "8/05/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 9,
+    "teams": "STK vs CAR",
+    "date": "9/05/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 9,
+    "teams": "MEL vs HAW",
+    "date": "10/05/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 9,
+    "teams": "ESS vs SYD",
+    "date": "10/05/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 9,
+    "teams": "GCS vs WBD",
+    "date": "10/05/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 9,
+    "teams": "PTA vs ADE",
+    "date": "10/05/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 9,
+    "teams": "RIC vs WCE",
+    "date": "11/05/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 9,
+    "teams": "GEE vs GWS",
+    "date": "11/05/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 9,
+    "teams": "NTH vs BRI",
+    "date": "11/05/2025",
+    "time": "16:40"
+  },
+  {
+    "round": 10,
+    "teams": "GCS vs HAW",
+    "date": "15/05/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 10,
+    "teams": "SYD vs CAR",
+    "date": "16/05/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 10,
+    "teams": "COL vs ADE",
+    "date": "17/05/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 10,
+    "teams": "PTA vs GEE",
+    "date": "17/05/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 10,
+    "teams": "GWS vs FRE",
+    "date": "17/05/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 10,
+    "teams": "WBD vs ESS",
+    "date": "17/05/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 10,
+    "teams": "RIC vs NTH",
+    "date": "18/05/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 10,
+    "teams": "BRI vs MEL",
+    "date": "18/05/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 10,
+    "teams": "WCE vs STK",
+    "date": "18/05/2025",
+    "time": "16:40"
+  },
+  {
+    "round": 11,
+    "teams": "GEE vs WBD",
+    "date": "22/05/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 11,
+    "teams": "ESS vs RIC",
+    "date": "23/05/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 11,
+    "teams": "CAR vs GWS",
+    "date": "24/05/2025",
+    "time": "12:35"
+  },
+  {
+    "round": 11,
+    "teams": "HAW vs BRI",
+    "date": "24/05/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 11,
+    "teams": "NTH vs COL",
+    "date": "24/05/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 11,
+    "teams": "FRE vs PTA",
+    "date": "24/05/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 11,
+    "teams": "ADE vs WCE",
+    "date": "25/05/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 11,
+    "teams": "MEL vs SYD",
+    "date": "25/05/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 11,
+    "teams": "STK vs GCS",
+    "date": "25/05/2025",
+    "time": "16:40"
+  },
+  {
+    "round": 12,
+    "teams": "BRI vs ESS",
+    "date": "29/05/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 12,
+    "teams": "COL vs HAW",
+    "date": "30/05/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 12,
+    "teams": "GCS vs FRE",
+    "date": "31/05/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 12,
+    "teams": "GWS vs RIC",
+    "date": "31/05/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 12,
+    "teams": "SYD vs ADE",
+    "date": "31/05/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 12,
+    "teams": "MEL vs STK",
+    "date": "1/06/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 12,
+    "teams": "WCE vs GEE",
+    "date": "1/06/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 13,
+    "teams": "WBD vs HAW",
+    "date": "5/06/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 13,
+    "teams": "ADE vs BRI",
+    "date": "6/06/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 13,
+    "teams": "RIC vs SYD",
+    "date": "7/06/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 13,
+    "teams": "GEE vs GCS",
+    "date": "7/06/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 13,
+    "teams": "GWS vs PTA",
+    "date": "7/06/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 13,
+    "teams": "NTH vs WCE",
+    "date": "8/06/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 13,
+    "teams": "CAR vs ESS",
+    "date": "8/06/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 13,
+    "teams": "MEL vs COL",
+    "date": "9/06/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 14,
+    "teams": "STK vs WBD",
+    "date": "12/06/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 14,
+    "teams": "HAW vs ADE",
+    "date": "13/06/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 14,
+    "teams": "BRI vs GWS",
+    "date": "14/06/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 14,
+    "teams": "ESS vs GEE",
+    "date": "14/06/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 14,
+    "teams": "NTH vs FRE",
+    "date": "14/06/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 14,
+    "teams": "PTA vs MEL",
+    "date": "15/06/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 14,
+    "teams": "WCE vs CAR",
+    "date": "15/06/2025",
+    "time": "18:10"
+  },
+  {
+    "round": 15,
+    "teams": "FRE vs ESS",
+    "date": "19/06/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 15,
+    "teams": "GEE vs BRI",
+    "date": "20/06/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 15,
+    "teams": "CAR vs NTH",
+    "date": "21/06/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 15,
+    "teams": "PTA vs SYD",
+    "date": "21/06/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 15,
+    "teams": "COL vs STK",
+    "date": "21/06/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 15,
+    "teams": "GWS vs GCS",
+    "date": "22/06/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 15,
+    "teams": "WBD vs RIC",
+    "date": "22/06/2025",
+    "time": "15:20"
+  },
+  {
+    "round": 16,
+    "teams": "PTA vs CAR",
+    "date": "26/06/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 16,
+    "teams": "SYD vs WBD",
+    "date": "27/06/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 16,
+    "teams": "GCS vs MEL",
+    "date": "28/06/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 16,
+    "teams": "HAW vs NTH",
+    "date": "28/06/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 16,
+    "teams": "COL vs WCE",
+    "date": "28/06/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 16,
+    "teams": "RIC vs ADE",
+    "date": "29/06/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 16,
+    "teams": "FRE vs STK",
+    "date": "29/06/2025",
+    "time": "17:10"
+  },
+  {
+    "round": 17,
+    "teams": "NTH vs WBD",
+    "date": "3/07/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 17,
+    "teams": "CAR vs COL",
+    "date": "4/07/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 17,
+    "teams": "WCE vs GWS",
+    "date": "4/07/2025",
+    "time": "20:20"
+  },
+  {
+    "round": 17,
+    "teams": "ESS vs GCS",
+    "date": "5/07/2025",
+    "time": "12:35"
+  },
+  {
+    "round": 17,
+    "teams": "GEE vs RIC",
+    "date": "5/07/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 17,
+    "teams": "BRI vs PTA",
+    "date": "5/07/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 17,
+    "teams": "STK vs HAW",
+    "date": "5/07/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 17,
+    "teams": "SYD vs FRE",
+    "date": "6/07/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 17,
+    "teams": "ADE vs MEL",
+    "date": "6/07/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 18,
+    "teams": "CAR vs BRI",
+    "date": "10/07/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 18,
+    "teams": "GCS vs COL",
+    "date": "11/07/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 18,
+    "teams": "WBD vs ADE",
+    "date": "12/07/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 18,
+    "teams": "GWS vs GEE",
+    "date": "12/07/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 18,
+    "teams": "RIC vs ESS",
+    "date": "12/07/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 18,
+    "teams": "FRE vs HAW",
+    "date": "12/07/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 18,
+    "teams": "MEL vs NTH",
+    "date": "13/07/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 18,
+    "teams": "STK vs SYD",
+    "date": "13/07/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 18,
+    "teams": "PTA vs WCE",
+    "date": "13/07/2025",
+    "time": "16:40"
+  },
+  {
+    "round": 19,
+    "teams": "ESS vs GWS",
+    "date": "17/07/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 19,
+    "teams": "BRI vs WBD",
+    "date": "18/07/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 19,
+    "teams": "HAW vs PTA",
+    "date": "19/07/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 19,
+    "teams": "SYD vs NTH",
+    "date": "19/07/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 19,
+    "teams": "CAR vs MEL",
+    "date": "19/07/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 19,
+    "teams": "WCE vs RIC",
+    "date": "19/07/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 19,
+    "teams": "GEE vs STK",
+    "date": "20/07/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 19,
+    "teams": "COL vs FRE",
+    "date": "20/07/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 19,
+    "teams": "ADE vs GCS",
+    "date": "20/07/2025",
+    "time": "16:40"
+  },
+  {
+    "round": 20,
+    "teams": "HAW vs CAR",
+    "date": "24/07/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 20,
+    "teams": "ESS vs WBD",
+    "date": "25/07/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 20,
+    "teams": "GWS vs SYD",
+    "date": "25/07/2025",
+    "time": "19:50"
+  },
+  {
+    "round": 20,
+    "teams": "GCS vs BRI",
+    "date": "26/07/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 20,
+    "teams": "FRE vs WCE",
+    "date": "26/07/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 20,
+    "teams": "NTH vs GEE",
+    "date": "26/07/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 20,
+    "teams": "ADE vs PTA",
+    "date": "26/07/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 20,
+    "teams": "RIC vs COL",
+    "date": "27/07/2025",
+    "time": "14:10"
+  },
+  {
+    "round": 20,
+    "teams": "STK vs MEL",
+    "date": "27/07/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 21,
+    "teams": "WBD vs GWS",
+    "date": "31/07/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 21,
+    "teams": "ADE vs HAW",
+    "date": "1/08/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 21,
+    "teams": "MEL vs WCE",
+    "date": "2/08/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 21,
+    "teams": "GCS vs RIC",
+    "date": "2/08/2025",
+    "time": "16:10"
+  },
+  {
+    "round": 21,
+    "teams": "SYD vs ESS",
+    "date": "2/08/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 21,
+    "teams": "COL vs BRI",
+    "date": "2/08/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 21,
+    "teams": "STK vs NTH",
+    "date": "3/08/2025",
+    "time": "13:40"
+  },
+  {
+    "round": 21,
+    "teams": "GEE vs PTA",
+    "date": "3/08/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 21,
+    "teams": "FRE vs CAR",
+    "date": "3/08/2025",
+    "time": "17:10"
+  },
+  {
+    "round": 22,
+    "teams": "HAW vs COL",
+    "date": "7/08/2025",
+    "time": "19:30"
+  },
+  {
+    "round": 22,
+    "teams": "GEE vs ESS",
+    "date": "8/08/2025",
+    "time": "19:40"
+  },
+  {
+    "round": 22,
+    "teams": "RIC vs STK",
+    "date": "9/08/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 22,
+    "teams": "BRI vs SYD",
+    "date": "9/08/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 22,
+    "teams": "CAR vs GCS",
+    "date": "9/08/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 22,
+    "teams": "PTA vs FRE",
+    "date": "9/08/2025",
+    "time": "20:10"
+  },
+  {
+    "round": 22,
+    "teams": "GWS vs NTH",
+    "date": "10/08/2025",
+    "time": "13:40"
+  },
+  {
+    "round": 22,
+    "teams": "MEL vs WBD",
+    "date": "10/08/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 22,
+    "teams": "WCE vs ADE",
+    "date": "10/08/2025",
+    "time": "17:10"
+  },
+  {
+    "round": 23,
+    "teams": "ESS vs STK",
+    "date": "15/08/2025",
+    "time": "19:20"
+  },
+  {
+    "round": 23,
+    "teams": "FRE vs BRI",
+    "date": "15/08/2025",
+    "time": "20:20"
+  },
+  {
+    "round": 23,
+    "teams": "GCS vs GWS",
+    "date": "16/08/2025",
+    "time": "12:35"
+  },
+  {
+    "round": 23,
+    "teams": "CAR vs PTA",
+    "date": "16/08/2025",
+    "time": "13:20"
+  },
+  {
+    "round": 23,
+    "teams": "HAW vs MEL",
+    "date": "16/08/2025",
+    "time": "16:15"
+  },
+  {
+    "round": 23,
+    "teams": "ADE vs COL",
+    "date": "16/08/2025",
+    "time": "19:35"
+  },
+  {
+    "round": 23,
+    "teams": "NTH vs RIC",
+    "date": "17/08/2025",
+    "time": "13:10"
+  },
+  {
+    "round": 23,
+    "teams": "SYD vs GEE",
+    "date": "17/08/2025",
+    "time": "15:15"
+  },
+  {
+    "round": 23,
+    "teams": "WBD vs WCE",
+    "date": "17/08/2025",
+    "time": "16:40"
+  },
+  {
+    "round": 24,
+    "teams": "GWS vs STK",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "NTH vs ADE",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "WBD vs FRE",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "COL vs MEL",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "RIC vs GEE",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "ESS vs CAR",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "BRI vs HAW",
+    "date": "23/08/2025",
+    "time": "0:00"
+  },
+  {
+    "round": 24,
+    "teams": "PTA vs GCS",
+    "date": "23/08/2025",
+    "time": "0:30"
+  },
+  {
+    "round": 24,
+    "teams": "WCE vs SYD",
+    "date": "23/08/2025",
+    "time": "2:00"
+  }
+]

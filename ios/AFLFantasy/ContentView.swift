@@ -7,7 +7,10 @@
 //
 
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
+import UserNotifications
 
 // MARK: - ContentView
 
@@ -15,7 +18,9 @@ struct ContentView: View {
     @EnvironmentObject var appState: AppState
 
     // Native iOS Haptic Feedback for tab switching
+    #if canImport(UIKit)
     private let selectionFeedback = UISelectionFeedbackGenerator()
+    #endif
 
     var body: some View {
         TabView(selection: $appState.selectedTab) {
@@ -57,7 +62,9 @@ struct ContentView: View {
         .accentColor(.orange) // AFL-inspired accent color
         .onChange(of: appState.selectedTab) { _, _ in
             // Haptic feedback when switching tabs
+            #if canImport(UIKit)
             selectionFeedback.selectionChanged()
+            #endif
         }
     }
 }
@@ -122,7 +129,7 @@ struct TeamScoreHeaderView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("TEAM SCORE")
-                        .typography(.caption)
+                        .typography(.caption1)
                         .foregroundColor(DesignSystem.Colors.onSurfaceSecondary)
                     Text("\(appState.teamScore)")
                         .typography(.largeTitle)
@@ -133,7 +140,7 @@ struct TeamScoreHeaderView: View {
 
                 VStack(alignment: .trailing) {
                     Text("RANK")
-                        .typography(.caption)
+                        .typography(.caption1)
                         .foregroundColor(DesignSystem.Colors.onSurfaceSecondary)
                     Text("#\(appState.teamRank)")
                         .typography(.title2)
@@ -170,7 +177,9 @@ struct PlayerCardView: View {
     @State private var showingDetails = false
 
     // Native iOS Haptic Feedback
+    #if canImport(UIKit)
     private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    #endif
 
     var body: some View {
         VStack(spacing: 12) {
@@ -312,58 +321,41 @@ struct PlayerCardView: View {
         .padding()
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
         .onTapGesture {
-            // Haptic feedback when opening player details
+            #if canImport(UIKit)
             impactFeedback.impactOccurred()
-            showingDetails.toggle()
+            #endif
+            showingDetails = true
         }
         .sheet(isPresented: $showingDetails) {
-            VStack {
-                Text("Player Details")
-                    .font(.title)
-                    .padding()
-                Text("\(player.name) - \(player.position.rawValue)")
-                    .font(.headline)
-                Text("Current Score: \(player.currentScore)")
-                Text("Price: \(player.formattedPrice)")
-                Text("Average: \(String(format: "%.1f", player.averageScore))")
-                Spacer()
-                Button("Close") {
-                    showingDetails = false
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            .padding()
+            PlayerDetailSheet(player: player)
         }
     }
 
     private func consistencyColor(for consistency: Double) -> Color {
-        switch consistency {
-        case 90...: .green
-        case 80 ..< 90: .blue
-        case 70 ..< 80: .yellow
-        default: .red
-        }
+        if consistency >= 0.8 { return .green }
+        if consistency >= 0.6 { return .orange }
+        return .red
     }
 
-    private func alertIcon(for alertType: AlertType) -> String {
-        switch alertType {
+    private func alertIcon(for type: AlertType) -> String {
+        switch type {
+        case .injury: "⚠️"
+        case .priceRise: "📈"
         case .priceDrop: "📉"
-        case .breakEvenCliff: "⚠️"
-        case .cashCowSell: "💰"
-        case .injuryRisk: "🏥"
-        case .roleChange: "🔄"
-        case .weatherRisk: "🌧️"
-        case .contractYear: "📋"
-        case .premiumBreakout: "🚀"
+        case .breakeven: "💰"
+        case .captain: "⭐"
+        case .trade: "🔄"
+        case .suspension: "🚫"
+        case .teamChange: "🏃"
         }
     }
 
     private func alertColor(for priority: AlertPriority) -> Color {
         switch priority {
-        case .critical: .red
-        case .high: .orange
-        case .medium: .yellow
+        case .high: .red
+        case .medium: .orange
         case .low: .blue
         }
     }
@@ -397,7 +389,7 @@ struct CaptainAdvisorView: View {
 
                     // Captain Suggestions
                     ForEach(Array(appState.captainSuggestions.enumerated()), id: \.element.id) { index, suggestion in
-                        CaptainSuggestionCard(suggestion: suggestion, rank: index + 1)
+                        SimpleCaptainSuggestionCard(suggestion: suggestion, rank: index + 1)
                     }
                 }
                 .padding()
@@ -408,56 +400,48 @@ struct CaptainAdvisorView: View {
     }
 }
 
-// MARK: - CaptainSuggestionCard
+// MARK: - SimpleCaptainSuggestionCard
 
-struct CaptainSuggestionCard: View {
+struct SimpleCaptainSuggestionCard: View {
     let suggestion: CaptainSuggestion
     let rank: Int
     @State private var showingDetails = false
 
     // Native iOS Haptic Feedback
+    #if canImport(UIKit)
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    #endif
 
     var body: some View {
         VStack(spacing: 12) {
             // Main captain info
             HStack {
-                // Rank
+                // Rank indicator
                 ZStack {
                     Circle()
-                        .fill(rank == 1 ? .yellow : rank == 2 ? .gray.opacity(0.7) : .gray.opacity(0.3))
+                        .fill(rankColor.opacity(0.2))
                         .frame(width: 40, height: 40)
 
                     Text("\(rank)")
                         .font(.headline)
                         .bold()
-                        .foregroundColor(rank == 1 ? .black : .white)
-
-                    if rank == 1 {
-                        Circle()
-                            .stroke(Color.orange, lineWidth: 3)
-                            .frame(width: 42, height: 42)
-                    }
+                        .foregroundColor(rankColor)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(suggestion.player.name)
+                    Text(suggestion.playerName)
                         .font(.headline)
                         .foregroundColor(.primary)
 
                     HStack(spacing: 8) {
-                        Text(suggestion.player.position.rawValue)
+                        Text(suggestion.position)
                             .font(.caption)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(suggestion.player.position.color.opacity(0.2))
+                            .background(suggestion.positionColor.opacity(0.2))
                             .cornerRadius(4)
 
-                        Text("vs \(suggestion.player.nextRoundProjection.opponent)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-
-                        Text("@ \(suggestion.player.nextRoundProjection.venue)")
+                        Text("vs \(suggestion.opponent)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -466,12 +450,12 @@ struct CaptainSuggestionCard: View {
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text("\(suggestion.projectedPoints)")
+                    Text("\(Int(suggestion.projectedScore))")
                         .font(.title2)
                         .bold()
                         .foregroundColor(.orange)
 
-                    Text("proj. pts")
+                    Text("\(Int(suggestion.confidence * 100))% confidence")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -479,667 +463,101 @@ struct CaptainSuggestionCard: View {
 
             // AI Analysis factors
             VStack(spacing: 8) {
-                // Confidence and key factors
                 HStack {
-                    VStack(spacing: 2) {
-                        Text("AI Confidence")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        Text("\(suggestion.confidence)%")
-                            .font(.caption)
-                            .bold()
-                            .foregroundColor(confidenceColor(for: suggestion.confidence))
-                    }
-
-                    Spacer()
-
-                    VStack(spacing: 2) {
-                        Text("Form Factor")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        Text(formGrade(for: suggestion.player))
-                            .font(.caption)
-                            .bold()
-                            .foregroundColor(.blue)
-                    }
-
-                    Spacer()
-
-                    VStack(spacing: 2) {
-                        Text("Venue Bias")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        let venueBias = suggestion.player.venuePerformance.first?.bias ?? 0
-                        Text(venueBias >= 0 ? "+\(String(format: "%.1f", venueBias))" : String(
-                            format: "%.1f",
-                            venueBias
-                        ))
-                        .font(.caption)
-                        .bold()
-                        .foregroundColor(venueBias >= 0 ? .green : .red)
-                    }
-
-                    Spacer()
-
-                    VStack(spacing: 2) {
-                        Text("Weather")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        let rainChance = suggestion.player.nextRoundProjection.conditions.rainProbability
-                        Text(rainChance > 0.5 ? "🌧️" : rainChance > 0.3 ? "⛅" : "☀️")
-                            .font(.caption)
-                    }
-                }
-
-                // Risk indicators
-                HStack {
-                    if suggestion.player.injuryRisk.riskLevel != .low {
-                        HStack(spacing: 4) {
-                            Text("⚠️")
-                            Text(suggestion.player.injuryRisk.riskLevel.rawValue)
-                                .font(.caption2)
-                                .foregroundColor(suggestion.player.injuryRisk.riskLevel.color)
-                        }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(suggestion.player.injuryRisk.riskLevel.color.opacity(0.1))
-                        .cornerRadius(4)
-                    }
-
-                    if suggestion.player.isDoubtful {
-                        HStack(spacing: 4) {
-                            Text("❓")
-                            Text("Doubtful")
-                                .font(.caption2)
-                                .foregroundColor(.orange)
-                        }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.orange.opacity(0.1))
-                        .cornerRadius(4)
-                    }
-
-                    Spacer()
-
-                    // Captain recommendation strength
-                    if rank == 1 {
-                        HStack(spacing: 4) {
-                            Text("👑")
-                            Text("Top Pick")
-                                .font(.caption2)
-                                .bold()
-                                .foregroundColor(.yellow)
-                        }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.yellow.opacity(0.1))
-                        .cornerRadius(4)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(
-            rank == 1 ? AnyView(LinearGradient(
-                colors: [Color.orange.opacity(0.1), Color.yellow.opacity(0.1)],
-                startPoint: .leading,
-                endPoint: .trailing
-            )) :
-                AnyView(Color(.secondarySystemBackground))
-        )
-        .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(rank == 1 ? Color.orange.opacity(0.5) : Color.clear, lineWidth: 2)
-        )
-        .onTapGesture {
-            // Stronger haptic feedback for captain selections
-            impactFeedback.impactOccurred()
-            showingDetails.toggle()
-        }
-        .sheet(isPresented: $showingDetails) {
-            VStack {
-                Text("Captain Details")
-                    .font(.title)
-                    .padding()
-                Text("\(suggestion.player.name) - Rank #\(rank)")
-                    .font(.headline)
-                Text("Projected Points: \(suggestion.projectedPoints)")
-                Text("Confidence: \(suggestion.confidence)%")
-                Text("Current Score: \(suggestion.player.currentScore)")
-                Spacer()
-                Button("Close") {
-                    showingDetails = false
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            .padding()
-        }
-    }
-
-    private func confidenceColor(for confidence: Int) -> Color {
-        switch confidence {
-        case 90...: .green
-        case 80 ..< 90: .blue
-        case 70 ..< 80: .orange
-        default: .red
-        }
-    }
-
-    private func formGrade(for player: EnhancedPlayer) -> String {
-        let recentForm = Double(player.currentScore) / player.averageScore
-        switch recentForm {
-        case 1.2...: return "🔥"
-        case 1.1 ..< 1.2: return "📈"
-        case 0.9 ..< 1.1: return "➡️"
-        case 0.8 ..< 0.9: return "📉"
-        default: return "❄️"
-        }
-    }
-}
-
-// MARK: - TradeCalculatorView
-
-struct TradeCalculatorView: View {
-    @EnvironmentObject var appState: AppState
-    @State private var selectedPlayerIn: EnhancedPlayer?
-    @State private var selectedPlayerOut: EnhancedPlayer?
-    @State private var showingPlayerInPicker = false
-    @State private var showingPlayerOutPicker = false
-    @State private var availablePlayersIn: [EnhancedPlayer] = []
-    @State private var availablePlayersOut: [EnhancedPlayer] = []
-
-    // Native iOS Haptic Feedback
-    private let selectionFeedback = UISelectionFeedbackGenerator()
-    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Header with AI Analysis
-                    VStack {
-                        Image(systemName: "arrow.triangle.2.circlepath")
-                            .font(.system(size: 50))
-                            .foregroundColor(.orange)
-
-                        Text("Trade Analyzer")
-                            .font(.title2)
-                            .bold()
-
-                        Text("AI-powered trade analysis and optimization")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding()
-
-                    // Trade OUT section
-                    TradePlayerSection(
-                        title: "TRADE OUT",
-                        subtitle: "Select player to sell",
-                        color: .red,
-                        selectedPlayer: selectedPlayerOut,
-                        onTap: {
-                            selectionFeedback.selectionChanged()
-                            availablePlayersOut = appState.players.filter { !$0.isCashCow }
-                            showingPlayerOutPicker = true
-                        }
-                    )
-
-                    // Trade Direction Indicator
-                    VStack {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .font(.title2)
-                            .foregroundColor(.orange)
-                            .padding(.vertical, 8)
-                        
-                        if let playerOut = selectedPlayerOut, let playerIn = selectedPlayerIn {
-                            Text("Net Cost: \(formatNetCost(playerIn: playerIn, playerOut: playerOut))")
-                                .font(.caption)
-                                .foregroundColor(getNetCostColor(playerIn: playerIn, playerOut: playerOut))
-                                .bold()
-                        }
-                    }
-
-                    // Trade IN section
-                    TradePlayerSection(
-                        title: "TRADE IN",
-                        subtitle: "Select player to buy",
-                        color: .green,
-                        selectedPlayer: selectedPlayerIn,
-                        onTap: {
-                            selectionFeedback.selectionChanged()
-                            availablePlayersIn = appState.players
-                            showingPlayerInPicker = true
-                        }
-                    )
-
-                    // Trade Analysis
-                    if let playerOut = selectedPlayerOut, let playerIn = selectedPlayerIn {
-                        TradeAnalysisView(playerOut: playerOut, playerIn: playerIn)
-                    } else {
-                        TradePromptView()
-                    }
-
-                    Spacer()
-                }
-                .padding()
-            }
-            .navigationTitle("🔄 Trades")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $showingPlayerOutPicker) {
-                PlayerPickerView(
-                    title: "Select Player to Trade Out",
-                    players: availablePlayersOut,
-                    selectedPlayer: $selectedPlayerOut
-                )
-            }
-            .sheet(isPresented: $showingPlayerInPicker) {
-                PlayerPickerView(
-                    title: "Select Player to Trade In",
-                    players: availablePlayersIn,
-                    selectedPlayer: $selectedPlayerIn
-                )
-            }
-        }
-    }
-    
-    private func formatNetCost(playerIn: EnhancedPlayer, playerOut: EnhancedPlayer) -> String {
-        let netCost = playerIn.price - playerOut.price
-        let prefix = netCost >= 0 ? "+" : ""
-        return "\(prefix)$\(abs(netCost) / 1000)k"
-    }
-    
-    private func getNetCostColor(playerIn: EnhancedPlayer, playerOut: EnhancedPlayer) -> Color {
-        let netCost = playerIn.price - playerOut.price
-        return netCost >= 0 ? .red : .green
-    }
-}
-
-// MARK: - TradePlayerSection
-
-struct TradePlayerSection: View {
-    let title: String
-    let subtitle: String
-    let color: Color
-    let selectedPlayer: EnhancedPlayer?
-    let onTap: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            // Header
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.headline)
-                        .foregroundColor(color)
-                    Text(subtitle)
+                    Text("Form")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Spacer()
+                    ProgressBar(value: suggestion.formRating, color: .blue)
+                    Text("\(Int(suggestion.formRating * 100))%")
+                        .font(.caption2)
+                        .foregroundColor(.blue)
                 }
-                Spacer()
-            }
-            
-            // Player Selection
-            if let player = selectedPlayer {
-                TradePlayerCard(player: player, color: color)
-                    .onTapGesture {
-                        onTap()
-                    }
-            } else {
-                Button(action: onTap) {
-                    HStack {
-                        Image(systemName: "plus.circle")
-                            .font(.title2)
-                        Text("Select Player")
-                            .font(.headline)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .opacity(0.6)
-                    }
-                    .foregroundColor(color)
-                    .padding()
-                    .background(color.opacity(0.1))
-                    .cornerRadius(12)
+
+                HStack {
+                    Text("Fixture")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    ProgressBar(value: suggestion.fixtureRating, color: .green)
+                    Text("\(Int(suggestion.fixtureRating * 100))%")
+                        .font(.caption2)
+                        .foregroundColor(.green)
                 }
-                .buttonStyle(PlainButtonStyle())
+
+                HStack {
+                    Text("Risk")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    ProgressBar(value: 1.0 - suggestion.riskFactor, color: .orange)
+                    Text("Low Risk")
+                        .font(.caption2)
+                        .foregroundColor(.orange)
+                }
             }
+            .padding(.horizontal, 8)
         }
         .padding()
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(16)
-    }
-}
-
-// MARK: - TradePlayerCard
-
-struct TradePlayerCard: View {
-    let player: EnhancedPlayer
-    let color: Color
-    
-    var body: some View {
-        HStack {
-            // Position indicator
-            RoundedRectangle(cornerRadius: 4)
-                .fill(player.position.color)
-                .frame(width: 6, height: 50)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(player.name)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                
-                HStack(spacing: 8) {
-                    Text(player.position.rawValue)
-                        .font(.caption)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(player.position.color.opacity(0.2))
-                        .cornerRadius(4)
-                    
-                    Text("Avg: \(Int(player.averageScore))")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    if player.injuryRisk.riskLevel != .low {
-                        Text("⚠️")
-                            .font(.caption2)
-                    }
-                }
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(player.formattedPrice)
-                    .font(.title3)
-                    .bold()
-                    .foregroundColor(color)
-                
-                Text("BE: \(player.breakeven)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
-        .background(color.opacity(0.05))
         .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .onTapGesture {
+            #if canImport(UIKit)
+            impactFeedback.impactOccurred()
+            #endif
+            showingDetails = true
+        }
+        .sheet(isPresented: $showingDetails) {
+            CaptainAnalysisDetailView(suggestion: suggestion)
+        }
     }
-}
 
-// MARK: - PlayerPickerView
-
-struct PlayerPickerView: View {
-    let title: String
-    let players: [EnhancedPlayer]
-    @Binding var selectedPlayer: EnhancedPlayer?
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationView {
-            List(players) { player in
-                Button(action: {
-                    selectedPlayer = player
-                    dismiss()
-                }) {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(player.position.color)
-                            .frame(width: 4, height: 40)
-                        
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(player.name)
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            HStack {
-                                Text(player.position.rawValue)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text("•")
-                                    .foregroundColor(.secondary)
-                                Text("Avg: \(Int(player.averageScore))")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        
-                        Spacer()
-                        
-                        Text(player.formattedPrice)
-                            .font(.headline)
-                            .foregroundColor(.orange)
-                    }
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                trailing: Button("Cancel") {
-                    dismiss()
-                }
-            )
+    private var rankColor: Color {
+        switch rank {
+        case 1: .green
+        case 2: .orange
+        case 3: .red
+        default: .gray
         }
     }
 }
 
-// MARK: - TradeAnalysisView
 
-struct TradeAnalysisView: View {
-    let playerOut: EnhancedPlayer
-    let playerIn: EnhancedPlayer
-    
-    private var tradeScore: Int {
-        calculateTradeScore()
-    }
-    
-    private var tradeRating: String {
-        switch tradeScore {
-        case 90...: "Excellent"
-        case 80..<90: "Very Good"
-        case 70..<80: "Good"
-        case 60..<70: "Fair"
-        case 50..<60: "Poor"
-        default: "Very Poor"
-        }
-    }
-    
-    private var tradeColor: Color {
-        switch tradeScore {
-        case 80...: .green
-        case 70..<80: .blue
-        case 60..<70: .orange
-        default: .red
-        }
-    }
-    
+// MARK: - TradeScoreView
+
+struct TradeScoreView: View {
     var body: some View {
-        VStack(spacing: 20) {
-            // Trade Score Circle
+        VStack {
+            Text("Trade Score")
+                .font(.headline)
+
             ZStack {
                 Circle()
                     .stroke(Color.gray.opacity(0.3), lineWidth: 8)
                     .frame(width: 120, height: 120)
-                
+
                 Circle()
-                    .trim(from: 0, to: CGFloat(tradeScore) / 100.0)
-                    .stroke(tradeColor, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                    .trim(from: 0, to: 0.75)
+                    .stroke(Color.orange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                     .frame(width: 120, height: 120)
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeInOut(duration: 1), value: tradeScore)
-                
+                    .animation(.easeInOut(duration: 1), value: 0.75)
+
                 VStack {
-                    Text("\(tradeScore)")
+                    Text("75")
                         .font(.title)
                         .bold()
-                        .foregroundColor(tradeColor)
-                    Text(tradeRating)
+                        .foregroundColor(.orange)
+                    Text("Good Trade")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(16)
-            
-            // Analysis Factors
-            VStack(spacing: 16) {
-                Text("Trade Analysis")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                TradeFactorRow(
-                    title: "Score Differential",
-                    value: formatScoreDifferential(),
-                    color: getScoreDifferentialColor()
-                )
-                
-                TradeFactorRow(
-                    title: "Price Efficiency",
-                    value: formatPriceEfficiency(),
-                    color: getPriceEfficiencyColor()
-                )
-                
-                TradeFactorRow(
-                    title: "Injury Risk",
-                    value: formatInjuryRisk(),
-                    color: getInjuryRiskColor()
-                )
-                
-                TradeFactorRow(
-                    title: "Consistency",
-                    value: formatConsistency(),
-                    color: getConsistencyColor()
-                )
-            }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(16)
         }
-    }
-    
-    private func calculateTradeScore() -> Int {
-        var score = 50 // Base score
-        
-        // Score differential (40% weight)
-        let scoreDiff = playerIn.averageScore - playerOut.averageScore
-        score += Int(scoreDiff * 0.4)
-        
-        // Price efficiency (30% weight)
-        let priceEfficiency = scoreDiff / (Double(playerIn.price - playerOut.price) / 10000.0)
-        score += Int(priceEfficiency * 0.3)
-        
-        // Injury risk (20% weight)
-        let injuryPenalty = (playerIn.injuryRisk.riskScore - playerOut.injuryRisk.riskScore) * 20
-        score -= Int(injuryPenalty)
-        
-        // Consistency (10% weight)
-        let consistencyBonus = (playerIn.consistency - playerOut.consistency) * 0.1
-        score += Int(consistencyBonus)
-        
-        return max(0, min(100, score))
-    }
-    
-    private func formatScoreDifferential() -> String {
-        let diff = playerIn.averageScore - playerOut.averageScore
-        let prefix = diff >= 0 ? "+" : ""
-        return "\(prefix)\(String(format: "%.1f", diff)) pts"
-    }
-    
-    private func getScoreDifferentialColor() -> Color {
-        let diff = playerIn.averageScore - playerOut.averageScore
-        return diff >= 0 ? .green : .red
-    }
-    
-    private func formatPriceEfficiency() -> String {
-        let scoreDiff = playerIn.averageScore - playerOut.averageScore
-        let priceDiff = Double(playerIn.price - playerOut.price) / 1000.0
-        if priceDiff == 0 { return "N/A" }
-        let efficiency = scoreDiff / priceDiff
-        return String(format: "%.2f pts/$k", efficiency)
-    }
-    
-    private func getPriceEfficiencyColor() -> Color {
-        let scoreDiff = playerIn.averageScore - playerOut.averageScore
-        let priceDiff = Double(playerIn.price - playerOut.price) / 1000.0
-        if priceDiff == 0 { return .gray }
-        let efficiency = scoreDiff / priceDiff
-        return efficiency >= 0.5 ? .green : efficiency >= 0 ? .orange : .red
-    }
-    
-    private func formatInjuryRisk() -> String {
-        let inRisk = playerIn.injuryRisk.riskLevel
-        let outRisk = playerOut.injuryRisk.riskLevel
-        return "\(outRisk.rawValue) → \(inRisk.rawValue)"
-    }
-    
-    private func getInjuryRiskColor() -> Color {
-        let inRisk = playerIn.injuryRisk.riskScore
-        let outRisk = playerOut.injuryRisk.riskScore
-        return inRisk <= outRisk ? .green : .red
-    }
-    
-    private func formatConsistency() -> String {
-        let diff = playerIn.consistency - playerOut.consistency
-        let prefix = diff >= 0 ? "+" : ""
-        return "\(prefix)\(String(format: "%.1f", diff))%"
-    }
-    
-    private func getConsistencyColor() -> Color {
-        let diff = playerIn.consistency - playerOut.consistency
-        return diff >= 0 ? .green : .red
-    }
-}
-
-// MARK: - TradeFactorRow
-
-struct TradeFactorRow: View {
-    let title: String
-    let value: String
-    let color: Color
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.primary)
-            
-            Spacer()
-            
-            Text(value)
-                .font(.subheadline)
-                .bold()
-                .foregroundColor(color)
-        }
-    }
-}
-
-// MARK: - TradePromptView
-
-struct TradePromptView: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "arrow.triangle.2.circlepath.circle")
-                .font(.system(size: 60))
-                .foregroundColor(.gray.opacity(0.6))
-            
-            Text("Select Two Players")
-                .font(.headline)
-                .foregroundColor(.secondary)
-            
-            Text("Choose a player to trade out and a player to trade in to see detailed analysis and trade scoring.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-        }
-        .padding(.vertical, 40)
-        .frame(maxWidth: .infinity)
+        .padding()
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(16)
+        .cornerRadius(12)
     }
 }
 
@@ -1231,82 +649,745 @@ struct CashCowCard: View {
         .padding()
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+// MARK: - ConnectionStatusBar
+
+struct ConnectionStatusBar: View {
+    @State private var isConnected = true
+
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(isConnected ? Color.green : Color.red)
+                .frame(width: 8, height: 8)
+
+            Text(isConnected ? "Live Data" : "Offline Mode")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Spacer()
+
+            Text("Updated 2m ago")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Color(.tertiarySystemBackground))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - ProgressBar
+
+struct ProgressBar: View {
+    let value: Double
+    let color: Color
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 4)
+
+                Rectangle()
+                    .fill(color)
+                    .frame(width: geometry.size.width * value, height: 4)
+                    .animation(.easeInOut(duration: 0.3), value: value)
+            }
+        }
+        .frame(height: 4)
+        .cornerRadius(2)
+    }
+}
+
+// MARK: - PlayerDetailSheet
+
+struct PlayerDetailSheet: View {
+    let player: EnhancedPlayer
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(player.name)
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Detailed player analysis coming soon...")
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+                }
+                .padding()
+            }
+            .navigationTitle("Player Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - CaptainAnalysisDetailView
+
+struct CaptainAnalysisDetailView: View {
+    let suggestion: CaptainSuggestion
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(suggestion.playerName)
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Detailed captain analysis coming soon...")
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+                }
+                .padding()
+            }
+            .navigationTitle("Captain Analysis")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - NotificationsSection
+
+struct NotificationsSection: View {
+    @Binding var enableBreakevenAlerts: Bool
+    @Binding var enableInjuryAlerts: Bool
+    @Binding var enableLateOutAlerts: Bool
+    @Binding var enableTradeAlerts: Bool
+    @Binding var enablePriceChangeAlerts: Bool
+    @Binding var enableCaptainAlerts: Bool
+    @Binding var notificationsSoundEnabled: Bool
+    @Binding var notificationsBadgeEnabled: Bool
+    @Binding var showingNotificationPermissions: Bool
+
+    let handleNotificationToggle: (String, Bool) -> Void
+
+    var body: some View {
+        Section(header: Text("🔔 Notifications")) {
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Breakeven Alerts", isOn: $enableBreakevenAlerts)
+                    .onChange(of: enableBreakevenAlerts) { _, newValue in
+                        handleNotificationToggle("breakeven", newValue)
+                    }
+
+                Toggle("Injury Risk Alerts", isOn: $enableInjuryAlerts)
+                    .onChange(of: enableInjuryAlerts) { _, newValue in
+                        handleNotificationToggle("injury", newValue)
+                    }
+
+                Toggle("Late Team Changes", isOn: $enableLateOutAlerts)
+                    .onChange(of: enableLateOutAlerts) { _, newValue in
+                        handleNotificationToggle("lateOut", newValue)
+                    }
+
+                Toggle("Trade Recommendations", isOn: $enableTradeAlerts)
+                    .onChange(of: enableTradeAlerts) { _, newValue in
+                        handleNotificationToggle("trade", newValue)
+                    }
+
+                Toggle("Price Change Alerts", isOn: $enablePriceChangeAlerts)
+                    .onChange(of: enablePriceChangeAlerts) { _, newValue in
+                        handleNotificationToggle("priceChange", newValue)
+                    }
+
+                Toggle("Captain Suggestions", isOn: $enableCaptainAlerts)
+                    .onChange(of: enableCaptainAlerts) { _, newValue in
+                        handleNotificationToggle("captain", newValue)
+                    }
+            }
+
+            Toggle("Sound Effects", isOn: $notificationsSoundEnabled)
+            Toggle("Badge Count", isOn: $notificationsBadgeEnabled)
+
+            Button("Notification Permissions") {
+                showingNotificationPermissions = true
+            }
+            .foregroundColor(.primary)
+        }
+    }
+}
+
+// MARK: - AIAnalysisSection
+
+struct AIAnalysisSection: View {
+    @Binding var aiConfidenceThreshold: Double
+    @Binding var showLowConfidencePicks: Bool
+    @Binding var enableAdvancedAnalytics: Bool
+    @Binding var autoUpdateInterval: Double
+
+    let formatUpdateInterval: (Double) -> String
+
+    var body: some View {
+        Section(header: Text("🧠 AI & Analysis")) {
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("AI Confidence Threshold: \(Int(aiConfidenceThreshold))%")
+                        .font(.subheadline)
+                    Slider(value: $aiConfidenceThreshold, in: 60 ... 95, step: 5)
+                        .tint(.orange)
+                    Text("Only show picks with \(Int(aiConfidenceThreshold))%+ confidence")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Toggle("Show Low Confidence Picks", isOn: $showLowConfidencePicks)
+                Toggle("Advanced Analytics", isOn: $enableAdvancedAnalytics)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Auto-Update: \(formatUpdateInterval(autoUpdateInterval))")
+                        .font(.subheadline)
+                    Slider(value: $autoUpdateInterval, in: 60 ... 1800, step: 60)
+                        .tint(.blue)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - DisplayPreferencesSection
+
+struct DisplayPreferencesSection: View {
+    @Binding var showPlayerOwnership: Bool
+    @Binding var showVenueWeather: Bool
+    @Binding var compactPlayerCards: Bool
+    @Binding var darkModePreference: Int
+
+    var body: some View {
+        Section(header: Text("🎨 Display")) {
+            Toggle("Show Player Ownership %", isOn: $showPlayerOwnership)
+            Toggle("Show Venue & Weather", isOn: $showVenueWeather)
+            Toggle("Compact Player Cards", isOn: $compactPlayerCards)
+
+            Picker("Appearance", selection: $darkModePreference) {
+                Text("System").tag(0)
+                Text("Light").tag(1)
+                Text("Dark").tag(2)
+            }
+        }
+    }
+}
+
+// MARK: - TeamManagementSection
+
+struct TeamManagementSection: View {
+    @EnvironmentObject var appState: AppState
+    let formatCurrency: (Int) -> String
+
+    var body: some View {
+        Section(header: Text("⚽ Team Management")) {
+            HStack {
+                Text("Team Value")
+                Spacer()
+                Text(formatCurrency(appState.teamValue))
+                    .foregroundColor(.green)
+                    .fontWeight(.medium)
+            }
+
+            HStack {
+                Text("Bank Balance")
+                Spacer()
+                Text(formatCurrency(appState.bankBalance))
+                    .foregroundColor(appState.bankBalance > 100_000 ? .green : .orange)
+                    .fontWeight(.medium)
+            }
+
+            HStack {
+                Text("Trades Remaining")
+                Spacer()
+                Text("\(appState.tradesRemaining)")
+                    .foregroundColor(appState.tradesRemaining > 5 ? .green :
+                        appState.tradesRemaining > 2 ? .orange : .red
+                    )
+                    .fontWeight(.medium)
+            }
+
+            HStack {
+                Text("Players")
+                Spacer()
+                Text("\(appState.players.count) / 30")
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+
+// MARK: - DataManagementSection
+
+struct DataManagementSection: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var cacheSize: String
+    @Binding var lastSyncTime: Date
+    @Binding var showingClearCacheAlert: Bool
+    @Binding var showingResetDataAlert: Bool
+    @Binding var showingExportData: Bool
+
+    let formatLastSync: (Date) -> String
+    let refreshAppData: () -> Void
+
+    var body: some View {
+        Section(header: Text("📊 Data Management")) {
+            HStack {
+                Text("Cache Size")
+                Spacer()
+                Text(cacheSize)
+                    .foregroundColor(.secondary)
+            }
+
+            HStack {
+                Text("Last Sync")
+                Spacer()
+                Text(formatLastSync(lastSyncTime))
+                    .foregroundColor(.secondary)
+            }
+
+            Button("Refresh Data Now") {
+                refreshAppData()
+            }
+            .foregroundColor(.blue)
+            .disabled(appState.isRefreshing)
+
+            Button("Clear Cache") {
+                showingClearCacheAlert = true
+            }
+            .foregroundColor(.orange)
+
+            Button("Export Team Data") {
+                showingExportData = true
+            }
+            .foregroundColor(.primary)
+
+            Button("Reset All Data") {
+                showingResetDataAlert = true
+            }
+            .foregroundColor(.red)
+        }
+    }
+}
+
+// MARK: - SupportLegalSection
+
+struct SupportLegalSection: View {
+    @Binding var showingPrivacyPolicy: Bool
+    @Binding var showingTermsOfUse: Bool
+
+    #if canImport(UIKit)
+    let impactFeedback: UIImpactFeedbackGenerator
+    #else
+    let impactFeedback: () -> Void = {}
+    #endif
+    let getBuildNumber: () -> String
+    let contactSupport: () -> Void
+    let rateApp: () -> Void
+
+    var body: some View {
+        Section(header: Text("ℹ️ Support & Legal")) {
+            HStack {
+                Text("Version")
+                Spacer()
+                Text("1.0.0 (MVP)")
+                    .foregroundColor(.secondary)
+            }
+
+            HStack {
+                Text("Build")
+                Spacer()
+                Text(getBuildNumber())
+                    .foregroundColor(.secondary)
+            }
+
+            Button("Privacy Policy") {
+                #if canImport(UIKit)
+                impactFeedback.impactOccurred()
+                #endif
+                showingPrivacyPolicy = true
+            }
+            .foregroundColor(.primary)
+
+            Button("Terms of Service") {
+                #if canImport(UIKit)
+                impactFeedback.impactOccurred()
+                #endif
+                showingTermsOfUse = true
+            }
+            .foregroundColor(.primary)
+
+            Button("Contact Support") {
+                contactSupport()
+            }
+            .foregroundColor(.primary)
+
+            Button("Rate App") {
+                rateApp()
+            }
+            .foregroundColor(.primary)
+        }
+    }
+}
+
+// MARK: - DebugSection
+
+struct DebugSection: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var showingDebugMenu: Bool
+
+    let generateTestData: () -> Void
+
+    var body: some View {
+        Section(header: Text("🔧 Debug")) {
+            Button("Show Debug Menu") {
+                showingDebugMenu = true
+            }
+            .foregroundColor(.purple)
+
+            Button("Simulate Network Error") {
+                appState.simulateError("Network connection failed")
+            }
+            .foregroundColor(.red)
+
+            Button("Generate Test Data") {
+                generateTestData()
+            }
+            .foregroundColor(.blue)
+        }
     }
 }
 
 // MARK: - SettingsView
 
 struct SettingsView: View {
-    @State private var enableBreakevenAlerts = true
-    @State private var enableInjuryAlerts = true
-    @State private var enableLateOutAlerts = true
+    @EnvironmentObject var appState: AppState
+
+    // Notification Settings
+    @AppStorage("enableBreakevenAlerts") private var enableBreakevenAlerts = true
+    @AppStorage("enableInjuryAlerts") private var enableInjuryAlerts = true
+    @AppStorage("enableLateOutAlerts") private var enableLateOutAlerts = true
+    @AppStorage("enableTradeAlerts") private var enableTradeAlerts = true
+    @AppStorage("enablePriceChangeAlerts") private var enablePriceChangeAlerts = true
+    @AppStorage("enableCaptainAlerts") private var enableCaptainAlerts = true
+    @AppStorage("notificationsSoundEnabled") private var notificationsSoundEnabled = true
+    @AppStorage("notificationsBadgeEnabled") private var notificationsBadgeEnabled = true
+
+    // AI Settings
+    @AppStorage("aiConfidenceThreshold") private var aiConfidenceThreshold = 80.0
+    @AppStorage("showLowConfidencePicks") private var showLowConfidencePicks = false
+    @AppStorage("enableAdvancedAnalytics") private var enableAdvancedAnalytics = true
+    @AppStorage("autoUpdateInterval") private var autoUpdateInterval = 300.0 // 5 minutes
+
+    // Display Settings
+    @AppStorage("showPlayerOwnership") private var showPlayerOwnership = true
+    @AppStorage("showVenueWeather") private var showVenueWeather = true
+    @AppStorage("compactPlayerCards") private var compactPlayerCards = false
+    @AppStorage("darkModePreference") private var darkModePreference = 0 // 0: System, 1: Light, 2: Dark
+
+    // Data Management
+    @State private var cacheSize = "12.4 MB"
+    @State private var lastSyncTime = Date()
+    @State private var showingClearCacheAlert = false
+    @State private var showingResetDataAlert = false
+    @State private var showingExportData = false
+
+    // Modal Presentations
     @State private var showingPrivacyPolicy = false
     @State private var showingTermsOfUse = false
+    @State private var showingDebugMenu = false
+    @State private var showingNotificationPermissions = false
 
     // Haptic feedback
+    #if canImport(UIKit)
     private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    private let notificationFeedback = UINotificationFeedbackGenerator()
+    #endif
 
     var body: some View {
         NavigationView {
             Form {
-                Section("🔔 Notifications") {
-                    Toggle("Breakeven Alerts", isOn: $enableBreakevenAlerts)
-                    Toggle("Injury Alerts", isOn: $enableInjuryAlerts)
-                    Toggle("Late Out Alerts", isOn: $enableLateOutAlerts)
-                }
+                NotificationsSection(
+                    enableBreakevenAlerts: $enableBreakevenAlerts,
+                    enableInjuryAlerts: $enableInjuryAlerts,
+                    enableLateOutAlerts: $enableLateOutAlerts,
+                    enableTradeAlerts: $enableTradeAlerts,
+                    enablePriceChangeAlerts: $enablePriceChangeAlerts,
+                    enableCaptainAlerts: $enableCaptainAlerts,
+                    notificationsSoundEnabled: $notificationsSoundEnabled,
+                    notificationsBadgeEnabled: $notificationsBadgeEnabled,
+                    showingNotificationPermissions: $showingNotificationPermissions,
+                    handleNotificationToggle: handleNotificationToggle
+                )
 
-                Section("📊 Data") {
-                    HStack {
-                        Text("Cache Size")
-                        Spacer()
-                        Text("12.4 MB")
-                            .foregroundColor(.secondary)
-                    }
+                AIAnalysisSection(
+                    aiConfidenceThreshold: $aiConfidenceThreshold,
+                    showLowConfidencePicks: $showLowConfidencePicks,
+                    enableAdvancedAnalytics: $enableAdvancedAnalytics,
+                    autoUpdateInterval: $autoUpdateInterval,
+                    formatUpdateInterval: formatUpdateInterval
+                )
 
-                    Button("Clear Cache") {
-                        impactFeedback.impactOccurred()
-                        // TODO: Implement cache clearing
-                    }
-                    .foregroundColor(.red)
-                }
+                DisplayPreferencesSection(
+                    showPlayerOwnership: $showPlayerOwnership,
+                    showVenueWeather: $showVenueWeather,
+                    compactPlayerCards: $compactPlayerCards,
+                    darkModePreference: $darkModePreference
+                )
 
-                Section("ℹ️ About") {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("1.0.0 (MVP)")
-                            .foregroundColor(.secondary)
-                    }
+                TeamManagementSection(
+                    formatCurrency: formatCurrency
+                )
 
-                    // Native legal document modals - fast, dark mode, offline
-                    Button("Privacy Policy") {
-                        impactFeedback.impactOccurred()
-                        showingPrivacyPolicy = true
-                    }
-                    .foregroundColor(.primary)
+                DataManagementSection(
+                    cacheSize: $cacheSize,
+                    lastSyncTime: $lastSyncTime,
+                    showingClearCacheAlert: $showingClearCacheAlert,
+                    showingResetDataAlert: $showingResetDataAlert,
+                    showingExportData: $showingExportData,
+                    formatLastSync: formatLastSync,
+                    refreshAppData: refreshAppData
+                )
 
-                    Button("Terms of Service") {
-                        impactFeedback.impactOccurred()
-                        showingTermsOfUse = true
-                    }
-                    .foregroundColor(.primary)
+                SupportLegalSection(
+                    showingPrivacyPolicy: $showingPrivacyPolicy,
+                    showingTermsOfUse: $showingTermsOfUse,
+                    impactFeedback: impactFeedback,
+                    getBuildNumber: getBuildNumber,
+                    contactSupport: contactSupport,
+                    rateApp: rateApp
+                )
+
+                // MARK: - Debug Section (Development Only)
+
+                if isDebugMode() {
+                    DebugSection(
+                        showingDebugMenu: $showingDebugMenu,
+                        generateTestData: generateTestData
+                    )
                 }
             }
             .navigationTitle("⚙️ Settings")
             .navigationBarTitleDisplayMode(.large)
+            .refreshable {
+                await refreshSettings()
+            }
         }
         .sheet(isPresented: $showingPrivacyPolicy) {
-            PrivacyPolicyView()
+            SimplePrivacyPolicyView()
         }
         .sheet(isPresented: $showingTermsOfUse) {
-            TermsOfUseView()
+            SimpleTermsOfUseView()
         }
+        .sheet(isPresented: $showingDebugMenu) {
+            SimpleDebugMenuView(appState: appState)
+        }
+        .sheet(isPresented: $showingNotificationPermissions) {
+            SimpleNotificationPermissionsView()
+        }
+        .alert("Clear Cache", isPresented: $showingClearCacheAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Clear", role: .destructive) {
+                clearCache()
+            }
+        } message: {
+            Text("This will clear all cached data and may slow down the app temporarily.")
+        }
+        .alert("Reset Data", isPresented: $showingResetDataAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset", role: .destructive) {
+                resetAllData()
+            }
+        } message: {
+            Text("This will reset all settings and data. This action cannot be undone.")
+        }
+        .onAppear {
+            updateCacheSize()
+            updateLastSyncTime()
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    private func handleNotificationToggle(_ type: String, enabled: Bool) {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+
+        // Here you would integrate with your NotificationManager
+        if enabled {
+            requestNotificationPermissions()
+        }
+
+        print("Notification \(type) \(enabled ? "enabled" : "disabled")")
+    }
+
+    private func refreshAppData() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        appState.refreshData()
+
+        // Update local state
+        Task {
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            await MainActor.run {
+                updateLastSyncTime()
+            }
+        }
+    }
+
+    private func clearCache() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+
+        // Simulate cache clearing
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            cacheSize = "0.8 MB"
+            #if canImport(UIKit)
+            notificationFeedback.notificationOccurred(.success)
+            #endif
+        }
+
+        print("Cache cleared")
+    }
+
+    private func resetAllData() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+
+        // Reset all settings to defaults
+        enableBreakevenAlerts = true
+        enableInjuryAlerts = true
+        enableLateOutAlerts = true
+        enableTradeAlerts = true
+        enablePriceChangeAlerts = true
+        enableCaptainAlerts = true
+        aiConfidenceThreshold = 80.0
+        showLowConfidencePicks = false
+        enableAdvancedAnalytics = true
+        autoUpdateInterval = 300.0
+        darkModePreference = 0
+
+        #if canImport(UIKit)
+        notificationFeedback.notificationOccurred(.success)
+        #endif
+        print("All data reset")
+    }
+
+    private func requestNotificationPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .badge, .sound]
+        ) { granted, _ in
+            DispatchQueue.main.async {
+                if granted {
+                    print("Notification permissions granted")
+                } else {
+                    print("Notification permissions denied")
+                }
+            }
+        }
+    }
+
+    private func contactSupport() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        // Open email or support system
+        if let url = URL(string: "mailto:support@aflfantasy.ai?subject=AFL%20Fantasy%20Support") {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    private func rateApp() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        // Open App Store rating
+        if let url = URL(string: "https://apps.apple.com/app/id123456789?action=write-review") {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    private func generateTestData() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        // Generate test notifications and data for development
+        print("Test data generated")
+    }
+
+    // MARK: - Formatting Helpers
+
+    private func formatCurrency(_ amount: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "AUD"
+        formatter.maximumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: amount)) ?? "$\(amount)"
+    }
+
+    private func formatUpdateInterval(_ seconds: Double) -> String {
+        let minutes = Int(seconds / 60)
+        return "\(minutes) min"
+    }
+
+    private func formatLastSync(_ date: Date) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
+
+    private func getBuildNumber() -> String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+    }
+
+    private func isDebugMode() -> Bool {
+        #if DEBUG
+            return true
+        #else
+            return false
+        #endif
+    }
+
+    private func updateCacheSize() {
+        // Calculate actual cache size if needed
+        // For now, simulating
+        cacheSize = "12.4 MB"
+    }
+
+    private func updateLastSyncTime() {
+        lastSyncTime = appState.lastUpdateTime ?? Date()
+    }
+
+    @MainActor
+    private func refreshSettings() async {
+        updateCacheSize()
+        updateLastSyncTime()
     }
 }
 
-// MARK: - PrivacyPolicyView
+// MARK: - SimplePrivacyPolicyView
 
-struct PrivacyPolicyView: View {
+struct SimplePrivacyPolicyView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -1335,11 +1416,6 @@ struct PrivacyPolicyView: View {
                         privacySection(
                             title: "Data Storage & Security",
                             content: "All sensitive data is encrypted and stored securely using industry-standard practices. We do not share personal information with third parties."
-                        )
-
-                        privacySection(
-                            title: "Your Rights",
-                            content: "You can request data deletion, modify privacy settings, or export your data at any time through the app settings."
                         )
 
                         privacySection(
@@ -1377,9 +1453,9 @@ struct PrivacyPolicyView: View {
     }
 }
 
-// MARK: - TermsOfUseView
+// MARK: - SimpleTermsOfUseView
 
-struct TermsOfUseView: View {
+struct SimpleTermsOfUseView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -1397,27 +1473,12 @@ struct TermsOfUseView: View {
                     Group {
                         termsSection(
                             title: "Acceptance of Terms",
-                            content: "By using AFL Fantasy Intelligence, you agree to these Terms of Service and our Privacy Policy. These terms may be updated periodically."
+                            content: "By using AFL Fantasy Intelligence, you agree to these Terms of Service and our Privacy Policy."
                         )
 
                         termsSection(
                             title: "App Usage",
-                            content: "This app provides fantasy football insights and recommendations. All data is for informational purposes only and should not be considered professional financial advice."
-                        )
-
-                        termsSection(
-                            title: "User Responsibilities",
-                            content: "Users are responsible for maintaining account security, providing accurate information, and using the app in compliance with applicable laws."
-                        )
-
-                        termsSection(
-                            title: "Intellectual Property",
-                            content: "AFL Fantasy Intelligence and all related content, features, and functionality are owned by AFL AI and protected by copyright and trademark laws."
-                        )
-
-                        termsSection(
-                            title: "Limitation of Liability",
-                            content: "The app is provided 'as is' without warranties. We are not liable for any damages arising from app usage or fantasy sports decisions."
+                            content: "This app provides fantasy football insights and recommendations. All data is for informational purposes only."
                         )
 
                         termsSection(
@@ -1455,9 +1516,539 @@ struct TermsOfUseView: View {
     }
 }
 
+// MARK: - SimpleDebugMenuView
+
+struct SimpleDebugMenuView: View {
+    let appState: AppState
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            List {
+                Section("Debug Actions") {
+                    Button("Generate Random Scores") {
+                        // Debug action
+                    }
+
+                    Button("Reset Captain Suggestions") {
+                        // Debug action
+                    }
+
+                    Button("Simulate Network Error") {
+                        appState.simulateError("Debug network error")
+                        dismiss()
+                    }
+                }
+            }
+            .navigationTitle("Debug Menu")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - SimpleNotificationPermissionsView
+
+struct SimpleNotificationPermissionsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var permissionStatus = "Unknown"
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Image(systemName: "bell.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.orange)
+
+                Text("Notification Permissions")
+                    .font(.title2)
+                    .bold()
+
+                Text("Current Status: \(permissionStatus)")
+                    .foregroundColor(.secondary)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("• Breakeven alerts when players near price drops")
+                    Text("• Injury updates for your players")
+                    Text("• Late team changes before lockout")
+                    Text("• Trade recommendations from AI")
+                    Text("• Price change notifications")
+                }
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+
+                Button("Request Permissions") {
+                    requestPermissions()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Spacer()
+            }
+            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .onAppear {
+                checkPermissionStatus()
+            }
+        }
+    }
+
+    private func checkPermissionStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                switch settings.authorizationStatus {
+                case .authorized:
+                    permissionStatus = "Authorized"
+                case .denied:
+                    permissionStatus = "Denied"
+                case .notDetermined:
+                    permissionStatus = "Not Requested"
+                case .provisional:
+                    permissionStatus = "Provisional"
+                case .ephemeral:
+                    permissionStatus = "Ephemeral"
+                @unknown default:
+                    permissionStatus = "Unknown"
+                }
+            }
+        }
+    }
+
+    private func requestPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .badge, .sound]
+        ) { granted, _ in
+            DispatchQueue.main.async {
+                permissionStatus = granted ? "Authorized" : "Denied"
+            }
+        }
+    }
+}
+
+// MARK: - DashboardPlaceholderView
+
+struct DashboardPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var dataService: AFLFantasyDataService
+    // @EnvironmentObject var toolsClient: AFLFantasyToolsClient // TODO: Add back when service is integrated
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header with AI status
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("AI Fantasy Intelligence")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            Text("Powered by advanced analytics")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(Color.green)
+                                .frame(width: 8, height: 8)
+                            Text("AI Active")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+
+                    // Quick stats grid
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 12) {
+                        StatCard(title: "Team Score", value: "\(appState.teamScore)", color: .green)
+                        StatCard(title: "Rank", value: "#\(appState.teamRank)", color: .blue)
+                        StatCard(title: "Trades Left", value: "\(appState.tradesRemaining)", color: .orange)
+                        StatCard(title: "Bank", value: "$\(appState.bankBalance / 1000)k", color: .purple)
+                    }
+
+                    // Feature preview
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Coming Soon Features")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+
+                        FeaturePreviewCard(
+                            icon: "brain.head.profile",
+                            title: "AI Insights",
+                            description: "Get personalized recommendations powered by machine learning"
+                        )
+
+                        FeaturePreviewCard(
+                            icon: "chart.bar.fill",
+                            title: "Performance Analytics",
+                            description: "Deep dive into your team's performance metrics"
+                        )
+
+                        FeaturePreviewCard(
+                            icon: "bell.badge.fill",
+                            title: "Smart Alerts",
+                            description: "Get notified about important player updates and opportunities"
+                        )
+                    }
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(12)
+                    .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+                }
+                .padding()
+            }
+            .navigationTitle("Dashboard")
+            .navigationBarTitleDisplayMode(.large)
+            .refreshable {
+                appState.refreshData()
+            }
+        }
+    }
+}
+
+// MARK: - CaptainPlaceholderView
+
+struct CaptainPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Image(systemName: "star.circle.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.yellow)
+
+                Text("Captain Analysis")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("AI-powered captain recommendations with fixture analysis, player form, and scoring projections")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                VStack(spacing: 16) {
+                    Text("Features")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        FeatureRow(icon: "brain", text: "AI-powered scoring predictions")
+                        FeatureRow(icon: "calendar", text: "Fixture difficulty analysis")
+                        FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Form and consistency tracking")
+                        FeatureRow(icon: "exclamationmark.triangle", text: "Risk assessment and alerts")
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+
+                Spacer()
+
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .padding()
+            .navigationTitle("Captain AI")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - TradesPlaceholderView
+
+struct TradesPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 80))
+                    .foregroundColor(.blue)
+
+                Text("Trade Analysis")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("Smart trade recommendations with impact analysis, timing optimization, and budget management")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                // Trade counter
+                HStack(spacing: 20) {
+                    VStack {
+                        Text("\(appState.tradesUsed)")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.red)
+                        Text("Used")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    VStack {
+                        Text("\(appState.tradesRemaining)")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.green)
+                        Text("Remaining")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    VStack {
+                        Text("$\(appState.bankBalance / 1000)k")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                        Text("Budget")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Trade Intelligence Features")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    FeatureRow(icon: "brain", text: "AI trade recommendations")
+                    FeatureRow(icon: "chart.bar", text: "Impact scoring and analysis")
+                    FeatureRow(icon: "dollarsign.circle", text: "Budget optimization")
+                    FeatureRow(icon: "clock", text: "Optimal timing suggestions")
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+
+                Spacer()
+
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .padding()
+            .navigationTitle("Trade Analysis")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - CashCowPlaceholderView
+
+struct CashCowPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Image(systemName: "dollarsign.circle.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.green)
+
+                Text("Cash Generation")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("Identify and track cash cows for maximum team value growth and trading flexibility")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                // Cash generation stats
+                VStack(spacing: 16) {
+                    HStack(spacing: 20) {
+                        VStack {
+                            Text("\(appState.cashCows.count)")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.green)
+                            Text("Cash Cows")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        VStack {
+                            Text("$\(appState.cashCows.reduce(0) { $0 + $1.cashGenerated } / 1000)k")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.blue)
+                            Text("Generated")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    if !appState.cashCows.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Your Cash Cows")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+
+                            ForEach(appState.cashCows.prefix(3)) { player in
+                                HStack {
+                                    Text(player.name)
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+
+                                    Spacer()
+
+                                    Text("+$\(player.cashGenerated / 1000)k")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.green)
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Cash Generation Features")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Price tracking and predictions")
+                    FeatureRow(icon: "target", text: "Breakeven analysis")
+                    FeatureRow(icon: "clock", text: "Optimal sell timing")
+                    FeatureRow(icon: "exclamationmark.triangle", text: "Risk assessment")
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+
+                Spacer()
+
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .padding()
+            .navigationTitle("Cash Generation")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - StatCard
+
+struct StatCard: View {
+    let title: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(color)
+
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, minHeight: 60)
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+// MARK: - FeaturePreviewCard
+
+struct FeaturePreviewCard: View {
+    let icon: String
+    let title: String
+    let description: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.accentColor)
+                .frame(width: 30)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                Text(description)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(12)
+        .background(Color(.systemGray6))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - FeatureRow
+
+struct FeatureRow: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundColor(.accentColor)
+                .frame(width: 16)
+
+            Text(text)
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Spacer()
+        }
+    }
+}
+
 // MARK: - Preview
 
 #Preview {
     ContentView()
         .environmentObject(AppState())
+        .environmentObject(AFLFantasyDataService())
+    // .environmentObject(AFLFantasyToolsClient()) // TODO: Add back when service is integrated
 }
+

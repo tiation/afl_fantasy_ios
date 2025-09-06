@@ -1,0 +1,224 @@
+===============================================================================
+EXACT JSON STRUCTURE FOR CLEAN PLAYER DATA FILE
+===============================================================================
+
+I've deleted ALL existing player data files. Here are the EXACT column names the platform expects for each stats category:
+
+## REQUIRED JSON FILE STRUCTURE
+
+```json
+[
+  {
+    // CORE PLAYER INFORMATION (REQUIRED)
+    "id": 1,
+    "name": "Marcus Bontempelli",
+    "position": "MID", // or "FWD", "DEF", "RUC", "Mid,Def", "Mid,Fwd", etc.
+    "team": "WBD", // 3-letter team code
+    "price": 1062000, // in dollars
+    "breakEven": 85,
+    "category": "Premium", // Premium, Mid-price, Rookie
+    "averagePoints": 107.5,
+    "lastScore": 122, // most recent game score
+    "projectedScore": 115, // projected next score
+
+    // FANTASY STATS CATEGORY
+    "roundsPlayed": 13,
+    "l3Average": 110.5, // last 3 games average
+    "l5Average": 108.2, // last 5 games average
+    "priceChange": 15600, // recent price change
+    "pricePerPoint": 9900, // dollars per point
+    "totalPoints": 1397, // total season points
+    "selectionPercentage": 87.4, // ownership percentage
+
+    // BASIC STATS CATEGORY  
+    "kicks": 18.5,
+    "handballs": 12.3,
+    "disposals": 30.8,
+    "marks": 6.2,
+    "tackles": 4.1,
+    "freeKicksFor": 1.2,
+    "freeKicksAgainst": 0.8,
+    "clearances": 5.5,
+    "hitouts": 0.1, // mostly for rucks
+    "cba": 78.5, // center bounce attendance %
+    "kickIns": 2.1,
+    "uncontestedMarks": 4.8,
+    "contestedMarks": 1.4,
+    "uncontestedDisposals": 22.1,
+    "contestedDisposals": 8.7,
+
+    // VALUE STATS CATEGORY
+    "projectedPriceChange": 8900, // projected price change
+    "breakEvenPercentage": 79.1, // breakeven as % of average
+    "projectedOwnershipChange": 2.3, // projected ownership change
+
+    // CONSISTENCY STATS CATEGORY  
+    "standardDeviation": 18.7, // score consistency measure
+    "highScore": 145, // highest score this season
+    "lowScore": 72, // lowest score this season
+    "belowAveragePercentage": 23.1, // % of games below average
+
+    // OPPOSITION STATS CATEGORY (VS)
+    "nextOpponent": "Richmond", // next opponent name
+    "averageVsOpp": 112.5, // average vs next opponent
+    "averageVs3RoundOpp": 108.3, // vs opponent last 3 rounds
+    "opponent3RoundDifficulty": 4.2, // opponent difficulty 0-10
+    "scoreImpact": 5.8, // expected score impact vs opponent
+    "projectedAverage": 113.2, // projected average vs this opponent
+
+    // VENUE STATS CATEGORY
+    "nextVenue": "MCG", // next venue
+    "averageAtVenue": 109.8, // average at next venue
+    "averageAt3RoundVenue": 107.1, // venue average last 3 rounds
+    "venueScoreVariance": 12.4, // score variance at venue
+
+    // RECENT GAME SCORES (for player detail modal)
+    "last1": 122, // most recent game
+    "last2": 108, // 2 games ago
+    "last3": 101, // 3 games ago
+    "last4": 115, // 4 games ago
+    "last5": 95, // 5 games ago
+
+    // STATUS FLAGS
+    "isSelected": false,
+    "isInjured": false,
+    "isSuspended": false,
+    "isFavorite": false
+  }
+]
+```
+
+## CRITICAL REQUIREMENTS
+
+### Team Codes (MUST USE THESE EXACT CODES):
+- Adelaide: "ADE"
+- Brisbane: "BRL"  
+- Carlton: "CAR"
+- Collingwood: "COL"
+- Essendon: "ESS"
+- Fremantle: "FRE"
+- Geelong: "GEE"
+- Gold Coast: "GCS"
+- GWS: "GWS" 
+- Hawthorn: "HAW"
+- Melbourne: "MEL"
+- North Melbourne: "NTH"
+- Port Adelaide: "POR"
+- Richmond: "RIC"
+- St Kilda: "STK"
+- Sydney: "SYD"
+- West Coast: "WCE"
+- Western Bulldogs: "WBD"
+
+### Position Values (MUST USE THESE):
+- Single: "MID", "FWD", "DEF", "RUC"
+- Multi: "Mid,Def", "Mid,Fwd", "Def,Fwd", "Fwd,Mid", etc.
+
+### Categories (MUST USE THESE):
+- "Premium" (players over $600k)
+- "Mid-price" (players $400k-$600k)  
+- "Rookie" (players under $400k)
+
+## STATS TABLE CATEGORIES
+
+The platform has 6 different stats table views:
+
+### 1. BASIC STATS
+Shows: kicks, handballs, disposals, marks, tackles, freeKicksFor, freeKicksAgainst, clearances, hitouts, cba, kickIns, uncontestedMarks, contestedMarks, uncontestedDisposals, contestedDisposals
+
+### 2. FANTASY STATS  
+Shows: price, lastScore, totalPoints, averagePoints, l3Average, l5Average, breakEven, pricePerPoint, selectionPercentage, roundsPlayed, priceChange
+
+### 3. VALUE STATS
+Shows: price, breakEven, projectedScore, projectedPriceChange, breakEvenPercentage, projectedOwnershipChange
+
+### 4. CONSISTENCY STATS
+Shows: roundsPlayed, averagePoints, standardDeviation, highScore, lowScore, belowAveragePercentage
+
+### 5. OPPOSITION STATS (VS)
+Shows: nextOpponent, averageVsOpp, opponent3RoundDifficulty, scoreImpact, projectedAverage
+
+### 6. VENUE STATS  
+Shows: nextVenue, averageAtVenue, averageAt3RoundVenue, opponent3RoundDifficulty, venueScoreVariance
+
+## IMPORTANT NOTES
+
+1. **All fields are required** - use null for missing values, don't omit fields
+2. **Use exact field names** - case sensitive, must match exactly
+3. **Number format** - prices in full dollars (1062000 not 1.062M)
+4. **Team codes** - must use 3-letter codes exactly as listed
+5. **Positions** - use exact format including comma separations for dual positions
+
+## EXAMPLE MINIMAL PLAYER ENTRY
+
+```json
+{
+  "id": 1,
+  "name": "Example Player",
+  "position": "MID",
+  "team": "WBD", 
+  "price": 500000,
+  "breakEven": 80,
+  "category": "Mid-price",
+  "averagePoints": 85.0,
+  "lastScore": 90,
+  "projectedScore": 88,
+  "roundsPlayed": 10,
+  "l3Average": 87.0,
+  "l5Average": 85.5,
+  "priceChange": 0,
+  "pricePerPoint": 5882,
+  "totalPoints": 850,
+  "selectionPercentage": 15.2,
+  "kicks": 15.0,
+  "handballs": 10.0,
+  "disposals": 25.0,
+  "marks": 5.0,
+  "tackles": 3.0,
+  "freeKicksFor": 1.0,
+  "freeKicksAgainst": 0.5,
+  "clearances": 2.0,
+  "hitouts": 0.0,
+  "cba": 60.0,
+  "kickIns": 1.0,
+  "uncontestedMarks": 4.0,
+  "contestedMarks": 1.0,
+  "uncontestedDisposals": 18.0,
+  "contestedDisposals": 7.0,
+  "projectedPriceChange": 5000,
+  "breakEvenPercentage": 94.1,
+  "projectedOwnershipChange": 1.2,
+  "standardDeviation": 15.0,
+  "highScore": 120,
+  "lowScore": 55,
+  "belowAveragePercentage": 30.0,
+  "nextOpponent": "Richmond",
+  "averageVsOpp": 88.0,
+  "averageVs3RoundOpp": 85.0,
+  "opponent3RoundDifficulty": 3.5,
+  "scoreImpact": 3.0,
+  "projectedAverage": 90.0,
+  "nextVenue": "MCG",
+  "averageAtVenue": 87.0,
+  "averageAt3RoundVenue": 85.0,
+  "venueScoreVariance": 12.0,
+  "last1": 90,
+  "last2": 85,
+  "last3": 86,
+  "last4": 82,
+  "last5": 88,
+  "isSelected": false,
+  "isInjured": false,
+  "isSuspended": false,
+  "isFavorite": false
+}
+```
+
+## FILE NAME
+Save your clean JSON file as: `player_data.json`
+
+This will be the primary data source for all 630+ players in the platform.
+
+===============================================================================
+END OF SPECIFICATION
+===============================================================================

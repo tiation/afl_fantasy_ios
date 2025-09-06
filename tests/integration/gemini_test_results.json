@@ -1,0 +1,531 @@
+{
+  "gemini_tests": [
+    {
+      "test_name": "Gemini API Connection",
+      "success": true,
+      "response_time": 11541.12195968628,
+      "timestamp": "2025-07-24T22:42:48.162597",
+      "details": {
+        "response": {
+          "status": "success",
+          "message": "Gemini API connection successful",
+          "response": "API connection successful\n",
+          "model": "gemini-1.5-flash"
+        }
+      }
+    },
+    {
+      "test_name": "Gemini Trade Analysis",
+      "success": true,
+      "response_time": 6964.86496925354,
+      "timestamp": "2025-07-24T22:42:55.127508",
+      "details": {
+        "response": {
+          "status": "success",
+          "data": {
+            "trade_recommendations": [
+              {
+                "trade_in": "Sam Docherty",
+                "trade_out": "Clayton Oliver",
+                "confidence": 75,
+                "reasoning": "While Clayton Oliver is a premium mid, his price point is high relative to his average score, and his scoring can be inconsistent.  Sam Docherty offers a significant price drop, providing valuable salary cap relief.  His average score is respectable, and defenders generally offer more scoring consistency than mids.  This trade allows upgrading in another position.",
+                "projected_gain": -10,
+                "risk_level": "Low",
+                "priority": "Medium"
+              }
+            ],
+            "market_insights": "The market currently favors premium mids, but their high price tags require careful consideration.  Looking for value in slightly lower-priced players with consistent scoring is a viable strategy. Defenders often provide a more stable scoring base, especially when considering salary cap management.",
+            "timing_advice": "The optimal time to execute this trade depends on upcoming fixtures.  Checking the bye rounds and the opposition for both Docherty and your remaining players is crucial.  Ideally, make the trade before a period of favorable fixtures for Docherty and unfavorable ones for your remaining players."
+          },
+          "generated_at": "2025-07-24T22:42:55.127154",
+          "model": "gemini-1.5-flash"
+        }
+      }
+    },
+    {
+      "test_name": "Gemini Captain Selection",
+      "success": true,
+      "response_time": 9767.796993255615,
+      "timestamp": "2025-07-24T22:43:04.895363",
+      "details": {
+        "response": {
+          "status": "success",
+          "data": {
+            "captain_recommendations": [
+              {
+                "player": "Touk Miller",
+                "team": "Gold Coast",
+                "confidence": 88,
+                "projected_score": 125,
+                "reasoning": "Miller boasts a strong average (115) and consistently delivers high scores. While his ownership is moderate (45%), his reliability makes him a safe captaincy option.  The MCG is a neutral venue, and assuming a fine day, weather shouldn't be a factor.  His matchup will need to be assessed closer to game time, but his form suggests a strong performance is likely.",
+                "ownership": 45,
+                "risk_level": "Low",
+                "ceiling": 145,
+                "floor": 100
+              },
+              {
+                "player": "Daicos",
+                "team": "Collingwood",
+                "confidence": 75,
+                "projected_score": 115,
+                "reasoning": "Daicos is a high-scoring midfielder with higher ownership (65%), making him less of a differential captain. While his average is respectable (108), his ceiling might be slightly lower than Miller's, and his higher ownership means less potential points gained relative to the field. Matchup and Collingwood's overall game plan will be crucial factors in determining his score.",
+                "ownership": 65,
+                "risk_level": "Medium",
+                "ceiling": 135,
+                "floor": 90
+              },
+              {
+                "player": "Grundy",
+                "team": "Melbourne",
+                "confidence": 60,
+                "projected_score": 100,
+                "reasoning": "Grundy's average (95) is lower than the other options, and his ruck position carries inherent volatility. While he can score big, he's also susceptible to lower scores if the ruck contest is dominated by the opposition.  His lower ownership (35%) makes him a riskier captaincy choice, despite the potential for a high-scoring game at the MCG.",
+                "ownership": 35,
+                "risk_level": "High",
+                "ceiling": 125,
+                "floor": 75
+              }
+            ],
+            "captaincy_strategy": "Prioritize players with consistent scoring history and moderate ownership.  While a high-ceiling player with low ownership can be tempting, the risk of a low score can significantly impact your overall rank.  Matchup analysis is crucial before finalizing your captain choice.  Consider the opposition's defensive strength and the overall game style of both teams.",
+            "differential_options": "Consider exploring other midfielders with lower ownership but strong form and favorable matchups.  Look for players with a recent history of high scores, even if their average is slightly lower than the top options.  This requires more research into individual player form and opponent analysis."
+          },
+          "generated_at": "2025-07-24T22:43:04.895082",
+          "model": "gemini-1.5-flash"
+        }
+      }
+    },
+    {
+      "test_name": "Gemini Invalid Key Handling",
+      "success": true,
+      "response_time": 4332.711219787598,
+      "timestamp": "2025-07-24T22:43:09.245098",
+      "details": {
+        "response": {
+          "status": "error",
+          "message": "Gemini API connection failed: Request failed: 400 Client Error: Bad Request for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=invalid_key_for_testing"
+        }
+      }
+    }
+  ],
+  "fallback_tests": [
+    {
+      "test_name": "Fallback ai_trade_suggester",
+      "success": true,
+      "response_time": 5.456209182739258,
+      "timestamp": "2025-07-24T22:43:04.900876",
+      "details": {
+        "response": {
+          "status": "ok",
+          "suggestions": [
+            {
+              "trade_in": "L Lombard",
+              "trade_out": "J Trezise",
+              "confidence": 94.5,
+              "reasoning": "AI analysis suggests L Lombard has higher scoring potential",
+              "projected_gain": 10.1,
+              "risk_level": "Medium"
+            },
+            {
+              "trade_in": "S Marshall",
+              "trade_out": "O Wines",
+              "confidence": 85.6,
+              "reasoning": "AI analysis suggests S Marshall has higher scoring potential",
+              "projected_gain": 12.3,
+              "risk_level": "Low"
+            },
+            {
+              "trade_in": "I Quaynor",
+              "trade_out": "D Robertson",
+              "confidence": 81.8,
+              "reasoning": "AI analysis suggests I Quaynor has higher scoring potential",
+              "projected_gain": 20.6,
+              "risk_level": "Low"
+            },
+            {
+              "trade_in": "J Bews",
+              "trade_out": "J O'Meara",
+              "confidence": 79.5,
+              "reasoning": "AI analysis suggests J Bews has higher scoring potential",
+              "projected_gain": 5.7,
+              "risk_level": "High"
+            },
+            {
+              "trade_in": "E Allan",
+              "trade_out": "J Melksham",
+              "confidence": 69.5,
+              "reasoning": "AI analysis suggests E Allan has higher scoring potential",
+              "projected_gain": 11.1,
+              "risk_level": "Medium"
+            }
+          ],
+          "generated_at": "2025-07-24T22:43:04.900860"
+        }
+      }
+    },
+    {
+      "test_name": "Fallback ai_captain_advisor",
+      "success": true,
+      "response_time": 4.034996032714844,
+      "timestamp": "2025-07-24T22:43:04.904924",
+      "details": {
+        "response": {
+          "status": "ok",
+          "recommendations": [
+            {
+              "player": "E Richards",
+              "team": "Unknown",
+              "position": "MID",
+              "confidence": 96.1,
+              "projected_score": 118.2,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 70.4
+            },
+            {
+              "player": "M Lewis",
+              "team": "Unknown",
+              "position": "FWD",
+              "confidence": 89.8,
+              "projected_score": 88.0,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 75.5
+            },
+            {
+              "player": "C Moraes",
+              "team": "Unknown",
+              "position": "MID",
+              "confidence": 89.0,
+              "projected_score": 95.9,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 19.0
+            },
+            {
+              "player": "J Fletcher",
+              "team": "Unknown",
+              "position": "MID,DEF",
+              "confidence": 83.7,
+              "projected_score": 110.9,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 78.8
+            },
+            {
+              "player": "F Young",
+              "team": "Unknown",
+              "position": "FWD",
+              "confidence": 79.9,
+              "projected_score": 125.4,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 30.6
+            },
+            {
+              "player": "T Powell",
+              "team": "Unknown",
+              "position": "MID",
+              "confidence": 76.9,
+              "projected_score": 91.3,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 37.5
+            },
+            {
+              "player": "D Prestia",
+              "team": "Unknown",
+              "position": "MID",
+              "confidence": 75.9,
+              "projected_score": 115.7,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 25.3
+            },
+            {
+              "player": "T Hanily",
+              "team": "Unknown",
+              "position": "MID,FWD",
+              "confidence": 72.8,
+              "projected_score": 130.4,
+              "reasoning": "Strong matchup and recent form suggest high ceiling",
+              "ownership": 82.4
+            }
+          ],
+          "generated_at": "2025-07-24T22:43:04.904906"
+        }
+      }
+    },
+    {
+      "test_name": "Fallback team_structure_analyzer",
+      "success": true,
+      "response_time": 0.025033950805664062,
+      "timestamp": "2025-07-24T22:43:04.904960",
+      "details": {
+        "response": {
+          "status": "ok",
+          "analysis": {
+            "balance_score": 70.5,
+            "premium_count": 9,
+            "rookie_count": 4,
+            "midpricer_count": 5,
+            "recommendations": [
+              "Consider upgrading defense line",
+              "Midfield structure looks strong",
+              "Forward line needs attention"
+            ]
+          },
+          "generated_at": "2025-07-24T22:43:04.904957"
+        }
+      }
+    },
+    {
+      "test_name": "Fallback ownership_risk_monitor",
+      "success": true,
+      "response_time": 3.838062286376953,
+      "timestamp": "2025-07-24T22:43:04.908803",
+      "details": {
+        "response": {
+          "status": "ok",
+          "players": [
+            {
+              "player": "B Hough",
+              "team": "Unknown",
+              "ownership": 84.5,
+              "risk_level": "High",
+              "recommendation": "Monitor closely"
+            },
+            {
+              "player": "C O'Sullivan",
+              "team": "Unknown",
+              "ownership": 74.5,
+              "risk_level": "High",
+              "recommendation": "Monitor closely"
+            },
+            {
+              "player": "C Petracca",
+              "team": "Unknown",
+              "ownership": 74.3,
+              "risk_level": "High",
+              "recommendation": "Monitor closely"
+            },
+            {
+              "player": "B McCreery",
+              "team": "Unknown",
+              "ownership": 73.3,
+              "risk_level": "High",
+              "recommendation": "Monitor closely"
+            },
+            {
+              "player": "O Wiltshire",
+              "team": "Unknown",
+              "ownership": 67.6,
+              "risk_level": "High",
+              "recommendation": "Monitor closely"
+            },
+            {
+              "player": "A May",
+              "team": "Unknown",
+              "ownership": 64.0,
+              "risk_level": "High",
+              "recommendation": "Monitor closely"
+            },
+            {
+              "player": "C Mackenzie",
+              "team": "Unknown",
+              "ownership": 44.1,
+              "risk_level": "Medium",
+              "recommendation": "Consider carefully"
+            },
+            {
+              "player": "B Kemp",
+              "team": "Unknown",
+              "ownership": 33.0,
+              "risk_level": "Low",
+              "recommendation": "Safe differential"
+            },
+            {
+              "player": "M Bontempelli",
+              "team": "Unknown",
+              "ownership": 32.1,
+              "risk_level": "Low",
+              "recommendation": "Safe differential"
+            },
+            {
+              "player": "T De Koning",
+              "team": "Unknown",
+              "ownership": 25.3,
+              "risk_level": "Low",
+              "recommendation": "Safe differential"
+            },
+            {
+              "player": "R Marshall",
+              "team": "Unknown",
+              "ownership": 20.9,
+              "risk_level": "Low",
+              "recommendation": "Safe differential"
+            },
+            {
+              "player": "D Rioli",
+              "team": "Unknown",
+              "ownership": 17.6,
+              "risk_level": "Low",
+              "recommendation": "Safe differential"
+            }
+          ],
+          "generated_at": "2025-07-24T22:43:04.908786"
+        }
+      }
+    },
+    {
+      "test_name": "Fallback form_vs_price_scanner",
+      "success": true,
+      "response_time": 3.5200119018554688,
+      "timestamp": "2025-07-24T22:43:04.912335",
+      "details": {
+        "response": {
+          "status": "ok",
+          "players": [
+            {
+              "player": "H Sharp",
+              "team": "Unknown",
+              "form_score": 66.2,
+              "price": 1067003,
+              "value_rating": 9.4,
+              "recommendation": "Strong buy"
+            },
+            {
+              "player": "B Jepson",
+              "team": "Unknown",
+              "form_score": 71.0,
+              "price": 712210,
+              "value_rating": 9.0,
+              "recommendation": "Strong buy"
+            },
+            {
+              "player": "S Ryan",
+              "team": "Unknown",
+              "form_score": 86.3,
+              "price": 976307,
+              "value_rating": 8.8,
+              "recommendation": "Strong buy"
+            },
+            {
+              "player": "G Stevens",
+              "team": "Unknown",
+              "form_score": 68.4,
+              "price": 867776,
+              "value_rating": 8.7,
+              "recommendation": "Strong buy"
+            },
+            {
+              "player": "A Sexton",
+              "team": "Unknown",
+              "form_score": 104.9,
+              "price": 957843,
+              "value_rating": 8.3,
+              "recommendation": "Consider"
+            },
+            {
+              "player": "A Pearce",
+              "team": "Unknown",
+              "form_score": 117.5,
+              "price": 1186375,
+              "value_rating": 8.2,
+              "recommendation": "Consider"
+            },
+            {
+              "player": "B McCreery",
+              "team": "Unknown",
+              "form_score": 116.5,
+              "price": 962782,
+              "value_rating": 7.7,
+              "recommendation": "Consider"
+            },
+            {
+              "player": "T Hotton",
+              "team": "Unknown",
+              "form_score": 116.5,
+              "price": 667741,
+              "value_rating": 7.4,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "L Evans",
+              "team": "Unknown",
+              "form_score": 72.8,
+              "price": 416923,
+              "value_rating": 7.4,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "X Lindsay",
+              "team": "Unknown",
+              "form_score": 60.3,
+              "price": 648155,
+              "value_rating": 7.4,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "S Bolton",
+              "team": "Unknown",
+              "form_score": 77.1,
+              "price": 820256,
+              "value_rating": 7.3,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "O Markov",
+              "team": "Unknown",
+              "form_score": 118.2,
+              "price": 1156655,
+              "value_rating": 7.3,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "M Cottrell",
+              "team": "Unknown",
+              "form_score": 114.7,
+              "price": 1173956,
+              "value_rating": 7.0,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "O Wiltshire",
+              "team": "Unknown",
+              "form_score": 105.4,
+              "price": 1074269,
+              "value_rating": 6.6,
+              "recommendation": "Monitor"
+            },
+            {
+              "player": "B Fritsch",
+              "team": "Unknown",
+              "form_score": 81.9,
+              "price": 965236,
+              "value_rating": 6.6,
+              "recommendation": "Monitor"
+            }
+          ],
+          "generated_at": "2025-07-24T22:43:04.912324"
+        }
+      }
+    }
+  ],
+  "performance_metrics": {
+    "Gemini Trade Analysis": {
+      "avg_response_time": 6476.979160308838,
+      "min_response_time": 5296.674013137817,
+      "max_response_time": 7537.815809249878,
+      "success_rate": 100.0,
+      "total_iterations": 5
+    },
+    "AI Trade Fallback": {
+      "avg_response_time": 2.5119781494140625,
+      "min_response_time": 1.8007755279541016,
+      "max_response_time": 3.0078887939453125,
+      "success_rate": 100.0,
+      "total_iterations": 5
+    },
+    "AI Captain Fallback": {
+      "avg_response_time": 2.324390411376953,
+      "min_response_time": 1.7290115356445312,
+      "max_response_time": 3.2248497009277344,
+      "success_rate": 100.0,
+      "total_iterations": 5
+    }
+  },
+  "errors": []
+}

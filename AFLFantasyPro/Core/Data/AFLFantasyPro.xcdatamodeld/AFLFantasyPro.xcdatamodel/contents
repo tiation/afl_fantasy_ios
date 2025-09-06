@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CachedPlayer" representedClassName="CachedPlayer" syncable="YES" codeGenerationType="class">
+        <attribute name="averageScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="captainScore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="currentPrice" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="displayName" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="injuryStatus" optional="YES" attributeType="String"/>
+        <attribute name="isAvailable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isCaptain" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isEmergency" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isViceCaptain" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="liveScore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="photoURL" optional="YES" attributeType="String"/>
+        <attribute name="playingStatus" optional="YES" attributeType="String"/>
+        <attribute name="position" optional="YES" attributeType="String"/>
+        <attribute name="priceChange" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="projectedScore" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="round" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stats" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String: Any]"/>
+        <attribute name="totalScore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CachedTeam" inverseName="players" inverseEntity="CachedTeam"/>
+    </entity>
+    <entity name="CachedTeam" representedClassName="CachedTeam" syncable="YES" codeGenerationType="class">
+        <attribute name="abbreviation" optional="YES" attributeType="String"/>
+        <attribute name="captainID" optional="YES" attributeType="String"/>
+        <attribute name="fullName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="logoURL" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="primaryColor" optional="YES" attributeType="String"/>
+        <attribute name="round" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="secondaryColor" optional="YES" attributeType="String"/>
+        <attribute name="totalScore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trades" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="userID" optional="YES" attributeType="String"/>
+        <attribute name="viceCaptainID" optional="YES" attributeType="String"/>
+        <relationship name="players" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CachedPlayer" inverseName="team" inverseEntity="CachedPlayer"/>
+    </entity>
+    <entity name="LiveMatch" representedClassName="LiveMatch" syncable="YES" codeGenerationType="class">
+        <attribute name="awayScore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="awayTeamID" optional="YES" attributeType="String"/>
+        <attribute name="awayTeamName" optional="YES" attributeType="String"/>
+        <attribute name="homeScore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="homeTeamID" optional="YES" attributeType="String"/>
+        <attribute name="homeTeamName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="isLive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="quarter" optional="YES" attributeType="String"/>
+        <attribute name="round" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="timeRemaining" optional="YES" attributeType="String"/>
+        <attribute name="venue" optional="YES" attributeType="String"/>
+        <attribute name="weather" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String: Any]"/>
+    </entity>
+    <entity name="UserSession" representedClassName="UserSession" syncable="YES" codeGenerationType="class">
+        <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastLoginAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="refreshToken" optional="YES" attributeType="String"/>
+        <attribute name="sessionID" optional="YES" attributeType="String"/>
+        <attribute name="token" optional="YES" attributeType="String"/>
+        <attribute name="userID" optional="YES" attributeType="String"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="CacheMetadata" representedClassName="CacheMetadata" syncable="YES" codeGenerationType="class">
+        <attribute name="cacheKey" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastAccessedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dataType" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="PlayerStats" representedClassName="PlayerStats" syncable="YES" codeGenerationType="class">
+        <attribute name="assists" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="behinds" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="clangers" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="contested_marks" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="contested_possessions" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="disposals" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fantasy_points" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="frees_against" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="frees_for" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="goals" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="handballs" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="hit_outs" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="inside_50s" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="kicks" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="marks" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="matchID" optional="YES" attributeType="String"/>
+        <attribute name="one_percenters" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="playerID" optional="YES" attributeType="String"/>
+        <attribute name="rebounds" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="round" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tackles" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time_on_ground" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="turnovers" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="uncontested_possessions" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+</model>

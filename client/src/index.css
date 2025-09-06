@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-gray-900 text-white;
+  }
+
+  /* Dark theme overrides */
+  .dark {
+    @apply bg-gray-900 text-white;
+  }
+
+  /* Custom green accent color matching your screenshots */
+  .accent-green {
+    @apply bg-green-500 text-white;
+  }
+
+  .accent-green-text {
+    @apply text-green-500;
+  }
+
+  /* Card styling for dark theme */
+  .card-dark {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  /* Button styling for bright green accents */
+  .btn-green {
+    @apply bg-green-500 hover:bg-green-600 text-white rounded-lg px-4 py-2 font-medium;
+  }
+
+  /* Chart background for dark theme */
+  .chart-dark {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+  }
+}

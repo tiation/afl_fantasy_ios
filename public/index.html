@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AFL Fantasy Stats 2025</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; font-size: 14px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h2>AFL Fantasy 2025 Stats</h2>
+  <table id="statsTable"></table>
+
+  <script>
+    fetch('/data/afl_fantasy_2025_full.csv')
+      .then(response => response.text())
+      .then(csv => {
+        const rows = csv.trim().split('\n');
+        const table = document.getElementById('statsTable');
+        rows.forEach((row, i) => {
+          const tr = document.createElement('tr');
+          row.split(',').forEach(cell => {
+            const el = document.createElement(i === 0 ? 'th' : 'td');
+            el.textContent = cell;
+            tr.appendChild(el);
+          });
+          table.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>

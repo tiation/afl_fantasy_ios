@@ -13,21 +13,21 @@ import SwiftUI
 struct ConnectionStatusBar: View {
     @State private var connectionStatus: ConnectionStatus = .live
     @State private var animateConnection = false
-    
+
     var body: some View {
         HStack {
             Image(systemName: connectionStatus.systemImage)
                 .foregroundColor(connectionStatus.color)
                 .scaleEffect(animateConnection ? 1.2 : 1.0)
                 .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: animateConnection)
-            
+
             Text(connectionStatus.rawValue)
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundColor(connectionStatus.color)
-            
+
             Spacer()
-            
+
             Text("Last updated: now")
                 .font(.caption2)
                 .foregroundColor(.secondary)

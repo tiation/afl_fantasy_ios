@@ -13,7 +13,7 @@ import UIKit
 
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
-    
+
     // Native iOS Haptic Feedback for tab switching
     private let selectionFeedback = UISelectionFeedbackGenerator()
 
@@ -55,7 +55,7 @@ struct ContentView: View {
                 .tag(TabItem.settings)
         }
         .accentColor(.orange) // AFL-inspired accent color
-        .onChange(of: appState.selectedTab) { oldValue, newValue in
+        .onChange(of: appState.selectedTab) { _, _ in
             // Haptic feedback when switching tabs
             selectionFeedback.selectionChanged()
         }
@@ -114,28 +114,30 @@ struct TeamScoreHeaderView: View {
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DesignSystem.Spacing.m.value) {
+            // Connection Status Bar
+            ConnectionStatusBar()
+            
+            // Main Team Info
             HStack {
                 VStack(alignment: .leading) {
                     Text("TEAM SCORE")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .typography(.caption1)
+                        .foregroundColor(DesignSystem.Colors.onSurfaceSecondary)
                     Text("\(appState.teamScore)")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundColor(.orange)
+                        .typography(.largeTitle)
+                        .foregroundColor(DesignSystem.Colors.primary)
                 }
 
                 Spacer()
 
                 VStack(alignment: .trailing) {
                     Text("RANK")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .typography(.caption1)
+                        .foregroundColor(DesignSystem.Colors.onSurfaceSecondary)
                     Text("#\(appState.teamRank)")
-                        .font(.title2)
-                        .bold()
-                        .foregroundColor(.green)
+                        .typography(.title2)
+                        .foregroundColor(DesignSystem.Colors.success)
                 }
             }
 
@@ -161,12 +163,12 @@ struct TeamScoreHeaderView: View {
     }
 }
 
-// MARK: - Enhanced PlayerCardView
+// MARK: - PlayerCardView
 
 struct PlayerCardView: View {
     let player: EnhancedPlayer
     @State private var showingDetails = false
-    
+
     // Native iOS Haptic Feedback
     private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
 
@@ -195,7 +197,7 @@ struct PlayerCardView: View {
                         Text(player.formattedPrice)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         // Injury risk indicator
                         if player.injuryRisk.riskLevel != .low {
                             Text("⚠️ \(player.injuryRisk.riskLevel.rawValue)")
@@ -218,7 +220,7 @@ struct PlayerCardView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             // Advanced analytics row
             HStack {
                 // Consistency grade
@@ -231,9 +233,9 @@ struct PlayerCardView: View {
                         .bold()
                         .foregroundColor(consistencyColor(for: player.consistency))
                 }
-                
+
                 Spacer()
-                
+
                 // Average score
                 VStack(spacing: 2) {
                     Text("Average")
@@ -243,9 +245,9 @@ struct PlayerCardView: View {
                         .font(.caption)
                         .bold()
                 }
-                
+
                 Spacer()
-                
+
                 // Price change indicator
                 VStack(spacing: 2) {
                     Text("Price Δ")
@@ -256,9 +258,9 @@ struct PlayerCardView: View {
                         .bold()
                         .foregroundColor(player.priceChange >= 0 ? .green : .red)
                 }
-                
+
                 Spacer()
-                
+
                 // Next round projection
                 VStack(spacing: 2) {
                     Text("Projected")
@@ -271,16 +273,16 @@ struct PlayerCardView: View {
                 }
             }
             .padding(.horizontal, 8)
-            
+
             // Cash cow indicator
-            if player.isCashCow && player.cashGenerated > 50000 {
+            if player.isCashCow, player.cashGenerated > 50000 {
                 HStack {
-                    Text("💰 Cash Generated: $\(player.cashGenerated/1000)k")
+                    Text("💰 Cash Generated: $\(player.cashGenerated / 1000)k")
                         .font(.caption)
                         .foregroundColor(.green)
-                    
+
                     Spacer()
-                    
+
                     if player.seasonProjection.premiumPotential > 0.8 {
                         Text("🚀 Premium Potential")
                             .font(.caption)
@@ -289,7 +291,7 @@ struct PlayerCardView: View {
                 }
                 .padding(.horizontal, 8)
             }
-            
+
             // Alert indicators
             if !player.alertFlags.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -334,35 +336,35 @@ struct PlayerCardView: View {
             .padding()
         }
     }
-    
+
     private func consistencyColor(for consistency: Double) -> Color {
         switch consistency {
-        case 90...: return .green
-        case 80..<90: return .blue
-        case 70..<80: return .yellow
-        default: return .red
+        case 90...: .green
+        case 80 ..< 90: .blue
+        case 70 ..< 80: .yellow
+        default: .red
         }
     }
-    
+
     private func alertIcon(for alertType: AlertType) -> String {
         switch alertType {
-        case .priceDrop: return "📉"
-        case .breakEvenCliff: return "⚠️"
-        case .cashCowSell: return "💰"
-        case .injuryRisk: return "🏥"
-        case .roleChange: return "🔄"
-        case .weatherRisk: return "🌧️"
-        case .contractYear: return "📋"
-        case .premiumBreakout: return "🚀"
+        case .priceDrop: "📉"
+        case .breakEvenCliff: "⚠️"
+        case .cashCowSell: "💰"
+        case .injuryRisk: "🏥"
+        case .roleChange: "🔄"
+        case .weatherRisk: "🌧️"
+        case .contractYear: "📋"
+        case .premiumBreakout: "🚀"
         }
     }
-    
+
     private func alertColor(for priority: AlertPriority) -> Color {
         switch priority {
-        case .critical: return .red
-        case .high: return .orange
-        case .medium: return .yellow
-        case .low: return .blue
+        case .critical: .red
+        case .high: .orange
+        case .medium: .yellow
+        case .low: .blue
         }
     }
 }
@@ -406,13 +408,13 @@ struct CaptainAdvisorView: View {
     }
 }
 
-// MARK: - Enhanced CaptainSuggestionCard
+// MARK: - CaptainSuggestionCard
 
 struct CaptainSuggestionCard: View {
     let suggestion: CaptainSuggestion
     let rank: Int
     @State private var showingDetails = false
-    
+
     // Native iOS Haptic Feedback
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
@@ -430,7 +432,7 @@ struct CaptainSuggestionCard: View {
                         .font(.headline)
                         .bold()
                         .foregroundColor(rank == 1 ? .black : .white)
-                    
+
                     if rank == 1 {
                         Circle()
                             .stroke(Color.orange, lineWidth: 3)
@@ -450,11 +452,11 @@ struct CaptainSuggestionCard: View {
                             .padding(.vertical, 2)
                             .background(suggestion.player.position.color.opacity(0.2))
                             .cornerRadius(4)
-                        
+
                         Text("vs \(suggestion.player.nextRoundProjection.opponent)")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Text("@ \(suggestion.player.nextRoundProjection.venue)")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -474,7 +476,7 @@ struct CaptainSuggestionCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             // AI Analysis factors
             VStack(spacing: 8) {
                 // Confidence and key factors
@@ -488,9 +490,9 @@ struct CaptainSuggestionCard: View {
                             .bold()
                             .foregroundColor(confidenceColor(for: suggestion.confidence))
                     }
-                    
+
                     Spacer()
-                    
+
                     VStack(spacing: 2) {
                         Text("Form Factor")
                             .font(.caption2)
@@ -500,22 +502,25 @@ struct CaptainSuggestionCard: View {
                             .bold()
                             .foregroundColor(.blue)
                     }
-                    
+
                     Spacer()
-                    
+
                     VStack(spacing: 2) {
                         Text("Venue Bias")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         let venueBias = suggestion.player.venuePerformance.first?.bias ?? 0
-                        Text(venueBias >= 0 ? "+\(String(format: "%.1f", venueBias))" : String(format: "%.1f", venueBias))
-                            .font(.caption)
-                            .bold()
-                            .foregroundColor(venueBias >= 0 ? .green : .red)
+                        Text(venueBias >= 0 ? "+\(String(format: "%.1f", venueBias))" : String(
+                            format: "%.1f",
+                            venueBias
+                        ))
+                        .font(.caption)
+                        .bold()
+                        .foregroundColor(venueBias >= 0 ? .green : .red)
                     }
-                    
+
                     Spacer()
-                    
+
                     VStack(spacing: 2) {
                         Text("Weather")
                             .font(.caption2)
@@ -525,7 +530,7 @@ struct CaptainSuggestionCard: View {
                             .font(.caption)
                     }
                 }
-                
+
                 // Risk indicators
                 HStack {
                     if suggestion.player.injuryRisk.riskLevel != .low {
@@ -540,7 +545,7 @@ struct CaptainSuggestionCard: View {
                         .background(suggestion.player.injuryRisk.riskLevel.color.opacity(0.1))
                         .cornerRadius(4)
                     }
-                    
+
                     if suggestion.player.isDoubtful {
                         HStack(spacing: 4) {
                             Text("❓")
@@ -553,9 +558,9 @@ struct CaptainSuggestionCard: View {
                         .background(Color.orange.opacity(0.1))
                         .cornerRadius(4)
                     }
-                    
+
                     Spacer()
-                    
+
                     // Captain recommendation strength
                     if rank == 1 {
                         HStack(spacing: 4) {
@@ -575,8 +580,12 @@ struct CaptainSuggestionCard: View {
         }
         .padding()
         .background(
-            rank == 1 ? AnyView(LinearGradient(colors: [Color.orange.opacity(0.1), Color.yellow.opacity(0.1)], startPoint: .leading, endPoint: .trailing)) :
-            AnyView(Color(.secondarySystemBackground))
+            rank == 1 ? AnyView(LinearGradient(
+                colors: [Color.orange.opacity(0.1), Color.yellow.opacity(0.1)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )) :
+                AnyView(Color(.secondarySystemBackground))
         )
         .cornerRadius(12)
         .overlay(
@@ -607,23 +616,23 @@ struct CaptainSuggestionCard: View {
             .padding()
         }
     }
-    
+
     private func confidenceColor(for confidence: Int) -> Color {
         switch confidence {
-        case 90...: return .green
-        case 80..<90: return .blue
-        case 70..<80: return .orange
-        default: return .red
+        case 90...: .green
+        case 80 ..< 90: .blue
+        case 70 ..< 80: .orange
+        default: .red
         }
     }
-    
+
     private func formGrade(for player: EnhancedPlayer) -> String {
         let recentForm = Double(player.currentScore) / player.averageScore
         switch recentForm {
         case 1.2...: return "🔥"
-        case 1.1..<1.2: return "📈"
-        case 0.9..<1.1: return "➡️"
-        case 0.8..<0.9: return "📉"
+        case 1.1 ..< 1.2: return "📈"
+        case 0.9 ..< 1.1: return "➡️"
+        case 0.8 ..< 0.9: return "📉"
         default: return "❄️"
         }
     }
@@ -634,7 +643,7 @@ struct CaptainSuggestionCard: View {
 struct TradeCalculatorView: View {
     @State private var selectedPlayerIn: EnhancedPlayer?
     @State private var selectedPlayerOut: EnhancedPlayer?
-    
+
     // Native iOS Haptic Feedback
     private let selectionFeedback = UISelectionFeedbackGenerator()
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)

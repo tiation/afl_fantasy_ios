@@ -9,7 +9,7 @@
 import SwiftUI
 import UserNotifications
 
-// MARK: - Main App
+// MARK: - AFLFantasyApp
 
 @main
 struct AFLFantasyApp: App {
@@ -24,7 +24,7 @@ struct AFLFantasyApp: App {
     }
 }
 
-// MARK: - App State
+// MARK: - AppState
 
 @MainActor
 class AppState: ObservableObject {
@@ -118,7 +118,7 @@ class AppState: ObservableObject {
                 consistency: 76.0,
                 injuryRiskScore: 14.0,
                 priceChange: 35000,
-                cashGenerated: 120000,
+                cashGenerated: 120_000,
                 isCashCow: true,
                 teamAbbreviation: "FRE",
                 projectedScore: 88.0,
@@ -154,16 +154,16 @@ class AppState: ObservableObject {
             )
         ]
 
-        cashCows = players.filter { $0.isCashCow }
+        cashCows = players.filter(\.isCashCow)
     }
 
     private func generateCaptainSuggestions() {
         let topPlayers = players.sorted { $0.averageScore > $1.averageScore }.prefix(3)
-        
+
         captainSuggestions = topPlayers.enumerated().map { index, player in
             let confidence = Int(90 - Double(index) * 5 + player.consistency * 0.1)
-            let projectedPoints = Int(player.projectedScore * 2 + Double.random(in: -10...10))
-            
+            let projectedPoints = Int(player.projectedScore * 2 + Double.random(in: -10 ... 10))
+
             return CaptainSuggestion(
                 player: player,
                 confidence: confidence,
@@ -173,7 +173,7 @@ class AppState: ObservableObject {
     }
 }
 
-// MARK: - Enhanced Player Model
+// MARK: - EnhancedPlayer
 
 struct EnhancedPlayer: Identifiable, Codable {
     let id = UUID()
@@ -197,46 +197,46 @@ struct EnhancedPlayer: Identifiable, Codable {
     let isDoubtful: Bool
     let contractYear: Bool
     let gamesPlayed: Int
-    
+
     var formattedPrice: String {
-        "$\(currentPrice/1000)k"
+        "$\(currentPrice / 1000)k"
     }
-    
+
     var priceChangeText: String {
         let prefix = priceChange >= 0 ? "+" : ""
-        return "\(prefix)\(priceChange/1000)k"
+        return "\(prefix)\(priceChange / 1000)k"
     }
-    
+
     var consistencyGrade: String {
         switch consistency {
-        case 90...: return "A+"
-        case 80..<90: return "A"
-        case 70..<80: return "B"
-        case 60..<70: return "C"
-        default: return "D"
+        case 90...: "A+"
+        case 80 ..< 90: "A"
+        case 70 ..< 80: "B"
+        case 60 ..< 70: "C"
+        default: "D"
         }
     }
-    
+
     var injuryRiskLevel: String {
         switch injuryRiskScore {
-        case 0..<15: return "Low"
-        case 15..<30: return "Moderate"
-        case 30..<60: return "High"
-        default: return "Extreme"
+        case 0 ..< 15: "Low"
+        case 15 ..< 30: "Moderate"
+        case 30 ..< 60: "High"
+        default: "Extreme"
         }
     }
-    
+
     var injuryRiskColor: Color {
         switch injuryRiskScore {
-        case 0..<15: return .green
-        case 15..<30: return .yellow
-        case 30..<60: return .orange
-        default: return .red
+        case 0 ..< 15: .green
+        case 15 ..< 30: .yellow
+        case 30 ..< 60: .orange
+        default: .red
         }
     }
 }
 
-// MARK: - Captain Suggestion
+// MARK: - CaptainSuggestion
 
 struct CaptainSuggestion: Identifiable {
     let id = UUID()
@@ -245,7 +245,7 @@ struct CaptainSuggestion: Identifiable {
     let projectedPoints: Int
 }
 
-// MARK: - Position Enum
+// MARK: - Position
 
 enum Position: String, CaseIterable, Codable {
     case defender = "DEF"
@@ -255,15 +255,15 @@ enum Position: String, CaseIterable, Codable {
 
     var color: Color {
         switch self {
-        case .defender: return .blue
-        case .midfielder: return .green
-        case .ruck: return .purple
-        case .forward: return .red
+        case .defender: .blue
+        case .midfielder: .green
+        case .ruck: .purple
+        case .forward: .red
         }
     }
 }
 
-// MARK: - Tab Item
+// MARK: - TabItem
 
 enum TabItem: String, CaseIterable {
     case dashboard = "Dashboard"
@@ -274,11 +274,11 @@ enum TabItem: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .dashboard: return "chart.line.uptrend.xyaxis"
-        case .captain: return "star.fill"
-        case .trades: return "arrow.triangle.2.circlepath"
-        case .cashCow: return "dollarsign.circle.fill"
-        case .settings: return "gearshape.fill"
+        case .dashboard: "chart.line.uptrend.xyaxis"
+        case .captain: "star.fill"
+        case .trades: "arrow.triangle.2.circlepath"
+        case .cashCow: "dollarsign.circle.fill"
+        case .settings: "gearshape.fill"
         }
     }
 }

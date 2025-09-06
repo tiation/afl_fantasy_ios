@@ -6,16 +6,16 @@
 //  Copyright © 2025 AFL AI. All rights reserved.
 //
 
-import SwiftUI
 import Charts
+import SwiftUI
 
-// MARK: - Player Performance Chart
+// MARK: - PlayerPerformanceChart
 
 struct PlayerPerformanceChart: View {
     let player: EnhancedPlayer
     @State private var chartData: [ScoreDataPoint] = []
     @State private var selectedRange: ChartTimeRange = .last5Games
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Header
@@ -23,9 +23,9 @@ struct PlayerPerformanceChart: View {
                 Text("Performance Trend")
                     .font(.headline)
                     .foregroundColor(.primary)
-                
+
                 Spacer()
-                
+
                 Picker("Time Range", selection: $selectedRange) {
                     ForEach(ChartTimeRange.allCases, id: \.self) { range in
                         Text(range.displayName).tag(range)
@@ -33,7 +33,7 @@ struct PlayerPerformanceChart: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
-            
+
             // Chart
             Chart(chartData) { dataPoint in
                 LineMark(
@@ -42,14 +42,14 @@ struct PlayerPerformanceChart: View {
                 )
                 .foregroundStyle(.orange)
                 .lineStyle(StrokeStyle(lineWidth: 3))
-                
+
                 PointMark(
                     x: .value("Round", dataPoint.round),
                     y: .value("Score", dataPoint.score)
                 )
                 .foregroundStyle(.orange)
                 .symbolSize(80)
-                
+
                 // Average line
                 RuleMark(y: .value("Average", player.averageScore))
                     .foregroundStyle(.blue)
@@ -64,7 +64,7 @@ struct PlayerPerformanceChart: View {
                     }
             }
             .frame(height: 200)
-            .chartYScale(domain: 0...180)
+            .chartYScale(domain: 0 ... 180)
             .chartXAxis {
                 AxisMarks(values: .automatic(desiredCount: 5))
             }
@@ -74,10 +74,10 @@ struct PlayerPerformanceChart: View {
             .onAppear {
                 generateChartData()
             }
-            .onChange(of: selectedRange) { oldValue, newValue in
+            .onChange(of: selectedRange) { _, _ in
                 generateChartData()
             }
-            
+
             // Statistics
             HStack(spacing: 20) {
                 StatCard(title: "Highest", value: "\(chartData.map(\.score).max() ?? 0)", color: .green)
@@ -89,25 +89,25 @@ struct PlayerPerformanceChart: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
     }
-    
+
     private func generateChartData() {
         // Generate mock data based on selected range
         let rounds = selectedRange.roundCount
-        chartData = (1...rounds).map { round in
+        chartData = (1 ... rounds).map { round in
             let baseScore = player.averageScore
-            let variance = Double.random(in: -30...40)
+            let variance = Double.random(in: -30 ... 40)
             let score = max(0, Int(baseScore + variance))
             return ScoreDataPoint(round: "R\(round)", score: score)
         }
     }
-    
+
     private var trendIndicator: String {
         guard chartData.count >= 3 else { return "–" }
         let recent = Array(chartData.suffix(3))
         let trend = recent.last!.score - recent.first!.score
         return trend > 5 ? "↗" : trend < -5 ? "↘" : "→"
     }
-    
+
     private var trendColor: Color {
         guard chartData.count >= 3 else { return .gray }
         let recent = Array(chartData.suffix(3))
@@ -116,18 +116,18 @@ struct PlayerPerformanceChart: View {
     }
 }
 
-// MARK: - Price Trend Chart
+// MARK: - PriceTrendChart
 
 struct PriceTrendChart: View {
     let player: EnhancedPlayer
     @State private var priceData: [PriceDataPoint] = []
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Price Trend")
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             Chart(priceData) { dataPoint in
                 AreaMark(
                     x: .value("Round", dataPoint.round),
@@ -140,7 +140,7 @@ struct PriceTrendChart: View {
                         endPoint: .bottom
                     )
                 )
-                
+
                 LineMark(
                     x: .value("Round", dataPoint.round),
                     y: .value("Price", dataPoint.price)
@@ -149,13 +149,13 @@ struct PriceTrendChart: View {
                 .lineStyle(StrokeStyle(lineWidth: 2))
             }
             .frame(height: 150)
-            .chartYScale(domain: (priceData.map(\.price).min() ?? 0)...(priceData.map(\.price).max() ?? 1000000))
+            .chartYScale(domain: (priceData.map(\.price).min() ?? 0) ... (priceData.map(\.price).max() ?? 1_000_000))
             .chartYAxis {
                 AxisMarks(position: .leading) { value in
                     AxisGridLine()
                     AxisValueLabel {
                         if let price = value.as(Int.self) {
-                            Text("$\(price/1000)k")
+                            Text("$\(price / 1000)k")
                                 .font(.caption2)
                         }
                     }
@@ -164,7 +164,7 @@ struct PriceTrendChart: View {
             .onAppear {
                 generatePriceData()
             }
-            
+
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Current Price")
@@ -175,9 +175,9 @@ struct PriceTrendChart: View {
                         .bold()
                         .foregroundColor(.blue)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("Price Change")
                         .font(.caption)
@@ -193,29 +193,29 @@ struct PriceTrendChart: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
     }
-    
+
     private func generatePriceData() {
         let currentPrice = player.price
-        priceData = (1...10).map { round in
-            let variation = Int.random(in: -50000...30000)
-            let price = max(200000, currentPrice + variation * (11 - round))
+        priceData = (1 ... 10).map { round in
+            let variation = Int.random(in: -50000 ... 30000)
+            let price = max(200_000, currentPrice + variation * (11 - round))
             return PriceDataPoint(round: "R\(round)", price: price)
         }
     }
 }
 
-// MARK: - Ownership Chart
+// MARK: - OwnershipChart
 
 struct OwnershipChart: View {
     let player: EnhancedPlayer
     @State private var ownershipData: [OwnershipDataPoint] = []
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Ownership Breakdown")
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             Chart(ownershipData, id: \.category) { data in
                 SectorMark(
                     angle: .value("Percentage", data.percentage),
@@ -248,7 +248,7 @@ struct OwnershipChart: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
     }
-    
+
     private func generateOwnershipData() {
         let ownership = player.ownership
         ownershipData = [
@@ -258,18 +258,18 @@ struct OwnershipChart: View {
     }
 }
 
-// MARK: - Consistency Chart
+// MARK: - ConsistencyChart
 
 struct ConsistencyChart: View {
     let player: EnhancedPlayer
     @State private var consistencyData: [ConsistencyDataPoint] = []
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Score Consistency")
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             Chart(consistencyData) { dataPoint in
                 BarMark(
                     x: .value("Range", dataPoint.scoreRange),
@@ -293,7 +293,7 @@ struct ConsistencyChart: View {
             .onAppear {
                 generateConsistencyData()
             }
-            
+
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Consistency Grade")
@@ -304,9 +304,9 @@ struct ConsistencyChart: View {
                         .bold()
                         .foregroundColor(consistencyColor)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("Games 100+")
                         .font(.caption)
@@ -322,37 +322,41 @@ struct ConsistencyChart: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
     }
-    
+
     private func generateConsistencyData() {
         consistencyData = [
-            ConsistencyDataPoint(scoreRange: "0-49", gameCount: Int.random(in: 1...3), color: .red),
-            ConsistencyDataPoint(scoreRange: "50-79", gameCount: Int.random(in: 3...6), color: .orange),
-            ConsistencyDataPoint(scoreRange: "80-99", gameCount: Int.random(in: 4...8), color: .yellow),
-            ConsistencyDataPoint(scoreRange: "100+", gameCount: Int.random(in: 2...6), color: .green)
+            ConsistencyDataPoint(scoreRange: "0-49", gameCount: Int.random(in: 1 ... 3), color: .red),
+            ConsistencyDataPoint(scoreRange: "50-79", gameCount: Int.random(in: 3 ... 6), color: .orange),
+            ConsistencyDataPoint(scoreRange: "80-99", gameCount: Int.random(in: 4 ... 8), color: .yellow),
+            ConsistencyDataPoint(scoreRange: "100+", gameCount: Int.random(in: 2 ... 6), color: .green)
         ]
     }
-    
+
     private var consistencyColor: Color {
         switch player.consistency {
-        case 90...: return .green
-        case 80..<90: return .blue
-        case 70..<80: return .orange
-        default: return .red
+        case 90...: .green
+        case 80 ..< 90: .blue
+        case 70 ..< 80: .orange
+        default: .red
         }
     }
 }
 
-// MARK: - Data Models
+// MARK: - ScoreDataPoint
 
 struct ScoreDataPoint {
     let round: String
     let score: Int
 }
 
+// MARK: - PriceDataPoint
+
 struct PriceDataPoint {
     let round: String
     let price: Int
 }
+
+// MARK: - OwnershipDataPoint
 
 struct OwnershipDataPoint {
     let category: String
@@ -360,39 +364,43 @@ struct OwnershipDataPoint {
     let color: Color
 }
 
+// MARK: - ConsistencyDataPoint
+
 struct ConsistencyDataPoint {
     let scoreRange: String
     let gameCount: Int
     let color: Color
 }
 
+// MARK: - ChartTimeRange
+
 enum ChartTimeRange: CaseIterable {
     case last5Games, last10Games, season
-    
+
     var displayName: String {
         switch self {
-        case .last5Games: return "5 Games"
-        case .last10Games: return "10 Games"
-        case .season: return "Season"
+        case .last5Games: "5 Games"
+        case .last10Games: "10 Games"
+        case .season: "Season"
         }
     }
-    
+
     var roundCount: Int {
         switch self {
-        case .last5Games: return 5
-        case .last10Games: return 10
-        case .season: return 22
+        case .last5Games: 5
+        case .last10Games: 10
+        case .season: 22
         }
     }
 }
 
-// MARK: - Stat Card Component
+// MARK: - StatCard
 
 struct StatCard: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(title)

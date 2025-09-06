@@ -6,35 +6,37 @@
 //  Copyright © 2025 AFL AI. All rights reserved.
 //
 
-import SwiftUI
 import Charts
+import SwiftUI
 import UIKit
+
+// MARK: - PlayerDetailView
 
 struct PlayerDetailView: View {
     let player: EnhancedPlayer
     @State private var selectedTab = 0
     @Environment(\.dismiss) private var dismiss
-    
+
     // Native iOS Haptic Feedback
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     private let selectionFeedback = UISelectionFeedbackGenerator()
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // Player Header
                     PlayerHeaderView(player: player)
-                    
+
                     // Tab Selection
                     HStack {
                         TabButton(title: "Overview", index: 0, selectedTab: $selectedTab)
-                        TabButton(title: "Price", index: 1, selectedTab: $selectedTab)  
+                        TabButton(title: "Price", index: 1, selectedTab: $selectedTab)
                         TabButton(title: "Performance", index: 2, selectedTab: $selectedTab)
                         TabButton(title: "Risk", index: 3, selectedTab: $selectedTab)
                     }
                     .padding(.horizontal)
-                    
+
                     // Tab Content
                     Group {
                         switch selectedTab {
@@ -67,9 +69,11 @@ struct PlayerDetailView: View {
     }
 }
 
+// MARK: - PlayerHeaderView
+
 struct PlayerHeaderView: View {
     let player: EnhancedPlayer
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Main player info
@@ -78,7 +82,7 @@ struct PlayerHeaderView: View {
                     Text(player.name)
                         .font(.title2)
                         .bold()
-                    
+
                     HStack(spacing: 12) {
                         Text(player.position.rawValue)
                             .font(.caption)
@@ -86,11 +90,11 @@ struct PlayerHeaderView: View {
                             .padding(.vertical, 4)
                             .background(player.position.color.opacity(0.2))
                             .cornerRadius(6)
-                        
+
                         Text(player.formattedPrice)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
-                        
+
                         if player.injuryRisk.riskLevel != .low {
                             HStack(spacing: 4) {
                                 Text("⚠️")
@@ -105,15 +109,15 @@ struct PlayerHeaderView: View {
                         }
                     }
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("\(player.currentScore)")
                         .font(.largeTitle)
                         .bold()
                         .foregroundColor(.orange)
-                    
+
                     Text("Current Score")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -122,12 +126,16 @@ struct PlayerHeaderView: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Quick stats row
             HStack(spacing: 0) {
                 StatBox(title: "Average", value: "\(Int(player.averageScore))", color: .blue)
                 StatBox(title: "Breakeven", value: "\(player.breakeven)", color: player.breakeven < 50 ? .green : .red)
-                StatBox(title: "Consistency", value: player.consistencyGrade, color: consistencyColor(for: player.consistency))
+                StatBox(
+                    title: "Consistency",
+                    value: player.consistencyGrade,
+                    color: consistencyColor(for: player.consistency)
+                )
                 StatBox(title: "Price Δ", value: player.priceChangeText, color: player.priceChange >= 0 ? .green : .red)
             }
             .background(Color(.secondarySystemBackground))
@@ -135,22 +143,24 @@ struct PlayerHeaderView: View {
         }
         .padding(.horizontal)
     }
-    
+
     private func consistencyColor(for consistency: Double) -> Color {
         switch consistency {
-        case 90...: return .green
-        case 80..<90: return .blue
-        case 70..<80: return .yellow
-        default: return .red
+        case 90...: .green
+        case 80 ..< 90: .blue
+        case 70 ..< 80: .yellow
+        default: .red
         }
     }
 }
+
+// MARK: - StatBox
 
 struct StatBox: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(title)
@@ -166,21 +176,23 @@ struct StatBox: View {
     }
 }
 
+// MARK: - TabButton
+
 struct TabButton: View {
     let title: String
     let index: Int
     @Binding var selectedTab: Int
-    
+
     // Native iOS Haptic Feedback
     private let selectionFeedback = UISelectionFeedbackGenerator()
-    
+
     var body: some View {
         Button {
             // Haptic feedback for tab selection
             if selectedTab != index {
                 selectionFeedback.selectionChanged()
             }
-            
+
             withAnimation(.easeInOut(duration: 0.2)) {
                 selectedTab = index
             }
@@ -198,52 +210,52 @@ struct TabButton: View {
     }
 }
 
-// MARK: - Tab Views
+// MARK: - OverviewTab
 
 struct OverviewTab: View {
     let player: EnhancedPlayer
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Ownership Chart
             OwnershipChart(player: player)
-            
+
             // Next Match Info
             VStack(alignment: .leading, spacing: 12) {
                 Text("Next Match")
                     .font(.headline)
-                
+
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("vs \(player.nextRoundProjection.opponent)")
                             .font(.subheadline)
                             .bold()
-                        
+
                         Text("@ \(player.nextRoundProjection.venue)")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         HStack(spacing: 8) {
                             let conditions = player.nextRoundProjection.conditions
                             Text("\(Int(conditions.temperature))°C")
                                 .font(.caption)
-                            
+
                             Text(conditions.rainProbability > 0.5 ? "🌧️" : conditions.rainProbability > 0.3 ? "⛅" : "☀️")
                                 .font(.caption)
-                                
+
                             Text("\(Int(conditions.windSpeed))km/h")
                                 .font(.caption)
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     VStack(alignment: .trailing, spacing: 4) {
                         Text("\(Int(player.nextRoundProjection.projectedScore))")
                             .font(.title2)
                             .bold()
                             .foregroundColor(.blue)
-                        
+
                         Text("Projected")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -253,12 +265,12 @@ struct OverviewTab: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Season Projection
             VStack(alignment: .leading, spacing: 12) {
                 Text("Season Projection")
                     .font(.headline)
-                
+
                 VStack(spacing: 8) {
                     HStack {
                         Text("Total Points")
@@ -266,20 +278,22 @@ struct OverviewTab: View {
                         Text("\(Int(player.seasonProjection.projectedTotalScore))")
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Average per Round")
                         Spacer()
                         Text("\(String(format: "%.1f", player.seasonProjection.projectedAverage))")
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Premium Potential")
                         Spacer()
                         Text("\(Int(player.seasonProjection.premiumPotential * 100))%")
                             .bold()
-                            .foregroundColor(player.seasonProjection.premiumPotential > 0.8 ? .green : player.seasonProjection.premiumPotential > 0.6 ? .orange : .red)
+                            .foregroundColor(player.seasonProjection.premiumPotential > 0.8 ? .green : player
+                                .seasonProjection.premiumPotential > 0.6 ? .orange : .red
+                            )
                     }
                 }
                 .font(.subheadline)
@@ -287,30 +301,30 @@ struct OverviewTab: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Cash Cow Status
             if player.isCashCow {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("💰 Cash Cow Analysis")
                         .font(.headline)
                         .foregroundColor(.green)
-                    
+
                     VStack(spacing: 8) {
                         HStack {
                             Text("Cash Generated")
                             Spacer()
-                            Text("$\(player.cashGenerated/1000)k")
+                            Text("$\(player.cashGenerated / 1000)k")
                                 .bold()
                                 .foregroundColor(.green)
                         }
-                        
+
                         HStack {
                             Text("Projected Peak Price")
                             Spacer()
-                            Text("$\(Int(player.projectedPeakPrice/1000))k")
+                            Text("$\(Int(player.projectedPeakPrice / 1000))k")
                                 .bold()
                         }
-                        
+
                         if player.breakeven < 50 {
                             HStack {
                                 Text("🚀 Sell Signal")
@@ -332,19 +346,21 @@ struct OverviewTab: View {
     }
 }
 
+// MARK: - PriceAnalysisTab
+
 struct PriceAnalysisTab: View {
     let player: EnhancedPlayer
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Price Trend Chart
             PriceTrendChart(player: player)
-            
+
             // Current Price Info
             VStack(alignment: .leading, spacing: 12) {
                 Text("Price Analysis")
                     .font(.headline)
-                
+
                 VStack(spacing: 8) {
                     HStack {
                         Text("Current Price")
@@ -352,7 +368,7 @@ struct PriceAnalysisTab: View {
                         Text(player.formattedPrice)
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Price Change")
                         Spacer()
@@ -360,7 +376,7 @@ struct PriceAnalysisTab: View {
                             .bold()
                             .foregroundColor(player.priceChange >= 0 ? .green : .red)
                     }
-                    
+
                     HStack {
                         Text("Breakeven")
                         Spacer()
@@ -368,12 +384,12 @@ struct PriceAnalysisTab: View {
                             .bold()
                             .foregroundColor(player.breakeven < 50 ? .green : .red)
                     }
-                    
+
                     if player.isCashCow {
                         HStack {
                             Text("Peak Price Projection")
                             Spacer()
-                            Text("$\(Int(player.projectedPeakPrice/1000))k")
+                            Text("$\(Int(player.projectedPeakPrice / 1000))k")
                                 .bold()
                                 .foregroundColor(.orange)
                         }
@@ -384,14 +400,14 @@ struct PriceAnalysisTab: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Value Analysis
             VStack(alignment: .leading, spacing: 12) {
                 Text("Value Analysis")
                     .font(.headline)
-                
+
                 let pointsPerDollar = Double(player.averageScore) / (Double(player.price) / 1000.0)
-                
+
                 VStack(spacing: 8) {
                     HStack {
                         Text("Points per $1k")
@@ -400,11 +416,12 @@ struct PriceAnalysisTab: View {
                             .bold()
                             .foregroundColor(pointsPerDollar > 15 ? .green : pointsPerDollar > 12 ? .orange : .red)
                     }
-                    
+
                     HStack {
                         Text("Value Rating")
                         Spacer()
-                        let valueRating = pointsPerDollar > 15 ? "Excellent" : pointsPerDollar > 12 ? "Good" : pointsPerDollar > 10 ? "Fair" : "Poor"
+                        let valueRating = pointsPerDollar > 15 ? "Excellent" : pointsPerDollar > 12 ? "Good" :
+                            pointsPerDollar > 10 ? "Fair" : "Poor"
                         Text(valueRating)
                             .bold()
                             .foregroundColor(pointsPerDollar > 15 ? .green : pointsPerDollar > 12 ? .orange : .red)
@@ -419,20 +436,22 @@ struct PriceAnalysisTab: View {
     }
 }
 
+// MARK: - PerformanceTab
+
 struct PerformanceTab: View {
     let player: EnhancedPlayer
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Performance Charts
             PlayerPerformanceChart(player: player)
             ConsistencyChart(player: player)
-            
+
             // Performance Metrics
             VStack(alignment: .leading, spacing: 12) {
                 Text("Performance Metrics")
                     .font(.headline)
-                
+
                 VStack(spacing: 8) {
                     HStack {
                         Text("Average Score")
@@ -440,7 +459,7 @@ struct PerformanceTab: View {
                         Text("\(String(format: "%.1f", player.averageScore))")
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Consistency")
                         Spacer()
@@ -448,7 +467,7 @@ struct PerformanceTab: View {
                             .bold()
                             .foregroundColor(consistencyColor(for: player.consistency))
                     }
-                    
+
                     HStack {
                         Text("High Score")
                         Spacer()
@@ -456,7 +475,7 @@ struct PerformanceTab: View {
                             .bold()
                             .foregroundColor(.green)
                     }
-                    
+
                     HStack {
                         Text("Low Score")
                         Spacer()
@@ -470,13 +489,13 @@ struct PerformanceTab: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Venue Performance
             if !player.venuePerformance.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Venue Performance")
                         .font(.headline)
-                    
+
                     ForEach(player.venuePerformance.prefix(3), id: \.venue) { venue in
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
@@ -487,17 +506,20 @@ struct PerformanceTab: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
-                            
+
                             Spacer()
-                            
+
                             VStack(alignment: .trailing, spacing: 2) {
                                 Text("\(String(format: "%.1f", venue.averageScore))")
                                     .font(.subheadline)
                                     .bold()
-                                
-                                Text(venue.bias >= 0 ? "+\(String(format: "%.1f", venue.bias))" : "\(String(format: "%.1f", venue.bias))")
-                                    .font(.caption)
-                                    .foregroundColor(venue.bias >= 0 ? .green : .red)
+
+                                Text(venue
+                                    .bias >= 0 ? "+\(String(format: "%.1f", venue.bias))" :
+                                    "\(String(format: "%.1f", venue.bias))"
+                                )
+                                .font(.caption)
+                                .foregroundColor(venue.bias >= 0 ? .green : .red)
                             }
                         }
                     }
@@ -508,59 +530,61 @@ struct PerformanceTab: View {
             }
         }
     }
-    
+
     private func consistencyColor(for consistency: Double) -> Color {
         switch consistency {
-        case 90...: return .green
-        case 80..<90: return .blue
-        case 70..<80: return .yellow
-        default: return .red
+        case 90...: .green
+        case 80 ..< 90: .blue
+        case 70 ..< 80: .yellow
+        default: .red
         }
     }
 }
 
+// MARK: - RiskTab
+
 struct RiskTab: View {
     let player: EnhancedPlayer
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Injury Risk
             VStack(alignment: .leading, spacing: 12) {
                 Text("Injury Risk Analysis")
                     .font(.headline)
-                
+
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Risk Level")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
-                        
+
                         Text(player.injuryRisk.riskLevel.rawValue)
                             .font(.title3)
                             .bold()
                             .foregroundColor(player.injuryRisk.riskLevel.color)
                     }
-                    
+
                     Spacer()
-                    
+
                     VStack(alignment: .trailing, spacing: 4) {
                         Text("Risk Score")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
-                        
+
                         Text("\(Int(player.injuryRisk.riskScore * 100))%")
                             .font(.title3)
                             .bold()
                             .foregroundColor(player.injuryRisk.riskLevel.color)
                     }
                 }
-                
+
                 if !player.injuryRisk.riskFactors.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Risk Factors:")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         ForEach(player.injuryRisk.riskFactors, id: \.self) { factor in
                             Text("• \(factor)")
                                 .font(.caption)
@@ -571,12 +595,12 @@ struct RiskTab: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Other Risk Factors
             VStack(alignment: .leading, spacing: 12) {
                 Text("Other Risk Factors")
                     .font(.headline)
-                
+
                 VStack(spacing: 8) {
                     if player.isDoubtful {
                         HStack {
@@ -587,7 +611,7 @@ struct RiskTab: View {
                                 .foregroundColor(.orange)
                         }
                     }
-                    
+
                     if player.isSuspended {
                         HStack {
                             Text("🚫 Suspension")
@@ -597,7 +621,7 @@ struct RiskTab: View {
                                 .foregroundColor(.red)
                         }
                     }
-                    
+
                     // Weather risk for next match
                     let conditions = player.nextRoundProjection.conditions
                     if conditions.rainProbability > 0.5 {
@@ -609,7 +633,7 @@ struct RiskTab: View {
                                 .foregroundColor(.orange)
                         }
                     }
-                    
+
                     if conditions.windSpeed > 30 {
                         HStack {
                             Text("💨 Wind Risk")
@@ -625,30 +649,30 @@ struct RiskTab: View {
             .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
-            
+
             // Active Alerts
             if !player.alertFlags.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("🚨 Active Alerts")
                         .font(.headline)
                         .foregroundColor(.red)
-                    
+
                     ForEach(player.alertFlags, id: \.type) { alert in
                         HStack {
                             Text(alertIcon(for: alert.type))
-                            
+
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(alertTitle(for: alert.type))
                                     .font(.subheadline)
                                     .bold()
-                                
+
                                 Text(alert.message)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
-                            
+
                             Spacer()
-                            
+
                             Text(alert.priority.rawValue)
                                 .font(.caption)
                                 .padding(.horizontal, 6)
@@ -664,39 +688,39 @@ struct RiskTab: View {
             }
         }
     }
-    
+
     private func alertIcon(for alertType: AlertType) -> String {
         switch alertType {
-        case .priceDrop: return "📉"
-        case .breakEvenCliff: return "⚠️"
-        case .cashCowSell: return "💰"
-        case .injuryRisk: return "🏥"
-        case .roleChange: return "🔄"
-        case .weatherRisk: return "🌧️"
-        case .contractYear: return "📋"
-        case .premiumBreakout: return "🚀"
+        case .priceDrop: "📉"
+        case .breakEvenCliff: "⚠️"
+        case .cashCowSell: "💰"
+        case .injuryRisk: "🏥"
+        case .roleChange: "🔄"
+        case .weatherRisk: "🌧️"
+        case .contractYear: "📋"
+        case .premiumBreakout: "🚀"
         }
     }
-    
+
     private func alertTitle(for alertType: AlertType) -> String {
         switch alertType {
-        case .priceDrop: return "Price Drop Alert"
-        case .breakEvenCliff: return "Breakeven Cliff"
-        case .cashCowSell: return "Cash Cow Sell Signal"
-        case .injuryRisk: return "Injury Risk"
-        case .roleChange: return "Role Change"
-        case .weatherRisk: return "Weather Risk"
-        case .contractYear: return "Contract Year"
-        case .premiumBreakout: return "Premium Breakout"
+        case .priceDrop: "Price Drop Alert"
+        case .breakEvenCliff: "Breakeven Cliff"
+        case .cashCowSell: "Cash Cow Sell Signal"
+        case .injuryRisk: "Injury Risk"
+        case .roleChange: "Role Change"
+        case .weatherRisk: "Weather Risk"
+        case .contractYear: "Contract Year"
+        case .premiumBreakout: "Premium Breakout"
         }
     }
-    
+
     private func alertColor(for priority: AlertPriority) -> Color {
         switch priority {
-        case .critical: return .red
-        case .high: return .orange
-        case .medium: return .yellow
-        case .low: return .blue
+        case .critical: .red
+        case .high: .orange
+        case .medium: .yellow
+        case .low: .blue
         }
     }
 }
@@ -708,7 +732,7 @@ struct RiskTab: View {
         id: "1",
         name: "Marcus Bontempelli",
         position: .midfielder,
-        price: 750000,
+        price: 750_000,
         currentScore: 120,
         averageScore: 105.5,
         breakeven: 45,

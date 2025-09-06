@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CachedDataEntity" representedClassName="CachedDataEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="data" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="key" attributeType="String" minValueString="1"/>
+        <attribute name="maxAge" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="policyIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="PlayerEntity" representedClassName="PlayerEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="averageScore" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="breakeven" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="currentScore" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="id" attributeType="String" minValueString="1"/>
+        <attribute name="isDoubtful" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="isInjured" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="lastUpdated" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String" minValueString="1"/>
+        <attribute name="ownership" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="position" attributeType="String"/>
+        <attribute name="price" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="priceChange" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="projectedScore" optional="YES" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="team" attributeType="String"/>
+    </entity>
+    <entity name="TeamSnapshotEntity" representedClassName="TeamSnapshotEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="captainName" optional="YES" attributeType="String"/>
+        <attribute name="captainScore" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="lastUpdated" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="overallRank" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="rankChange" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="remainingSalary" attributeType="Double" defaultValueString="0.0"/>
+        <attribute name="teamScore" attributeType="Integer 32" defaultValueString="0"/>
+        <attribute name="teamValue" attributeType="Double" defaultValueString="0.0"/>
+    </entity>
+    <entity name="FixtureEntity" representedClassName="FixtureEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="awayTeam" attributeType="String"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="homeTeam" attributeType="String"/>
+        <attribute name="id" attributeType="String" minValueString="1"/>
+        <attribute name="round" attributeType="String"/>
+        <attribute name="venue" attributeType="String"/>
+    </entity>
+</model>

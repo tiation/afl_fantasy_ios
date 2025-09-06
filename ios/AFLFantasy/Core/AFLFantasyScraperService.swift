@@ -10,7 +10,7 @@
 import Foundation
 import os.log
 
-// MARK: - Scraper Service Protocol
+// MARK: - AFLFantasyScraperServiceProtocol
 
 protocol AFLFantasyScraperServiceProtocol {
     func fetchTeamData() async throws -> TeamData
@@ -19,7 +19,7 @@ protocol AFLFantasyScraperServiceProtocol {
     func refreshAllData() async throws -> ScraperResult
 }
 
-// MARK: - Data Transfer Objects
+// MARK: - TeamData
 
 struct TeamData: Codable {
     let teamValue: Double
@@ -31,6 +31,8 @@ struct TeamData: Codable {
     let rankChange: Int
     let lastUpdated: Date
 }
+
+// MARK: - PlayerStats
 
 struct PlayerStats: Codable, Identifiable {
     let id: String
@@ -49,12 +51,16 @@ struct PlayerStats: Codable, Identifiable {
     let isDoubtful: Bool
 }
 
+// MARK: - LiveScores
+
 struct LiveScores: Codable {
     let currentRound: Int
     let matchesInProgress: [LiveMatch]
     let playerScores: [String: Int] // playerId -> current score
     let lastUpdated: Date
 }
+
+// MARK: - LiveMatch
 
 struct LiveMatch: Codable, Identifiable {
     let id: String
@@ -66,6 +72,8 @@ struct LiveMatch: Codable, Identifiable {
     let awayScore: Int
 }
 
+// MARK: - ScraperResult
+
 struct ScraperResult: Codable {
     let success: Bool
     let teamData: TeamData?
@@ -75,20 +83,20 @@ struct ScraperResult: Codable {
     let timestamp: Date
 }
 
-// MARK: - AFL Fantasy Scraper Service
+// MARK: - AFLFantasyScraperService
 
 @MainActor
 final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
     static let shared = AFLFantasyScraperService()
-    
+
     private let networkClient: NetworkClientProtocol
     private let keychain: KeychainService
     private let logger = Logger(subsystem: "AFLFantasy", category: "ScraperService")
     private let requestBuilder = APIRequestBuilder()
-    
+
     // Cache to avoid excessive API calls
-    private var cache: ScraperCache = ScraperCache()
-    
+    private var cache: ScraperCache = .init()
+
     private init(
         networkClient: NetworkClientProtocol = NetworkClient.shared,
         keychain: KeychainService = KeychainService.shared
@@ -96,31 +104,31 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
         self.networkClient = networkClient
         self.keychain = keychain
     }
-    
+
     // MARK: - Public API
-    
+
     func fetchTeamData() async throws -> TeamData {
         logger.info("Fetching team data")
-        
+
         guard let teamId = try? await keychain.retrieveTeamId() else {
             throw ScraperError.missingCredentials
         }
-        
+
         let endpoints = [
             "/api/teams/\(teamId)",
             "/api/teams/\(teamId)/summary",
             "/api/user/teams/\(teamId)"
         ]
-        
+
         for endpoint in endpoints {
             do {
-                let request = try requestBuilder.buildRequest(
+                let request = try await requestBuilder.buildRequest(
                     endpoint: endpoint,
-                    headers: await getAuthHeaders()
+                    headers: getAuthHeaders()
                 )
-                
+
                 let response = try await networkClient.fetch(AFLTeamResponse.self, from: request)
-                
+
                 if let teamData = extractTeamData(from: response) {
                     cache.teamData = teamData
                     cache.lastTeamUpdate = Date()
@@ -131,13 +139,13 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
                 continue
             }
         }
-        
+
         throw ScraperError.noDataAvailable
     }
-    
+
     func fetchPlayerStats() async throws -> [PlayerStats] {
         logger.info("Fetching player stats")
-        
+
         // Check cache first
         if let cached = cache.playerStats,
            let lastUpdate = cache.lastPlayerUpdate,
@@ -145,22 +153,22 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             logger.info("Returning cached player stats")
             return cached
         }
-        
+
         let endpoints = [
             "/api/players/stats/current",
             "/api/fantasy/players/all",
             "/api/stats/combined-stats"
         ]
-        
+
         for endpoint in endpoints {
             do {
-                let request = try requestBuilder.buildRequest(
+                let request = try await requestBuilder.buildRequest(
                     endpoint: endpoint,
-                    headers: await getAuthHeaders()
+                    headers: getAuthHeaders()
                 )
-                
+
                 let response = try await networkClient.fetch(AFLPlayersResponse.self, from: request)
-                
+
                 let playerStats = extractPlayerStats(from: response)
                 if !playerStats.isEmpty {
                     cache.playerStats = playerStats
@@ -172,27 +180,27 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
                 continue
             }
         }
-        
+
         // Fallback to community API
         return try await fetchFromCommunityAPI()
     }
-    
+
     func fetchLiveScores() async throws -> LiveScores {
         logger.info("Fetching live scores")
-        
+
         let endpoint = "/api/matches/live"
-        let request = try requestBuilder.buildRequest(
+        let request = try await requestBuilder.buildRequest(
             endpoint: endpoint,
-            headers: await getAuthHeaders()
+            headers: getAuthHeaders()
         )
-        
+
         let response = try await networkClient.fetch(AFLLiveResponse.self, from: request)
         return extractLiveScores(from: response)
     }
-    
+
     func refreshAllData() async throws -> ScraperResult {
         logger.info("Refreshing all data")
-        
+
         var result = ScraperResult(
             success: false,
             teamData: nil,
@@ -201,7 +209,7 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             error: nil,
             timestamp: Date()
         )
-        
+
         // Fetch team data
         do {
             result.teamData = try await fetchTeamData()
@@ -209,7 +217,7 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             logger.error("Failed to fetch team data: \(error.localizedDescription)")
             result.error = error.localizedDescription
         }
-        
+
         // Fetch player stats
         do {
             result.playerStats = try await fetchPlayerStats()
@@ -219,7 +227,7 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
                 result.error = error.localizedDescription
             }
         }
-        
+
         // Fetch live scores
         do {
             result.liveScores = try await fetchLiveScores()
@@ -227,42 +235,42 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             logger.error("Failed to fetch live scores: \(error.localizedDescription)")
             // Live scores are optional, don't fail the entire operation
         }
-        
+
         result.success = result.teamData != nil || !result.playerStats.isEmpty
         return result
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func getAuthHeaders() async -> [String: String] {
         var headers: [String: String] = [:]
-        
+
         // Add session cookie if available
         if let sessionCookie = try? await keychain.retrieveSessionCookie() {
             headers["Cookie"] = sessionCookie
         }
-        
+
         // Add API token if available
         if let apiToken = try? await keychain.retrieveAPIToken() {
             headers["Authorization"] = "Bearer \(apiToken)"
         }
-        
+
         // Add CSRF token if available
         if let csrfToken = try? await keychain.retrieveCSRFToken() {
             headers["X-CSRF-Token"] = csrfToken
         }
-        
+
         return headers
     }
-    
+
     private func extractTeamData(from response: AFLTeamResponse) -> TeamData? {
         // Extract team data from various possible response formats
         // Implementation based on AflFantasyManager patterns
-        
+
         guard let teamValue = response.teamValue ?? response.squad?.totalValue else {
             return nil
         }
-        
+
         return TeamData(
             teamValue: teamValue,
             remainingSalary: max(0, 13_000_000 - teamValue), // AFL Fantasy salary cap
@@ -274,9 +282,9 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             lastUpdated: Date()
         )
     }
-    
+
     private func extractPlayerStats(from response: AFLPlayersResponse) -> [PlayerStats] {
-        return (response.players ?? []).compactMap { player in
+        (response.players ?? []).compactMap { player in
             PlayerStats(
                 id: player.id,
                 name: player.name,
@@ -295,7 +303,7 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             )
         }
     }
-    
+
     private func extractLiveScores(from response: AFLLiveResponse) -> LiveScores {
         let matches = (response.matches ?? []).map { match in
             LiveMatch(
@@ -308,7 +316,7 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
                 awayScore: match.awayScore ?? 0
             )
         }
-        
+
         return LiveScores(
             currentRound: response.currentRound ?? 1,
             matchesInProgress: matches,
@@ -316,20 +324,20 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
             lastUpdated: Date()
         )
     }
-    
+
     private func fetchFromCommunityAPI() async throws -> [PlayerStats] {
         logger.info("Falling back to community API")
-        
+
         // Fallback to DFS Australia or other community endpoints
         let communityBuilder = APIRequestBuilder(baseURL: "https://api.dfsaustralia.com")
-        
+
         let request = try communityBuilder.buildRequest(
             endpoint: "/fantasy/players/afl",
             headers: ["X-API-Key": "community-key"] // Would be stored in keychain
         )
-        
+
         let response = try await networkClient.fetch(CommunityPlayersResponse.self, from: request)
-        
+
         return (response.data ?? []).map { player in
             PlayerStats(
                 id: player.id,
@@ -351,7 +359,7 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
     }
 }
 
-// MARK: - Response Models
+// MARK: - AFLTeamResponse
 
 private struct AFLTeamResponse: Codable {
     let teamValue: Double?
@@ -362,19 +370,27 @@ private struct AFLTeamResponse: Codable {
     let squad: SquadInfo?
 }
 
+// MARK: - CaptainInfo
+
 private struct CaptainInfo: Codable {
     let name: String
     let score: Int
 }
+
+// MARK: - SquadInfo
 
 private struct SquadInfo: Codable {
     let totalValue: Double
     let playerCount: Int
 }
 
+// MARK: - AFLPlayersResponse
+
 private struct AFLPlayersResponse: Codable {
     let players: [AFLPlayerInfo]?
 }
+
+// MARK: - AFLPlayerInfo
 
 private struct AFLPlayerInfo: Codable {
     let id: String
@@ -393,11 +409,15 @@ private struct AFLPlayerInfo: Codable {
     let isDoubtful: Bool?
 }
 
+// MARK: - AFLLiveResponse
+
 private struct AFLLiveResponse: Codable {
     let currentRound: Int?
     let matches: [LiveMatchInfo]?
     let playerScores: [String: Int]?
 }
+
+// MARK: - LiveMatchInfo
 
 private struct LiveMatchInfo: Codable {
     let id: String
@@ -409,9 +429,13 @@ private struct LiveMatchInfo: Codable {
     let awayScore: Int?
 }
 
+// MARK: - CommunityPlayersResponse
+
 private struct CommunityPlayersResponse: Codable {
     let data: [CommunityPlayerInfo]?
 }
+
+// MARK: - CommunityPlayerInfo
 
 private struct CommunityPlayerInfo: Codable {
     let id: String
@@ -425,26 +449,26 @@ private struct CommunityPlayerInfo: Codable {
     let ownership: Double?
 }
 
-// MARK: - Scraper Error
+// MARK: - ScraperError
 
 enum ScraperError: LocalizedError {
     case missingCredentials
     case noDataAvailable
     case authenticationFailed
-    
+
     var errorDescription: String? {
         switch self {
         case .missingCredentials:
-            return "Missing AFL Fantasy credentials"
+            "Missing AFL Fantasy credentials"
         case .noDataAvailable:
-            return "No data available from any source"
+            "No data available from any source"
         case .authenticationFailed:
-            return "Failed to authenticate with AFL Fantasy"
+            "Failed to authenticate with AFL Fantasy"
         }
     }
 }
 
-// MARK: - Scraper Cache
+// MARK: - ScraperCache
 
 private struct ScraperCache {
     var teamData: TeamData?

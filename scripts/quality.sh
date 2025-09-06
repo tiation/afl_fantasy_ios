@@ -59,7 +59,7 @@ check_tool swiftlint
 echo ""
 
 # 2. SwiftFormat check
-run_check "SwiftFormat" "swiftformat --lint --reporter json . | jq -e 'length == 0' > /dev/null 2>&1 || swiftformat --diff ."
+run_check "SwiftFormat" "swiftformat --lint . | grep -q 'would have been formatted' && exit 1 || exit 0"
 
 # 3. SwiftLint check
 run_check "SwiftLint" "swiftlint --quiet --reporter json | jq -e 'length == 0' > /dev/null 2>&1 || (echo 'SwiftLint violations:' && swiftlint)"

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import UserNotifications
+import CoreData
 import os.log
 
 // MARK: - Notification Classes (Inline for now)
@@ -15,7 +16,7 @@ import os.log
 class NotificationManager {
     static let shared = NotificationManager()
     private init() {}
-    
+
     func requestAuthorization() async -> Bool {
         let center = UNUserNotificationCenter.current()
         do {
@@ -26,82 +27,114 @@ class NotificationManager {
             return false
         }
     }
-    
+
     func scheduleCaptainSuggestion(_ suggestion: CaptainSuggestion) async {
         let content = UNMutableNotificationContent()
         content.title = "Captain Suggestion"
         content.body = "Consider \(suggestion.player.name) for captain - \(suggestion.confidence)% confidence"
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        let request = UNNotificationRequest(identifier: "captain-\(suggestion.player.id)", content: content, trigger: trigger)
-        
+        let request = UNNotificationRequest(
+            identifier: "captain-\(suggestion.player.id)",
+            content: content,
+            trigger: trigger
+        )
+
         try? await UNUserNotificationCenter.current().add(request)
     }
-    
+
     func scheduleRoundLockoutReminder(round: Int) async {
         let content = UNMutableNotificationContent()
         content.title = "Round Lockout Soon!"
         content.body = "Round \(round) locks out in 1 hour. Check your team!"
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
         let request = UNNotificationRequest(identifier: "lockout-\(round)", content: content, trigger: trigger)
-        
+
         try? await UNUserNotificationCenter.current().add(request)
     }
-    
+
     func schedulePlayerAlert(_ alert: AlertFlag, for player: EnhancedPlayer) async {
         let content = UNMutableNotificationContent()
         content.title = "Player Alert"
         content.body = "\(player.name): \(alert.message)"
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
-        let request = UNNotificationRequest(identifier: "alert-\(player.id)-\(alert.type.rawValue)", content: content, trigger: trigger)
-        
+        let request = UNNotificationRequest(
+            identifier: "alert-\(player.id)-\(alert.type.rawValue)",
+            content: content,
+            trigger: trigger
+        )
+
         try? await UNUserNotificationCenter.current().add(request)
     }
-    
+
     func scheduleInjuryAlert(for player: EnhancedPlayer) async {
         let content = UNMutableNotificationContent()
         content.title = "Injury Risk Alert"
         content.body = "\(player.name) has \(player.injuryRisk.riskLevel.rawValue.lowercased()) injury risk"
         content.sound = .default
-        
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 20, repeats: false)
         let request = UNNotificationRequest(identifier: "injury-\(player.id)", content: content, trigger: trigger)
-        
+
         try? await UNUserNotificationCenter.current().add(request)
     }
 }
+
+// MARK: - NotificationDelegate
 
 class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     func setupWithApp(_ app: UIApplication) {
         UNUserNotificationCenter.current().delegate = self
     }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
         completionHandler([.banner, .sound])
     }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
         print("Notification tapped: \(response.notification.request.identifier)")
         completionHandler()
     }
 }
 
-// MARK: - Main App
+// MARK: - AFLFantasyApp
 
 @main
 struct AFLFantasyApp: App {
     @StateObject private var appState = AppState()
     private let notificationDelegate = NotificationDelegate()
+    
+    // Core Data Stack (inline for simplicity) 
+    private let persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "AFLFantasy")
+        container.loadPersistentStores { _, error in
+            if let error = error {
+                print("Core Data error: \(error.localizedDescription)")
+            } else {
+                print("Core Data loaded successfully")
+            }
+        }
+        return container
+    }()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
+                .environment(\.managedObjectContext, persistentContainer.viewContext)
                 .preferredColorScheme(.dark)
                 .onAppear {
                     // Setup notifications when app launches
@@ -117,32 +150,32 @@ struct AFLFantasyApp: App {
                 }
         }
     }
-    
+
     // MARK: - Demo Notifications
-    
+
     private func scheduleDemoNotifications() async {
         let notificationManager = NotificationManager.shared
-        
+
         // Request authorization first
         _ = await notificationManager.requestAuthorization()
-        
+
         // Schedule demo notifications for the first few players
-        if let player = appState.players.first {
+        if !appState.players.isEmpty {
             // Demo captain suggestion
             if let captainSuggestion = appState.captainSuggestions.first {
                 await notificationManager.scheduleCaptainSuggestion(captainSuggestion)
             }
         }
-        
+
         // Schedule a lockout reminder
         await notificationManager.scheduleRoundLockoutReminder(round: 15)
-        
+
         // Schedule alerts for players with alert flags
         for player in appState.players {
             for alert in player.alertFlags {
                 await notificationManager.schedulePlayerAlert(alert, for: player)
             }
-            
+
             // Schedule injury alerts for high-risk players
             if player.injuryRisk.riskLevel == .moderate || player.injuryRisk.riskLevel == .high {
                 await notificationManager.scheduleInjuryAlert(for: player)
@@ -150,8 +183,9 @@ struct AFLFantasyApp: App {
         }
     }
 }
-
-// MARK: - App State
+// MARK: - Simple App State (kept for compatibility)
+// Note: PersistentAppState is now the primary state management class
+// This AppState is kept for backward compatibility if needed
 
 @MainActor
 class AppState: ObservableObject {
@@ -161,7 +195,7 @@ class AppState: ObservableObject {
     @Published var players: [EnhancedPlayer] = []
     @Published var captainSuggestions: [CaptainSuggestion] = []
     @Published var cashCows: [EnhancedPlayer] = []
-    
+
     init() {
         loadEnhancedData()
         generateCaptainSuggestions()
@@ -173,7 +207,7 @@ class AppState: ObservableObject {
                 id: "1",
                 name: "Marcus Bontempelli",
                 position: .midfielder,
-                price: 850000,
+                price: 850_000,
                 currentScore: 125,
                 averageScore: 118.5,
                 breakeven: 85,
@@ -219,7 +253,7 @@ class AppState: ObservableObject {
                 id: "2",
                 name: "Max Gawn",
                 position: .ruck,
-                price: 780000,
+                price: 780_000,
                 currentScore: 98,
                 averageScore: 105.2,
                 breakeven: 90,
@@ -267,7 +301,7 @@ class AppState: ObservableObject {
                 id: "3",
                 name: "Touk Miller",
                 position: .midfielder,
-                price: 720000,
+                price: 720_000,
                 currentScore: 110,
                 averageScore: 108.8,
                 breakeven: 75,
@@ -315,7 +349,7 @@ class AppState: ObservableObject {
                 id: "4",
                 name: "Hayden Young",
                 position: .defender,
-                price: 550000,
+                price: 550_000,
                 currentScore: 78,
                 averageScore: 85.2,
                 breakeven: 45,
@@ -326,8 +360,8 @@ class AppState: ObservableObject {
                 isCashCow: true,
                 isDoubtful: false,
                 isSuspended: false,
-                cashGenerated: 120000,
-                projectedPeakPrice: 680000,
+                cashGenerated: 120_000,
+                projectedPeakPrice: 680_000,
                 nextRoundProjection: RoundProjection(
                     round: 15,
                     opponent: "Sydney",
@@ -363,7 +397,7 @@ class AppState: ObservableObject {
                 id: "5",
                 name: "Sam Walsh",
                 position: .midfielder,
-                price: 750000,
+                price: 750_000,
                 currentScore: 115,
                 averageScore: 112.4,
                 breakeven: 80,
@@ -409,16 +443,16 @@ class AppState: ObservableObject {
             )
         ]
 
-        cashCows = players.filter { $0.isCashCow }
+        cashCows = players.filter(\.isCashCow)
     }
 
     private func generateCaptainSuggestions() {
         let topPlayers = players.sorted { $0.averageScore > $1.averageScore }.prefix(3)
-        
+
         captainSuggestions = topPlayers.enumerated().map { index, player in
             let confidence = Int(90 - Double(index) * 5 + player.consistency * 0.1)
-            let projectedPoints = Int(player.nextRoundProjection.projectedScore * 2 + Double.random(in: -10...10))
-            
+            let projectedPoints = Int(player.nextRoundProjection.projectedScore * 2 + Double.random(in: -10 ... 10))
+
             return CaptainSuggestion(
                 player: player,
                 confidence: confidence,
@@ -428,7 +462,7 @@ class AppState: ObservableObject {
     }
 }
 
-// MARK: - Enhanced Player Model
+// MARK: - EnhancedPlayer
 
 struct EnhancedPlayer: Identifiable, Codable {
     let id: String
@@ -452,28 +486,28 @@ struct EnhancedPlayer: Identifiable, Codable {
     let injuryRisk: InjuryRisk
     let venuePerformance: [VenuePerformance]
     let alertFlags: [AlertFlag]
-    
+
     var formattedPrice: String {
-        "$\(price/1000)k"
+        "$\(price / 1000)k"
     }
-    
+
     var priceChangeText: String {
         let prefix = priceChange >= 0 ? "+" : ""
-        return "\(prefix)\(priceChange/1000)k"
+        return "\(prefix)\(priceChange / 1000)k"
     }
-    
+
     var consistencyGrade: String {
         switch consistency {
-        case 90...: return "A+"
-        case 80..<90: return "A"
-        case 70..<80: return "B"
-        case 60..<70: return "C"
-        default: return "D"
+        case 90...: "A+"
+        case 80 ..< 90: "A"
+        case 70 ..< 80: "B"
+        case 60 ..< 70: "C"
+        default: "D"
         }
     }
 }
 
-// MARK: - Supporting Models
+// MARK: - RoundProjection
 
 struct RoundProjection: Codable {
     let round: Int
@@ -484,11 +518,15 @@ struct RoundProjection: Codable {
     let conditions: WeatherConditions
 }
 
+// MARK: - SeasonProjection
+
 struct SeasonProjection: Codable {
     let projectedTotalScore: Double
     let projectedAverage: Double
     let premiumPotential: Double
 }
+
+// MARK: - InjuryRisk
 
 struct InjuryRisk: Codable {
     let riskLevel: RiskLevel
@@ -496,21 +534,25 @@ struct InjuryRisk: Codable {
     let riskFactors: [String]
 }
 
+// MARK: - RiskLevel
+
 enum RiskLevel: String, Codable {
     case low = "Low"
     case moderate = "Moderate"
     case high = "High"
     case extreme = "Extreme"
-    
+
     var color: Color {
         switch self {
-        case .low: return .green
-        case .moderate: return .yellow
-        case .high: return .orange
-        case .extreme: return .red
+        case .low: .green
+        case .moderate: .yellow
+        case .high: .orange
+        case .extreme: .red
         }
     }
 }
+
+// MARK: - VenuePerformance
 
 struct VenuePerformance: Codable {
     let venue: String
@@ -519,11 +561,15 @@ struct VenuePerformance: Codable {
     let bias: Double
 }
 
+// MARK: - AlertFlag
+
 struct AlertFlag: Codable {
     let type: AlertType
     let priority: AlertPriority
     let message: String
 }
+
+// MARK: - AlertType
 
 enum AlertType: String, Codable {
     case priceDrop = "Price Drop"
@@ -536,12 +582,16 @@ enum AlertType: String, Codable {
     case premiumBreakout = "Premium Breakout"
 }
 
+// MARK: - AlertPriority
+
 enum AlertPriority: String, Codable {
     case critical = "Critical"
     case high = "High"
     case medium = "Medium"
     case low = "Low"
 }
+
+// MARK: - WeatherConditions
 
 struct WeatherConditions: Codable {
     let temperature: Double
@@ -550,7 +600,7 @@ struct WeatherConditions: Codable {
     let humidity: Double
 }
 
-// MARK: - Captain Suggestion
+// MARK: - CaptainSuggestion
 
 struct CaptainSuggestion: Identifiable {
     let id = UUID()
@@ -559,7 +609,7 @@ struct CaptainSuggestion: Identifiable {
     let projectedPoints: Int
 }
 
-// MARK: - Position Enum
+// MARK: - Position
 
 enum Position: String, CaseIterable, Codable {
     case defender = "DEF"
@@ -569,15 +619,15 @@ enum Position: String, CaseIterable, Codable {
 
     var color: Color {
         switch self {
-        case .defender: return .blue
-        case .midfielder: return .green
-        case .ruck: return .purple
-        case .forward: return .red
+        case .defender: .blue
+        case .midfielder: .green
+        case .ruck: .purple
+        case .forward: .red
         }
     }
 }
 
-// MARK: - Connection Status
+// MARK: - ConnectionStatus
 
 enum ConnectionStatus: String, CaseIterable {
     case disconnected = "Disconnected"
@@ -585,29 +635,29 @@ enum ConnectionStatus: String, CaseIterable {
     case connected = "Connected"
     case live = "Live"
     case error = "Error"
-    
+
     var color: Color {
         switch self {
-        case .disconnected: return .gray
-        case .connecting: return .orange
-        case .connected: return .green
-        case .live: return .red
-        case .error: return .red
+        case .disconnected: .gray
+        case .connecting: .orange
+        case .connected: .green
+        case .live: .red
+        case .error: .red
         }
     }
-    
+
     var systemImage: String {
         switch self {
-        case .disconnected: return "wifi.slash"
-        case .connecting: return "wifi.exclamationmark"
-        case .connected: return "wifi"
-        case .live: return "dot.radiowaves.left.and.right"
-        case .error: return "exclamationmark.triangle"
+        case .disconnected: "wifi.slash"
+        case .connecting: "wifi.exclamationmark"
+        case .connected: "wifi"
+        case .live: "dot.radiowaves.left.and.right"
+        case .error: "exclamationmark.triangle"
         }
     }
 }
 
-// MARK: - Tab Item
+// MARK: - TabItem
 
 enum TabItem: String, CaseIterable {
     case dashboard = "Dashboard"
@@ -618,11 +668,11 @@ enum TabItem: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .dashboard: return "chart.line.uptrend.xyaxis"
-        case .captain: return "star.fill"
-        case .trades: return "arrow.triangle.2.circlepath"
-        case .cashCow: return "dollarsign.circle.fill"
-        case .settings: return "gearshape.fill"
+        case .dashboard: "chart.line.uptrend.xyaxis"
+        case .captain: "star.fill"
+        case .trades: "arrow.triangle.2.circlepath"
+        case .cashCow: "dollarsign.circle.fill"
+        case .settings: "gearshape.fill"
         }
     }
 }

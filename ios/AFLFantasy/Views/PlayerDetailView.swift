@@ -16,14 +16,14 @@ struct PlayerDetailView: View {
     @StateObject private var analyticsService = AdvancedAnalyticsService()
     @State private var pricePrediction: PlayerPricePrediction?
     @State private var selectedTab = 0
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // Player Header
                     PlayerHeaderView(player: player)
-                    
+
                     // Tab Selection
                     Picker("Analysis", selection: $selectedTab) {
                         Text("Overview").tag(0)
@@ -33,7 +33,7 @@ struct PlayerDetailView: View {
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal)
-                    
+
                     // Content based on selected tab
                     Group {
                         switch selectedTab {
@@ -66,7 +66,7 @@ struct PlayerDetailView: View {
             }
         }
     }
-    
+
     private func generatePricePrediction() {
         let predictions = analyticsService.predictPriceChanges(for: [player])
         pricePrediction = predictions.first
@@ -77,7 +77,7 @@ struct PlayerDetailView: View {
 
 struct PlayerHeaderView: View {
     let player: Player
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Main player info
@@ -86,7 +86,7 @@ struct PlayerHeaderView: View {
                     Text(player.name)
                         .font(.largeTitle)
                         .bold()
-                    
+
                     HStack {
                         Text(player.position.rawValue)
                             .font(.headline)
@@ -95,7 +95,7 @@ struct PlayerHeaderView: View {
                             .background(player.position.color)
                             .foregroundColor(.white)
                             .cornerRadius(8)
-                        
+
                         Text(player.teamAbbreviation)
                             .font(.headline)
                             .padding(.horizontal, 12)
@@ -104,25 +104,29 @@ struct PlayerHeaderView: View {
                             .cornerRadius(8)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing) {
                     Text(player.formattedPrice)
                         .font(.title)
                         .bold()
                         .foregroundColor(.green)
-                    
+
                     Text("Current Score: \\(player.currentScore)")
                         .font(.headline)
                         .foregroundColor(.orange)
                 }
             }
-            
+
             // Key metrics row
             HStack {
                 MetricCard(title: "Average", value: "\\(Int(player.averageScore))", color: .blue)
-                MetricCard(title: "Consistency", value: player.consistencyGrade, color: consistencyColor(for: player.consistency))
+                MetricCard(
+                    title: "Consistency",
+                    value: player.consistencyGrade,
+                    color: consistencyColor(for: player.consistency)
+                )
                 MetricCard(title: "Breakeven", value: "\\(player.breakeven)", color: .gray)
                 MetricCard(title: "Games", value: "\\(player.gamesPlayed)", color: .purple)
             }
@@ -131,13 +135,13 @@ struct PlayerHeaderView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
     }
-    
+
     private func consistencyColor(for consistency: Double) -> Color {
         switch consistency {
-        case 90...: return .green
-        case 80..<90: return .blue  
-        case 70..<80: return .yellow
-        default: return .red
+        case 90...: .green
+        case 80 ..< 90: .blue
+        case 70 ..< 80: .yellow
+        default: .red
         }
     }
 }
@@ -148,7 +152,7 @@ struct MetricCard: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(title)
@@ -170,7 +174,7 @@ struct MetricCard: View {
 
 struct OverviewTabView: View {
     let player: Player
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Performance Summary
@@ -183,7 +187,7 @@ struct OverviewTabView: View {
                             .bold()
                             .foregroundColor(.green)
                     }
-                    
+
                     HStack {
                         Text("Floor:")
                         Spacer()
@@ -191,7 +195,7 @@ struct OverviewTabView: View {
                             .bold()
                             .foregroundColor(.red)
                     }
-                    
+
                     HStack {
                         Text("Volatility:")
                         Spacer()
@@ -199,7 +203,7 @@ struct OverviewTabView: View {
                             .bold()
                             .foregroundColor(.orange)
                     }
-                    
+
                     HStack {
                         Text("Total Score:")
                         Spacer()
@@ -208,7 +212,7 @@ struct OverviewTabView: View {
                     }
                 }
             }
-            
+
             // Next Round Projection
             AnalyticsCard(title: "🔮 Next Round Projection") {
                 VStack(alignment: .leading, spacing: 8) {
@@ -219,21 +223,21 @@ struct OverviewTabView: View {
                             .bold()
                             .foregroundColor(.blue)
                     }
-                    
+
                     HStack {
                         Text("Opponent:")
                         Spacer()
                         Text(player.nextRoundProjection.opponent)
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Venue:")
                         Spacer()
                         Text(player.nextRoundProjection.venue)
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Confidence:")
                         Spacer()
@@ -243,7 +247,7 @@ struct OverviewTabView: View {
                     }
                 }
             }
-            
+
             // Weather Conditions
             AnalyticsCard(title: "🌤️ Match Conditions") {
                 VStack(alignment: .leading, spacing: 8) {
@@ -253,20 +257,22 @@ struct OverviewTabView: View {
                         Text("\\(player.nextRoundProjection.conditions.temperature)°C")
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Wind Speed:")
                         Spacer()
                         Text("\\(player.nextRoundProjection.conditions.windSpeed) km/h")
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Rain Chance:")
                         Spacer()
                         Text(String(format: "%.0f%%", player.nextRoundProjection.conditions.rainProbability * 100))
                             .bold()
-                            .foregroundColor(player.nextRoundProjection.conditions.rainProbability > 0.5 ? .blue : .gray)
+                            .foregroundColor(player.nextRoundProjection.conditions
+                                .rainProbability > 0.5 ? .blue : .gray
+                            )
                     }
                 }
             }
@@ -279,21 +285,23 @@ struct OverviewTabView: View {
 struct PriceAnalysisTabView: View {
     let player: Player
     let prediction: PlayerPricePrediction?
-    
+
     var body: some View {
         VStack(spacing: 16) {
-            if let prediction = prediction {
+            if let prediction {
                 // Next Round Price Change
                 AnalyticsCard(title: "📈 Next Round Price Change") {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Predicted Change:")
                             Spacer()
-                            Text("\\(prediction.nextRoundChange.amount >= 0 ? \"+\" : \"\")$\\(prediction.nextRoundChange.amount/1000)k")
-                                .bold()
-                                .foregroundColor(prediction.nextRoundChange.amount >= 0 ? .green : .red)
+                            Text(
+                                "\\(prediction.nextRoundChange.amount >= 0 ? \"+\" : \"\")$\\(prediction.nextRoundChange.amount/1000)k"
+                            )
+                            .bold()
+                            .foregroundColor(prediction.nextRoundChange.amount >= 0 ? .green : .red)
                         }
-                        
+
                         HStack {
                             Text("Probability:")
                             Spacer()
@@ -301,7 +309,7 @@ struct PriceAnalysisTabView: View {
                                 .bold()
                                 .foregroundColor(.blue)
                         }
-                        
+
                         Text("Reasoning:")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -309,18 +317,20 @@ struct PriceAnalysisTabView: View {
                             .font(.caption)
                     }
                 }
-                
+
                 // 3-Round Outlook
                 AnalyticsCard(title: "📊 3-Round Outlook") {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Expected Change:")
                             Spacer()
-                            Text("\\(prediction.threeRoundChange.amount >= 0 ? \"+\" : \"\")$\\(prediction.threeRoundChange.amount/1000)k")
-                                .bold()
-                                .foregroundColor(prediction.threeRoundChange.amount >= 0 ? .green : .red)
+                            Text(
+                                "\\(prediction.threeRoundChange.amount >= 0 ? \"+\" : \"\")$\\(prediction.threeRoundChange.amount/1000)k"
+                            )
+                            .bold()
+                            .foregroundColor(prediction.threeRoundChange.amount >= 0 ? .green : .red)
                         }
-                        
+
                         HStack {
                             Text("Confidence:")
                             Spacer()
@@ -330,7 +340,7 @@ struct PriceAnalysisTabView: View {
                         }
                     }
                 }
-                
+
                 // Season End Projection
                 AnalyticsCard(title: "🏆 Season End Projection") {
                     VStack(alignment: .leading, spacing: 8) {
@@ -341,7 +351,7 @@ struct PriceAnalysisTabView: View {
                                 .bold()
                                 .foregroundColor(.purple)
                         }
-                        
+
                         HStack {
                             Text("Total Rise:")
                             Spacer()
@@ -352,7 +362,7 @@ struct PriceAnalysisTabView: View {
                         }
                     }
                 }
-                
+
                 // Price Factors
                 AnalyticsCard(title: "🔍 Price Factors") {
                     VStack(alignment: .leading, spacing: 6) {
@@ -370,7 +380,7 @@ struct PriceAnalysisTabView: View {
                     }
                 }
             }
-            
+
             // Cash Cow Analysis (if applicable)
             if player.isCashCow {
                 AnalyticsCard(title: "💰 Cash Cow Analysis") {
@@ -382,7 +392,7 @@ struct PriceAnalysisTabView: View {
                                 .bold()
                                 .foregroundColor(.green)
                         }
-                        
+
                         HStack {
                             Text("Premium Potential:")
                             Spacer()
@@ -395,12 +405,12 @@ struct PriceAnalysisTabView: View {
             }
         }
     }
-    
+
     private func factorIcon(for impact: FactorImpact) -> String {
         switch impact {
-        case .positive: return "✅"
-        case .negative: return "❌"
-        case .neutral: return "⚪"
+        case .positive: "✅"
+        case .negative: "❌"
+        case .neutral: "⚪"
         }
     }
 }
@@ -409,7 +419,7 @@ struct PriceAnalysisTabView: View {
 
 struct PerformanceTabView: View {
     let player: Player
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Seasonal Trend Analysis
@@ -421,21 +431,21 @@ struct PerformanceTabView: View {
                         Text(String(format: "%.1f", player.seasonalTrend.earlySeasonAvg))
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Mid Season Avg:")
                         Spacer()
                         Text(String(format: "%.1f", player.seasonalTrend.midSeasonAvg))
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Late Season Avg:")
                         Spacer()
                         Text(String(format: "%.1f", player.seasonalTrend.lateSeasonAvg))
                             .bold()
                     }
-                    
+
                     HStack {
                         Text("Trend Direction:")
                         Spacer()
@@ -444,7 +454,7 @@ struct PerformanceTabView: View {
                             .bold()
                             .foregroundColor(trendColor(for: player.seasonalTrend.trendDirection))
                     }
-                    
+
                     HStack {
                         Text("Fade Risk:")
                         Spacer()
@@ -454,7 +464,7 @@ struct PerformanceTabView: View {
                     }
                 }
             }
-            
+
             // Venue Performance
             if !player.venuePerformance.isEmpty {
                 AnalyticsCard(title: "🏟️ Venue Performance") {
@@ -475,7 +485,7 @@ struct PerformanceTabView: View {
                     }
                 }
             }
-            
+
             // Contract Status
             AnalyticsCard(title: "📋 Contract Status") {
                 VStack(alignment: .leading, spacing: 8) {
@@ -486,14 +496,14 @@ struct PerformanceTabView: View {
                             .bold()
                             .foregroundColor(player.contractStatus.contractYear ? .orange : .gray)
                     }
-                    
+
                     HStack {
                         Text("Years Remaining:")
                         Spacer()
                         Text("\\(player.contractStatus.yearsRemaining)")
                             .bold()
                     }
-                    
+
                     if player.contractStatus.contractYear {
                         HStack {
                             Text("Motivation Bonus:")
@@ -507,22 +517,22 @@ struct PerformanceTabView: View {
             }
         }
     }
-    
+
     private func trendIcon(for trend: TrendDirection) -> String {
         switch trend {
-        case .improving: return "📈"
-        case .stable: return "➡️"
-        case .declining: return "📉"
-        case .volatile: return "⚡"
+        case .improving: "📈"
+        case .stable: "➡️"
+        case .declining: "📉"
+        case .volatile: "⚡"
         }
     }
-    
+
     private func trendColor(for trend: TrendDirection) -> Color {
         switch trend {
-        case .improving: return .green
-        case .stable: return .blue
-        case .declining: return .red
-        case .volatile: return .orange
+        case .improving: .green
+        case .stable: .blue
+        case .declining: .red
+        case .volatile: .orange
         }
     }
 }
@@ -531,7 +541,7 @@ struct PerformanceTabView: View {
 
 struct RiskAnalysisTabView: View {
     let player: Player
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Injury Risk Analysis
@@ -544,7 +554,7 @@ struct RiskAnalysisTabView: View {
                             .bold()
                             .foregroundColor(player.injuryRisk.riskLevel.color)
                     }
-                    
+
                     HStack {
                         Text("Risk Score:")
                         Spacer()
@@ -552,7 +562,7 @@ struct RiskAnalysisTabView: View {
                             .bold()
                             .foregroundColor(riskScoreColor(for: player.injuryRisk.riskScore))
                     }
-                    
+
                     HStack {
                         Text("Reinjury Probability:")
                         Spacer()
@@ -562,7 +572,7 @@ struct RiskAnalysisTabView: View {
                     }
                 }
             }
-            
+
             // Injury History
             if !player.injuryRisk.injuryHistory.isEmpty {
                 AnalyticsCard(title: "📋 Injury History") {
@@ -580,7 +590,7 @@ struct RiskAnalysisTabView: View {
                                     .foregroundColor(.red)
                             }
                         }
-                        
+
                         if player.injuryRisk.injuryHistory.count > 3 {
                             Text("... and \\(player.injuryRisk.injuryHistory.count - 3) more")
                                 .font(.caption)
@@ -589,7 +599,7 @@ struct RiskAnalysisTabView: View {
                     }
                 }
             }
-            
+
             // Player Status
             AnalyticsCard(title: "🚨 Current Status") {
                 VStack(alignment: .leading, spacing: 8) {
@@ -600,7 +610,7 @@ struct RiskAnalysisTabView: View {
                             .bold()
                             .foregroundColor(player.isInjured ? .red : .green)
                     }
-                    
+
                     HStack {
                         Text("Doubtful:")
                         Spacer()
@@ -608,7 +618,7 @@ struct RiskAnalysisTabView: View {
                             .bold()
                             .foregroundColor(player.isDoubtful ? .orange : .green)
                     }
-                    
+
                     HStack {
                         Text("Trade Target:")
                         Spacer()
@@ -616,7 +626,7 @@ struct RiskAnalysisTabView: View {
                             .bold()
                             .foregroundColor(player.isTradeTarget ? .orange : .gray)
                     }
-                    
+
                     HStack {
                         Text("Captain Recommended:")
                         Spacer()
@@ -628,13 +638,13 @@ struct RiskAnalysisTabView: View {
             }
         }
     }
-    
+
     private func riskScoreColor(for score: Double) -> Color {
         switch score {
-        case 0..<25: return .green
-        case 25..<50: return .yellow
-        case 50..<75: return .orange
-        default: return .red
+        case 0 ..< 25: .green
+        case 25 ..< 50: .yellow
+        case 50 ..< 75: .orange
+        default: .red
         }
     }
 }
@@ -644,18 +654,18 @@ struct RiskAnalysisTabView: View {
 struct AnalyticsCard<Content: View>: View {
     let title: String
     let content: Content
-    
+
     init(title: String, @ViewBuilder content: () -> Content) {
         self.title = title
         self.content = content()
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             content
         }
         .padding()

@@ -12,7 +12,7 @@ import Security
 
 // MARK: - KeychainService
 
-final class KeychainService {
+public final class KeychainService {
     static let shared = KeychainService()
 
     private let logger = Logger(subsystem: "AFLFantasy", category: "KeychainService")
@@ -23,7 +23,10 @@ final class KeychainService {
     // MARK: - AFL Fantasy Credentials
 
     func storeTeamId(_ teamId: String) async throws {
-        try await store(data: teamId.data(using: .utf8)!, forKey: "afl_team_id")
+        guard let data = teamId.data(using: .utf8) else {
+            throw KeychainError.invalidData
+        }
+        try await store(data: data, forKey: "afl_team_id")
     }
 
     func retrieveTeamId() async throws -> String {
@@ -35,7 +38,10 @@ final class KeychainService {
     }
 
     func storeSessionCookie(_ cookie: String) async throws {
-        try await store(data: cookie.data(using: .utf8)!, forKey: "afl_session_cookie")
+        guard let data = cookie.data(using: .utf8) else {
+            throw KeychainError.invalidData
+        }
+        try await store(data: data, forKey: "afl_session_cookie")
     }
 
     func retrieveSessionCookie() async throws -> String {
@@ -47,7 +53,10 @@ final class KeychainService {
     }
 
     func storeAPIToken(_ token: String) async throws {
-        try await store(data: token.data(using: .utf8)!, forKey: "afl_api_token")
+        guard let data = token.data(using: .utf8) else {
+            throw KeychainError.invalidData
+        }
+        try await store(data: data, forKey: "afl_api_token")
     }
 
     func retrieveAPIToken() async throws -> String {
@@ -59,7 +68,10 @@ final class KeychainService {
     }
 
     func storeCSRFToken(_ token: String) async throws {
-        try await store(data: token.data(using: .utf8)!, forKey: "afl_csrf_token")
+        guard let data = token.data(using: .utf8) else {
+            throw KeychainError.invalidData
+        }
+        try await store(data: data, forKey: "afl_csrf_token")
     }
 
     func retrieveCSRFToken() async throws -> String {
@@ -161,7 +173,7 @@ final class KeychainService {
 
 // MARK: - KeychainError
 
-enum KeychainError: LocalizedError {
+public enum KeychainError: LocalizedError {
     case storageError(OSStatus)
     case retrievalError(OSStatus)
     case deletionError(OSStatus)

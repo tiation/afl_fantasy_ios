@@ -41,120 +41,144 @@ class AppState: ObservableObject {
     }
 
     private func loadEnhancedData() {
-        players = [
-            EnhancedPlayer(
-                name: "Marcus Bontempelli",
-                position: .midfielder,
-                currentPrice: 850_000,
-                currentScore: 125,
-                averageScore: 118.5,
-                breakeven: 85,
-                consistency: 92.0,
-                injuryRiskScore: 15.0,
-                priceChange: 25000,
-                cashGenerated: 0,
-                isCashCow: false,
-                teamAbbreviation: "WBD",
-                projectedScore: 130.0,
-                opponent: "Richmond",
-                venue: "Marvel Stadium",
-                rainProbability: 0.2,
-                venueBias: 3.5,
-                isDoubtful: false,
-                contractYear: false,
-                gamesPlayed: 10
-            ),
-            EnhancedPlayer(
-                name: "Max Gawn",
-                position: .ruck,
-                currentPrice: 780_000,
-                currentScore: 98,
-                averageScore: 105.2,
-                breakeven: 90,
-                consistency: 88.0,
-                injuryRiskScore: 35.0,
-                priceChange: -15000,
-                cashGenerated: 0,
-                isCashCow: false,
-                teamAbbreviation: "MEL",
-                projectedScore: 105.0,
-                opponent: "Collingwood",
-                venue: "MCG",
-                rainProbability: 0.1,
-                venueBias: 2.0,
-                isDoubtful: true,
-                contractYear: false,
-                gamesPlayed: 9
-            ),
-            EnhancedPlayer(
-                name: "Touk Miller",
-                position: .midfielder,
-                currentPrice: 720_000,
-                currentScore: 110,
-                averageScore: 108.8,
-                breakeven: 75,
-                consistency: 89.0,
-                injuryRiskScore: 12.0,
-                priceChange: 20000,
-                cashGenerated: 0,
-                isCashCow: false,
-                teamAbbreviation: "GCS",
-                projectedScore: 115.0,
-                opponent: "Geelong",
-                venue: "GMHBA Stadium",
-                rainProbability: 0.4,
-                venueBias: -1.5,
-                isDoubtful: false,
-                contractYear: true,
-                gamesPlayed: 10
-            ),
-            EnhancedPlayer(
-                name: "Hayden Young",
-                position: .defender,
-                currentPrice: 550_000,
-                currentScore: 78,
-                averageScore: 85.2,
-                breakeven: 45,
-                consistency: 76.0,
-                injuryRiskScore: 14.0,
-                priceChange: 35000,
-                cashGenerated: 120_000,
-                isCashCow: true,
-                teamAbbreviation: "FRE",
-                projectedScore: 88.0,
-                opponent: "Sydney",
-                venue: "Optus Stadium",
-                rainProbability: 0.0,
-                venueBias: 4.2,
-                isDoubtful: false,
-                contractYear: false,
-                gamesPlayed: 8
-            ),
-            EnhancedPlayer(
-                name: "Sam Walsh",
-                position: .midfielder,
-                currentPrice: 750_000,
-                currentScore: 115,
-                averageScore: 112.4,
-                breakeven: 80,
-                consistency: 87.0,
-                injuryRiskScore: 18.0,
-                priceChange: 30000,
-                cashGenerated: 0,
-                isCashCow: false,
-                teamAbbreviation: "CAR",
-                projectedScore: 118.0,
-                opponent: "Hawthorn",
-                venue: "MCG",
-                rainProbability: 0.3,
-                venueBias: 1.8,
-                isDoubtful: false,
-                contractYear: true,
-                gamesPlayed: 10
-            )
-        ]
-
+        players = createSamplePlayers()
         cashCows = players.filter(\.isCashCow)
+    }
+
+    private func createSamplePlayers() -> [EnhancedPlayer] {
+        let samplePlayers = [
+            createPremiumMidfielder(),
+            createPremiumRuck(),
+            createConsistentMidfielder(),
+            createCashCowDefender(),
+            createContractYearMidfielder()
+        ]
+        return samplePlayers
+    }
+
+    private func createPremiumMidfielder() -> EnhancedPlayer {
+        EnhancedPlayer(
+            name: "Marcus Bontempelli",
+            position: .midfielder,
+            currentPrice: 850_000,
+            currentScore: 125,
+            averageScore: 118.5,
+            breakeven: 85,
+            consistency: 92.0,
+            injuryRiskScore: 15.0,
+            priceChange: 25000,
+            cashGenerated: 0,
+            isCashCow: false,
+            teamAbbreviation: "WBD",
+            projectedScore: 130.0,
+            opponent: "Richmond",
+            venue: "Marvel Stadium",
+            rainProbability: 0.2,
+            venueBias: 3.5,
+            isDoubtful: false,
+            contractYear: false,
+            gamesPlayed: 10
+        )
+    }
+
+    private func createPremiumRuck() -> EnhancedPlayer {
+        EnhancedPlayer(
+            name: "Max Gawn",
+            position: .ruck,
+            currentPrice: 780_000,
+            currentScore: 98,
+            averageScore: 105.2,
+            breakeven: 90,
+            consistency: 88.0,
+            injuryRiskScore: 35.0,
+            priceChange: -15000,
+            cashGenerated: 0,
+            isCashCow: false,
+            teamAbbreviation: "MEL",
+            projectedScore: 105.0,
+            opponent: "Collingwood",
+            venue: "MCG",
+            rainProbability: 0.1,
+            venueBias: 2.0,
+            isDoubtful: true,
+            contractYear: false,
+            gamesPlayed: 9
+        )
+    }
+
+    private func createConsistentMidfielder() -> EnhancedPlayer {
+        EnhancedPlayer(
+            name: "Touk Miller",
+            position: .midfielder,
+            currentPrice: 720_000,
+            currentScore: 110,
+            averageScore: 108.8,
+            breakeven: 75,
+            consistency: 89.0,
+            injuryRiskScore: 12.0,
+            priceChange: 20000,
+            cashGenerated: 0,
+            isCashCow: false,
+            teamAbbreviation: "GCS",
+            projectedScore: 115.0,
+            opponent: "Geelong",
+            venue: "GMHBA Stadium",
+            rainProbability: 0.4,
+            venueBias: -1.5,
+            isDoubtful: false,
+            contractYear: true,
+            gamesPlayed: 10
+        )
+    }
+
+    private func createCashCowDefender() -> EnhancedPlayer {
+        EnhancedPlayer(
+            name: "Hayden Young",
+            position: .defender,
+            currentPrice: 550_000,
+            currentScore: 78,
+            averageScore: 85.2,
+            breakeven: 45,
+            consistency: 76.0,
+            injuryRiskScore: 14.0,
+            priceChange: 35000,
+            cashGenerated: 120_000,
+            isCashCow: true,
+            teamAbbreviation: "FRE",
+            projectedScore: 88.0,
+            opponent: "Sydney",
+            venue: "Optus Stadium",
+            rainProbability: 0.0,
+            venueBias: 4.2,
+            isDoubtful: false,
+            contractYear: false,
+            gamesPlayed: 8
+        )
+    }
+
+    private func createContractYearMidfielder() -> EnhancedPlayer {
+        EnhancedPlayer(
+            name: "Sam Walsh",
+            position: .midfielder,
+            currentPrice: 750_000,
+            currentScore: 115,
+            averageScore: 112.4,
+            breakeven: 80,
+            consistency: 87.0,
+            injuryRiskScore: 18.0,
+            priceChange: 30000,
+            cashGenerated: 0,
+            isCashCow: false,
+            teamAbbreviation: "CAR",
+            projectedScore: 118.0,
+            opponent: "Hawthorn",
+            venue: "MCG",
+            rainProbability: 0.3,
+            venueBias: 1.8,
+            isDoubtful: false,
+            contractYear: true,
+            gamesPlayed: 10
+        )
     }
 
     private func generateCaptainSuggestions() {

@@ -281,7 +281,8 @@ class NotificationManager: ObservableObject {
         let identifiersToCancel = pendingRequests
             .filter { request in
                 if let userInfo = request.content.userInfo,
-                   let requestPlayerId = userInfo["playerId"] as? String {
+                   let requestPlayerId = userInfo["playerId"] as? String
+                {
                     return requestPlayerId == playerId
                 }
                 return false

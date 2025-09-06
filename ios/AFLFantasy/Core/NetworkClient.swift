@@ -90,76 +90,100 @@ final class NetworkClient: NetworkClientProtocol {
 
         for attempt in 1 ... maxRetries {
             do {
-                logger.info("Attempt \(attempt): \(request.url?.absoluteString ?? "unknown", privacy: .public)")
-
-                let (data, response) = try await session.data(for: request)
-
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    throw NetworkError.unknown(URLError(.badServerResponse))
-                }
-
-                // Handle HTTP status codes
-                switch httpResponse.statusCode {
-                case 200 ... 299:
-                    logger.info("Success: \(httpResponse.statusCode)")
-                    return data
-                case 401:
-                    throw NetworkError.unauthorized
-                case 429:
-                    let retryAfter = Double(httpResponse.value(forHTTPHeaderField: "Retry-After") ?? "60") ?? 60.0
-                    throw NetworkError.rateLimited(retryAfter: retryAfter)
-                case 500 ... 599:
-                    throw NetworkError.serverError(statusCode: httpResponse.statusCode)
-                default:
-                    throw NetworkError.serverError(statusCode: httpResponse.statusCode)
-                }
+                return try await performSingleRequest(request, attempt: attempt)
             } catch let error as NetworkError {
                 lastError = error
-
-                // Don't retry certain errors
-                switch error {
-                case .unauthorized, .invalidURL, .decodingError:
-                    throw error
-                case let .rateLimited(retryAfter):
-                    if attempt < maxRetries {
-                        logger.info("Rate limited, retrying after \(retryAfter)s")
-                        try await Task.sleep(nanoseconds: UInt64(retryAfter * 1_000_000_000))
-                        continue
-                    }
-                    throw error
-                default:
-                    break
+                if try await shouldRetryForNetworkError(error, attempt: attempt) {
+                    continue
                 }
-
-                if attempt < maxRetries {
-                    let delay = baseRetryDelay * pow(2.0, Double(attempt - 1)) // Exponential backoff
-                    logger.info("Retrying in \(delay)s due to: \(error.localizedDescription, privacy: .public)")
-                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-                }
+                throw error
             } catch {
                 lastError = error
-
-                // Handle URLErrors
-                if let urlError = error as? URLError {
-                    switch urlError.code {
-                    case .notConnectedToInternet, .networkConnectionLost:
-                        throw NetworkError.noInternetConnection
-                    case .timedOut:
-                        throw NetworkError.requestTimeout
-                    default:
-                        break
-                    }
-                }
-
-                if attempt < maxRetries {
-                    let delay = baseRetryDelay * pow(2.0, Double(attempt - 1))
-                    logger.info("Retrying in \(delay)s due to: \(error.localizedDescription, privacy: .public)")
-                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                if try await shouldRetryForGenericError(error, attempt: attempt) {
+                    continue
                 }
             }
         }
 
         throw lastError ?? NetworkError.unknown(URLError(.unknown))
+    }
+
+    private func performSingleRequest(_ request: URLRequest, attempt: Int) async throws -> Data {
+        logger.info("Attempt \(attempt): \(request.url?.absoluteString ?? "unknown", privacy: .public)")
+
+        let (data, response) = try await session.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.unknown(URLError(.badServerResponse))
+        }
+
+        return try handleHTTPResponse(httpResponse, data: data)
+    }
+
+    private func handleHTTPResponse(_ response: HTTPURLResponse, data: Data) throws -> Data {
+        switch response.statusCode {
+        case 200 ... 299:
+            logger.info("Success: \(response.statusCode)")
+            return data
+        case 401:
+            throw NetworkError.unauthorized
+        case 429:
+            let retryAfter = Double(response.value(forHTTPHeaderField: "Retry-After") ?? "60") ?? 60.0
+            throw NetworkError.rateLimited(retryAfter: retryAfter)
+        case 500 ... 599:
+            throw NetworkError.serverError(statusCode: response.statusCode)
+        default:
+            throw NetworkError.serverError(statusCode: response.statusCode)
+        }
+    }
+
+    private func shouldRetryForNetworkError(_ error: NetworkError, attempt: Int) async throws -> Bool {
+        // Don't retry certain errors
+        switch error {
+        case .unauthorized, .invalidURL, .decodingError:
+            return false
+        case let .rateLimited(retryAfter):
+            if attempt < maxRetries {
+                logger.info("Rate limited, retrying after \(retryAfter)s")
+                try await Task.sleep(nanoseconds: UInt64(retryAfter * 1_000_000_000))
+                return true
+            }
+            return false
+        default:
+            break
+        }
+
+        if attempt < maxRetries {
+            let delay = baseRetryDelay * pow(2.0, Double(attempt - 1))
+            logger.info("Retrying in \(delay)s due to: \(error.localizedDescription, privacy: .public)")
+            try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            return true
+        }
+
+        return false
+    }
+
+    private func shouldRetryForGenericError(_ error: Error, attempt: Int) async throws -> Bool {
+        // Handle URLErrors
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet, .networkConnectionLost:
+                throw NetworkError.noInternetConnection
+            case .timedOut:
+                throw NetworkError.requestTimeout
+            default:
+                break
+            }
+        }
+
+        if attempt < maxRetries {
+            let delay = baseRetryDelay * pow(2.0, Double(attempt - 1))
+            logger.info("Retrying in \(delay)s due to: \(error.localizedDescription, privacy: .public)")
+            try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            return true
+        }
+
+        return false
     }
 }
 

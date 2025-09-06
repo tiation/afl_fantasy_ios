@@ -6,22 +6,22 @@
 //  Created by AI Assistant on 6/9/2025.
 //
 
-import SwiftUI
-import UIKit
 import Combine
 import Foundation
+import SwiftUI
+import UIKit
 
-// MARK: - Lazy Loading Manager
+// MARK: - LazyLoadingManager
 
 public class LazyLoadingManager: ObservableObject {
     @Published var criticalDataLoaded = false
     @Published var nonCriticalDataLoaded = false
     @Published var isInitialized = false
-    
+
     init() {
         loadCriticalDataFirst()
     }
-    
+
     private func loadCriticalDataFirst() {
         // Load only essential data for first paint
         Task {
@@ -32,7 +32,7 @@ public class LazyLoadingManager: ObservableObject {
             }
         }
     }
-    
+
     private func loadNonCriticalData() {
         // Load analytics, additional features, etc.
         Task {
@@ -49,23 +49,22 @@ public class LazyLoadingManager: ObservableObject {
 public extension View {
     // Stable frame to prevent layout thrash
     func stableFrame(width: CGFloat? = nil, height: CGFloat? = nil) -> some View {
-        self.frame(
+        frame(
             minWidth: width, maxWidth: width,
             minHeight: height, maxHeight: height
         )
     }
-    
+
     // Cancel work when view disappears
-    func cancelWorkOnDisappear<T: Cancellable>(_ cancellable: T?) -> some View {
-        self.onDisappear {
+    func cancelWorkOnDisappear(_ cancellable: (some Cancellable)?) -> some View {
+        onDisappear {
             cancellable?.cancel()
         }
     }
-    
+
     // Efficient list items
     func listRowOptimized() -> some View {
-        self
-            .listRowSeparator(.hidden)
+        listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             .buttonStyle(PlainButtonStyle()) // Prevents default button animations
     }

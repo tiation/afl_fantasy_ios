@@ -149,7 +149,8 @@ final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
         // Check cache first
         if let cached = cache.playerStats,
            let lastUpdate = cache.lastPlayerUpdate,
-           Date().timeIntervalSince(lastUpdate) < 300 { // 5 minutes
+           Date().timeIntervalSince(lastUpdate) < 300
+        { // 5 minutes
             logger.info("Returning cached player stats")
             return cached
         }

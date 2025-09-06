@@ -262,7 +262,8 @@ extension CoreDataManager {
         // Delete existing venue performances
         if let existingPerformances = player.venuePerformances {
             for performance in existingPerformances {
-                context.delete(performance as! NSManagedObject)
+                guard let managedObject = performance as? NSManagedObject else { continue }
+                context.delete(managedObject)
             }
         }
 
@@ -282,7 +283,8 @@ extension CoreDataManager {
         // Delete existing alert flags
         if let existingFlags = player.alertFlags {
             for flag in existingFlags {
-                context.delete(flag as! NSManagedObject)
+                guard let managedObject = flag as? NSManagedObject else { continue }
+                context.delete(managedObject)
             }
         }
 

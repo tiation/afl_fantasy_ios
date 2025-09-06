@@ -6,12 +6,12 @@
 //  Copyright © 2025 AFL AI. All rights reserved.
 //
 
-import SwiftUI
-import UserNotifications
 import CoreData
 import os.log
+import SwiftUI
+import UserNotifications
 
-// MARK: - Notification Classes (Inline for now)
+// MARK: - NotificationManager
 
 class NotificationManager {
     static let shared = NotificationManager()
@@ -116,12 +116,12 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 struct AFLFantasyApp: App {
     @StateObject private var appState = AppState()
     private let notificationDelegate = NotificationDelegate()
-    
-    // Core Data Stack (inline for simplicity) 
+
+    // Core Data Stack (inline for simplicity)
     private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "AFLFantasy")
         container.loadPersistentStores { _, error in
-            if let error = error {
+            if let error {
                 print("Core Data error: \(error.localizedDescription)")
             } else {
                 print("Core Data loaded successfully")
@@ -139,10 +139,11 @@ struct AFLFantasyApp: App {
                 .onAppear {
                     // Setup notifications when app launches
                     if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let app = windowScene.delegate as? UIApplicationDelegate {
+                       let app = windowScene.delegate as? UIApplicationDelegate
+                    {
                         notificationDelegate.setupWithApp(UIApplication.shared)
                     }
-                    
+
                     // Schedule some demo notifications for testing
                     Task {
                         await scheduleDemoNotifications()
@@ -183,7 +184,9 @@ struct AFLFantasyApp: App {
         }
     }
 }
-// MARK: - Simple App State (kept for compatibility)
+
+// MARK: - AppState
+
 // Note: PersistentAppState is now the primary state management class
 // This AppState is kept for backward compatibility if needed
 
@@ -607,6 +610,82 @@ struct CaptainSuggestion: Identifiable {
     let player: EnhancedPlayer
     let confidence: Int
     let projectedPoints: Int
+}
+
+// MARK: - ConnectionStatusBar
+
+struct ConnectionStatusBar: View {
+    @State private var connectionStatus: ConnectionStatus = .live
+    @State private var animateConnection = false
+
+    var body: some View {
+        HStack {
+            Image(systemName: connectionStatus.systemImage)
+                .foregroundColor(connectionStatus.color)
+                .scaleEffect(animateConnection ? 1.2 : 1.0)
+                .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: animateConnection)
+
+            Text(connectionStatus.rawValue)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(connectionStatus.color)
+
+            Spacer()
+
+            Text("Last updated: now")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(connectionStatus.color.opacity(0.1))
+        )
+        .onAppear {
+            animateConnection = connectionStatus == .live
+        }
+    }
+}
+
+// MARK: - DesignSystem
+
+enum DesignSystem {
+    enum Colors {
+        static let primary = Color.orange
+        static let onSurfaceSecondary = Color.secondary
+        static let success = Color.green
+    }
+
+    enum Spacing {
+        case s, m, l, xl
+
+        var value: CGFloat {
+            switch self {
+            case .s: 8
+            case .m: 16
+            case .l: 24
+            case .xl: 32
+            }
+        }
+    }
+}
+
+// MARK: - TypographyModifier
+
+struct TypographyModifier: ViewModifier {
+    let style: Font.TextStyle
+
+    func body(content: Content) -> some View {
+        content
+            .font(.system(style))
+    }
+}
+
+extension View {
+    func typography(_ style: Font.TextStyle) -> some View {
+        modifier(TypographyModifier(style: style))
+    }
 }
 
 // MARK: - Position

@@ -117,12 +117,12 @@ struct TeamScoreHeaderView: View {
         VStack(spacing: DesignSystem.Spacing.m.value) {
             // Connection Status Bar
             ConnectionStatusBar()
-            
+
             // Main Team Info
             HStack {
                 VStack(alignment: .leading) {
                     Text("TEAM SCORE")
-                        .typography(.caption1)
+                        .typography(.caption)
                         .foregroundColor(DesignSystem.Colors.onSurfaceSecondary)
                     Text("\(appState.teamScore)")
                         .typography(.largeTitle)
@@ -133,7 +133,7 @@ struct TeamScoreHeaderView: View {
 
                 VStack(alignment: .trailing) {
                     Text("RANK")
-                        .typography(.caption1)
+                        .typography(.caption)
                         .foregroundColor(DesignSystem.Colors.onSurfaceSecondary)
                     Text("#\(appState.teamRank)")
                         .typography(.title2)
@@ -844,6 +844,11 @@ struct SettingsView: View {
     @State private var enableBreakevenAlerts = true
     @State private var enableInjuryAlerts = true
     @State private var enableLateOutAlerts = true
+    @State private var showingPrivacyPolicy = false
+    @State private var showingTermsOfUse = false
+
+    // Haptic feedback
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
 
     var body: some View {
         NavigationView {
@@ -863,6 +868,7 @@ struct SettingsView: View {
                     }
 
                     Button("Clear Cache") {
+                        impactFeedback.impactOccurred()
                         // TODO: Implement cache clearing
                     }
                     .foregroundColor(.red)
@@ -876,16 +882,179 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    if let privacyURL = URL(string: "https://afl.ai/privacy") {
-                        Link("Privacy Policy", destination: privacyURL)
+                    // Native legal document modals - fast, dark mode, offline
+                    Button("Privacy Policy") {
+                        impactFeedback.impactOccurred()
+                        showingPrivacyPolicy = true
                     }
-                    if let termsURL = URL(string: "https://afl.ai/terms") {
-                        Link("Terms of Service", destination: termsURL)
+                    .foregroundColor(.primary)
+
+                    Button("Terms of Service") {
+                        impactFeedback.impactOccurred()
+                        showingTermsOfUse = true
                     }
+                    .foregroundColor(.primary)
                 }
             }
             .navigationTitle("⚙️ Settings")
             .navigationBarTitleDisplayMode(.large)
+        }
+        .sheet(isPresented: $showingPrivacyPolicy) {
+            PrivacyPolicyView()
+        }
+        .sheet(isPresented: $showingTermsOfUse) {
+            TermsOfUseView()
+        }
+    }
+}
+
+// MARK: - PrivacyPolicyView
+
+struct PrivacyPolicyView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Privacy Policy")
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Last updated: September 6, 2025")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Group {
+                        privacySection(
+                            title: "Information We Collect",
+                            content: "AFL Fantasy Intelligence collects data necessary to provide fantasy football insights including team selections, player preferences, and usage analytics."
+                        )
+
+                        privacySection(
+                            title: "How We Use Your Information",
+                            content: "Your data is used to provide personalized fantasy recommendations, improve app performance, and deliver relevant notifications about your team."
+                        )
+
+                        privacySection(
+                            title: "Data Storage & Security",
+                            content: "All sensitive data is encrypted and stored securely using industry-standard practices. We do not share personal information with third parties."
+                        )
+
+                        privacySection(
+                            title: "Your Rights",
+                            content: "You can request data deletion, modify privacy settings, or export your data at any time through the app settings."
+                        )
+
+                        privacySection(
+                            title: "Contact Us",
+                            content: "Questions about privacy? Contact us at privacy@afl.ai or through the app feedback system."
+                        )
+                    }
+                }
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .accessibilityLabel("Close privacy policy")
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func privacySection(title: String, content: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.primary)
+
+            Text(content)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+// MARK: - TermsOfUseView
+
+struct TermsOfUseView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Terms of Service")
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Last updated: September 6, 2025")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Group {
+                        termsSection(
+                            title: "Acceptance of Terms",
+                            content: "By using AFL Fantasy Intelligence, you agree to these Terms of Service and our Privacy Policy. These terms may be updated periodically."
+                        )
+
+                        termsSection(
+                            title: "App Usage",
+                            content: "This app provides fantasy football insights and recommendations. All data is for informational purposes only and should not be considered professional financial advice."
+                        )
+
+                        termsSection(
+                            title: "User Responsibilities",
+                            content: "Users are responsible for maintaining account security, providing accurate information, and using the app in compliance with applicable laws."
+                        )
+
+                        termsSection(
+                            title: "Intellectual Property",
+                            content: "AFL Fantasy Intelligence and all related content, features, and functionality are owned by AFL AI and protected by copyright and trademark laws."
+                        )
+
+                        termsSection(
+                            title: "Limitation of Liability",
+                            content: "The app is provided 'as is' without warranties. We are not liable for any damages arising from app usage or fantasy sports decisions."
+                        )
+
+                        termsSection(
+                            title: "Contact Information",
+                            content: "Questions about these terms? Contact us at legal@afl.ai or through the app support system."
+                        )
+                    }
+                }
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .accessibilityLabel("Close terms of service")
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func termsSection(title: String, content: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.primary)
+
+            Text(content)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

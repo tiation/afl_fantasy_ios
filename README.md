@@ -149,6 +149,32 @@ Core/
 - Optional telemetry (can be disabled)
 - Sign in with Apple for privacy
 
+## 📄 Legal Documents
+
+The app includes comprehensive legal documentation:
+
+- **Privacy Policy** (`docs/privacy.md`) - GDPR-compliant, no data collection policy
+- **Terms of Use** (`docs/terms.md`) - Fantasy sports disclaimers & gambling help resources
+- **Hosting Guide** (`docs/legal/hosting-guide.md`) - Instructions for deploying legal docs
+
+### Key Legal Features:
+- ✅ Clear "no gambling" disclaimers
+- ✅ Prediction accuracy limitations explained
+- ✅ Australian gambling help resources (BetStop, 1800 858 858)
+- ✅ No personal data collection policy
+- ✅ App Store compliance (§5.1, §5.3)
+- ✅ Links accessible from Settings page
+
+### Hosting Legal Documents:
+```bash
+# Quick setup with GitHub Pages
+gh repo create --public
+git push origin main
+# Enable Pages in repo settings → Pages → /docs folder
+
+# Or deploy to Netlify/Vercel - see docs/legal/hosting-guide.md
+```
+
 ## 🚢 Deployment
 
 Currently targeting:

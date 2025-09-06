@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
-import App from "./App";
+// import App from "./App";
+import SimpleApp from "./SimpleApp";
 import "./index.css";
 import { ThemeProvider } from "next-themes";
 
@@ -14,7 +15,7 @@ if (!rootElement) {
   try {
     createRoot(rootElement).render(
       <ThemeProvider attribute="class" defaultTheme="light">
-        <App />
+        <SimpleApp />
       </ThemeProvider>
     );
     

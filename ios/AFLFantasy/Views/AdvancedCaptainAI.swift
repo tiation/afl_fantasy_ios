@@ -989,16 +989,6 @@ struct AdvancedSettingsSheet: View {
 
 #Preview {
     let state = AppState()
-    // Try to extract a real captain from suggestions if present
-    _ = if let suggestion = state.captainSuggestions.first {
-        CaptainData(
-            playerName: suggestion.player.name,
-            score: suggestion.projectedPoints / 2,
-            ownershipPercentage: 45.0
-        )
-    } else {
-        CaptainData()
-    }
-    AdvancedCaptainAI()
+    return AdvancedCaptainAI()
         .environmentObject(state)
 }

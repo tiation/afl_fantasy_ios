@@ -229,7 +229,7 @@ class AFLFantasyToolsClient: ObservableObject {
     }
 }
 
-// MARK: - Data Models
+// MARK: - DashboardData
 
 struct DashboardData {
     let teamValue: TeamValue
@@ -254,6 +254,8 @@ struct DashboardData {
     }
 }
 
+// MARK: - CaptainData
+
 enum CaptainData {
     struct Captain {
         let name: String
@@ -261,6 +263,8 @@ enum CaptainData {
         let position: String?
     }
 }
+
+// MARK: - AIRecommendation
 
 struct AIRecommendation: Identifiable {
     let id: String
@@ -273,6 +277,8 @@ struct AIRecommendation: Identifiable {
     let reasoning: String
     let data: [String: String]?
 }
+
+// MARK: - CaptainSuggestionAnalysis
 
 struct CaptainSuggestionAnalysis: Identifiable {
     let id: String
@@ -288,6 +294,8 @@ struct CaptainSuggestionAnalysis: Identifiable {
     let fixture: FixtureAnalysis?
 }
 
+// MARK: - FixtureAnalysis
+
 struct FixtureAnalysis {
     let opponent: String
     let venue: String
@@ -295,6 +303,8 @@ struct FixtureAnalysis {
     let defensiveVulnerability: Double?
     let weatherImpact: String?
 }
+
+// MARK: - CashGenerationTarget
 
 struct CashGenerationTarget: Identifiable {
     let id: String
@@ -307,6 +317,8 @@ struct CashGenerationTarget: Identifiable {
     let confidence: Double
     let riskLevel: String
 }
+
+// MARK: - TradeAnalysis
 
 struct TradeAnalysis: Identifiable {
     let id: String

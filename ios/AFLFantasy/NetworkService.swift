@@ -6,127 +6,127 @@
 //  Created by AI Assistant on 6/9/2025.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-// MARK: - Network Service
+// MARK: - NetworkService
 
 @MainActor
 class NetworkService: ObservableObject {
     static let shared = NetworkService()
-    
+
     // MARK: - Properties
-    
+
     private let session = URLSession.shared
-    private let baseURL = "http://localhost:5001"  // Backend API URL
+    private let baseURL = "http://localhost:5001" // Backend API URL
     private let timeout: TimeInterval = 10.0
-    
+
     @Published var isLoading = false
     @Published var lastError: NetworkError?
-    
+
     // MARK: - Cache Management
-    
+
     private var cache: [String: CachedResponse] = [:]
     private let cacheTimeout: TimeInterval = 300 // 5 minutes
-    
+
     private struct CachedResponse {
         let data: Data
         let timestamp: Date
-        
+
         var isExpired: Bool {
             Date().timeIntervalSince(timestamp) > 300
         }
     }
-    
+
     // MARK: - Initialization
-    
+
     private init() {
         // Configure URL session
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = timeout
         config.waitsForConnectivity = true
     }
-    
+
     // MARK: - API Methods
-    
+
     /// Get dashboard data from backend
     func getDashboardData() async throws -> DashboardData {
         let endpoint = "/api/afl-fantasy/dashboard-data"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(DashboardData.self, from: data)
     }
-    
+
     /// Get team value data
     func getTeamValue() async throws -> TeamValueData {
         let endpoint = "/api/afl-fantasy/team-value"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(TeamValueData.self, from: data)
     }
-    
+
     /// Get team score data
     func getTeamScore() async throws -> TeamScoreData {
         let endpoint = "/api/afl-fantasy/team-score"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(TeamScoreData.self, from: data)
     }
-    
+
     /// Get overall rank data
     func getRankData() async throws -> RankData {
         let endpoint = "/api/afl-fantasy/rank"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(RankData.self, from: data)
     }
-    
+
     /// Get captain recommendations
     func getCaptainData() async throws -> CaptainData {
         let endpoint = "/api/afl-fantasy/captain"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(CaptainData.self, from: data)
     }
-    
+
     /// Get player stats data
     func getPlayerStats() async throws -> [PlayerData] {
         let endpoint = "/api/stats/combined-stats"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode([PlayerData].self, from: data)
     }
-    
+
     /// Get cash cow analysis
     func getCashCowData() async throws -> CashCowAnalysis {
         let endpoint = "/api/cash/generation-analysis"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(CashCowAnalysis.self, from: data)
     }
-    
+
     /// Get trade recommendations
     func getTradeRecommendations() async throws -> TradeRecommendations {
         let endpoint = "/api/ai/trade-suggestions"
         let data = try await performRequest(endpoint: endpoint)
         return try JSONDecoder().decode(TradeRecommendations.self, from: data)
     }
-    
+
     /// Refresh all data
     func refreshAllData() async throws {
         isLoading = true
         defer { isLoading = false }
-        
+
         do {
             // Clear cache for fresh data
             cache.removeAll()
-            
+
             // Fetch all data concurrently
             async let dashboardTask = getDashboardData()
             async let playersTask = getPlayerStats()
             async let cashCowTask = getCashCowData()
             async let captainTask = getCaptainData()
-            
+
             let (dashboard, players, cashCow, captain) = try await (
                 dashboardTask,
-                playersTask, 
+                playersTask,
                 cashCowTask,
                 captainTask
             )
-            
+
             // Post notification that data was updated
             NotificationCenter.default.post(
                 name: .dataDidUpdate,
@@ -138,66 +138,66 @@ class NetworkService: ObservableObject {
                     "captain": captain
                 ]
             )
-            
+
         } catch {
             lastError = error as? NetworkError ?? .unknown(error.localizedDescription)
             throw error
         }
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func performRequest(endpoint: String) async throws -> Data {
         guard let url = URL(string: baseURL + endpoint) else {
             throw NetworkError.invalidURL
         }
-        
+
         // Check cache first
         if let cachedResponse = cache[endpoint], !cachedResponse.isExpired {
             print("🔄 Using cached data for \(endpoint)")
             return cachedResponse.data
         }
-        
+
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("AFL Fantasy iOS/1.0", forHTTPHeaderField: "User-Agent")
-        
+
         print("🌐 Making API request: \(endpoint)")
-        
+
         do {
             let (data, response) = try await session.data(for: request)
-            
+
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw NetworkError.invalidResponse
             }
-            
+
             switch httpResponse.statusCode {
-            case 200...299:
+            case 200 ... 299:
                 // Cache successful response
                 cache[endpoint] = CachedResponse(data: data, timestamp: Date())
                 print("✅ API request successful: \(endpoint)")
                 return data
-                
+
             case 304:
                 // Not modified - use cached version
                 if let cachedResponse = cache[endpoint] {
                     return cachedResponse.data
                 }
                 throw NetworkError.noData
-                
+
             case 401:
                 throw NetworkError.unauthorized
-                
+
             case 404:
                 throw NetworkError.notFound
-                
-            case 500...599:
+
+            case 500 ... 599:
                 throw NetworkError.serverError(httpResponse.statusCode)
-                
+
             default:
                 throw NetworkError.httpError(httpResponse.statusCode)
             }
-            
+
         } catch let error as NetworkError {
             print("❌ Network error: \(error.localizedDescription)")
             throw error
@@ -208,7 +208,7 @@ class NetworkService: ObservableObject {
     }
 }
 
-// MARK: - Network Error Types
+// MARK: - NetworkError
 
 enum NetworkError: Error, LocalizedError {
     case invalidURL
@@ -220,32 +220,32 @@ enum NetworkError: Error, LocalizedError {
     case httpError(Int)
     case decodingError(String)
     case unknown(String)
-    
+
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "Invalid URL"
+            "Invalid URL"
         case .noData:
-            return "No data received"
+            "No data received"
         case .invalidResponse:
-            return "Invalid response"
+            "Invalid response"
         case .unauthorized:
-            return "Authentication required"
+            "Authentication required"
         case .notFound:
-            return "Resource not found"
-        case .serverError(let code):
-            return "Server error (\(code))"
-        case .httpError(let code):
-            return "HTTP error (\(code))"
-        case .decodingError(let message):
-            return "Data parsing error: \(message)"
-        case .unknown(let message):
-            return "Unknown error: \(message)"
+            "Resource not found"
+        case let .serverError(code):
+            "Server error (\(code))"
+        case let .httpError(code):
+            "HTTP error (\(code))"
+        case let .decodingError(message):
+            "Data parsing error: \(message)"
+        case let .unknown(message):
+            "Unknown error: \(message)"
         }
     }
 }
 
-// MARK: - Response Data Models
+// MARK: - DashboardData
 
 struct DashboardData: Codable {
     let teamValue: TeamValueResponse
@@ -255,6 +255,8 @@ struct DashboardData: Codable {
     let lastUpdated: String?
 }
 
+// MARK: - TeamValueData
+
 struct TeamValueData: Codable {
     let totalValue: Int
     let remainingSalary: Int
@@ -263,6 +265,8 @@ struct TeamValueData: Codable {
     let playerCount: Int
 }
 
+// MARK: - TeamValueResponse
+
 struct TeamValueResponse: Codable {
     let total: Int
     let playerCount: Int
@@ -270,11 +274,15 @@ struct TeamValueResponse: Codable {
     let formatted: String
 }
 
+// MARK: - TeamScoreData
+
 struct TeamScoreData: Codable {
     let totalScore: Int
     let captainScore: Int
     let scoreChange: Int
 }
+
+// MARK: - TeamScoreResponse
 
 struct TeamScoreResponse: Codable {
     let total: Int
@@ -282,17 +290,23 @@ struct TeamScoreResponse: Codable {
     let changeFromLastRound: Int
 }
 
+// MARK: - RankData
+
 struct RankData: Codable {
     let overallRank: Int
     let formattedRank: String
     let rankChange: Int
 }
 
+// MARK: - RankResponse
+
 struct RankResponse: Codable {
     let current: Int
     let formatted: String
     let changeFromLastRound: Int
 }
+
+// MARK: - CaptainData
 
 struct CaptainData: Codable {
     let captainScore: Int
@@ -301,11 +315,15 @@ struct CaptainData: Codable {
     let formattedOwnership: String
 }
 
+// MARK: - CaptainResponse
+
 struct CaptainResponse: Codable {
     let score: Int
     let ownershipPercentage: Double
     let playerName: String
 }
+
+// MARK: - PlayerData
 
 struct PlayerData: Codable {
     let name: String
@@ -321,11 +339,15 @@ struct PlayerData: Codable {
     let l3Average: Double?
 }
 
+// MARK: - CashCowAnalysis
+
 struct CashCowAnalysis: Codable {
     let recommendations: [CashCowRecommendation]
     let totalCashGenerated: Int
     let sellSignals: [SellSignal]
 }
+
+// MARK: - CashCowRecommendation
 
 struct CashCowRecommendation: Codable {
     let playerName: String
@@ -337,16 +359,22 @@ struct CashCowRecommendation: Codable {
     let confidence: Double
 }
 
+// MARK: - SellSignal
+
 struct SellSignal: Codable {
     let playerName: String
     let signal: String // "SELL NOW", "HOLD", "MONITOR"
     let reason: String
 }
 
+// MARK: - TradeRecommendations
+
 struct TradeRecommendations: Codable {
     let suggestions: [TradeRecommendation]
     let generatedAt: String
 }
+
+// MARK: - TradeRecommendation
 
 struct TradeRecommendation: Codable {
     let tradeIn: String

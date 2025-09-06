@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # 🚀 AFL Fantasy Platform - Development Wrapper
-# Simple alias to the new setup.sh orchestrator with development mode
-# This script maintains backward compatibility while using the new architecture
+# Simple alias to the working start.sh script
+# This script maintains backward compatibility
 
 set -euo pipefail
 
@@ -29,59 +29,58 @@ print_warning() {
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 print_info "🏆 AFL Fantasy Platform - Development Mode"
-print_info "This is now a wrapper for the new setup.sh orchestrator"
+print_info "This now uses the working start.sh script"
 echo ""
 
-# Check if setup.sh exists
-if [ ! -f "$SCRIPT_DIR/setup.sh" ]; then
-    print_warning "setup.sh not found - falling back to legacy mode"
-    # Could fall back to old implementation here
+# Check if start.sh exists
+if [ ! -f "$SCRIPT_DIR/start.sh" ]; then
+    print_warning "start.sh not found - please use npm run dev directly"
     exit 1
 fi
 
 # Parse any arguments passed to this script
-SETUP_ARGS=("--dev")
+START_ARGS=()
 
 # Handle legacy arguments
 for arg in "$@"; do
     case $arg in
         --clean)
-            SETUP_ARGS+=("--clean")
+            START_ARGS+=("--clean")
             ;;
         --logs)
-            SETUP_ARGS+=("--logs")
+            # start.sh doesn't need logs flag, it shows output by default
             ;;
         --help|-h)
             echo "AFL Fantasy Platform - Development Startup"
             echo ""
-            echo "This script starts the AFL Fantasy platform in development mode with:"
-            echo "  • Frontend (React with hot-reload)"
-            echo "  • Backend API (Express with auto-restart)"
-            echo "  • Python AI services"
-            echo "  • PostgreSQL and Redis databases"
-            echo "  • Real-time monitoring"
+            echo "This script starts the AFL Fantasy platform with:"
+            echo "  • React frontend with live data"
+            echo "  • Express API backend with all routes"
+            echo "  • Fantasy analysis tools and calculators"
+            echo "  • Player data and statistics"
+            echo "  • Real-time score projections"
             echo ""
             echo "Options:"
-            echo "  --clean    Clean rebuild (removes containers and volumes)"
-            echo "  --logs     Show logs after startup"
+            echo "  --clean    Kill existing processes and clean start"
             echo "  --help     Show this help"
             echo ""
             echo "Quick Access URLs:"
-            echo "  🌐 Frontend:     http://localhost:5173"
-            echo "  🔧 API Health:   http://localhost:4000/api/health"
-            echo "  📊 Dashboard:    http://localhost:8090"
+            echo "  🌐 Web App:     http://localhost:5173"
+            echo "  🔧 API Health:  http://localhost:5173/api/health"
+            echo "  📊 Dashboard:   http://localhost:5173/dashboard"
+            echo "  🛠️ Tools:       http://localhost:5173/api/fantasy-tools"
             echo ""
             echo "iOS Development:"
-            echo "  ./run_ios.sh     Start iOS simulator and app"
+            echo "  ./run_ios.sh    Start iOS simulator and app"
             echo ""
             exit 0
             ;;
     esac
 done
 
-# Call the new setup orchestrator
-print_info "Calling setup orchestrator with development configuration..."
-print_success "Running: ./setup.sh ${SETUP_ARGS[*]}"
+# Call the working start script
+print_info "Starting AFL Fantasy Platform..."
+print_success "Running: ./start.sh ${START_ARGS[*]}"
 echo ""
 
-exec "$SCRIPT_DIR/setup.sh" "${SETUP_ARGS[@]}"
+exec "$SCRIPT_DIR/start.sh" "${START_ARGS[@]}"

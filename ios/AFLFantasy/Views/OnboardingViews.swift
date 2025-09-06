@@ -17,48 +17,50 @@ enum OnboardingError: LocalizedError {
     case serverError(Int)
     case timeout
     case unknownError
-    
+
     var errorDescription: String? {
         switch self {
-        case .networkError(let message):
-            return "Network Error: \(message)"
-        case .invalidCredentials(let message):
-            return message.isEmpty ? "Invalid team credentials. Please check your Team ID and Session Cookie." : message
+        case let .networkError(message):
+            "Network Error: \(message)"
+        case let .invalidCredentials(message):
+            message.isEmpty ? "Invalid team credentials. Please check your Team ID and Session Cookie." : message
         case .emptyFields:
-            return "Please fill in both your Team ID and Session Cookie."
-        case .serverError(let code):
-            return "Server error (\(code)). Please try again later."
+            "Please fill in both your Team ID and Session Cookie."
+        case let .serverError(code):
+            "Server error (\(code)). Please try again later."
         case .timeout:
-            return "Request timed out. Please check your internet connection and try again."
+            "Request timed out. Please check your internet connection and try again."
         case .unknownError:
-            return "Something went wrong. Please try again."
+            "Something went wrong. Please try again."
         }
     }
-    
+
     var recoveryMessage: String {
         switch self {
         case .networkError, .timeout:
-            return "Check your internet connection and try again."
+            "Check your internet connection and try again."
         case .invalidCredentials:
-            return "Double-check your credentials in the AFL Fantasy app or website."
+            "Double-check your credentials in the AFL Fantasy app or website."
         case .emptyFields:
-            return "Make sure both fields are filled in completely."
+            "Make sure both fields are filled in completely."
         case .serverError:
-            return "This is usually temporary. Try again in a few minutes."
+            "This is usually temporary. Try again in a few minutes."
         case .unknownError:
-            return "If this persists, try restarting the app."
+            "If this persists, try restarting the app."
         }
     }
-    
+
     var canRetry: Bool {
         switch self {
         case .emptyFields:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
 }
+
+// MARK: - AFLTeam
 
 enum AFLTeam: String, CaseIterable {
     case adelaide = "Adelaide Crows"
@@ -141,7 +143,7 @@ class OnboardingCoordinator: ObservableObject {
     @Published var isCompleted: Bool = false
     @Published var hasExistingTeam: Bool = true // Track user choice
     @Published var showValidationAlert: Bool = false
-    
+
     private let keychainManager = KeychainManager()
     private var validationRetryCount: Int = 0
     private let maxRetries = 3
@@ -240,7 +242,8 @@ class OnboardingCoordinator: ObservableObject {
 
     private func validateCredentials() {
         guard !teamId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              !sessionCookie.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+              !sessionCookie.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else {
             validationError = .emptyFields
             showValidationAlert = true
             return
@@ -287,11 +290,11 @@ class OnboardingCoordinator: ObservableObject {
             }
         }
     }
-    
+
     private func handleValidationResponse(httpResponse: HTTPURLResponse, data: Data) {
         do {
             let result = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-            
+
             switch httpResponse.statusCode {
             case 200:
                 if let isValid = result?["valid"] as? Bool, isValid {
@@ -311,7 +314,7 @@ class OnboardingCoordinator: ObservableObject {
             case 429:
                 validationError = .serverError(429)
                 showValidationAlert = true
-            case 500...599:
+            case 500 ... 599:
                 validationError = .serverError(httpResponse.statusCode)
                 showValidationAlert = true
             default:
@@ -323,7 +326,7 @@ class OnboardingCoordinator: ObservableObject {
             showValidationAlert = true
         }
     }
-    
+
     private func handleValidationError(_ error: Error) {
         if let urlError = error as? URLError {
             switch urlError.code {
@@ -341,15 +344,15 @@ class OnboardingCoordinator: ObservableObject {
         }
         showValidationAlert = true
     }
-    
+
     func retryValidation() {
         validationRetryCount += 1
         showValidationAlert = false
         validateCredentials()
     }
-    
+
     func shouldShowSupportOption() -> Bool {
-        return validationRetryCount >= maxRetries
+        validationRetryCount >= maxRetries
     }
 
     private func completeOnboarding() {
@@ -420,10 +423,10 @@ struct SplashView: View {
     @State private var showContent = false
     @State private var showFeaturePreview = false
     @Environment(\.accessibilityReduceMotion) var reduceMotion
-    
+
     private let keyBenefits = [
         "🧠 AI-powered trade recommendations",
-        "⭐ Smart captain selection advice", 
+        "⭐ Smart captain selection advice",
         "💰 Never miss cash cow opportunities",
         "📊 Real-time performance tracking"
     ]
@@ -439,7 +442,7 @@ struct SplashView: View {
                     .foregroundColor(.white)
                     .scaleEffect(logoScale)
                     .animation(
-                        reduceMotion ? .none : .easeInOut(duration: 2).repeatForever(autoreverses: true), 
+                        reduceMotion ? .none : .easeInOut(duration: 2).repeatForever(autoreverses: true),
                         value: logoScale
                     )
 
@@ -457,7 +460,7 @@ struct SplashView: View {
                                 .fontWeight(.medium)
                                 .foregroundColor(.white.opacity(0.9))
                         }
-                        
+
                         // Value proposition
                         Text("Dominate your league with AI-powered insights and real-time data")
                             .font(.body)
@@ -465,7 +468,7 @@ struct SplashView: View {
                             .foregroundColor(.white.opacity(0.85))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 16)
-                        
+
                         // Key benefits list
                         VStack(spacing: 8) {
                             ForEach(keyBenefits, id: \.self) { benefit in
@@ -491,7 +494,7 @@ struct SplashView: View {
                     .buttonStyle(OnboardingButtonStyle())
                     .accessibilityLabel("Set up your AFL Fantasy team")
                     .accessibilityHint("Start the setup process to connect your team and get personalized insights")
-                    
+
                     // Secondary CTA
                     Button("Preview Features") {
                         showFeaturePreview = true
@@ -532,7 +535,7 @@ struct SplashView: View {
 struct FeaturePreviewModal: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedTab = 0
-    
+
     private let features = [
         FeaturePreview(
             title: "AI Trade Insights",
@@ -559,14 +562,14 @@ struct FeaturePreviewModal: View {
             color: .purple
         )
     ]
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 // Tab selector
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
-                        ForEach(0..<features.count, id: \.self) { index in
+                        ForEach(0 ..< features.count, id: \.self) { index in
                             Button {
                                 selectedTab = index
                             } label: {
@@ -574,7 +577,7 @@ struct FeaturePreviewModal: View {
                                     Image(systemName: features[index].icon)
                                         .font(.title2)
                                         .foregroundColor(selectedTab == index ? features[index].color : .secondary)
-                                    
+
                                     Text(features[index].title)
                                         .font(.caption)
                                         .fontWeight(.medium)
@@ -593,16 +596,16 @@ struct FeaturePreviewModal: View {
                     .padding(.horizontal)
                 }
                 .padding(.vertical)
-                
+
                 // Feature content
                 TabView(selection: $selectedTab) {
-                    ForEach(0..<features.count, id: \.self) { index in
+                    ForEach(0 ..< features.count, id: \.self) { index in
                         FeaturePreviewCard(feature: features[index])
                             .tag(index)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                
+
                 // CTA
                 VStack(spacing: 16) {
                     Button("Start Using AFL Fantasy Intelligence") {
@@ -610,7 +613,7 @@ struct FeaturePreviewModal: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
-                    
+
                     Text("Ready to dominate your league?")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -641,7 +644,7 @@ struct FeaturePreview {
 
 struct FeaturePreviewCard: View {
     let feature: FeaturePreview
-    
+
     var body: some View {
         VStack(spacing: 24) {
             // Icon
@@ -649,21 +652,21 @@ struct FeaturePreviewCard: View {
                 .font(.system(size: 60))
                 .foregroundColor(feature.color)
                 .padding(.top)
-            
+
             // Content
             VStack(spacing: 16) {
                 Text(feature.title)
                     .font(.title2)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
-                
+
                 Text(feature.description)
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
-            
+
             Spacer()
         }
         .padding()
@@ -1195,7 +1198,7 @@ struct CredentialsView: View {
                 totalSteps: coordinator.currentStep.totalSteps
             )
             .padding(.horizontal)
-            
+
             // Header
             VStack(spacing: 16) {
                 Text("🔐")
@@ -1282,7 +1285,7 @@ struct CredentialsView: View {
         }
         .alert("Validation Error", isPresented: $coordinator.showValidationAlert) {
             if let error = coordinator.validationError {
-                if error.canRetry && !coordinator.shouldShowSupportOption() {
+                if error.canRetry, !coordinator.shouldShowSupportOption() {
                     Button("Try Again") {
                         coordinator.retryValidation()
                     }

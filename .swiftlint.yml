@@ -1,0 +1,243 @@
+# Enterprise SwiftLint Configuration for AFL Fantasy iOS
+
+disabled_rules:
+  - trailing_comma
+  - file_header
+  - orphaned_doc_comment
+
+opt_in_rules:
+  - closure_end_indentation
+  - closure_spacing
+  - contains_over_first_not_nil
+  - empty_count
+  - explicit_init
+  - fatal_error_message
+  - file_name
+  - force_unwrapping
+  - implicit_return
+  - let_var_whitespace
+  - modifier_order
+  - nimble_operator
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - strict_fileprivate
+  - implicitly_unwrapped_optional
+  - accessibility_label_for_image
+  - accessibility_trait_for_button
+  - anonymous_argument_in_multiline_closure
+  - array_init
+  - attributes
+  - balanced_xctest_lifecycle
+  - closure_body_length
+  - collection_alignment
+  - comma_inheritance
+  - conditional_returns_on_newline
+  - convenience_type
+  - discouraged_assert
+  - discouraged_none_name
+  - discouraged_object_literal
+  - empty_collection_literal
+  - empty_string
+  - empty_xctest_method
+  - enum_case_associated_values_count
+  - expiring_todo
+  - explicit_enum_raw_value
+  - explicit_top_level_acl
+  - extension_access_modifier
+  - fallthrough
+  - first_where
+  - flatmap_over_map_reduce
+  - identical_operands
+  - joined_default_parameter
+  - last_where
+  - legacy_multiple
+  - literal_expression_end_indentation
+  - lower_acl_than_parent
+  - missing_docs
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_literal_brackets
+  - multiline_parameters
+  - multiline_parameters_brackets
+  - operator_usage_whitespace
+  - optional_enum_case_matching
+  - overridden_super_call
+  - override_in_extension
+  - pattern_matching_keywords
+  - prefer_self_type_over_type_of_self
+  - prefer_zero_over_explicit_init
+  - prefixed_toplevel_constant
+  - private_action
+  - private_outlet
+  - raw_value_for_camel_cased_codable_enum
+  - reduce_into
+  - redundant_type_annotation
+  - sorted_first_last
+  - static_operator
+  - strong_iboutlet
+  - switch_case_on_newline
+  - toggle_bool
+  - trailing_closure
+  - type_contents_order
+  - unavailable_function
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - untyped_error_in_catch
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - weak_delegate
+  - xct_specific_matcher
+  - yoda_condition
+
+included:
+  - ios/AFLFantasy
+  - ios/AFLFantasyTests
+  - ios/AFLFantasyUITests
+
+excluded:
+  - build
+  - .build
+  - Scripts
+  - Carthage
+  - Pods
+  - vendor
+  - Generated
+  - DerivedData
+
+analyzer_rules:
+  - unused_import
+  - unused_declaration
+
+# Sizing & complexity limits
+line_length:
+  warning: 120
+  error: 140
+  ignores_urls: true
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_interpolated_strings: true
+
+file_length:
+  warning: 400
+  error: 500
+  ignore_comment_only_lines: true
+
+type_body_length:
+  warning: 300
+  error: 400
+
+function_body_length:
+  warning: 40
+  error: 60
+
+cyclomatic_complexity:
+  warning: 10
+  error: 12
+  ignores_case_statements: true
+
+nesting:
+  type_level: 2
+
+# Safety & best practices
+force_cast: error
+force_try: error
+force_unwrapping: error
+implicitly_unwrapped_optional: 
+  severity: warning
+  mode: all_except_iboutlets
+
+unused_optional_binding:
+  ignore_optional_try: false
+  severity: warning
+
+# Naming conventions
+identifier_name:
+  min_length: 2
+  max_length: 40
+  allowed_symbols: ["_"]
+  excluded: ["id", "to", "up", "x", "y", "z", "i", "j", "k", "ok"]
+  validates_start_with_lowercase: true
+
+type_name:
+  min_length: 3
+  max_length: 40
+  excluded: ["ID", "URL", "API", "UI", "AFL", "MVP", "AI"]
+  validates_start_with_lowercase: false
+
+
+# Whitespace & formatting
+trailing_whitespace: 
+  severity: error
+  ignores_empty_lines: false
+  ignores_comments: false
+
+vertical_whitespace:
+  max_empty_lines: 1
+  severity: error
+
+# Comments & documentation
+todo:
+  severity: warning
+
+
+# Custom rules for AFL Fantasy
+custom_rules:
+  no_print_in_release:
+    name: "No print statements in Release"
+    regex: 'print\('
+    match_kinds:
+      - identifier
+    message: "Use proper logging instead of print() statements"
+    severity: warning
+
+  no_force_unwrapping_in_production:
+    name: "Avoid force unwrapping in production code"
+    regex: '!\s*$'
+    match_kinds:
+      - identifier
+    message: "Consider using guard let or if let instead of force unwrapping"
+    severity: warning
+    
+  no_hardcoded_strings:
+    name: "No hardcoded strings in UI"
+    regex: 'Text\("(?!SF Symbols|Debug|Test)[^"]*"\)'
+    message: "Use localized strings for user-facing text"
+    severity: warning
+
+
+# Performance & memory
+large_tuple:
+  warning: 3
+  error: 4
+
+# Error handling
+generic_type_name:
+  min_length: 1
+  max_length: 20
+
+# Accessibility
+accessibility_label_for_image:
+  severity: warning
+
+accessibility_trait_for_button:
+  severity: warning
+
+# Testing rules
+empty_xctest_method:
+  severity: warning
+
+balanced_xctest_lifecycle:
+  test_parent_classes: ["XCTestCase"]
+  severity: warning
+
+# Documentation
+missing_docs:
+  excludes_extensions: true
+  excludes_trivial_init: true
+  severity: warning
+
+reporter: "xcode"
+
+# Environment-specific overrides
+strict: false  # Set to true for CI/CD

@@ -32,27 +32,77 @@ A next-gen coaching assistant that turns raw AFL Fantasy data into **actionable 
 - **Authentication**: Sign in with Apple + OAuth
 - **Analytics**: Custom event tracking
 
-## 🎯 Core Features (MVP)
+## 🎯 Current Implementation State
 
-### ✅ Live Dashboard
-- Team projected score + real-time rank updates
-- Team structure view with salary cap visualization
-- Weekly projection summary
+### ✅ Implemented Features
 
-### ✅ AI-Powered Tools
-- Captain Advisor (C/VC recommendations)
-- Trade Suggester with projections
-- Team Structure Analyzer
+#### 📊 Dashboard View
+- ✅ Live team score simulation (2-3 second updates)
+- ✅ Team rank tracking with animations
+- ✅ Salary cap progress visualization (85% usage display)
+- ✅ Player cards with position colors, prices, scores, breakevens
+- ✅ Responsive ScrollView with LazyVStack optimization
 
-### ✅ Cash Generation Tools
-- Cash Cow Tracker (rookie analysis)
-- Price Change Predictor
-- Breakeven Analyzer
+#### 🧠 Captain Advisor
+- ✅ AI-powered captain recommendations with confidence ratings
+- ✅ Top 3 captain suggestions with projected points
+- ✅ Visual ranking system with gold/silver indicators
+- ✅ Confidence percentage display for each recommendation
 
-### ✅ Smart Alerts
-- Price/BE alerts
-- News alerts (late outs, injuries)
-- Central notification feed
+#### 🔄 Trade Calculator
+- ✅ Trade in/out selection interface
+- ✅ Visual trade flow with animated arrows
+- ✅ Trade score circular progress (75% example)
+- ✅ Color-coded trade recommendations (red out, green in)
+
+#### 💰 Cash Cow Tracker
+- ✅ Rookie player optimization display
+- ✅ Smart sell signals ("🚀 SELL NOW", "⚠️ HOLD")
+- ✅ Breakeven-based recommendations
+- ✅ Cash generation tracking
+
+#### ⚙️ Settings View
+- ✅ Notification toggles (breakeven, injury, late out alerts)
+- ✅ Cache size display and clear functionality
+- ✅ App version and legal links (privacy, terms)
+- ✅ Form-based settings UI
+
+### 🏗️ Advanced Data Models
+
+#### Enhanced Player Model
+- ✅ Comprehensive player data (84 properties)
+- ✅ Venue performance analysis
+- ✅ Opponent performance tracking
+- ✅ Injury risk assessment with historical data
+- ✅ Contract status and seasonal trends
+- ✅ Multi-round projections (next round + 3-round forecast)
+
+#### Analytics Services
+- ✅ `AIAnalysisService` for captain recommendations and trade analysis
+- ✅ `AdvancedAnalyticsService` for cash generation, price prediction, consistency scores
+- ✅ `AlertService` for smart notifications and alert management
+- ✅ Price change prediction algorithms with confidence scoring
+- ✅ Injury risk modeling and recommendations
+
+### 🚧 Current Limitations
+
+#### Data Integration
+- ⏳ Mock data only - no live AFL API integration
+- ⏳ No persistent storage (CoreData/SwiftData)
+- ⏳ No user authentication
+
+#### UI Implementation Gaps
+- ⏳ Trade calculator player selection not functional
+- ⏳ Captain advisor uses mock confidence scores
+- ⏳ Settings actions not fully implemented
+- ⏳ No search/filtering capabilities
+
+#### Advanced Features Missing
+- ⏳ Weather modeling and venue bias calculations
+- ⏳ Social features and league comparisons
+- ⏳ Push notifications infrastructure
+- ⏳ Offline mode and data caching
+- ⏳ Advanced analytics dashboards
 
 ## 🏗️ Architecture
 

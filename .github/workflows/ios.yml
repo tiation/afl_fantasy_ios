@@ -1,0 +1,280 @@
+# Enterprise iOS CI/CD Pipeline for AFL Fantasy
+name: iOS CI/CD
+
+on:
+  pull_request:
+    branches: [ develop, main ]
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+  PROJECT_NAME: AFLFantasy
+  SCHEME: AFLFantasy
+  
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Code quality checks
+  quality:
+    name: Code Quality
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Cache SwiftLint
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/swiftlint
+          key: swiftlint-${{ runner.os }}
+          
+      - name: Cache SwiftFormat
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/swiftformat
+          key: swiftformat-${{ runner.os }}
+          
+      - name: Install SwiftLint
+        run: |
+          if ! command -v swiftlint &> /dev/null; then
+            brew install swiftlint
+          fi
+          
+      - name: Install SwiftFormat
+        run: |
+          if ! command -v swiftformat &> /dev/null; then
+            brew install swiftformat
+          fi
+          
+      - name: Check SwiftFormat
+        run: |
+          swiftformat --lint .
+          
+      - name: Run SwiftLint
+        run: |
+          swiftlint --strict --reporter github-actions-logging
+          
+      - name: Check for TODO/FIXME
+        run: |
+          if grep -r "TODO\|FIXME" ios/AFLFantasy --include="*.swift" --exclude-dir=build; then
+            echo "❌ Found TODO/FIXME comments. Please track in GitHub issues."
+            exit 1
+          fi
+          echo "✅ No TODO/FIXME found"
+
+  # Build and test
+  build-test:
+    name: Build & Test
+    runs-on: macos-14
+    needs: quality
+    strategy:
+      matrix:
+        destination: 
+          - "platform=iOS Simulator,name=iPhone 15,OS=17.0"
+          - "platform=iOS Simulator,name=iPhone 15 Pro,OS=latest"
+          
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0'
+          
+      - name: Cache SPM Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ios/.build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+            
+      - name: Cache Build Products
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+            
+      - name: Build App
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "ios/${{ env.PROJECT_NAME }}.xcodeproj" \
+            -scheme "${{ env.SCHEME }}" \
+            -destination "${{ matrix.destination }}" \
+            -configuration Debug \
+            -derivedDataPath DerivedData \
+            clean build | xcpretty
+            
+      - name: Run Unit Tests
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "ios/${{ env.PROJECT_NAME }}.xcodeproj" \
+            -scheme "${{ env.SCHEME }}" \
+            -destination "${{ matrix.destination }}" \
+            -configuration Debug \
+            -derivedDataPath DerivedData \
+            -enableCodeCoverage YES \
+            test | xcpretty
+            
+      - name: Generate Code Coverage
+        run: |
+          xcrun llvm-cov export \
+            -format="lcov" \
+            -instr-profile=DerivedData/Build/ProfileData/*/Coverage.profdata \
+            DerivedData/Build/Products/Debug-iphonesimulator/${{ env.PROJECT_NAME }}.app/${{ env.PROJECT_NAME }} \
+            > coverage.lcov
+            
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.lcov
+          flags: ios
+          name: ${{ matrix.destination }}
+          
+      - name: Coverage Gate
+        run: |
+          chmod +x scripts/coverage_gate.sh
+          ./scripts/coverage_gate.sh 80
+          
+      - name: Archive Build Products
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-products-${{ matrix.destination }}
+          path: |
+            DerivedData/Build/Products
+            coverage.lcov
+          retention-days: 7
+
+  # Security & Performance Analysis
+  analysis:
+    name: Security & Performance
+    runs-on: macos-14
+    needs: build-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Security Scan
+        run: |
+          echo "🔍 Scanning for security issues..."
+          # Check for hardcoded secrets
+          if grep -r "api_key\|password\|secret\|token" ios/AFLFantasy --include="*.swift" | grep -v "// Test" | grep -v "// Mock"; then
+            echo "❌ Potential hardcoded secrets found!"
+            exit 1
+          fi
+          echo "✅ No hardcoded secrets detected"
+          
+      - name: Check Bundle Size
+        run: |
+          # This would normally check the .app bundle size
+          echo "📊 Bundle size analysis would run here"
+          # du -sh DerivedData/Build/Products/Debug-iphonesimulator/*.app
+          
+      - name: Performance Budget Check
+        run: |
+          echo "⚡ Performance budget checks would run here"
+          # Add custom performance analysis scripts
+
+  # UI Tests (separate job for parallel execution)
+  ui-tests:
+    name: UI Tests
+    runs-on: macos-14
+    needs: quality
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0'
+          
+      - name: Boot Simulator
+        run: |
+          xcrun simctl boot "iPhone 15" || true
+          
+      - name: Run UI Tests
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "ios/${{ env.PROJECT_NAME }}.xcodeproj" \
+            -scheme "${{ env.SCHEME }}" \
+            -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" \
+            -configuration Debug \
+            -only-testing:"${{ env.PROJECT_NAME }}UITests" \
+            test | xcpretty
+            
+      - name: Upload UI Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-results
+          path: |
+            ~/Library/Developer/Xcode/DerivedData/*/Logs/Test
+          retention-days: 7
+
+  # Release preparation (only on main branch)
+  release:
+    name: Release Preparation
+    runs-on: macos-14
+    needs: [build-test, analysis]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Build Release
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "ios/${{ env.PROJECT_NAME }}.xcodeproj" \
+            -scheme "${{ env.SCHEME }}" \
+            -destination "generic/platform=iOS" \
+            -configuration Release \
+            -archivePath "${{ env.PROJECT_NAME }}.xcarchive" \
+            archive | xcpretty
+            
+      - name: Export IPA
+        run: |
+          # This would create the IPA for distribution
+          echo "📦 IPA export would happen here"
+          # xcodebuild -exportArchive ...
+          
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ github.sha }}
+          path: |
+            *.xcarchive
+          retention-days: 30
+
+  # Notify on completion
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    needs: [build-test, ui-tests, analysis]
+    if: always()
+    steps:
+      - name: Success Notification
+        if: needs.build-test.result == 'success' && needs.analysis.result == 'success'
+        run: |
+          echo "✅ AFL Fantasy iOS build completed successfully!"
+          
+      - name: Failure Notification  
+        if: failure()
+        run: |
+          echo "❌ AFL Fantasy iOS build failed. Check the logs."

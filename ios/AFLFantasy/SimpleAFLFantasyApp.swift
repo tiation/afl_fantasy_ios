@@ -1,0 +1,284 @@
+//
+//  SimpleAFLFantasyApp.swift
+//  AFL Fantasy Intelligence Platform
+//
+//  Simple working version with enhanced data
+//  Created by AI Assistant on 6/9/2025.
+//
+
+import SwiftUI
+import UserNotifications
+
+// MARK: - Main App
+
+@main
+struct AFLFantasyApp: App {
+    @StateObject private var appState = AppState()
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(appState)
+                .preferredColorScheme(.dark)
+        }
+    }
+}
+
+// MARK: - App State
+
+@MainActor
+class AppState: ObservableObject {
+    @Published var selectedTab: TabItem = .dashboard
+    @Published var teamScore: Int = 1987
+    @Published var teamRank: Int = 5432
+    @Published var players: [EnhancedPlayer] = []
+    @Published var captainSuggestions: [CaptainSuggestion] = []
+    @Published var cashCows: [EnhancedPlayer] = []
+
+    init() {
+        loadEnhancedData()
+        generateCaptainSuggestions()
+    }
+
+    private func loadEnhancedData() {
+        players = [
+            EnhancedPlayer(
+                name: "Marcus Bontempelli",
+                position: .midfielder,
+                currentPrice: 850_000,
+                currentScore: 125,
+                averageScore: 118.5,
+                breakeven: 85,
+                consistency: 92.0,
+                injuryRiskScore: 15.0,
+                priceChange: 25000,
+                cashGenerated: 0,
+                isCashCow: false,
+                teamAbbreviation: "WBD",
+                projectedScore: 130.0,
+                opponent: "Richmond",
+                venue: "Marvel Stadium",
+                rainProbability: 0.2,
+                venueBias: 3.5,
+                isDoubtful: false,
+                contractYear: false,
+                gamesPlayed: 10
+            ),
+            EnhancedPlayer(
+                name: "Max Gawn",
+                position: .ruck,
+                currentPrice: 780_000,
+                currentScore: 98,
+                averageScore: 105.2,
+                breakeven: 90,
+                consistency: 88.0,
+                injuryRiskScore: 35.0,
+                priceChange: -15000,
+                cashGenerated: 0,
+                isCashCow: false,
+                teamAbbreviation: "MEL",
+                projectedScore: 105.0,
+                opponent: "Collingwood",
+                venue: "MCG",
+                rainProbability: 0.1,
+                venueBias: 2.0,
+                isDoubtful: true,
+                contractYear: false,
+                gamesPlayed: 9
+            ),
+            EnhancedPlayer(
+                name: "Touk Miller",
+                position: .midfielder,
+                currentPrice: 720_000,
+                currentScore: 110,
+                averageScore: 108.8,
+                breakeven: 75,
+                consistency: 89.0,
+                injuryRiskScore: 12.0,
+                priceChange: 20000,
+                cashGenerated: 0,
+                isCashCow: false,
+                teamAbbreviation: "GCS",
+                projectedScore: 115.0,
+                opponent: "Geelong",
+                venue: "GMHBA Stadium",
+                rainProbability: 0.4,
+                venueBias: -1.5,
+                isDoubtful: false,
+                contractYear: true,
+                gamesPlayed: 10
+            ),
+            EnhancedPlayer(
+                name: "Hayden Young",
+                position: .defender,
+                currentPrice: 550_000,
+                currentScore: 78,
+                averageScore: 85.2,
+                breakeven: 45,
+                consistency: 76.0,
+                injuryRiskScore: 14.0,
+                priceChange: 35000,
+                cashGenerated: 120000,
+                isCashCow: true,
+                teamAbbreviation: "FRE",
+                projectedScore: 88.0,
+                opponent: "Sydney",
+                venue: "Optus Stadium",
+                rainProbability: 0.0,
+                venueBias: 4.2,
+                isDoubtful: false,
+                contractYear: false,
+                gamesPlayed: 8
+            ),
+            EnhancedPlayer(
+                name: "Sam Walsh",
+                position: .midfielder,
+                currentPrice: 750_000,
+                currentScore: 115,
+                averageScore: 112.4,
+                breakeven: 80,
+                consistency: 87.0,
+                injuryRiskScore: 18.0,
+                priceChange: 30000,
+                cashGenerated: 0,
+                isCashCow: false,
+                teamAbbreviation: "CAR",
+                projectedScore: 118.0,
+                opponent: "Hawthorn",
+                venue: "MCG",
+                rainProbability: 0.3,
+                venueBias: 1.8,
+                isDoubtful: false,
+                contractYear: true,
+                gamesPlayed: 10
+            )
+        ]
+
+        cashCows = players.filter { $0.isCashCow }
+    }
+
+    private func generateCaptainSuggestions() {
+        let topPlayers = players.sorted { $0.averageScore > $1.averageScore }.prefix(3)
+        
+        captainSuggestions = topPlayers.enumerated().map { index, player in
+            let confidence = Int(90 - Double(index) * 5 + player.consistency * 0.1)
+            let projectedPoints = Int(player.projectedScore * 2 + Double.random(in: -10...10))
+            
+            return CaptainSuggestion(
+                player: player,
+                confidence: confidence,
+                projectedPoints: projectedPoints
+            )
+        }
+    }
+}
+
+// MARK: - Enhanced Player Model
+
+struct EnhancedPlayer: Identifiable, Codable {
+    let id = UUID()
+    let name: String
+    let position: Position
+    let currentPrice: Int
+    let currentScore: Int
+    let averageScore: Double
+    let breakeven: Int
+    let consistency: Double
+    let injuryRiskScore: Double
+    let priceChange: Int
+    let cashGenerated: Int
+    let isCashCow: Bool
+    let teamAbbreviation: String
+    let projectedScore: Double
+    let opponent: String
+    let venue: String
+    let rainProbability: Double
+    let venueBias: Double
+    let isDoubtful: Bool
+    let contractYear: Bool
+    let gamesPlayed: Int
+    
+    var formattedPrice: String {
+        "$\(currentPrice/1000)k"
+    }
+    
+    var priceChangeText: String {
+        let prefix = priceChange >= 0 ? "+" : ""
+        return "\(prefix)\(priceChange/1000)k"
+    }
+    
+    var consistencyGrade: String {
+        switch consistency {
+        case 90...: return "A+"
+        case 80..<90: return "A"
+        case 70..<80: return "B"
+        case 60..<70: return "C"
+        default: return "D"
+        }
+    }
+    
+    var injuryRiskLevel: String {
+        switch injuryRiskScore {
+        case 0..<15: return "Low"
+        case 15..<30: return "Moderate"
+        case 30..<60: return "High"
+        default: return "Extreme"
+        }
+    }
+    
+    var injuryRiskColor: Color {
+        switch injuryRiskScore {
+        case 0..<15: return .green
+        case 15..<30: return .yellow
+        case 30..<60: return .orange
+        default: return .red
+        }
+    }
+}
+
+// MARK: - Captain Suggestion
+
+struct CaptainSuggestion: Identifiable {
+    let id = UUID()
+    let player: EnhancedPlayer
+    let confidence: Int
+    let projectedPoints: Int
+}
+
+// MARK: - Position Enum
+
+enum Position: String, CaseIterable, Codable {
+    case defender = "DEF"
+    case midfielder = "MID"
+    case ruck = "RUC"
+    case forward = "FWD"
+
+    var color: Color {
+        switch self {
+        case .defender: return .blue
+        case .midfielder: return .green
+        case .ruck: return .purple
+        case .forward: return .red
+        }
+    }
+}
+
+// MARK: - Tab Item
+
+enum TabItem: String, CaseIterable {
+    case dashboard = "Dashboard"
+    case captain = "Captain"
+    case trades = "Trades"
+    case cashCow = "Cash Cow"
+    case settings = "Settings"
+
+    var systemImage: String {
+        switch self {
+        case .dashboard: return "chart.line.uptrend.xyaxis"
+        case .captain: return "star.fill"
+        case .trades: return "arrow.triangle.2.circlepath"
+        case .cashCow: return "dollarsign.circle.fill"
+        case .settings: return "gearshape.fill"
+        }
+    }
+}

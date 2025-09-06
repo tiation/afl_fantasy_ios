@@ -1,0 +1,87 @@
+# Enterprise iOS App Standards - .gitignore
+
+# Essentials
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
+UserInterfaceState.xcuserstate
+
+# SwiftPM
+.build/
+Packages/
+Package.resolved
+*.swiftpm
+
+# Secrets & Configuration
+*.xcconfig
+Secrets/
+secrets/
+*.plist
+!**/Info.plist
+!**/Assets.xcassets/**/*.plist
+
+# CocoaPods (deprecated - SPM only)
+Pods/
+*.xcworkspace
+!default.xcworkspace
+Podfile.lock
+
+# Carthage (deprecated - SPM only) 
+Carthage/
+Cartfile.resolved
+
+# IDE Files
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Xcode
+timeline.xctimeline
+playground.xcworkspace
+*.xcscmblueprint
+*.xccheckout
+
+# Testing
+test_output/
+*.gcda
+*.gcno
+coverage.profdata
+coverage/
+
+# Build artifacts
+*.app
+*.dSYM.zip
+*.ipa
+*.xcarchive
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/.env
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.log
+
+# Documentation build
+docs/_build/
+site/
+
+# Danger
+Dangerfile.swift.resolved

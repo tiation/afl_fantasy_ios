@@ -224,7 +224,7 @@ struct AdvancedCaptainAI: View {
         score += consistencyBonus
 
         // Injury risk penalty (10% weight)
-        let injuryPenalty = Double(player.injuryRisk.riskScore) / 100 * 8
+        let injuryPenalty = Double(player.injuryRiskScore) / 100 * 8
         score -= injuryPenalty
 
         // Ceiling factor for captain choice (15% weight)
@@ -259,7 +259,7 @@ struct AdvancedCaptainAI: View {
         confidence += (player.consistency - 70) / 100 * 0.2
 
         // Lower confidence for injury-prone players
-        confidence -= Double(player.injuryRisk.riskScore) / 100 * 0.15
+        confidence -= Double(player.injuryRiskScore) / 100 * 0.15
 
         // Lower confidence for doubtful players
         if player.isDoubtful { confidence -= 0.2 }
@@ -302,7 +302,7 @@ struct AdvancedCaptainAI: View {
                 impact = player.consistency > 80 ? Double.random(in: 2 ... 8) : Double.random(in: -5 ... 2)
                 confidence = 0.9
             case .injury:
-                impact = player.injuryRisk.riskScore > 25 ? Double.random(in: -8 ... -2) : Double.random(in: -1 ... 1)
+                impact = player.injuryRiskScore > 25 ? Double.random(in: -8 ... -2) : Double.random(in: -1 ... 1)
                 confidence = 0.85
             case .ownership:
                 impact = Double.random(in: -2 ... 5)
@@ -323,7 +323,7 @@ struct AdvancedCaptainAI: View {
             risks.append("Injury concern - monitor team news")
         }
 
-        if player.injuryRisk.riskScore > 30 {
+        if player.injuryRiskScore > 30 {
             risks.append("High injury risk based on history")
         }
 
@@ -646,7 +646,7 @@ struct CaptainRecommendationCard: View {
                             .background(positionColor(result.player.position))
                             .cornerRadius(4)
 
-                        Text(formatPrice(result.player.price))
+                        Text(formatPrice(result.player.currentPrice))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

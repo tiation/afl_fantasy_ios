@@ -34,12 +34,11 @@ enum Position: String, CaseIterable, Codable {
     }
 }
 
+// MARK: - InjuryRisk
 
-// MARK: - EnhancedPlayer
-
-struct EnhancedPlayer: Identifiable, Codable {
-    var id = UUID()
-    let name: String
+struct InjuryRisk: Codable {
+    let riskScore: Double
+}
     let position: Position
     let currentPrice: Int
     let currentScore: Int
@@ -61,6 +60,14 @@ struct EnhancedPlayer: Identifiable, Codable {
     let gamesPlayed: Int
     
     // Add missing properties that views expect
+    var price: Int {
+        currentPrice
+    }
+    
+    var injuryRisk: InjuryRisk {
+        InjuryRisk(riskScore: injuryRiskScore)
+    }
+    
     var highScore: Int {
         Int(averageScore * 1.3) // estimated 30% above average
     }

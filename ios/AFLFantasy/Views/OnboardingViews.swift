@@ -1189,6 +1189,30 @@ struct TeamSelectionButton: View {
 struct CredentialsView: View {
     @EnvironmentObject var coordinator: OnboardingCoordinator
     @State private var showHelp = false
+    @State private var showQRScanner = false
+    @State private var showClipboardDetected = false
+    @State private var teamIdValidationState: ValidationState = .none
+    @State private var cookieValidationState: ValidationState = .none
+    
+    enum ValidationState {
+        case none, valid, invalid
+        
+        var icon: String {
+            switch self {
+            case .none: return ""
+            case .valid: return "checkmark.circle.fill"
+            case .invalid: return "exclamationmark.triangle.fill"
+            }
+        }
+        
+        var color: Color {
+            switch self {
+            case .none: return .clear
+            case .valid: return .green
+            case .invalid: return .red
+            }
+        }
+    }
 
     var body: some View {
         VStack(spacing: 30) {
@@ -1198,7 +1222,7 @@ struct CredentialsView: View {
                 totalSteps: coordinator.currentStep.totalSteps
             )
             .padding(.horizontal)
-
+            
             // Header
             VStack(spacing: 16) {
                 Text("🔐")
@@ -1224,6 +1248,15 @@ struct CredentialsView: View {
                             .font(.headline)
                             .foregroundColor(.white)
 
+                        Spacer()
+                        
+                        // Validation indicator
+                        if teamIdValidationState != .none {
+                            Image(systemName: teamIdValidationState.icon)
+                                .foregroundColor(teamIdValidationState.color)
+                                .font(.caption)
+                        }
+                        
                         Button("?") {
                             showHelp.toggle()
                         }
@@ -1235,9 +1268,27 @@ struct CredentialsView: View {
                         .clipShape(Circle())
                     }
 
-                    TextField("e.g., 123456", text: $coordinator.teamId)
-                        .textFieldStyle(OnboardingTextFieldStyle())
-                        .keyboardType(.numberPad)
+                    HStack(spacing: 12) {
+                        TextField("e.g., 123456", text: $coordinator.teamId)
+                            .textFieldStyle(OnboardingTextFieldStyle())
+                            .keyboardType(.numberPad)
+                            .onChange(of: coordinator.teamId) { _, newValue in
+                                validateTeamId(newValue)
+                            }
+                        
+                        Button {
+                            showQRScanner = true
+                        } label: {
+                            Image(systemName: "qrcode.viewfinder")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(.white.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                        .accessibilityLabel("Scan QR code for Team ID")
+                        .accessibilityHint("Opens camera to scan QR codes containing AFL Fantasy team URLs")
+                    }
                 }
 
                 // Session Cookie Input
@@ -1246,6 +1297,15 @@ struct CredentialsView: View {
                         Text("Session Cookie")
                             .font(.headline)
                             .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        // Validation indicator
+                        if cookieValidationState != .none {
+                            Image(systemName: cookieValidationState.icon)
+                                .foregroundColor(cookieValidationState.color)
+                                .font(.caption)
+                        }
 
                         Button("?") {
                             showHelp.toggle()
@@ -1258,8 +1318,42 @@ struct CredentialsView: View {
                         .clipShape(Circle())
                     }
 
-                    TextField("Paste your session cookie here", text: $coordinator.sessionCookie)
-                        .textFieldStyle(OnboardingTextFieldStyle())
+                    HStack(spacing: 12) {
+                        TextField("Paste your session cookie here", text: $coordinator.sessionCookie)
+                            .textFieldStyle(OnboardingTextFieldStyle())
+                            .onChange(of: coordinator.sessionCookie) { _, newValue in
+                                validateSessionCookie(newValue)
+                            }
+                        
+                        Button {
+                            pasteFromClipboard()
+                        } label: {
+                            Image(systemName: "doc.on.clipboard")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(.white.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                        .accessibilityLabel("Paste from clipboard")
+                        .accessibilityHint("Automatically detect and paste session cookie from clipboard")
+                    }
+                }
+                
+                // Clipboard detection hint
+                if showClipboardDetected {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(.blue)
+                        Text("Possible session cookie detected in clipboard. Tap paste button to auto-fill.")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(.blue.opacity(0.2))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .transition(.opacity.combined(with: .scale))
                 }
             }
 
@@ -1280,12 +1374,22 @@ struct CredentialsView: View {
             }
         }
         .padding()
+        .onAppear {
+            checkClipboardForSessionCookie()
+            validateTeamId(coordinator.teamId)
+            validateSessionCookie(coordinator.sessionCookie)
+        }
+        .sheet(isPresented: $showQRScanner) {
+            QRScannerView { qrCodeContent in
+                handleQRCodeResult(qrCodeContent)
+            }
+        }
         .sheet(isPresented: $showHelp) {
             CredentialHelpView()
         }
         .alert("Validation Error", isPresented: $coordinator.showValidationAlert) {
             if let error = coordinator.validationError {
-                if error.canRetry, !coordinator.shouldShowSupportOption() {
+                if error.canRetry && !coordinator.shouldShowSupportOption() {
                     Button("Try Again") {
                         coordinator.retryValidation()
                     }
@@ -1315,6 +1419,109 @@ struct CredentialsView: View {
                         .font(.caption)
                 }
             }
+        }
+    }
+    
+    private func handleQRCodeResult(_ qrContent: String) {
+        // Extract team ID from QR code
+        if let teamId = extractTeamIdFromURL(qrContent) {
+            coordinator.teamId = teamId
+            
+            // Give haptic feedback for successful scan
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
+            
+            validateTeamId(teamId)
+        } else if qrContent.allSatisfy({ $0.isNumber }) && qrContent.count >= 4 {
+            // If it's just numbers, assume it's a team ID
+            coordinator.teamId = qrContent
+            
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
+            
+            validateTeamId(qrContent)
+        } else {
+            // Show error that QR code doesn't contain team ID
+            let notificationFeedback = UINotificationFeedbackGenerator()
+            notificationFeedback.notificationOccurred(.error)
+        }
+    }
+    
+    private func extractTeamIdFromURL(_ urlString: String) -> String? {
+        let patterns = [
+            #"fantasy\.afl\.com\.au/team/(\d+)"#,
+            #"/team/(\d+)"#
+        ]
+        
+        for pattern in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let range = NSRange(location: 0, length: urlString.utf16.count)
+                if let match = regex.firstMatch(in: urlString, options: [], range: range) {
+                    if match.numberOfRanges > 1 {
+                        let teamIdRange = match.range(at: 1)
+                        if let swiftRange = Range(teamIdRange, in: urlString) {
+                            return String(urlString[swiftRange])
+                        }
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    private func pasteFromClipboard() {
+        if let sessionCookie = ClipboardHelper.extractSessionCookieFromClipboard() {
+            coordinator.sessionCookie = sessionCookie
+            
+            // Give haptic feedback for successful paste
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
+            
+            validateSessionCookie(sessionCookie)
+            showClipboardDetected = false
+        } else {
+            // No valid cookie found in clipboard
+            let notificationFeedback = UINotificationFeedbackGenerator()
+            notificationFeedback.notificationOccurred(.error)
+        }
+    }
+    
+    private func checkClipboardForSessionCookie() {
+        showClipboardDetected = ClipboardHelper.clipboardContainsPossibleSessionCookie()
+        
+        // Auto-hide after 10 seconds
+        if showClipboardDetected {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                withAnimation {
+                    showClipboardDetected = false
+                }
+            }
+        }
+    }
+    
+    private func validateTeamId(_ teamId: String) {
+        let cleaned = teamId.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if cleaned.isEmpty {
+            teamIdValidationState = .none
+        } else if cleaned.allSatisfy({ $0.isNumber }) && cleaned.count >= 4 && cleaned.count <= 10 {
+            teamIdValidationState = .valid
+        } else {
+            teamIdValidationState = .invalid
+        }
+    }
+    
+    private func validateSessionCookie(_ cookie: String) {
+        let cleaned = cookie.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if cleaned.isEmpty {
+            cookieValidationState = .none
+        } else if cleaned.count >= 20 && cleaned.count <= 128 {
+            // Basic length validation for session cookies
+            cookieValidationState = .valid
+        } else {
+            cookieValidationState = .invalid
         }
     }
 }

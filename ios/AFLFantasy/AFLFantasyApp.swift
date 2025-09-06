@@ -8,18 +8,145 @@
 
 import SwiftUI
 import UserNotifications
+import os.log
+
+// MARK: - Notification Classes (Inline for now)
+
+class NotificationManager {
+    static let shared = NotificationManager()
+    private init() {}
+    
+    func requestAuthorization() async -> Bool {
+        let center = UNUserNotificationCenter.current()
+        do {
+            let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
+            return granted
+        } catch {
+            print("Notification authorization error: \(error)")
+            return false
+        }
+    }
+    
+    func scheduleCaptainSuggestion(_ suggestion: CaptainSuggestion) async {
+        let content = UNMutableNotificationContent()
+        content.title = "Captain Suggestion"
+        content.body = "Consider \(suggestion.player.name) for captain - \(suggestion.confidence)% confidence"
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: "captain-\(suggestion.player.id)", content: content, trigger: trigger)
+        
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleRoundLockoutReminder(round: Int) async {
+        let content = UNMutableNotificationContent()
+        content.title = "Round Lockout Soon!"
+        content.body = "Round \(round) locks out in 1 hour. Check your team!"
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        let request = UNNotificationRequest(identifier: "lockout-\(round)", content: content, trigger: trigger)
+        
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+    
+    func schedulePlayerAlert(_ alert: AlertFlag, for player: EnhancedPlayer) async {
+        let content = UNMutableNotificationContent()
+        content.title = "Player Alert"
+        content.body = "\(player.name): \(alert.message)"
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
+        let request = UNNotificationRequest(identifier: "alert-\(player.id)-\(alert.type.rawValue)", content: content, trigger: trigger)
+        
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+    
+    func scheduleInjuryAlert(for player: EnhancedPlayer) async {
+        let content = UNMutableNotificationContent()
+        content.title = "Injury Risk Alert"
+        content.body = "\(player.name) has \(player.injuryRisk.riskLevel.rawValue.lowercased()) injury risk"
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 20, repeats: false)
+        let request = UNNotificationRequest(identifier: "injury-\(player.id)", content: content, trigger: trigger)
+        
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+}
+
+class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+    func setupWithApp(_ app: UIApplication) {
+        UNUserNotificationCenter.current().delegate = self
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print("Notification tapped: \(response.notification.request.identifier)")
+        completionHandler()
+    }
+}
 
 // MARK: - Main App
 
 @main
 struct AFLFantasyApp: App {
     @StateObject private var appState = AppState()
+    private let notificationDelegate = NotificationDelegate()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
                 .preferredColorScheme(.dark)
+                .onAppear {
+                    // Setup notifications when app launches
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                       let app = windowScene.delegate as? UIApplicationDelegate {
+                        notificationDelegate.setupWithApp(UIApplication.shared)
+                    }
+                    
+                    // Schedule some demo notifications for testing
+                    Task {
+                        await scheduleDemoNotifications()
+                    }
+                }
+        }
+    }
+    
+    // MARK: - Demo Notifications
+    
+    private func scheduleDemoNotifications() async {
+        let notificationManager = NotificationManager.shared
+        
+        // Request authorization first
+        _ = await notificationManager.requestAuthorization()
+        
+        // Schedule demo notifications for the first few players
+        if let player = appState.players.first {
+            // Demo captain suggestion
+            if let captainSuggestion = appState.captainSuggestions.first {
+                await notificationManager.scheduleCaptainSuggestion(captainSuggestion)
+            }
+        }
+        
+        // Schedule a lockout reminder
+        await notificationManager.scheduleRoundLockoutReminder(round: 15)
+        
+        // Schedule alerts for players with alert flags
+        for player in appState.players {
+            for alert in player.alertFlags {
+                await notificationManager.schedulePlayerAlert(alert, for: player)
+            }
+            
+            // Schedule injury alerts for high-risk players
+            if player.injuryRisk.riskLevel == .moderate || player.injuryRisk.riskLevel == .high {
+                await notificationManager.scheduleInjuryAlert(for: player)
+            }
         }
     }
 }
@@ -34,7 +161,7 @@ class AppState: ObservableObject {
     @Published var players: [EnhancedPlayer] = []
     @Published var captainSuggestions: [CaptainSuggestion] = []
     @Published var cashCows: [EnhancedPlayer] = []
-
+    
     init() {
         loadEnhancedData()
         generateCaptainSuggestions()
@@ -446,6 +573,36 @@ enum Position: String, CaseIterable, Codable {
         case .midfielder: return .green
         case .ruck: return .purple
         case .forward: return .red
+        }
+    }
+}
+
+// MARK: - Connection Status
+
+enum ConnectionStatus: String, CaseIterable {
+    case disconnected = "Disconnected"
+    case connecting = "Connecting"
+    case connected = "Connected"
+    case live = "Live"
+    case error = "Error"
+    
+    var color: Color {
+        switch self {
+        case .disconnected: return .gray
+        case .connecting: return .orange
+        case .connected: return .green
+        case .live: return .red
+        case .error: return .red
+        }
+    }
+    
+    var systemImage: String {
+        switch self {
+        case .disconnected: return "wifi.slash"
+        case .connecting: return "wifi.exclamationmark"
+        case .connected: return "wifi"
+        case .live: return "dot.radiowaves.left.and.right"
+        case .error: return "exclamationmark.triangle"
         }
     }
 }

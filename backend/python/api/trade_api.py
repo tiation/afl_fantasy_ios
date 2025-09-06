@@ -522,6 +522,152 @@ def fetch_fresh_afl_data():
         print(f"Error running AFL Fantasy scraper: {e}")
         return None
 
+def validate_afl_credentials(team_id: str, session_cookie: str) -> Dict[str, Any]:
+    """
+    Validate AFL Fantasy credentials by attempting to fetch basic data.
+    
+    Args:
+        team_id: The AFL Fantasy team ID
+        session_cookie: The session cookie for authentication
+        
+    Returns:
+        Dictionary with validation results
+    """
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+        
+        # Basic validation URL - try to access team page
+        url = f"https://fantasy.afl.com.au/classic/team/view/{team_id}"
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            'Cookie': f'sessionid={session_cookie}'
+        }
+        
+        # Make request with timeout
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        # Check response status
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Look for team name or other indicators of valid access
+            team_name_element = soup.find('h1', class_='team-name') or soup.find('title')
+            if team_name_element:
+                team_name = team_name_element.get_text(strip=True)
+                return {
+                    'valid': True,
+                    'team_name': team_name,
+                    'team_id': team_id,
+                    'message': 'Credentials validated successfully'
+                }
+            else:
+                return {
+                    'valid': False,
+                    'error': 'Could not find team information. Please check your team ID.'
+                }
+        elif response.status_code == 403:
+            return {
+                'valid': False,
+                'error': 'Access denied. Please check your session cookie.'
+            }
+        elif response.status_code == 404:
+            return {
+                'valid': False,
+                'error': 'Team not found. Please check your team ID.'
+            }
+        else:
+            return {
+                'valid': False,
+                'error': f'Server error (Status: {response.status_code})'
+            }
+            
+    except requests.exceptions.Timeout:
+        return {
+            'valid': False,
+            'error': 'Request timed out. Please try again.'
+        }
+    except requests.exceptions.ConnectionError:
+        return {
+            'valid': False,
+            'error': 'Connection failed. Please check your internet connection.'
+        }
+    except ImportError:
+        return {
+            'valid': False,
+            'error': 'Missing required packages (requests, beautifulsoup4)'
+        }
+    except Exception as e:
+        return {
+            'valid': False,
+            'error': f'Validation error: {str(e)}'
+        }
+
+@app.route('/api/afl-fantasy/validate-credentials', methods=['POST'])
+def validate_credentials():
+    """
+    Validate AFL Fantasy credentials.
+    
+    Expected JSON input:
+    {
+        "team_id": "string",
+        "session_cookie": "string"
+    }
+    
+    Returns:
+    {
+        "valid": bool,
+        "team_name": "string" (if valid),
+        "team_id": "string",
+        "message": "string",
+        "error": "string" (if invalid)
+    }
+    """
+    try:
+        data = request.get_json()
+        logger.info("Received credential validation request")
+        
+        # Validate required fields
+        if not data or 'team_id' not in data or 'session_cookie' not in data:
+            return jsonify({
+                'valid': False,
+                'error': 'Missing required fields: team_id and session_cookie'
+            }), 400
+        
+        team_id = data['team_id'].strip()
+        session_cookie = data['session_cookie'].strip()
+        
+        # Basic validation
+        if not team_id:
+            return jsonify({
+                'valid': False,
+                'error': 'Team ID cannot be empty'
+            }), 400
+            
+        if not session_cookie:
+            return jsonify({
+                'valid': False,
+                'error': 'Session cookie cannot be empty'
+            }), 400
+        
+        # Validate credentials
+        result = validate_afl_credentials(team_id, session_cookie)
+        
+        if result['valid']:
+            logger.info(f"Credentials validated successfully for team: {result.get('team_name', 'Unknown')}")
+            return jsonify(result)
+        else:
+            logger.warning(f"Credential validation failed: {result.get('error', 'Unknown error')}")
+            return jsonify(result), 401
+            
+    except Exception as e:
+        logger.error(f"Error validating credentials: {str(e)}")
+        return jsonify({
+            'valid': False,
+            'error': f'Server error: {str(e)}'
+        }), 500
+
 @app.route('/api/afl-fantasy/dashboard-data', methods=['GET'])
 def get_dashboard_data():
     """Get all dashboard data from AFL Fantasy"""

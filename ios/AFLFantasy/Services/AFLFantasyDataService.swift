@@ -177,16 +177,16 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
         guard authenticated else {
             throw AFLFantasyError.notAuthenticated
         }
-        
+
         loading = true
         defer { loading = false }
-        
+
         // In production, this would call the actual API to set captain
         // For now, we'll simulate the API call and update local state
         do {
             // Simulate API delay
             try await Task.sleep(nanoseconds: 1_000_000_000)
-            
+
             // Update current captain in dashboard data
             if var dashboardData = currentDashboardData {
                 var captainData = CaptainData()
@@ -196,7 +196,7 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
                 dashboardData.captain = captainData
                 currentDashboardData = dashboardData
             }
-            
+
             print("✅ Captain set to: \(playerName)")
         } catch {
             throw AFLFantasyError.networkError(error)

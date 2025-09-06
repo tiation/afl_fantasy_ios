@@ -13,20 +13,20 @@ import SwiftUI
 struct PlayerPickerView: View {
     @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) private var dismiss
-    
+
     let mode: PickerMode
     let onSelection: (EnhancedPlayer) -> Void
-    
+
     @State private var searchText = ""
     @State private var selectedPosition: Position? = nil
     @State private var sortOption: SortOption = .score
     @State private var maxPrice: Double = 1_200_000
-    
+
     enum PickerMode {
         case tradeOut
         case tradeIn
         case teamSelection
-        
+
         var title: String {
             switch self {
             case .tradeOut: "Select Player to Trade Out"
@@ -34,7 +34,7 @@ struct PlayerPickerView: View {
             case .teamSelection: "Select Player"
             }
         }
-        
+
         var subtitle: String {
             switch self {
             case .tradeOut: "Choose from your current team"
@@ -43,13 +43,13 @@ struct PlayerPickerView: View {
             }
         }
     }
-    
+
     enum SortOption: String, CaseIterable {
         case score = "Score"
         case price = "Price"
         case name = "Name"
         case value = "Value"
-        
+
         var systemImage: String {
             switch self {
             case .score: "chart.bar.fill"
@@ -59,7 +59,7 @@ struct PlayerPickerView: View {
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -69,7 +69,7 @@ struct PlayerPickerView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
-                    
+
                     // Budget info for trade in
                     if mode == .tradeIn {
                         Text("Budget: $\(Int(maxPrice / 1000))k")
@@ -82,7 +82,7 @@ struct PlayerPickerView: View {
                     }
                 }
                 .padding()
-                
+
                 // Search and filters
                 PlayerSearchFilters(
                     searchText: $searchText,
@@ -91,7 +91,7 @@ struct PlayerPickerView: View {
                     maxPrice: $maxPrice,
                     showPriceFilter: mode == .tradeIn
                 )
-                
+
                 // Player list
                 ScrollView {
                     LazyVStack(spacing: 8) {
@@ -120,18 +120,18 @@ struct PlayerPickerView: View {
             }
         }
     }
-    
+
     private var availablePlayers: [EnhancedPlayer] {
         switch mode {
         case .tradeOut:
-            return appState.players // Current team players
+            appState.players // Current team players
         case .tradeIn, .teamSelection:
             // In production, this would fetch all AFL players
             // For demo, we'll use a mix of current and generated players
-            return generateAvailablePlayers()
+            generateAvailablePlayers()
         }
     }
-    
+
     private var filteredPlayers: [EnhancedPlayer] {
         let filtered = availablePlayers.filter { player in
             // Search filter
@@ -140,20 +140,20 @@ struct PlayerPickerView: View {
                     player.position.rawValue.localizedCaseInsensitiveContains(searchText)
                 if !matchesSearch { return false }
             }
-            
+
             // Position filter
             if let position = selectedPosition {
                 if player.position != position { return false }
             }
-            
+
             // Price filter for trade in
             if mode == .tradeIn {
                 if Double(player.price) > maxPrice { return false }
             }
-            
+
             return true
         }
-        
+
         // Sort players
         return filtered.sorted { player1, player2 in
             switch sortOption {
@@ -170,7 +170,7 @@ struct PlayerPickerView: View {
             }
         }
     }
-    
+
     private func generateAvailablePlayers() -> [EnhancedPlayer] {
         // Generate some mock players for trade-in options
         let mockPlayers: [EnhancedPlayer] = [
@@ -182,44 +182,44 @@ struct PlayerPickerView: View {
             createMockPlayer(name: "Nick Daicos", position: .defender, price: 580_000, score: 92.1),
             createMockPlayer(name: "Jordan Dawson", position: .defender, price: 620_000, score: 95.4)
         ]
-        
+
         return (appState.players + mockPlayers).uniqued()
     }
-    
+
     private func createMockPlayer(name: String, position: Position, price: Int, score: Double) -> EnhancedPlayer {
         EnhancedPlayer(
             id: UUID().uuidString,
             name: name,
             position: position,
             price: price,
-            currentScore: Int(score + Double.random(in: -15...15)),
+            currentScore: Int(score + Double.random(in: -15 ... 15)),
             averageScore: score,
-            breakeven: Int.random(in: 40...80),
-            consistency: Double.random(in: 0.7...0.95),
-            highScore: Int(score + Double.random(in: 15...35)),
-            lowScore: Int(score - Double.random(in: 15...25)),
-            priceChange: Int.random(in: -30000...30000),
+            breakeven: Int.random(in: 40 ... 80),
+            consistency: Double.random(in: 0.7 ... 0.95),
+            highScore: Int(score + Double.random(in: 15 ... 35)),
+            lowScore: Int(score - Double.random(in: 15 ... 25)),
+            priceChange: Int.random(in: -30000 ... 30000),
             isCashCow: price < 600_000,
             isDoubtful: Bool.random(),
             isSuspended: false,
-            cashGenerated: price < 600_000 ? Int.random(in: 50000...150000) : 0,
-            projectedPeakPrice: price + Int.random(in: -50000...100000),
+            cashGenerated: price < 600_000 ? Int.random(in: 50000 ... 150_000) : 0,
+            projectedPeakPrice: price + Int.random(in: -50000 ... 100_000),
             nextRoundProjection: RoundProjection(
                 round: 15,
                 opponent: ["Richmond", "Collingwood", "Geelong", "Sydney"].randomElement()!,
                 venue: ["MCG", "Marvel Stadium", "Adelaide Oval"].randomElement()!,
-                projectedScore: score + Double.random(in: -10...10),
-                confidence: Double.random(in: 0.6...0.9),
+                projectedScore: score + Double.random(in: -10 ... 10),
+                confidence: Double.random(in: 0.6 ... 0.9),
                 conditions: WeatherConditions(temperature: 18, rainProbability: 0.2, windSpeed: 15, humidity: 60)
             ),
             seasonProjection: SeasonProjection(
                 projectedTotalScore: score * 20,
                 projectedAverage: score,
-                premiumPotential: Double.random(in: 0.6...0.95)
+                premiumPotential: Double.random(in: 0.6 ... 0.95)
             ),
             injuryRisk: InjuryRisk(
                 riskLevel: [.low, .medium, .high].randomElement()!,
-                riskScore: Double.random(in: 0.1...0.4),
+                riskScore: Double.random(in: 0.1 ... 0.4),
                 riskFactors: []
             ),
             venuePerformance: [],
@@ -236,17 +236,17 @@ struct PlayerSearchFilters: View {
     @Binding var sortOption: PlayerPickerView.SortOption
     @Binding var maxPrice: Double
     let showPriceFilter: Bool
-    
+
     var body: some View {
         VStack(spacing: 12) {
             // Search bar
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
-                
+
                 TextField("Search players...", text: $searchText)
                     .textFieldStyle(.plain)
-                
+
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
                         Image(systemName: "xmark.circle.fill")
@@ -258,7 +258,7 @@ struct PlayerSearchFilters: View {
             .padding(.vertical, 8)
             .background(Color(.systemGray6))
             .cornerRadius(8)
-            
+
             // Filters
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -267,7 +267,7 @@ struct PlayerSearchFilters: View {
                         Button("All Positions") {
                             selectedPosition = nil
                         }
-                        
+
                         ForEach(Position.allCases, id: \.rawValue) { position in
                             Button(position.rawValue) {
                                 selectedPosition = position
@@ -280,7 +280,7 @@ struct PlayerSearchFilters: View {
                             icon: "person.3.fill"
                         )
                     }
-                    
+
                     // Sort filter
                     Menu {
                         ForEach(PlayerPickerView.SortOption.allCases, id: \.rawValue) { option in
@@ -298,7 +298,7 @@ struct PlayerSearchFilters: View {
                             icon: sortOption.systemImage
                         )
                     }
-                    
+
                     // Price filter (for trade in)
                     if showPriceFilter {
                         Menu {
@@ -328,7 +328,7 @@ struct FilterChip: View {
     let title: String
     let isSelected: Bool
     let icon: String
-    
+
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: icon)
@@ -351,9 +351,9 @@ struct PlayerPickerRow: View {
     let player: EnhancedPlayer
     let mode: PlayerPickerView.PickerMode
     let onSelect: () -> Void
-    
+
     private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-    
+
     var body: some View {
         Button(action: {
             impactFeedback.impactOccurred()
@@ -364,13 +364,13 @@ struct PlayerPickerRow: View {
                 RoundedRectangle(cornerRadius: 4)
                     .fill(player.position.color)
                     .frame(width: 4, height: 50)
-                
+
                 // Player info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(player.name)
                         .font(.headline)
                         .foregroundColor(.primary)
-                    
+
                     HStack(spacing: 8) {
                         Text(player.position.rawValue)
                             .font(.caption)
@@ -378,32 +378,32 @@ struct PlayerPickerRow: View {
                             .padding(.vertical, 2)
                             .background(player.position.color.opacity(0.2))
                             .cornerRadius(4)
-                        
+
                         Text("Avg: \(Int(player.averageScore))")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         if player.isDoubtful {
                             Text("⚠️")
                                 .font(.caption)
                         }
                     }
                 }
-                
+
                 Spacer()
-                
+
                 // Price and value
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(player.formattedPrice)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
-                    
+
                     Text("Value: \(valueRating)")
                         .font(.caption)
                         .foregroundColor(valueColor)
                 }
-                
+
                 // Selection indicator
                 Image(systemName: "chevron.right")
                     .font(.caption)
@@ -415,22 +415,22 @@ struct PlayerPickerRow: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
     }
-    
+
     private var valueRating: String {
         let value = player.averageScore / Double(player.price / 10000)
         switch value {
         case 12...: "★★★"
-        case 8..<12: "★★☆"
-        case 6..<8: "★☆☆"
+        case 8 ..< 12: "★★☆"
+        case 6 ..< 8: "★☆☆"
         default: "☆☆☆"
         }
     }
-    
+
     private var valueColor: Color {
         let value = player.averageScore / Double(player.price / 10000)
         switch value {
         case 12...: .green
-        case 8..<12: .orange
+        case 8 ..< 12: .orange
         default: .red
         }
     }
@@ -441,7 +441,7 @@ struct PlayerPickerRow: View {
 extension Array where Element: Identifiable {
     func uniqued() -> [Element] {
         var seen = Set<Element.ID>()
-        return self.filter { seen.insert($0.id).inserted }
+        return filter { seen.insert($0.id).inserted }
     }
 }
 

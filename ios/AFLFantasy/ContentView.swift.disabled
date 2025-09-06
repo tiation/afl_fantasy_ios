@@ -1,0 +1,2112 @@
+//
+//  ContentView.swift
+//  AFL Fantasy Intelligence Platform
+//
+//  Created by AI Assistant on 6/9/2025.
+//  Copyright © 2025 AFL AI. All rights reserved.
+//
+
+import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
+import UserNotifications
+
+// MARK: - TradeCalculatorViewWrapper
+
+struct TradeCalculatorViewWrapper: View {
+    @State private var playerOut: EnhancedPlayer?
+    @State private var playerIn: EnhancedPlayer?
+    
+    var body: some View {
+        // Placeholder view until EnhancedTradeCalculatorView is properly integrated
+        TradesPlaceholderView()
+    }
+}
+
+// MARK: - ContentView
+
+struct ContentView: View {
+    @EnvironmentObject var appState: AppState
+
+    // Native iOS Haptic Feedback for tab switching
+    #if canImport(UIKit)
+    private let selectionFeedback = UISelectionFeedbackGenerator()
+    #endif
+
+    var body: some View {
+        TabView(selection: $appState.selectedTab) {
+            DashboardView()
+                .tabItem {
+                    Image(systemName: TabItem.dashboard.systemImage)
+                    Text(TabItem.dashboard.rawValue)
+                }
+                .tag(TabItem.dashboard)
+
+            CaptainAdvisorView()
+                .tabItem {
+                    Image(systemName: TabItem.captain.systemImage)
+                    Text(TabItem.captain.rawValue)
+                }
+                .tag(TabItem.captain)
+
+            TradeCalculatorViewWrapper()
+                .tabItem {
+                    Image(systemName: TabItem.trades.systemImage)
+                    Text(TabItem.trades.rawValue)
+                }
+                .tag(TabItem.trades)
+
+            CashCowView()
+                .tabItem {
+                    Image(systemName: TabItem.cashCow.systemImage)
+                    Text(TabItem.cashCow.rawValue)
+                }
+                .tag(TabItem.cashCow)
+
+            SettingsView()
+                .tabItem {
+                    Image(systemName: TabItem.settings.systemImage)
+                    Text(TabItem.settings.rawValue)
+                }
+                .tag(TabItem.settings)
+        }
+        .accentColor(.orange) // AFL-inspired accent color
+        .onChange(of: appState.selectedTab) { _, _ in
+            // Haptic feedback when switching tabs
+            #if canImport(UIKit)
+            selectionFeedback.selectionChanged()
+            #endif
+        }
+    }
+}
+
+// MARK: - DashboardView
+
+struct DashboardView: View {
+    @EnvironmentObject var appState: AppState
+    @State private var animateScore = false
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Team Score Header
+                    TeamScoreHeaderView()
+
+                    // Player Cards
+                    LazyVStack(spacing: 12) {
+                        ForEach(appState.players) { player in
+                            PlayerCardView(player: player)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            .navigationTitle("🏆 Dashboard")
+            .navigationBarTitleDisplayMode(.large)
+            .onAppear {
+                simulateLiveScores()
+            }
+        }
+    }
+
+    private func simulateLiveScores() {
+        // Simulate live score updates for MVP
+        Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
+                await MainActor.run {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        appState.teamScore = Int.random(in: 1800 ... 2200)
+                        appState.teamRank = Int.random(in: 1000 ... 15000)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - TeamScoreHeaderView
+
+struct TeamScoreHeaderView: View {
+    @EnvironmentObject var appState: AppState
+    private let keychainManager = KeychainManager()
+
+    var body: some View {
+        VStack(spacing: 16) {
+            // Connection Status Bar
+            ConnectionStatusBar()
+            
+            // Personalized greeting (if user name is available)
+            if let userName = keychainManager.getUserName() {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(personalizedGreeting())
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                        Text(userName)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                    }
+                    
+                    Spacer()
+                    
+                    if let favoriteTeam = keychainManager.getFavoriteTeam(),
+                       let aflTeam = AFLTeam.allCases.first(where: { $0.rawValue == favoriteTeam }) {
+                        Text(aflTeam.emoji)
+                            .font(.title)
+                    }
+                }
+                .padding(.bottom, 8)
+            }
+
+            // Main Team Info
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("TEAM SCORE")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(appState.teamScore)")
+                        .font(.largeTitle)
+                        .foregroundColor(.orange)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing) {
+                    Text("RANK")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("#\(appState.teamRank)")
+                        .font(.title2)
+                        .foregroundColor(.green)
+                }
+            }
+
+            // Progress bar for salary cap
+            ProgressView(value: 0.85)
+                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                .scaleEffect(x: 1, y: 2, anchor: .center)
+
+            HStack {
+                Text("Salary Cap: $10.2M / $12.0M")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text("85% Used")
+                    .font(.caption)
+                    .foregroundColor(.blue)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .padding(.horizontal)
+    }
+    
+    private func personalizedGreeting() -> String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 6..<12:
+            return "Good morning,"
+        case 12..<17:
+            return "Good afternoon,"
+        case 17..<22:
+            return "Good evening,"
+        default:
+            return "Hello,"
+        }
+    }
+}
+
+// MARK: - PlayerCardView
+
+struct PlayerCardView: View {
+    let player: EnhancedPlayer
+    @State private var showingDetails = false
+
+    // Native iOS Haptic Feedback
+    #if canImport(UIKit)
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    #endif
+
+    var body: some View {
+        VStack(spacing: 12) {
+            // Main player info row
+            HStack {
+                // Position indicator
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(player.position.color)
+                    .frame(width: 6, height: 50)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(player.name)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    HStack(spacing: 8) {
+                        Text(player.position.rawValue)
+                            .font(.caption)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(player.position.color.opacity(0.2))
+                            .cornerRadius(4)
+
+                        Text(player.formattedPrice)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        // Injury risk indicator
+                        if player.injuryRisk.riskLevel != .low {
+                            Text("⚠️ \(player.injuryRisk.riskLevel.rawValue)")
+                                .font(.caption2)
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(player.currentScore)")
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.orange)
+
+                    Text("BE: \(player.breakeven)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            // Advanced analytics row
+            HStack {
+                // Consistency grade
+                VStack(spacing: 2) {
+                    Text("Consistency")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text(player.consistencyGrade)
+                        .font(.caption)
+                        .bold()
+                        .foregroundColor(consistencyColor(for: player.consistency))
+                }
+
+                Spacer()
+
+                // Average score
+                VStack(spacing: 2) {
+                    Text("Average")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("\(Int(player.averageScore))")
+                        .font(.caption)
+                        .bold()
+                }
+
+                Spacer()
+
+                // Price change indicator
+                VStack(spacing: 2) {
+                    Text("Price Δ")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text(player.priceChangeText)
+                        .font(.caption)
+                        .bold()
+                        .foregroundColor(player.priceChange >= 0 ? .green : .red)
+                }
+
+                Spacer()
+
+                // Next round projection
+                VStack(spacing: 2) {
+                    Text("Projected")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text("\(Int(player.nextRoundProjection.projectedScore))")
+                        .font(.caption)
+                        .bold()
+                        .foregroundColor(.blue)
+                }
+            }
+            .padding(.horizontal, 8)
+
+            // Cash cow indicator
+            if player.isCashCow, player.cashGenerated > 50000 {
+                HStack {
+                    Text("💰 Cash Generated: $\(player.cashGenerated / 1000)k")
+                        .font(.caption)
+                        .foregroundColor(.green)
+
+                    Spacer()
+
+                    if player.seasonProjection.premiumPotential > 0.8 {
+                        Text("🚀 Premium Potential")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                }
+                .padding(.horizontal, 8)
+            }
+
+            // Alert indicators
+            if !player.alertFlags.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(player.alertFlags, id: \.type) { alert in
+                            Text(alertIcon(for: alert.type))
+                                .font(.caption)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(alertColor(for: alert.priority).opacity(0.2))
+                                .cornerRadius(4)
+                        }
+                    }
+                    .padding(.horizontal, 8)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .onTapGesture {
+            #if canImport(UIKit)
+            impactFeedback.impactOccurred()
+            #endif
+            showingDetails = true
+        }
+        .sheet(isPresented: $showingDetails) {
+            PlayerDetailSheet(player: player)
+        }
+    }
+
+    private func consistencyColor(for consistency: Double) -> Color {
+        if consistency >= 0.8 { return .green }
+        if consistency >= 0.6 { return .orange }
+        return .red
+    }
+
+    private func alertIcon(for type: AlertType) -> String {
+        switch type {
+        case .injuryRisk: "⚠️"
+        case .injury: "⚠️"
+        case .priceRise: "📈"
+        case .priceDrop: "📉"
+        case .breakeven: "💰"
+        case .captain: "⭐"
+        case .trade: "🔄"
+        case .suspension: "🚫"
+        case .teamChange: "🏃"
+        case .breakEvenCliff: "🏔️"
+        case .cashCowSell: "💰"
+        case .roleChange: "🔄"
+        case .weatherRisk: "🌧️"
+        case .contractYear: "📝"
+        case .premiumBreakout: "⭐"
+        }
+    }
+
+    private func alertColor(for priority: AlertPriority) -> Color {
+        switch priority {
+        case .critical: .red
+        case .high: .red
+        case .medium: .orange
+        case .low: .blue
+        }
+    }
+}
+
+// MARK: - CaptainAdvisorView
+
+struct CaptainAdvisorView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 16) {
+                    // AI Confidence Header
+                    VStack {
+                        Image(systemName: "brain.head.profile")
+                            .font(.system(size: 50))
+                            .foregroundColor(.orange)
+
+                        Text("AI Captain Advisor")
+                            .font(.title2)
+                            .bold()
+
+                        Text("Based on venue, form, and opponent analysis")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+
+                    // Captain Suggestions
+                    ForEach(Array(appState.captainSuggestions.enumerated()), id: \.element.id) { index, suggestion in
+                        SimpleCaptainSuggestionCard(suggestion: suggestion, rank: index + 1)
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("⭐ Captain AI")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - SimpleCaptainSuggestionCard
+
+struct SimpleCaptainSuggestionCard: View {
+    let suggestion: CaptainSuggestion
+    let rank: Int
+    @State private var showingDetails = false
+
+    // Native iOS Haptic Feedback
+    #if canImport(UIKit)
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    #endif
+
+    var body: some View {
+        VStack(spacing: 12) {
+            // Main captain info
+            HStack {
+                // Rank indicator
+                ZStack {
+                    Circle()
+                        .fill(rankColor.opacity(0.2))
+                        .frame(width: 40, height: 40)
+
+                    Text("\(rank)")
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(rankColor)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Player \(rank)")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    HStack(spacing: 8) {
+                        Text(suggestion.position)
+                            .font(.caption)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(suggestion.positionColor.opacity(0.2))
+                            .cornerRadius(4)
+
+                        Text("vs \(suggestion.opponent)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(Int(suggestion.projectedScore))")
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.orange)
+
+                    Text("\(Int(suggestion.confidence * 100))% confidence")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            // AI Analysis factors
+            VStack(spacing: 8) {
+                HStack {
+                    Text("Form")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    ProgressBar(value: suggestion.formRating, color: .blue)
+                    Text("\(Int(suggestion.formRating * 100))%")
+                        .font(.caption2)
+                        .foregroundColor(.blue)
+                }
+
+                HStack {
+                    Text("Fixture")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    ProgressBar(value: suggestion.fixtureRating, color: .green)
+                    Text("\(Int(suggestion.fixtureRating * 100))%")
+                        .font(.caption2)
+                        .foregroundColor(.green)
+                }
+
+                HStack {
+                    Text("Risk")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    ProgressBar(value: 1.0 - suggestion.riskFactor, color: .orange)
+                    Text("Low Risk")
+                        .font(.caption2)
+                        .foregroundColor(.orange)
+                }
+            }
+            .padding(.horizontal, 8)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .onTapGesture {
+            #if canImport(UIKit)
+            impactFeedback.impactOccurred()
+            #endif
+            showingDetails = true
+        }
+        .sheet(isPresented: $showingDetails) {
+            CaptainAnalysisDetailView(suggestion: suggestion)
+        }
+    }
+
+    private var rankColor: Color {
+        switch rank {
+        case 1: .green
+        case 2: .orange
+        case 3: .red
+        default: .gray
+        }
+    }
+}
+
+
+// MARK: - TradeScoreView
+
+struct TradeScoreView: View {
+    var body: some View {
+        VStack {
+            Text("Trade Score")
+                .font(.headline)
+
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 8)
+                    .frame(width: 120, height: 120)
+
+                Circle()
+                    .trim(from: 0, to: 0.75)
+                    .stroke(Color.orange, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                    .frame(width: 120, height: 120)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeInOut(duration: 1), value: 0.75)
+
+                VStack {
+                    Text("75")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(.orange)
+                    Text("Good Trade")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - CashCowView
+
+struct CashCowView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Header
+                    VStack {
+                        Image(systemName: "dollarsign.circle.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(.green)
+
+                        Text("Cash Cow Tracker")
+                            .font(.title2)
+                            .bold()
+
+                        Text("Rookies optimized for cash generation")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+
+                    // Cash Cow Cards
+                    ForEach(appState.cashCows) { player in
+                        CashCowCard(player: player)
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("💰 Cash Cows")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - CashCowCard
+
+struct CashCowCard: View {
+    let player: EnhancedPlayer
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(player.name)
+                    .font(.headline)
+
+                HStack {
+                    Text(player.position.rawValue)
+                        .font(.caption)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(player.position.color.opacity(0.2))
+                        .cornerRadius(4)
+
+                    // Sell signal
+                    if player.breakeven < 0 {
+                        Text("🚀 SELL NOW")
+                            .font(.caption)
+                            .bold()
+                            .foregroundColor(.green)
+                    } else if player.breakeven < 50 {
+                        Text("⚠️ HOLD")
+                            .font(.caption)
+                            .bold()
+                            .foregroundColor(.orange)
+                    }
+                }
+            }
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(player.formattedPrice)
+                    .font(.title3)
+                    .bold()
+                    .foregroundColor(.green)
+
+                Text("BE: \(player.breakeven)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+// MARK: - ConnectionStatusBar
+
+struct ConnectionStatusBar: View {
+    @State private var isConnected = true
+
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(isConnected ? Color.green : Color.red)
+                .frame(width: 8, height: 8)
+
+            Text(isConnected ? "Live Data" : "Offline Mode")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Spacer()
+
+            Text("Updated 2m ago")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Color(.tertiarySystemBackground))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - ProgressBar
+
+struct ProgressBar: View {
+    let value: Double
+    let color: Color
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 4)
+
+                Rectangle()
+                    .fill(color)
+                    .frame(width: geometry.size.width * value, height: 4)
+                    .animation(.easeInOut(duration: 0.3), value: value)
+            }
+        }
+        .frame(height: 4)
+        .cornerRadius(2)
+    }
+}
+
+// MARK: - PlayerDetailSheet
+
+struct PlayerDetailSheet: View {
+    let player: EnhancedPlayer
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(player.name)
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Detailed player analysis coming soon...")
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+                }
+                .padding()
+            }
+            .navigationTitle("Player Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - CaptainAnalysisDetailView
+
+struct CaptainAnalysisDetailView: View {
+    let suggestion: CaptainSuggestion
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Player Detail")
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Detailed captain analysis coming soon...")
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+                }
+                .padding()
+            }
+            .navigationTitle("Captain Analysis")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - NotificationsSection
+
+struct NotificationsSection: View {
+    @Binding var enableBreakevenAlerts: Bool
+    @Binding var enableInjuryAlerts: Bool
+    @Binding var enableLateOutAlerts: Bool
+    @Binding var enableTradeAlerts: Bool
+    @Binding var enablePriceChangeAlerts: Bool
+    @Binding var enableCaptainAlerts: Bool
+    @Binding var notificationsSoundEnabled: Bool
+    @Binding var notificationsBadgeEnabled: Bool
+    @Binding var showingNotificationPermissions: Bool
+
+    let handleNotificationToggle: (String, Bool) -> Void
+
+    var body: some View {
+        Section(header: Text("🔔 Notifications")) {
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Breakeven Alerts", isOn: $enableBreakevenAlerts)
+                    .onChange(of: enableBreakevenAlerts) { _, newValue in
+                        handleNotificationToggle("breakeven", newValue)
+                    }
+
+                Toggle("Injury Risk Alerts", isOn: $enableInjuryAlerts)
+                    .onChange(of: enableInjuryAlerts) { _, newValue in
+                        handleNotificationToggle("injury", newValue)
+                    }
+
+                Toggle("Late Team Changes", isOn: $enableLateOutAlerts)
+                    .onChange(of: enableLateOutAlerts) { _, newValue in
+                        handleNotificationToggle("lateOut", newValue)
+                    }
+
+                Toggle("Trade Recommendations", isOn: $enableTradeAlerts)
+                    .onChange(of: enableTradeAlerts) { _, newValue in
+                        handleNotificationToggle("trade", newValue)
+                    }
+
+                Toggle("Price Change Alerts", isOn: $enablePriceChangeAlerts)
+                    .onChange(of: enablePriceChangeAlerts) { _, newValue in
+                        handleNotificationToggle("priceChange", newValue)
+                    }
+
+                Toggle("Captain Suggestions", isOn: $enableCaptainAlerts)
+                    .onChange(of: enableCaptainAlerts) { _, newValue in
+                        handleNotificationToggle("captain", newValue)
+                    }
+            }
+
+            Toggle("Sound Effects", isOn: $notificationsSoundEnabled)
+            Toggle("Badge Count", isOn: $notificationsBadgeEnabled)
+
+            Button("Notification Permissions") {
+                showingNotificationPermissions = true
+            }
+            .foregroundColor(.primary)
+        }
+    }
+}
+
+// MARK: - AIAnalysisSection
+
+struct AIAnalysisSection: View {
+    @Binding var aiConfidenceThreshold: Double
+    @Binding var showLowConfidencePicks: Bool
+    @Binding var enableAdvancedAnalytics: Bool
+    @Binding var autoUpdateInterval: Double
+
+    let formatUpdateInterval: (Double) -> String
+
+    var body: some View {
+        Section(header: Text("🧠 AI & Analysis")) {
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("AI Confidence Threshold: \(Int(aiConfidenceThreshold))%")
+                        .font(.subheadline)
+                    Slider(value: $aiConfidenceThreshold, in: 60 ... 95, step: 5)
+                        .tint(.orange)
+                    Text("Only show picks with \(Int(aiConfidenceThreshold))%+ confidence")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Toggle("Show Low Confidence Picks", isOn: $showLowConfidencePicks)
+                Toggle("Advanced Analytics", isOn: $enableAdvancedAnalytics)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Auto-Update: \(formatUpdateInterval(autoUpdateInterval))")
+                        .font(.subheadline)
+                    Slider(value: $autoUpdateInterval, in: 60 ... 1800, step: 60)
+                        .tint(.blue)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - DisplayPreferencesSection
+
+struct DisplayPreferencesSection: View {
+    @Binding var showPlayerOwnership: Bool
+    @Binding var showVenueWeather: Bool
+    @Binding var compactPlayerCards: Bool
+    @Binding var darkModePreference: Int
+
+    var body: some View {
+        Section(header: Text("🎨 Display")) {
+            Toggle("Show Player Ownership %", isOn: $showPlayerOwnership)
+            Toggle("Show Venue & Weather", isOn: $showVenueWeather)
+            Toggle("Compact Player Cards", isOn: $compactPlayerCards)
+
+            Picker("Appearance", selection: $darkModePreference) {
+                Text("System").tag(0)
+                Text("Light").tag(1)
+                Text("Dark").tag(2)
+            }
+        }
+    }
+}
+
+// MARK: - TeamManagementSection
+
+struct TeamManagementSection: View {
+    @EnvironmentObject var appState: AppState
+    let formatCurrency: (Int) -> String
+
+    var body: some View {
+        Section(header: Text("⚽ Team Management")) {
+            HStack {
+                Text("Team Value")
+                Spacer()
+                Text(formatCurrency(appState.teamValue))
+                    .foregroundColor(.green)
+                    .fontWeight(.medium)
+            }
+
+            HStack {
+                Text("Bank Balance")
+                Spacer()
+                Text(formatCurrency(appState.bankBalance))
+                    .foregroundColor(appState.bankBalance > 100_000 ? .green : .orange)
+                    .fontWeight(.medium)
+            }
+
+            HStack {
+                Text("Trades Remaining")
+                Spacer()
+                Text("\(appState.tradesRemaining)")
+                    .foregroundColor(appState.tradesRemaining > 5 ? .green :
+                        appState.tradesRemaining > 2 ? .orange : .red
+                    )
+                    .fontWeight(.medium)
+            }
+
+            HStack {
+                Text("Players")
+                Spacer()
+                Text("\(appState.players.count) / 30")
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+
+// MARK: - DataManagementSection
+
+struct DataManagementSection: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var cacheSize: String
+    @Binding var lastSyncTime: Date
+    @Binding var showingClearCacheAlert: Bool
+    @Binding var showingResetDataAlert: Bool
+    @Binding var showingExportData: Bool
+
+    let formatLastSync: (Date) -> String
+    let refreshAppData: () -> Void
+
+    var body: some View {
+        Section(header: Text("📊 Data Management")) {
+            HStack {
+                Text("Cache Size")
+                Spacer()
+                Text(cacheSize)
+                    .foregroundColor(.secondary)
+            }
+
+            HStack {
+                Text("Last Sync")
+                Spacer()
+                Text(formatLastSync(lastSyncTime))
+                    .foregroundColor(.secondary)
+            }
+
+            Button("Refresh Data Now") {
+                refreshAppData()
+            }
+            .foregroundColor(.blue)
+            .disabled(appState.isRefreshing)
+
+            Button("Clear Cache") {
+                showingClearCacheAlert = true
+            }
+            .foregroundColor(.orange)
+
+            Button("Export Team Data") {
+                showingExportData = true
+            }
+            .foregroundColor(.primary)
+
+            Button("Reset All Data") {
+                showingResetDataAlert = true
+            }
+            .foregroundColor(.red)
+        }
+    }
+}
+
+// MARK: - SupportLegalSection
+
+struct SupportLegalSection: View {
+    @Binding var showingPrivacyPolicy: Bool
+    @Binding var showingTermsOfUse: Bool
+
+    #if canImport(UIKit)
+    let impactFeedback: UIImpactFeedbackGenerator
+    #else
+    let impactFeedback: () -> Void = {}
+    #endif
+    let getBuildNumber: () -> String
+    let contactSupport: () -> Void
+    let rateApp: () -> Void
+
+    var body: some View {
+        Section(header: Text("ℹ️ Support & Legal")) {
+            HStack {
+                Text("Version")
+                Spacer()
+                Text("1.0.0 (MVP)")
+                    .foregroundColor(.secondary)
+            }
+
+            HStack {
+                Text("Build")
+                Spacer()
+                Text(getBuildNumber())
+                    .foregroundColor(.secondary)
+            }
+
+            Button("Privacy Policy") {
+                #if canImport(UIKit)
+                impactFeedback.impactOccurred()
+                #endif
+                showingPrivacyPolicy = true
+            }
+            .foregroundColor(.primary)
+
+            Button("Terms of Service") {
+                #if canImport(UIKit)
+                impactFeedback.impactOccurred()
+                #endif
+                showingTermsOfUse = true
+            }
+            .foregroundColor(.primary)
+
+            Button("Contact Support") {
+                contactSupport()
+            }
+            .foregroundColor(.primary)
+
+            Button("Rate App") {
+                rateApp()
+            }
+            .foregroundColor(.primary)
+        }
+    }
+}
+
+// MARK: - DebugSection
+
+struct DebugSection: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var showingDebugMenu: Bool
+
+    let generateTestData: () -> Void
+
+    var body: some View {
+        Section(header: Text("🔧 Debug")) {
+            Button("Show Debug Menu") {
+                showingDebugMenu = true
+            }
+            .foregroundColor(.purple)
+
+            Button("Simulate Network Error") {
+                appState.simulateError("Network connection failed")
+            }
+            .foregroundColor(.red)
+
+            Button("Generate Test Data") {
+                generateTestData()
+            }
+            .foregroundColor(.blue)
+        }
+    }
+}
+
+// MARK: - SettingsView
+
+struct SettingsView: View {
+    @EnvironmentObject var appState: AppState
+
+    // Notification Settings
+    @AppStorage("enableBreakevenAlerts") private var enableBreakevenAlerts = true
+    @AppStorage("enableInjuryAlerts") private var enableInjuryAlerts = true
+    @AppStorage("enableLateOutAlerts") private var enableLateOutAlerts = true
+    @AppStorage("enableTradeAlerts") private var enableTradeAlerts = true
+    @AppStorage("enablePriceChangeAlerts") private var enablePriceChangeAlerts = true
+    @AppStorage("enableCaptainAlerts") private var enableCaptainAlerts = true
+    @AppStorage("notificationsSoundEnabled") private var notificationsSoundEnabled = true
+    @AppStorage("notificationsBadgeEnabled") private var notificationsBadgeEnabled = true
+
+    // AI Settings
+    @AppStorage("aiConfidenceThreshold") private var aiConfidenceThreshold = 80.0
+    @AppStorage("showLowConfidencePicks") private var showLowConfidencePicks = false
+    @AppStorage("enableAdvancedAnalytics") private var enableAdvancedAnalytics = true
+    @AppStorage("autoUpdateInterval") private var autoUpdateInterval = 300.0 // 5 minutes
+
+    // Display Settings
+    @AppStorage("showPlayerOwnership") private var showPlayerOwnership = true
+    @AppStorage("showVenueWeather") private var showVenueWeather = true
+    @AppStorage("compactPlayerCards") private var compactPlayerCards = false
+    @AppStorage("darkModePreference") private var darkModePreference = 0 // 0: System, 1: Light, 2: Dark
+
+    // Data Management
+    @State private var cacheSize = "12.4 MB"
+    @State private var lastSyncTime = Date()
+    @State private var showingClearCacheAlert = false
+    @State private var showingResetDataAlert = false
+    @State private var showingExportData = false
+
+    // Modal Presentations
+    @State private var showingPrivacyPolicy = false
+    @State private var showingTermsOfUse = false
+    @State private var showingDebugMenu = false
+    @State private var showingNotificationPermissions = false
+
+    // Haptic feedback
+    #if canImport(UIKit)
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+    private let notificationFeedback = UINotificationFeedbackGenerator()
+    #endif
+
+    var body: some View {
+        NavigationView {
+            Form {
+                NotificationsSection(
+                    enableBreakevenAlerts: $enableBreakevenAlerts,
+                    enableInjuryAlerts: $enableInjuryAlerts,
+                    enableLateOutAlerts: $enableLateOutAlerts,
+                    enableTradeAlerts: $enableTradeAlerts,
+                    enablePriceChangeAlerts: $enablePriceChangeAlerts,
+                    enableCaptainAlerts: $enableCaptainAlerts,
+                    notificationsSoundEnabled: $notificationsSoundEnabled,
+                    notificationsBadgeEnabled: $notificationsBadgeEnabled,
+                    showingNotificationPermissions: $showingNotificationPermissions,
+                    handleNotificationToggle: handleNotificationToggle
+                )
+
+                AIAnalysisSection(
+                    aiConfidenceThreshold: $aiConfidenceThreshold,
+                    showLowConfidencePicks: $showLowConfidencePicks,
+                    enableAdvancedAnalytics: $enableAdvancedAnalytics,
+                    autoUpdateInterval: $autoUpdateInterval,
+                    formatUpdateInterval: formatUpdateInterval
+                )
+
+                DisplayPreferencesSection(
+                    showPlayerOwnership: $showPlayerOwnership,
+                    showVenueWeather: $showVenueWeather,
+                    compactPlayerCards: $compactPlayerCards,
+                    darkModePreference: $darkModePreference
+                )
+
+                TeamManagementSection(
+                    formatCurrency: formatCurrency
+                )
+
+                DataManagementSection(
+                    cacheSize: $cacheSize,
+                    lastSyncTime: $lastSyncTime,
+                    showingClearCacheAlert: $showingClearCacheAlert,
+                    showingResetDataAlert: $showingResetDataAlert,
+                    showingExportData: $showingExportData,
+                    formatLastSync: formatLastSync,
+                    refreshAppData: refreshAppData
+                )
+
+                SupportLegalSection(
+                    showingPrivacyPolicy: $showingPrivacyPolicy,
+                    showingTermsOfUse: $showingTermsOfUse,
+                    impactFeedback: impactFeedback,
+                    getBuildNumber: getBuildNumber,
+                    contactSupport: contactSupport,
+                    rateApp: rateApp
+                )
+
+                // MARK: - Debug Section (Development Only)
+
+                if isDebugMode() {
+                    DebugSection(
+                        showingDebugMenu: $showingDebugMenu,
+                        generateTestData: generateTestData
+                    )
+                }
+            }
+            .navigationTitle("⚙️ Settings")
+            .navigationBarTitleDisplayMode(.large)
+            .refreshable {
+                await refreshSettings()
+            }
+        }
+        .sheet(isPresented: $showingPrivacyPolicy) {
+            SimplePrivacyPolicyView()
+        }
+        .sheet(isPresented: $showingTermsOfUse) {
+            SimpleTermsOfUseView()
+        }
+        .sheet(isPresented: $showingDebugMenu) {
+            SimpleDebugMenuView(appState: appState)
+        }
+        .sheet(isPresented: $showingNotificationPermissions) {
+            SimpleNotificationPermissionsView()
+        }
+        .alert("Clear Cache", isPresented: $showingClearCacheAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Clear", role: .destructive) {
+                clearCache()
+            }
+        } message: {
+            Text("This will clear all cached data and may slow down the app temporarily.")
+        }
+        .alert("Reset Data", isPresented: $showingResetDataAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset", role: .destructive) {
+                resetAllData()
+            }
+        } message: {
+            Text("This will reset all settings and data. This action cannot be undone.")
+        }
+        .onAppear {
+            updateCacheSize()
+            updateLastSyncTime()
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    private func handleNotificationToggle(_ type: String, enabled: Bool) {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+
+        // Here you would integrate with your NotificationManager
+        if enabled {
+            requestNotificationPermissions()
+        }
+
+        print("Notification \(type) \(enabled ? "enabled" : "disabled")")
+    }
+
+    private func refreshAppData() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        appState.refreshData()
+
+        // Update local state
+        Task {
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            await MainActor.run {
+                updateLastSyncTime()
+            }
+        }
+    }
+
+    private func clearCache() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+
+        // Simulate cache clearing
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            cacheSize = "0.8 MB"
+            #if canImport(UIKit)
+            notificationFeedback.notificationOccurred(.success)
+            #endif
+        }
+
+        print("Cache cleared")
+    }
+
+    private func resetAllData() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+
+        // Reset all settings to defaults
+        enableBreakevenAlerts = true
+        enableInjuryAlerts = true
+        enableLateOutAlerts = true
+        enableTradeAlerts = true
+        enablePriceChangeAlerts = true
+        enableCaptainAlerts = true
+        aiConfidenceThreshold = 80.0
+        showLowConfidencePicks = false
+        enableAdvancedAnalytics = true
+        autoUpdateInterval = 300.0
+        darkModePreference = 0
+
+        #if canImport(UIKit)
+        notificationFeedback.notificationOccurred(.success)
+        #endif
+        print("All data reset")
+    }
+
+    private func requestNotificationPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .badge, .sound]
+        ) { granted, _ in
+            DispatchQueue.main.async {
+                if granted {
+                    print("Notification permissions granted")
+                } else {
+                    print("Notification permissions denied")
+                }
+            }
+        }
+    }
+
+    private func contactSupport() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        // Open email or support system
+        if let url = URL(string: "mailto:support@aflfantasy.ai?subject=AFL%20Fantasy%20Support") {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    private func rateApp() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        // Open App Store rating
+        if let url = URL(string: "https://apps.apple.com/app/id123456789?action=write-review") {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    private func generateTestData() {
+        #if canImport(UIKit)
+        impactFeedback.impactOccurred()
+        #endif
+        // Generate test notifications and data for development
+        print("Test data generated")
+    }
+
+    // MARK: - Formatting Helpers
+
+    private func formatCurrency(_ amount: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "AUD"
+        formatter.maximumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: amount)) ?? "$\(amount)"
+    }
+
+    private func formatUpdateInterval(_ seconds: Double) -> String {
+        let minutes = Int(seconds / 60)
+        return "\(minutes) min"
+    }
+
+    private func formatLastSync(_ date: Date) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
+
+    private func getBuildNumber() -> String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+    }
+
+    private func isDebugMode() -> Bool {
+        #if DEBUG
+            return true
+        #else
+            return false
+        #endif
+    }
+
+    private func updateCacheSize() {
+        // Calculate actual cache size if needed
+        // For now, simulating
+        cacheSize = "12.4 MB"
+    }
+
+    private func updateLastSyncTime() {
+        lastSyncTime = appState.lastUpdateTime ?? Date()
+    }
+
+    @MainActor
+    private func refreshSettings() async {
+        updateCacheSize()
+        updateLastSyncTime()
+    }
+}
+
+// MARK: - SimplePrivacyPolicyView
+
+struct SimplePrivacyPolicyView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Privacy Policy")
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Last updated: September 6, 2025")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Group {
+                        privacySection(
+                            title: "Information We Collect",
+                            content: "AFL Fantasy Intelligence collects data necessary to provide fantasy football insights including team selections, player preferences, and usage analytics."
+                        )
+
+                        privacySection(
+                            title: "How We Use Your Information",
+                            content: "Your data is used to provide personalized fantasy recommendations, improve app performance, and deliver relevant notifications about your team."
+                        )
+
+                        privacySection(
+                            title: "Data Storage & Security",
+                            content: "All sensitive data is encrypted and stored securely using industry-standard practices. We do not share personal information with third parties."
+                        )
+
+                        privacySection(
+                            title: "Contact Us",
+                            content: "Questions about privacy? Contact us at privacy@afl.ai or through the app feedback system."
+                        )
+                    }
+                }
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .accessibilityLabel("Close privacy policy")
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func privacySection(title: String, content: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.primary)
+
+            Text(content)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+// MARK: - SimpleTermsOfUseView
+
+struct SimpleTermsOfUseView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Terms of Service")
+                        .font(.largeTitle)
+                        .bold()
+
+                    Text("Last updated: September 6, 2025")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Group {
+                        termsSection(
+                            title: "Acceptance of Terms",
+                            content: "By using AFL Fantasy Intelligence, you agree to these Terms of Service and our Privacy Policy."
+                        )
+
+                        termsSection(
+                            title: "App Usage",
+                            content: "This app provides fantasy football insights and recommendations. All data is for informational purposes only."
+                        )
+
+                        termsSection(
+                            title: "Contact Information",
+                            content: "Questions about these terms? Contact us at legal@afl.ai or through the app support system."
+                        )
+                    }
+                }
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .accessibilityLabel("Close terms of service")
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func termsSection(title: String, content: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.primary)
+
+            Text(content)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+// MARK: - SimpleDebugMenuView
+
+struct SimpleDebugMenuView: View {
+    let appState: AppState
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            List {
+                Section("Debug Actions") {
+                    Button("Generate Random Scores") {
+                        // Debug action
+                    }
+
+                    Button("Reset Captain Suggestions") {
+                        // Debug action
+                    }
+
+                    Button("Simulate Network Error") {
+                        appState.simulateError("Debug network error")
+                        dismiss()
+                    }
+                }
+            }
+            .navigationTitle("Debug Menu")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - SimpleNotificationPermissionsView
+
+struct SimpleNotificationPermissionsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var permissionStatus = "Unknown"
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Image(systemName: "bell.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.orange)
+
+                Text("Notification Permissions")
+                    .font(.title2)
+                    .bold()
+
+                Text("Current Status: \(permissionStatus)")
+                    .foregroundColor(.secondary)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("• Breakeven alerts when players near price drops")
+                    Text("• Injury updates for your players")
+                    Text("• Late team changes before lockout")
+                    Text("• Trade recommendations from AI")
+                    Text("• Price change notifications")
+                }
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+
+                Button("Request Permissions") {
+                    requestPermissions()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Spacer()
+            }
+            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .onAppear {
+                checkPermissionStatus()
+            }
+        }
+    }
+
+    private func checkPermissionStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                switch settings.authorizationStatus {
+                case .authorized:
+                    permissionStatus = "Authorized"
+                case .denied:
+                    permissionStatus = "Denied"
+                case .notDetermined:
+                    permissionStatus = "Not Requested"
+                case .provisional:
+                    permissionStatus = "Provisional"
+                case .ephemeral:
+                    permissionStatus = "Ephemeral"
+                @unknown default:
+                    permissionStatus = "Unknown"
+                }
+            }
+        }
+    }
+
+    private func requestPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .badge, .sound]
+        ) { granted, _ in
+            DispatchQueue.main.async {
+                permissionStatus = granted ? "Authorized" : "Denied"
+            }
+        }
+    }
+}
+
+// MARK: - DashboardPlaceholderView
+
+struct DashboardPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var dataService: AFLFantasyDataService
+    // @EnvironmentObject var toolsClient: AFLFantasyToolsClient // TODO: Add back when service is integrated
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header with AI status
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("AI Fantasy Intelligence")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            Text("Powered by advanced analytics")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(Color.green)
+                                .frame(width: 8, height: 8)
+                            Text("AI Active")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+
+                    // Quick stats grid
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 12) {
+                        StatCard(title: "Team Score", value: "\(appState.teamScore)", color: .green)
+                        StatCard(title: "Rank", value: "#\(appState.teamRank)", color: .blue)
+                        StatCard(title: "Trades Left", value: "\(appState.tradesRemaining)", color: .orange)
+                        StatCard(title: "Bank", value: "$\(appState.bankBalance / 1000)k", color: .purple)
+                    }
+
+                    // Feature preview
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Coming Soon Features")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+
+                        FeaturePreviewCard(
+                            icon: "brain.head.profile",
+                            title: "AI Insights",
+                            description: "Get personalized recommendations powered by machine learning"
+                        )
+
+                        FeaturePreviewCard(
+                            icon: "chart.bar.fill",
+                            title: "Performance Analytics",
+                            description: "Deep dive into your team's performance metrics"
+                        )
+
+                        FeaturePreviewCard(
+                            icon: "bell.badge.fill",
+                            title: "Smart Alerts",
+                            description: "Get notified about important player updates and opportunities"
+                        )
+                    }
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(12)
+                    .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+                }
+                .padding()
+            }
+            .navigationTitle("Dashboard")
+            .navigationBarTitleDisplayMode(.large)
+            .refreshable {
+                appState.refreshData()
+            }
+        }
+    }
+}
+
+// MARK: - CaptainPlaceholderView
+
+struct CaptainPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Image(systemName: "star.circle.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.yellow)
+
+                Text("Captain Analysis")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("AI-powered captain recommendations with fixture analysis, player form, and scoring projections")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                VStack(spacing: 16) {
+                    Text("Features")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        FeatureRow(icon: "brain", text: "AI-powered scoring predictions")
+                        FeatureRow(icon: "calendar", text: "Fixture difficulty analysis")
+                        FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Form and consistency tracking")
+                        FeatureRow(icon: "exclamationmark.triangle", text: "Risk assessment and alerts")
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+
+                Spacer()
+
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .padding()
+            .navigationTitle("Captain AI")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - TradesPlaceholderView
+
+struct TradesPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 80))
+                    .foregroundColor(.blue)
+
+                Text("Trade Analysis")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("Smart trade recommendations with impact analysis, timing optimization, and budget management")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                // Trade counter
+                HStack(spacing: 20) {
+                    VStack {
+                        Text("\(appState.tradesUsed)")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.red)
+                        Text("Used")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    VStack {
+                        Text("\(appState.tradesRemaining)")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.green)
+                        Text("Remaining")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    VStack {
+                        Text("$\(appState.bankBalance / 1000)k")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                        Text("Budget")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Trade Intelligence Features")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    FeatureRow(icon: "brain", text: "AI trade recommendations")
+                    FeatureRow(icon: "chart.bar", text: "Impact scoring and analysis")
+                    FeatureRow(icon: "dollarsign.circle", text: "Budget optimization")
+                    FeatureRow(icon: "clock", text: "Optimal timing suggestions")
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+
+                Spacer()
+
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .padding()
+            .navigationTitle("Trade Analysis")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - CashCowPlaceholderView
+
+struct CashCowPlaceholderView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Image(systemName: "dollarsign.circle.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.green)
+
+                Text("Cash Generation")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("Identify and track cash cows for maximum team value growth and trading flexibility")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                // Cash generation stats
+                VStack(spacing: 16) {
+                    HStack(spacing: 20) {
+                        VStack {
+                            Text("\(appState.cashCows.count)")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.green)
+                            Text("Cash Cows")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        VStack {
+                            Text("$\(appState.cashCows.reduce(0) { $0 + $1.cashGenerated } / 1000)k")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.blue)
+                            Text("Generated")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    if !appState.cashCows.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Your Cash Cows")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+
+                            ForEach(appState.cashCows.prefix(3)) { player in
+                                HStack {
+                                    Text(player.name)
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+
+                                    Spacer()
+
+                                    Text("+$\(player.cashGenerated / 1000)k")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.green)
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Cash Generation Features")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Price tracking and predictions")
+                    FeatureRow(icon: "target", text: "Breakeven analysis")
+                    FeatureRow(icon: "clock", text: "Optimal sell timing")
+                    FeatureRow(icon: "exclamationmark.triangle", text: "Risk assessment")
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+
+                Spacer()
+
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .padding()
+            .navigationTitle("Cash Generation")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - StatCard
+
+struct StatCard: View {
+    let title: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(color)
+
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, minHeight: 60)
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+// MARK: - FeaturePreviewCard
+
+struct FeaturePreviewCard: View {
+    let icon: String
+    let title: String
+    let description: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.accentColor)
+                .frame(width: 30)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                Text(description)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(12)
+        .background(Color(.systemGray6))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - FeatureRow
+
+struct FeatureRow: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundColor(.accentColor)
+                .frame(width: 16)
+
+            Text(text)
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Spacer()
+        }
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    ContentView()
+        .environmentObject(AppState())
+        .environmentObject(AFLFantasyDataService())
+    // .environmentObject(AFLFantasyToolsClient()) // TODO: Add back when service is integrated
+}
+

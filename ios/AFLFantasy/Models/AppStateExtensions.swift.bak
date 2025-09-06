@@ -192,7 +192,14 @@ struct AlertFlag: Identifiable, Codable {
 // MARK: - AlertType
 
 enum AlertType: String, CaseIterable, Codable {
-    case priceDrop
+    case injury = "injury"
+    case priceRise = "priceRise"
+    case priceDrop = "priceDrop"
+    case breakeven = "breakeven"
+    case captain = "captain"
+    case trade = "trade"
+    case suspension = "suspension"
+    case teamChange = "teamChange"
     case breakEvenCliff
     case cashCowSell
     case injuryRisk
@@ -216,13 +223,34 @@ enum AlertPriority: String, CaseIterable, Codable {
 struct CaptainSuggestion: Identifiable, Codable {
     let id = UUID()
     let player: EnhancedPlayer
-    let confidence: Int
-    let projectedPoints: Int
+    let confidence: Double
+    let projectedScore: Double
+    let formRating: Double
+    let fixtureRating: Double
+    let riskFactor: Double
+    let opponent: String
+    
+    // Computed properties for ContentView compatibility
+    var playerName: String { player.name }
+    var position: String { player.position.rawValue }
+    var positionColor: Color { player.position.color }
 
-    init(player: EnhancedPlayer, confidence: Int, projectedPoints: Int) {
+    init(
+        player: EnhancedPlayer, 
+        confidence: Double, 
+        projectedScore: Double,
+        formRating: Double = 0.8,
+        fixtureRating: Double = 0.7,
+        riskFactor: Double = 0.2,
+        opponent: String = "TBD"
+    ) {
         self.player = player
         self.confidence = confidence
-        self.projectedPoints = projectedPoints
+        self.projectedScore = projectedScore
+        self.formRating = formRating
+        self.fixtureRating = fixtureRating
+        self.riskFactor = riskFactor
+        self.opponent = opponent
     }
 }
 

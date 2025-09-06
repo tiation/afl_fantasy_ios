@@ -1,0 +1,180 @@
+{
+  "dashboard": {
+    "teamValue": {
+      "total": 83500000,
+      "remaining": 9500000,
+      "formatted": "$83.5M",
+      "playerCount": 30
+    },
+    "rank": {
+      "current": 15847,
+      "change": -234,
+      "formatted": "15,847"
+    },
+    "upcomingMatchups": [
+      {
+        "homeTeam": "Melbourne",
+        "awayTeam": "Collingwood",
+        "round": 24,
+        "venue": "MCG",
+        "date": "2025-08-30"
+      },
+      {
+        "homeTeam": "Carlton",
+        "awayTeam": "Brisbane",
+        "round": 24,
+        "venue": "Marvel Stadium",
+        "date": "2025-08-31"
+      }
+    ],
+    "topPerformers": [
+      {
+        "name": "Max Gawn",
+        "score": 145,
+        "team": "Melbourne",
+        "captain": true
+      },
+      {
+        "name": "Clayton Oliver",
+        "score": 128,
+        "team": "Melbourne",
+        "captain": false
+      },
+      {
+        "name": "Christian Petracca",
+        "score": 94,
+        "team": "Melbourne",
+        "captain": false
+      }
+    ],
+    "lastUpdated": "2025-09-06T13:13:05.176Z",
+    "nextDeadline": "2025-08-29T19:50:00Z"
+  },
+  "players": {
+    "status": "success",
+    "data": [
+      {
+        "id": 1,
+        "name": "Max Gawn",
+        "team": "Melbourne",
+        "position": "RUC",
+        "price": 800000,
+        "avg": 105.2,
+        "lastScore": 112,
+        "ownership": 45.8
+      },
+      {
+        "id": 2,
+        "name": "Clayton Oliver",
+        "team": "Melbourne",
+        "position": "MID",
+        "price": 750000,
+        "avg": 115.8,
+        "lastScore": 128,
+        "ownership": 52.3
+      },
+      {
+        "id": 3,
+        "name": "Christian Petracca",
+        "team": "Melbourne",
+        "position": "MID",
+        "price": 720000,
+        "avg": 110.4,
+        "lastScore": 94,
+        "ownership": 41.2
+      },
+      {
+        "id": 4,
+        "name": "Marcus Bontempelli",
+        "team": "Western Bulldogs",
+        "position": "MID",
+        "price": 700000,
+        "avg": 108.7,
+        "lastScore": 115,
+        "ownership": 48.7
+      },
+      {
+        "id": 5,
+        "name": "Charlie Curnow",
+        "team": "Carlton",
+        "position": "FWD",
+        "price": 750000,
+        "avg": 98.5,
+        "lastScore": 85,
+        "ownership": 39.8
+      },
+      {
+        "id": 6,
+        "name": "Jeremy Cameron",
+        "team": "Geelong",
+        "position": "FWD",
+        "price": 700000,
+        "avg": 89.7,
+        "lastScore": 94,
+        "ownership": 35.7
+      },
+      {
+        "id": 7,
+        "name": "Rory Laird",
+        "team": "Adelaide",
+        "position": "DEF",
+        "price": 600000,
+        "avg": 92.8,
+        "lastScore": 88,
+        "ownership": 42.1
+      },
+      {
+        "id": 8,
+        "name": "Jake Lloyd",
+        "team": "Sydney",
+        "position": "DEF",
+        "price": 590000,
+        "avg": 89.4,
+        "lastScore": 95,
+        "ownership": 38.7
+      }
+    ],
+    "count": 8,
+    "total": 8,
+    "season": "2025",
+    "filters": {
+      "position": "all"
+    }
+  },
+  "singlePlayer": {
+    "status": "success",
+    "data": {
+      "id": 1,
+      "name": "Max Gawn",
+      "team": "Melbourne",
+      "position": "RUC",
+      "price": 800000,
+      "avg": 105.2,
+      "lastScore": 112,
+      "ownership": 45.8,
+      "breakeven": 78,
+      "form": "Excellent",
+      "injury": null,
+      "stats": {
+        "games": 22,
+        "goals": 12,
+        "assists": 8,
+        "disposals": 18.5,
+        "marks": 4.2,
+        "hitouts": 32.1
+      },
+      "fixtures": [
+        {
+          "opponent": "Collingwood",
+          "venue": "MCG",
+          "difficulty": 3
+        },
+        {
+          "opponent": "Brisbane",
+          "venue": "Gabba",
+          "difficulty": 4
+        }
+      ]
+    }
+  }
+}

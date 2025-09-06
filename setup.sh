@@ -114,3 +114,35 @@ echo -e "${GREEN}📊 Web Dashboard: http://localhost:5173${NC}"
 echo -e "${GREEN}🔌 API Endpoints: http://localhost:5173/api${NC}"
 echo ""
 echo -e "${BLUE}For more information, see the documentation in /docs folder${NC}"
+
+# Open setup dashboard if available
+echo ""
+echo -e "${BLUE}📋 Opening enhanced setup dashboard...${NC}"
+if [ -f "setup-dashboard.html" ]; then
+    # Start a simple HTTP server for the dashboard to avoid CORS issues
+    if command -v python3 >/dev/null 2>&1; then
+        python3 -m http.server 8080 --bind 127.0.0.1 >/dev/null 2>&1 &
+        DASHBOARD_SERVER_PID=$!
+        sleep 2
+        
+        if command -v open >/dev/null 2>&1; then
+            open "http://localhost:8080/setup-dashboard.html"
+        elif command -v xdg-open >/dev/null 2>&1; then
+            xdg-open "http://localhost:8080/setup-dashboard.html"
+        else
+            echo -e "${GREEN}Setup dashboard: http://localhost:8080/setup-dashboard.html${NC}"
+        fi
+        
+        echo -e "${GREEN}✅ Enhanced setup dashboard opened${NC}"
+        echo -e "${BLUE}💡 Dashboard server running on http://localhost:8080${NC}"
+    else
+        # Fallback to file URL
+        if command -v open >/dev/null 2>&1; then
+            open setup-dashboard.html
+        else
+            echo -e "${YELLOW}Setup dashboard available at: file://$(pwd)/setup-dashboard.html${NC}"
+        fi
+    fi
+else
+    echo -e "${RED}❌ Enhanced setup dashboard not found${NC}"
+fi

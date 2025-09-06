@@ -19,7 +19,11 @@ fi
 # Check if node_modules exists
 if [ ! -d "node_modules" ]; then
     echo -e "${YELLOW}📦 Installing dependencies...${NC}"
-    npm install
+    if command -v pnpm >/dev/null 2>&1; then
+        pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+    else
+        npm install
+    fi
 fi
 
 # Check if .env exists
@@ -37,9 +41,35 @@ fi
 echo -e "${BLUE}🔄 Starting development servers...${NC}"
 echo -e "${GREEN}📊 Web Dashboard will be available at: http://localhost:5173${NC}"
 echo -e "${GREEN}🔌 API will be available at: http://localhost:5173/api${NC}"
+echo -e "${GREEN}📊 Health Check: http://localhost:5173/api/health${NC}"
 echo ""
 echo -e "${YELLOW}💡 Press Ctrl+C to stop the servers${NC}"
+echo -e "${YELLOW}💡 The server may take 10-15 seconds to fully start${NC}"
 echo ""
 
 # Start the development server
-npm run dev
+echo -e "${BLUE}🚀 Starting AFL Fantasy Platform...${NC}"
+echo -e "${YELLOW}📊 Status dashboard will open automatically after startup${NC}"
+echo ""
+
+# Start the development server
+npm run dev &
+
+# Wait a moment for server to start, then open dashboard
+sleep 5
+echo -e "${GREEN}📊 Opening status dashboard...${NC}"
+
+# Start dashboard server if needed
+if ! curl -s http://localhost:8080/status.html > /dev/null 2>&1; then
+    python3 -m http.server 8080 --bind 127.0.0.1 >/dev/null 2>&1 &
+    sleep 2
+fi
+
+if command -v open >/dev/null 2>&1; then
+    open "http://localhost:8080/status.html" || open "file://$(pwd)/status.html"
+fi
+
+echo -e "${GREEN}🎯 Live Status Dashboard: http://localhost:8080/status.html${NC}"
+
+# Keep the server running in foreground
+wait

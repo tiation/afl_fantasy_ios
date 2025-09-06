@@ -14,11 +14,13 @@ struct DashboardView: View {
     // MARK: - Environment
 
     @EnvironmentObject private var dataService: AFLFantasyDataService
+    @EnvironmentObject private var offlineManager: OfflineManager
 
     // MARK: - State
 
     @State private var showingLogin = false
     @State private var showingSettings = false
+    @State private var showingOfflineAlert = false
 
     // MARK: - Body
 
@@ -42,22 +44,26 @@ struct DashboardView: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        if dataService.authenticated {
-                            Button("Settings") {
-                                showingSettings = true
-                            }
+                    HStack {
+                        OfflineStatusView()
 
-                            Button("Sign Out", role: .destructive) {
-                                dataService.logout()
+                        Menu {
+                            if dataService.authenticated {
+                                Button("Settings") {
+                                    showingSettings = true
+                                }
+
+                                Button("Sign Out", role: .destructive) {
+                                    dataService.logout()
+                                }
+                            } else {
+                                Button("Sign In") {
+                                    showingLogin = true
+                                }
                             }
-                        } else {
-                            Button("Sign In") {
-                                showingLogin = true
-                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
                         }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }
@@ -68,8 +74,19 @@ struct DashboardView: View {
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }
+        .withOfflineStatus()
         .refreshable {
             await refreshData()
+        }
+        .offlineAlert(isPresented: $showingOfflineAlert, alert: .dataOutdated)
+        .onAppear {
+            // Check if data is fresh when view appears
+            Task {
+                let freshness = await offlineManager.getDataFreshness(for: .dashboardData)
+                if freshness == .stale, !offlineManager.isOnline {
+                    showingOfflineAlert = true
+                }
+            }
         }
     }
 

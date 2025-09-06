@@ -17,6 +17,24 @@ enum Position: String, CaseIterable, Codable {
     case midfielder = "MID"
     case ruck = "RUC"
     case forward = "FWD"
+
+    var shortName: String {
+        switch self {
+        case .defender: "DEF"
+        case .midfielder: "MID"
+        case .ruck: "RUC"
+        case .forward: "FWD"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .defender: .blue
+        case .midfielder: .green
+        case .ruck: .purple
+        case .forward: .red
+        }
+    }
 }
 
 // MARK: - RoundProjection
@@ -80,6 +98,15 @@ enum InjuryRiskLevel: String, CaseIterable, Codable {
     case medium = "Medium"
     case high = "High"
     case critical = "Critical"
+
+    var color: Color {
+        switch self {
+        case .low: .green
+        case .medium: .orange
+        case .high: .red
+        case .critical: .red
+        }
+    }
 }
 
 // MARK: - VenuePerformance
@@ -117,7 +144,14 @@ struct AlertFlag: Identifiable, Codable {
 // MARK: - AlertType
 
 enum AlertType: String, CaseIterable, Codable {
+    case injury
+    case priceRise
     case priceDrop
+    case breakeven
+    case captain
+    case trade
+    case suspension
+    case teamChange
     case breakEvenCliff
     case cashCowSell
     case injuryRisk
@@ -166,6 +200,33 @@ struct EnhancedPlayer: Identifiable, Codable {
     var projectedScore: Double {
         nextRoundProjection.projectedScore
     }
+
+    var formattedPrice: String {
+        String(format: "$%.1fk", Double(price) / 1000)
+    }
+
+    var consistencyGrade: String {
+        switch consistency {
+        case 90 ... 100: "A+"
+        case 80 ..< 90: "A"
+        case 70 ..< 80: "B+"
+        case 60 ..< 70: "B"
+        case 50 ..< 60: "C+"
+        case 40 ..< 50: "C"
+        default: "D"
+        }
+    }
+
+    var priceChangeText: String {
+        let changeK = Double(priceChange) / 1000
+        if priceChange > 0 {
+            return "+$\(String(format: "%.1f", changeK))k"
+        } else if priceChange < 0 {
+            return "-$\(String(format: "%.1f", abs(changeK)))k"
+        } else {
+            return "$0.0k"
+        }
+    }
 }
 
 // MARK: - CaptainSuggestion
@@ -181,6 +242,39 @@ struct CaptainSuggestion: Identifiable, Codable {
         self.player = player
         self.confidence = confidence
         self.projectedPoints = projectedPoints
+    }
+
+    // Additional properties for ContentView compatibility
+    var playerName: String {
+        player.name
+    }
+
+    var position: String {
+        player.position.rawValue
+    }
+
+    var opponent: String {
+        player.nextRoundProjection.opponent
+    }
+
+    var positionColor: Color {
+        player.position.color
+    }
+
+    var projectedScore: Double {
+        player.projectedScore
+    }
+
+    var formRating: Double {
+        player.consistency / 100.0
+    }
+
+    var fixtureRating: Double {
+        0.8 // Simulated fixture rating
+    }
+
+    var riskFactor: Double {
+        player.injuryRisk.riskScore
     }
 }
 
@@ -212,6 +306,52 @@ struct TradeRecord: Identifiable, Codable {
     }
 }
 
+// MARK: - AFLTeam
+
+enum AFLTeam: String, CaseIterable, Codable {
+    case adelaide = "Adelaide"
+    case brisbane = "Brisbane"
+    case carlton = "Carlton"
+    case collingwood = "Collingwood"
+    case essendon = "Essendon"
+    case fremantle = "Fremantle"
+    case geelong = "Geelong"
+    case goldCoast = "Gold Coast"
+    case gws = "GWS"
+    case hawthorn = "Hawthorn"
+    case melbourne = "Melbourne"
+    case northMelbourne = "North Melbourne"
+    case portAdelaide = "Port Adelaide"
+    case richmond = "Richmond"
+    case stKilda = "St Kilda"
+    case sydney = "Sydney"
+    case westCoast = "West Coast"
+    case westernBulldogs = "Western Bulldogs"
+
+    var emoji: String {
+        switch self {
+        case .adelaide: "🔴"
+        case .brisbane: "🦁"
+        case .carlton: "🔵"
+        case .collingwood: "⚫"
+        case .essendon: "🔴"
+        case .fremantle: "⚓"
+        case .geelong: "🐱"
+        case .goldCoast: "☀️"
+        case .gws: "🧡"
+        case .hawthorn: "🦅"
+        case .melbourne: "😈"
+        case .northMelbourne: "🦘"
+        case .portAdelaide: "⚡"
+        case .richmond: "🐅"
+        case .stKilda: "👼"
+        case .sydney: "🦢"
+        case .westCoast: "🦅"
+        case .westernBulldogs: "🐕"
+        }
+    }
+}
+
 // MARK: - AFLFantasyApp
 
 @main
@@ -220,26 +360,76 @@ struct AFLFantasyApp: App {
 
     @StateObject private var dataService = AFLFantasyDataService()
     @StateObject private var appState = AppState()
+    @StateObject private var keychainManager = KeychainManager()
+    @StateObject private var audioManager = AFLAudioManager()
+    @StateObject private var hapticsManager = AFLHapticsManager()
+    @State private var showOnboarding = false
+    @State private var hasCheckedOnboarding = false
 
     // MARK: - Scene
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(dataService)
-                .environmentObject(appState)
-                .preferredColorScheme(.dark)
-                .onAppear {
-                    setupApp()
+            Group {
+                if !hasCheckedOnboarding {
+                    // Show loading state while checking onboarding status
+                    LoadingView()
+                } else if showOnboarding {
+                    // Show onboarding flow
+                    OnboardingView {
+                        showOnboarding = false
+                        setupApp()
+                    }
+                } else {
+                    // Show main app
+                    SimpleContentView()
+                        .environmentObject(dataService)
+                        .environmentObject(appState)
+                        .environmentObject(audioManager)
+                        .environmentObject(hapticsManager)
                 }
+            }
+            .preferredColorScheme(.dark)
+            .onAppear {
+                checkOnboardingStatus()
+            }
         }
     }
 
     // MARK: - Setup
 
+    private func checkOnboardingStatus() {
+        // Check if user needs onboarding
+        showOnboarding = keychainManager.needsOnboarding()
+        hasCheckedOnboarding = true
+
+        // Setup app if not showing onboarding
+        if !showOnboarding {
+            setupApp()
+        }
+    }
+
     private func setupApp() {
         // Configure any app-level settings here
         print("🚀 AFL Fantasy Intelligence Platform started")
+
+        // Load user preferences
+        if let userName = keychainManager.getUserName() {
+            print("👋 Welcome back, \(userName)!")
+        }
+
+        if let favoriteTeam = keychainManager.getFavoriteTeam() {
+            print("🏈 Go \(favoriteTeam)!")
+        }
+        
+        // Trigger AFL experience launch
+        Task {
+            await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            await MainActor.run {
+                audioManager.onAppLaunch()
+                hapticsManager.onAppLaunch()
+            }
+        }
 
         // Debug information
         #if DEBUG
@@ -252,6 +442,11 @@ struct AFLFantasyApp: App {
         #endif
     }
 }
+
+// MARK: - AppState
+
+// AppState type alias for compatibility
+typealias PersistentAppState = AppState
 
 // MARK: - AppState
 
@@ -576,3 +771,509 @@ class AppState: ObservableObject {
         errorMessage = nil
     }
 }
+
+// MARK: - LoadingView
+
+struct LoadingView: View {
+    @State private var isAnimating = false
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [.orange, .red]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                Image(systemName: "football.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.white)
+                    .scaleEffect(isAnimating ? 1.2 : 0.8)
+                    .animation(
+                        .easeInOut(duration: 1.0)
+                            .repeatForever(autoreverses: true),
+                        value: isAnimating
+                    )
+
+                Text("AFL Fantasy Intelligence")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.2)
+            }
+        }
+        .onAppear {
+            isAnimating = true
+        }
+    }
+}
+
+// MARK: - OnboardingView
+
+struct OnboardingView: View {
+    let onComplete: () -> Void
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [.blue, .purple]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            VStack(spacing: 30) {
+                Spacer()
+
+                Image(systemName: "brain.head.profile")
+                    .font(.system(size: 80))
+                    .foregroundColor(.white)
+
+                Text("Welcome to AFL Fantasy Intelligence")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+
+                Text("Get AI-powered insights and analysis to dominate your fantasy league")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+
+                Spacer()
+
+                Button("Get Started") {
+                    onComplete()
+                }
+                .font(.headline)
+                .foregroundColor(.blue)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(.white)
+                .cornerRadius(12)
+                .padding(.horizontal, 40)
+
+                Spacer()
+            }
+        }
+    }
+}
+
+// MARK: - SimpleContentView
+
+struct SimpleContentView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        TabView(selection: $appState.selectedTab) {
+            SimpleTradeCalculatorView()
+                .tabItem {
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                    Text("Trades")
+                }
+                .tag(TabItem.trades)
+
+            SimpleDashboardView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Dashboard")
+                }
+                .tag(TabItem.dashboard)
+
+            SimpleCaptainView()
+                .tabItem {
+                    Image(systemName: "star.fill")
+                    Text("Captain")
+                }
+                .tag(TabItem.captain)
+
+            SimpleCashCowView()
+                .tabItem {
+                    Image(systemName: "dollarsign.circle.fill")
+                    Text("Cash Cow")
+                }
+                .tag(TabItem.cashCow)
+
+            SimpleSettingsView()
+                .tabItem {
+                    Image(systemName: "gearshape.fill")
+                    Text("Settings")
+                }
+                .tag(TabItem.settings)
+        }
+        .accentColor(.orange)
+    }
+}
+
+// MARK: - SimpleDashboardView
+
+struct SimpleDashboardView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Team Score Header
+                    VStack {
+                        Text("Team Score: \(appState.teamScore)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        Text("Rank: #\(appState.teamRank)")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+
+                    // Players List
+                    LazyVStack(spacing: 12) {
+                        ForEach(appState.players) { player in
+                            SimplePlayerCard(player: player)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            .navigationTitle("🏆 Dashboard")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - SimplePlayerCard
+
+struct SimplePlayerCard: View {
+    let player: EnhancedPlayer
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(player.name)
+                        .font(.headline)
+                    Text(player.position.rawValue)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing) {
+                    Text("\(player.currentScore)")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
+                    Text(player.formattedPrice)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - SimpleCaptainView
+
+struct SimpleCaptainView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 16) {
+                    Text("🧠 AI Captain Advisor")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding()
+
+                    ForEach(appState.captainSuggestions) { suggestion in
+                        SimpleCaptainCard(suggestion: suggestion)
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("⭐ Captain AI")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - SimpleCaptainCard
+
+struct SimpleCaptainCard: View {
+    let suggestion: CaptainSuggestion
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(suggestion.player.name)
+                    .font(.headline)
+
+                Spacer()
+
+                Text("\(suggestion.confidence)%")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.green)
+            }
+
+            Text("Projected: \(suggestion.projectedPoints) pts")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - SimpleTradeCalculatorView
+
+struct SimpleTradeCalculatorView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("🔄 Trade Calculator")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding()
+
+                Text("Coming Soon")
+                    .foregroundColor(.secondary)
+
+                Spacer()
+            }
+            .navigationTitle("🔄 Trades")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - SimpleCashCowView
+
+struct SimpleCashCowView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("💰 Cash Cow Tracker")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding()
+
+                Text("Coming Soon")
+                    .foregroundColor(.secondary)
+
+                Spacer()
+            }
+            .navigationTitle("💰 Cash Cow")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - SimpleSettingsView
+
+struct SimpleSettingsView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("⚙️ Settings")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding()
+
+                Text("Coming Soon")
+                    .foregroundColor(.secondary)
+
+                Spacer()
+            }
+            .navigationTitle("⚙️ Settings")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+// MARK: - AFLFantasyTabView
+
+struct AFLFantasyTabView: View {
+    @EnvironmentObject var appState: AppState
+    
+    var body: some View {
+        Text("Advanced TabView Coming Soon")
+            .font(.title)
+            .foregroundColor(.orange)
+    }
+}
+
+struct AlertCenterView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Image(systemName: "bell.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.red)
+                    .padding()
+                
+                Text("⚠️ Smart Alert System")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                Text("AI Alert Generator proactively warns you about price drop risks, breakeven cliffs, and potential cash cows before the market moves.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                Text("Coming Soon")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+            .navigationTitle("⚠️ Alert Center")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+struct AnalysisCenterView: View {
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                LazyVStack(spacing: 20) {
+                    // Header
+                    VStack(spacing: 16) {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.purple)
+                        
+                        Text("📊 Advanced Analysis")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Text("Deep dive analytics and contextual player analysis")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    
+                    // Analysis Categories
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                        AnalysisCategoryCard(
+                            title: "Cash Generation",
+                            subtitle: "Price Analytics",
+                            icon: "dollarsign.circle.fill",
+                            color: .green,
+                            description: "Track cash cow potential and optimal sell windows"
+                        )
+                        
+                        AnalysisCategoryCard(
+                            title: "Venue Bias",
+                            subtitle: "Ground Analysis",
+                            icon: "location.fill",
+                            color: .blue,
+                            description: "Player performance by venue and conditions"
+                        )
+                        
+                        AnalysisCategoryCard(
+                            title: "Consistency Scores",
+                            subtitle: "Reliability Metrics",
+                            icon: "chart.line.uptrend.xyaxis",
+                            color: .orange,
+                            description: "How reliably players hit projected scores"
+                        )
+                        
+                        AnalysisCategoryCard(
+                            title: "Risk Assessment",
+                            subtitle: "Injury & Suspension",
+                            icon: "exclamationmark.triangle.fill",
+                            color: .red,
+                            description: "Algorithmic risk scoring for smart decisions"
+                        )
+                        
+                        AnalysisCategoryCard(
+                            title: "Fixture Analysis",
+                            subtitle: "Upcoming Difficulty",
+                            icon: "calendar.circle.fill",
+                            color: .purple,
+                            description: "5-round fixture difficulty ratings"
+                        )
+                        
+                        AnalysisCategoryCard(
+                            title: "Weather Impact",
+                            subtitle: "Conditions Model",
+                            icon: "cloud.rain.fill",
+                            color: .gray,
+                            description: "Performance adjustments for rain and wind"
+                        )
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.bottom)
+            }
+            .navigationTitle("📊 Analysis")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+struct AnalysisCategoryCard: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let color: Color
+    let description: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(color)
+                
+                Spacer()
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Text(description)
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer()
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: 140)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+        )
+    }
+}
+

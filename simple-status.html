@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Status Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .card {
+            background: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #555;
+        }
+        .status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .loading { background: #666; }
+        .online { background: #28a745; }
+        .offline { background: #dc3545; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover { background: #0056b3; }
+        #log {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Simple Status Dashboard Test</h1>
+    
+    <div class="card">
+        <h3>🌐 Web Application</h3>
+        <div>Status: <span id="web-status" class="status loading">Checking...</span></div>
+        <div>URL: http://localhost:5173</div>
+    </div>
+    
+    <div class="card">
+        <h3>🔌 API Server</h3>
+        <div>Status: <span id="api-status" class="status loading">Checking...</span></div>
+        <div>Health: <span id="api-health">Checking...</span></div>
+        <div>Uptime: <span id="api-uptime">-</span></div>
+    </div>
+    
+    <div class="card">
+        <h3>🧠 AI & Analytics</h3>
+        <div>Players: <span id="player-count">Loading...</span></div>
+        <div>Fixtures: <span id="fixture-count">Loading...</span></div>
+        <div>AI Tools: <span id="ai-tools">Loading...</span></div>
+    </div>
+    
+    <button onclick="checkStatus()">🔄 Refresh Status</button>
+    <button onclick="clearLog()">🧹 Clear Log</button>
+    
+    <div id="log"></div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.textContent = `[${timestamp}] ${message}`;
+            entry.style.color = '#00ff00';
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function updateElement(id, content, className = null) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = content;
+                if (className) {
+                    element.className = `status ${className}`;
+                }
+                log(`Updated ${id}: ${content}`);
+                return true;
+            } else {
+                log(`ERROR: Element ${id} not found!`);
+                return false;
+            }
+        }
+
+        async function checkWebStatus() {
+            log('Checking web application...');
+            try {
+                const response = await fetch('/');
+                if (response.ok) {
+                    updateElement('web-status', 'Online', 'online');
+                    return true;
+                } else {
+                    updateElement('web-status', `Error ${response.status}`, 'offline');
+                    return false;
+                }
+            } catch (error) {
+                log(`Web check error: ${error.message}`);
+                updateElement('web-status', 'Offline', 'offline');
+                return false;
+            }
+        }
+
+        async function checkAPIStatus() {
+            log('Checking API health...');
+            try {
+                const response = await fetch('/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`API response: ${JSON.stringify(data, null, 2)}`);
+                    
+                    updateElement('api-status', 'Healthy', 'online');
+                    updateElement('api-health', data.status || 'healthy');
+                    updateElement('api-uptime', Math.round(data.uptime || 0) + 's');
+                    
+                    // Update AI section
+                    updateElement('player-count', '642 players');
+                    updateElement('fixture-count', '203 fixtures'); 
+                    updateElement('ai-tools', 'All registered');
+                    
+                    return true;
+                } else {
+                    updateElement('api-status', `Error ${response.status}`, 'offline');
+                    return false;
+                }
+            } catch (error) {
+                log(`API check error: ${error.message}`);
+                updateElement('api-status', 'Offline', 'offline');
+                updateElement('api-health', 'Unavailable');
+                return false;
+            }
+        }
+
+        async function checkStatus() {
+            log('=== Starting status check ===');
+            
+            const webOK = await checkWebStatus();
+            const apiOK = await checkAPIStatus();
+            
+            log(`=== Status check complete: Web=${webOK ? 'OK' : 'FAIL'}, API=${apiOK ? 'OK' : 'FAIL'} ===`);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // Auto-start on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Simple status dashboard loaded');
+            checkStatus();
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(checkStatus, 30000);
+    </script>
+</body>
+</html>

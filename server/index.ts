@@ -21,6 +21,12 @@ app.use('/data', express.static(path.join(__dirname, '../data')));
 // ✅ Serve guernsey images
 app.use('/guernseys', express.static(path.join(__dirname, '../public/guernseys')));
 
+// ✅ Serve status dashboard files statically
+app.use('/dashboards', express.static(path.join(__dirname, '../'), {
+  index: false,
+  dotfiles: 'deny'
+}));
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,6 +37,21 @@ app.use(metricsMiddleware);
 // Health and metrics endpoints
 app.get('/api/health', healthCheck);
 app.get('/metrics', metricsEndpoint);
+
+// Serve status dashboard (fixes CORS issues)
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../status.html'));
+});
+
+// Serve debug status page for troubleshooting
+app.get('/debug', (req, res) => {
+  res.sendFile(path.join(__dirname, '../debug-status.html'));
+});
+
+// Serve simple status page for testing
+app.get('/simple', (req, res) => {
+  res.sendFile(path.join(__dirname, '../simple-status.html'));
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -62,7 +83,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Register routes first, before Vite setup
 (async () => {
+  // These routes need to be registered BEFORE Vite middleware
+  // to prevent Vite from intercepting them
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -79,7 +104,7 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 5174;
   
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);

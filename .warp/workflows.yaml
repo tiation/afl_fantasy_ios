@@ -57,6 +57,11 @@ workflows:
     command: "cd ~/workspace/10_projects/afl_fantasy_ios && echo '🏆 AFL Fantasy Platform Status' && echo '================================' && echo '📁 Directory:' && pwd && echo '📦 Dependencies:' && (test -d node_modules && echo '✅ Installed' || echo '❌ Missing') && echo '🔧 Environment:' && (test -f .env && echo '✅ Configured' || echo '❌ Missing .env file') && echo '🚀 Server Status:' && curl -s http://localhost:5173/api/health | head -1 || echo '❌ Server not running'"
     description: "Show current project status and health"
     
+  open_status_dashboard:
+    name: "📊 Open Status Dashboard"
+    command: "cd ~/workspace/10_projects/afl_fantasy_ios && ./status.sh"
+    description: "Open real-time visual status dashboard in browser"
+    
   # 📱 iOS Development
   open_ios:
     name: "📱 Open iOS Project"

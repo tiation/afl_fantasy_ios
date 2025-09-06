@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Status Dashboard</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+        .success { background: #001100; border-color: #00ff00; }
+        .error { background: #110000; border-color: #ff0000; color: #ff0000; }
+        .info { background: #001122; border-color: #0099ff; color: #0099ff; }
+        button {
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        button:hover { background: #555; }
+        #log {
+            background: #000;
+            padding: 10px;
+            border: 1px solid #333;
+            margin-top: 20px;
+            height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 AFL Fantasy Status Dashboard Debug Tool</h1>
+    
+    <div class="test-result info">
+        <strong>Debug Mode Active</strong><br>
+        Testing all status dashboard functions and API endpoints...
+    </div>
+    
+    <div id="tests"></div>
+    
+    <button onclick="runAllTests()">🔄 Run All Tests</button>
+    <button onclick="testWebStatus()">🌐 Test Web Status</button>
+    <button onclick="testAPIStatus()">🔌 Test API Status</button>
+    <button onclick="clearLog()">🧹 Clear Log</button>
+    
+    <div id="log"></div>
+
+    <script>
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.style.color = type === 'error' ? '#ff0000' : type === 'success' ? '#00ff00' : '#0099ff';
+            entry.textContent = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        function showTestResult(testName, success, details) {
+            const testsDiv = document.getElementById('tests');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${success ? 'success' : 'error'}`;
+            resultDiv.innerHTML = `
+                <strong>${success ? '✅' : '❌'} ${testName}</strong><br>
+                ${details}
+            `;
+            testsDiv.appendChild(resultDiv);
+        }
+        
+        async function testWebStatus() {
+            log('Testing web application status...', 'info');
+            try {
+                const startTime = Date.now();
+                const response = await fetch('/');
+                const duration = Date.now() - startTime;
+                
+                if (response.ok) {
+                    const details = `Status: ${response.status}, Duration: ${duration}ms, Content-Type: ${response.headers.get('content-type')}`;
+                    showTestResult('Web Application', true, details);
+                    log(`Web app test successful: ${details}`, 'success');
+                    return true;
+                } else {
+                    showTestResult('Web Application', false, `HTTP ${response.status}: ${response.statusText}`);
+                    log(`Web app test failed: ${response.status} ${response.statusText}`, 'error');
+                    return false;
+                }
+            } catch (error) {
+                showTestResult('Web Application', false, `Error: ${error.message}`);
+                log(`Web app test error: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        async function testAPIStatus() {
+            log('Testing API health endpoint...', 'info');
+            try {
+                const startTime = Date.now();
+                const response = await fetch('/api/health');
+                const duration = Date.now() - startTime;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const details = `Status: ${data.status}, Uptime: ${Math.round(data.uptime)}s, Duration: ${duration}ms`;
+                    showTestResult('API Health', true, details);
+                    log(`API test successful: ${details}`, 'success');
+                    
+                    // Show full health data
+                    log(`Full API response: ${JSON.stringify(data, null, 2)}`, 'info');
+                    return true;
+                } else {
+                    showTestResult('API Health', false, `HTTP ${response.status}: ${response.statusText}`);
+                    log(`API test failed: ${response.status} ${response.statusText}`, 'error');
+                    return false;
+                }
+            } catch (error) {
+                showTestResult('API Health', false, `Error: ${error.message}`);
+                log(`API test error: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        async function testDOMElements() {
+            log('Testing DOM elements...', 'info');
+            const elements = [
+                'web-status-indicator',
+                'api-status-indicator', 
+                'api-health',
+                'api-uptime',
+                'player-count',
+                'fixture-count',
+                'ai-tools'
+            ];
+            
+            let found = 0;
+            let missing = [];
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    found++;
+                    log(`Found element: ${id}`, 'success');
+                } else {
+                    missing.push(id);
+                    log(`Missing element: ${id}`, 'error');
+                }
+            });
+            
+            const success = missing.length === 0;
+            const details = success 
+                ? `All ${found} elements found successfully`
+                : `Found ${found}/${elements.length} elements. Missing: ${missing.join(', ')}`;
+                
+            showTestResult('DOM Elements', success, details);
+            return success;
+        }
+        
+        async function testCurrentPage() {
+            log('Testing current page URL and location...', 'info');
+            const details = `
+                URL: ${window.location.href}<br>
+                Protocol: ${window.location.protocol}<br>
+                Host: ${window.location.host}<br>
+                Origin: ${window.location.origin}<br>
+                Pathname: ${window.location.pathname}
+            `;
+            showTestResult('Page Info', true, details);
+            
+            // Test if we can access the status page
+            try {
+                const response = await fetch('/status');
+                if (response.ok) {
+                    log('Status page is accessible', 'success');
+                } else {
+                    log(`Status page returned ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`Status page error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function runAllTests() {
+            document.getElementById('tests').innerHTML = '';
+            log('Starting comprehensive diagnostic tests...', 'info');
+            
+            await testCurrentPage();
+            await testDOMElements();
+            const webOK = await testWebStatus();
+            const apiOK = await testAPIStatus();
+            
+            log(`Test Summary: Web=${webOK ? 'PASS' : 'FAIL'}, API=${apiOK ? 'PASS' : 'FAIL'}`, 'info');
+            
+            if (webOK && apiOK) {
+                log('All tests passed! The issue might be in the main dashboard JavaScript.', 'success');
+            } else {
+                log('Some tests failed. Check the results above for details.', 'error');
+            }
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+        
+        // Auto-run tests on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Debug page loaded successfully', 'success');
+            runAllTests();
+        });
+    </script>
+</body>
+</html>

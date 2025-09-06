@@ -8,6 +8,50 @@
 
 import SwiftUI
 
+// MARK: - CaptainAnalysisResult
+
+struct CaptainAnalysisResult: Identifiable {
+    let id = UUID()
+    let player: EnhancedPlayer
+    let aiScore: Double
+    let confidenceLevel: Double
+    let projectedCaptainScore: Double
+    let floorScore: Double
+    let ceilingScore: Double
+    let factorBreakdown: [FactorScore]
+    let risks: [String]
+    let upside: [String]
+
+    var confidenceGrade: String {
+        switch confidenceLevel {
+        case 0.9...: "A+"
+        case 0.8 ..< 0.9: "A"
+        case 0.7 ..< 0.8: "B"
+        case 0.6 ..< 0.7: "C"
+        default: "D"
+        }
+    }
+}
+
+// MARK: - AnalysisFactor
+
+struct AnalysisFactor: Identifiable {
+    let id = UUID()
+    let name: String
+    let score: Double
+    let weight: Double
+    let impact: String
+
+    var color: Color {
+        switch score {
+        case 80 ... 100: .green
+        case 60 ..< 80: .blue
+        case 40 ..< 60: .orange
+        default: .red
+        }
+    }
+}
+
 // MARK: - AdvancedCaptainAI
 
 struct AdvancedCaptainAI: View {
@@ -57,8 +101,9 @@ struct AdvancedCaptainAI: View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    // Current captain header
-                    CurrentCaptainHeader(captain: appState.currentCaptain ?? CaptainData())
+                    // Current captain header - create placeholder captain for now
+                    let placeholderCaptain = CaptainData()
+                    CurrentCaptainHeader(captain: placeholderCaptain)
 
                     // Analysis mode selector
                     AnalysisModeSelector(selectedMode: $analysisMode)
@@ -311,46 +356,11 @@ struct AdvancedCaptainAI: View {
         }
 
         // Contract year motivation - using a random factor as placeholder
-        if Double.random(in: 0...1) > 0.7 {
+        if Double.random(in: 0 ... 1) > 0.7 {
             upside.append("Contract year motivation")
         }
 
         return upside
-    }
-}
-
-// MARK: - CaptainAnalysisResult
-
-struct CaptainAnalysisResult: Identifiable {
-    let id = UUID()
-    let player: EnhancedPlayer
-    let aiScore: Double
-    let confidenceLevel: Double
-    let projectedCaptainScore: Double
-    let floorScore: Double
-    let ceilingScore: Double
-    let factorBreakdown: [FactorScore]
-    let risks: [String]
-    let upside: [String]
-
-    var confidenceGrade: String {
-        switch confidenceLevel {
-        case 0.9...: "Exceptional"
-        case 0.8 ..< 0.9: "High"
-        case 0.7 ..< 0.8: "Good"
-        case 0.6 ..< 0.7: "Moderate"
-        default: "Low"
-        }
-    }
-
-    var riskLevel: InjuryRiskLevel {
-        let riskCount = risks.count
-        switch riskCount {
-        case 0: return .low
-        case 1: return .medium
-        case 2: return .high
-        default: return .critical
-        }
     }
 }
 
@@ -380,6 +390,55 @@ struct FactorScore: Identifiable {
         case -5 ..< -1: .orange
         default: .red
         }
+    }
+}
+
+// MARK: - CurrentCaptainHeader
+
+struct CurrentCaptainHeader: View {
+    let captain: CaptainData
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Current Captain")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(captain.playerName)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+
+                    Text("Last Round Score: \(captain.score)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(captain.score * 2)")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.green)
+
+                    Text("Captain Points")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            if captain.ownershipPercentage > 0 {
+                Text(captain.formattedOwnership)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
     }
 }
 
@@ -541,6 +600,29 @@ struct CaptainRecommendationCard: View {
     let result: CaptainAnalysisResult
     @State private var isExpanded = false
 
+    // Local mapping helpers to avoid relying on Position extensions that may not exist in this target
+    private func positionShortName(_ position: Position) -> String {
+        switch position {
+        case .defender: "DEF"
+        case .midfielder: "MID"
+        case .ruck: "RUC"
+        case .forward: "FWD"
+        }
+    }
+
+    private func positionColor(_ position: Position) -> Color {
+        switch position {
+        case .defender: .blue
+        case .midfielder: .green
+        case .ruck: .purple
+        case .forward: .red
+        }
+    }
+
+    private func formatPrice(_ price: Int) -> String {
+        "$\(String(format: "%.1f", Double(price) / 1000))k"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
@@ -555,16 +637,16 @@ struct CaptainRecommendationCard: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
 
-                        Text(result.player.position.shortName)
+                        Text(positionShortName(result.player.position))
                             .font(.caption2)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(result.player.position.color)
+                            .background(positionColor(result.player.position))
                             .cornerRadius(4)
 
-                        Text(result.player.formattedPrice)
+                        Text(formatPrice(result.player.price))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -906,6 +988,17 @@ struct AdvancedSettingsSheet: View {
 }
 
 #Preview {
-    AdvancedCaptainAI()
-        .environmentObject(AppState())
+    let state = AppState()
+    // Try to extract a real captain from suggestions if present
+    let captain = if let suggestion = state.captainSuggestions.first {
+        CaptainData(
+            playerName: suggestion.player.name,
+            score: suggestion.projectedPoints / 2,
+            ownershipPercentage: 45.0
+        )
+    } else {
+        CaptainData()
+    }
+    return AdvancedCaptainAI()
+        .environmentObject(state)
 }

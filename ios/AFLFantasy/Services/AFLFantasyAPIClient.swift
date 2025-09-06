@@ -16,7 +16,7 @@ import Foundation
 class AFLFantasyAPIClient: ObservableObject {
     // MARK: - Properties
 
-    private let baseURL = "https://fantasy.afl.com.au"
+    let baseURL: URL
     private let session: URLSession
     private let keychain: KeychainManager
 
@@ -27,7 +27,8 @@ class AFLFantasyAPIClient: ObservableObject {
 
     // MARK: - Initialization
 
-    init(keychain: KeychainManager = KeychainManager()) {
+    init(baseURL: URL = URL(string: "https://fantasy.afl.com.au")!, keychain: KeychainManager = KeychainManager()) {
+        self.baseURL = baseURL
         self.keychain = keychain
 
         // Configure URLSession with custom configuration
@@ -57,6 +58,11 @@ class AFLFantasyAPIClient: ObservableObject {
             apiToken: apiToken
         )
         isAuthenticated = true
+    }
+
+    /// Update credentials (alias for storeCredentials for compatibility)
+    func updateCredentials(teamId: String, sessionCookie: String, apiToken: String?) {
+        storeCredentials(teamId: teamId, sessionCookie: sessionCookie, apiToken: apiToken)
     }
 
     /// Clear stored credentials
@@ -124,7 +130,7 @@ class AFLFantasyAPIClient: ObservableObject {
 
         for endpoint in endpoints {
             do {
-                let url = URL(string: baseURL + endpoint)!
+                let url = baseURL.appendingPathComponent(endpoint)
                 let request = buildRequest(for: url)
                 let (data, _) = try await session.data(for: request)
 
@@ -154,7 +160,7 @@ class AFLFantasyAPIClient: ObservableObject {
 
         for endpoint in endpoints {
             do {
-                let url = URL(string: baseURL + endpoint)!
+                let url = baseURL.appendingPathComponent(endpoint)
                 let request = buildRequest(for: url)
                 let (data, _) = try await session.data(for: request)
 
@@ -183,7 +189,7 @@ class AFLFantasyAPIClient: ObservableObject {
 
         for endpoint in endpoints {
             do {
-                let url = URL(string: baseURL + endpoint)!
+                let url = baseURL.appendingPathComponent(endpoint)
                 let request = buildRequest(for: url)
                 let (data, _) = try await session.data(for: request)
 
@@ -212,7 +218,7 @@ class AFLFantasyAPIClient: ObservableObject {
 
         for endpoint in endpoints {
             do {
-                let url = URL(string: baseURL + endpoint)!
+                let url = baseURL.appendingPathComponent(endpoint)
                 let request = buildRequest(for: url)
                 let (data, _) = try await session.data(for: request)
 
@@ -457,4 +463,3 @@ extension AFLFantasyAPIClient {
         }
     }
 }
-

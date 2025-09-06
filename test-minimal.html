@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #111;
+            color: white;
+        }
+        .success { color: #22c55e; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <h1>🧪 AFL Fantasy Minimal Test</h1>
+    <div id="test-results">
+        <h2>Test Results:</h2>
+        <div id="server-test" class="error">❌ Server: Not tested</div>
+        <div id="fetch-test" class="error">❌ API: Not tested</div>
+        <div id="js-test" class="error">❌ JavaScript: Not running</div>
+    </div>
+
+    <div id="api-data">
+        <h2>API Data:</h2>
+        <pre id="api-results">Loading...</pre>
+    </div>
+
+    <script>
+        console.log('🧪 Minimal test script started');
+        
+        // Test 1: JavaScript is running
+        document.getElementById('js-test').innerHTML = '✅ JavaScript: Running';
+        document.getElementById('js-test').className = 'success';
+        
+        // Test 2: Server is responding
+        fetch('/api/health')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('server-test').innerHTML = '✅ Server: Healthy';
+                    document.getElementById('server-test').className = 'success';
+                    return response.json();
+                } else {
+                    throw new Error(`Server returned ${response.status}`);
+                }
+            })
+            .then(data => {
+                document.getElementById('api-results').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('server-test').innerHTML = `❌ Server: ${error.message}`;
+                document.getElementById('api-results').textContent = `Error: ${error.message}`;
+            });
+        
+        // Test 3: User API
+        fetch('/api/me')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('fetch-test').innerHTML = '✅ API: Working';
+                    document.getElementById('fetch-test').className = 'success';
+                    return response.json();
+                } else {
+                    throw new Error(`API returned ${response.status}`);
+                }
+            })
+            .then(data => {
+                const existingData = document.getElementById('api-results').textContent;
+                document.getElementById('api-results').textContent = 
+                    existingData + '\n\n/api/me:\n' + JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('fetch-test').innerHTML = `❌ API: ${error.message}`;
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,645 @@
+openapi: 3.0.3
+info:
+  title: AFL Fantasy API
+  description: |
+    AFL Fantasy iOS Backend API providing player data, dashboard information, 
+    trade analysis, and real-time fantasy football statistics.
+    
+    ## Authentication
+    Most endpoints are publicly accessible for development. Production endpoints
+    will require API key authentication.
+    
+    ## Rate Limiting
+    API calls are limited to 100 requests per minute per IP address.
+    
+    ## Data Sources
+    - Real AFL Fantasy player data via web scraping
+    - FootyWire statistics integration  
+    - DFS Australia data feeds
+    - Custom trade analysis algorithms
+  version: 1.0.0
+  termsOfService: https://afl-fantasy-api.com/terms
+  contact:
+    name: AFL Fantasy API Support
+    url: https://afl-fantasy-api.com/support
+    email: support@afl-fantasy-api.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+  - url: https://api-staging.afl-fantasy.com
+    description: Staging server
+  - url: https://api.afl-fantasy.com
+    description: Production server
+
+tags:
+  - name: health
+    description: API health and status checks
+  - name: dashboard
+    description: Dashboard data and summary information
+  - name: players
+    description: Player data and statistics
+  - name: trades
+    description: Trade analysis and recommendations
+
+paths:
+  /api/health:
+    get:
+      tags: [health]
+      summary: Health check endpoint
+      description: Returns API health status and system information
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: "healthy"
+                timestamp: "2025-09-06T13:15:00Z"
+                service: "AFL Fantasy Test API"
+                database: "connected"
+                version: "1.0.0"
+
+  /v1/dashboard:
+    get:
+      tags: [dashboard]
+      summary: Get dashboard data
+      description: |
+        Returns comprehensive dashboard information including team value, 
+        current rank, upcoming matchups, and top performing players.
+      operationId: getDashboard
+      responses:
+        '200':
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/players:
+    get:
+      tags: [players]
+      summary: List all players
+      description: |
+        Get a list of all AFL Fantasy players with optional filtering by position and season.
+        Returns player statistics including price, average score, ownership percentage.
+      operationId: getPlayers
+      parameters:
+        - name: position
+          in: query
+          description: Filter players by position (DEF, MID, RUC, FWD)
+          required: false
+          schema:
+            type: string
+            enum: [DEF, MID, RUC, FWD]
+          example: MID
+        - name: season
+          in: query
+          description: Season year to filter by
+          required: false
+          schema:
+            type: integer
+            minimum: 2020
+            maximum: 2030
+          example: 2025
+        - name: limit
+          in: query
+          description: Maximum number of players to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+        - name: offset
+          in: query
+          description: Number of players to skip for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Players retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayersResponse'
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/players/{playerId}:
+    get:
+      tags: [players]
+      summary: Get single player
+      description: |
+        Get detailed information for a specific player including statistics,
+        fixtures, injury status, and form data.
+      operationId: getPlayerById
+      parameters:
+        - name: playerId
+          in: path
+          description: Unique identifier for the player
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Player retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SinglePlayerResponse'
+        '404':
+          description: Player not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/trade_score:
+    post:
+      tags: [trades]
+      summary: Calculate trade score
+      description: |
+        Calculate a trade score and recommendation for swapping one player for another.
+        Uses advanced algorithms considering form, price, fixtures, and ownership.
+      operationId: calculateTradeScore
+      requestBody:
+        description: Trade analysis parameters
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TradeScoreRequest'
+            example:
+              player_in_id: 2
+              player_out_id: 5
+              budget: 500000
+              current_team: [1, 3, 4, 6, 7]
+      responses:
+        '200':
+          description: Trade score calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeScoreResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Overall health status of the API
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the health check
+        service:
+          type: string
+          description: Service name
+        database:
+          type: string
+          description: Database connection status
+        version:
+          type: string
+          description: API version
+
+    DashboardResponse:
+      type: object
+      required:
+        - teamValue
+        - rank
+        - upcomingMatchups
+        - lastUpdated
+      properties:
+        teamValue:
+          $ref: '#/components/schemas/TeamValue'
+        rank:
+          $ref: '#/components/schemas/Rank'
+        upcomingMatchups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchup'
+        topPerformers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopPerformer'
+        lastUpdated:
+          type: string
+          format: date-time
+          description: When the dashboard data was last updated
+        nextDeadline:
+          type: string
+          format: date-time
+          description: Next team lockout deadline
+
+    TeamValue:
+      type: object
+      required:
+        - total
+        - remaining
+        - formatted
+      properties:
+        total:
+          type: integer
+          description: Total team value in cents
+          example: 83500000
+        remaining:
+          type: integer
+          description: Remaining salary cap in cents
+          example: 9500000
+        formatted:
+          type: string
+          description: Formatted team value for display
+          example: "$83.5M"
+        playerCount:
+          type: integer
+          description: Number of players in team
+          example: 30
+
+    Rank:
+      type: object
+      required:
+        - current
+        - formatted
+      properties:
+        current:
+          type: integer
+          description: Current overall rank
+          example: 15847
+        change:
+          type: integer
+          description: Change from previous round (positive = improvement)
+          example: -234
+        formatted:
+          type: string
+          description: Formatted rank for display
+          example: "15,847"
+
+    Matchup:
+      type: object
+      required:
+        - homeTeam
+        - awayTeam
+      properties:
+        homeTeam:
+          type: string
+          description: Home team name
+          example: "Melbourne"
+        awayTeam:
+          type: string
+          description: Away team name
+          example: "Collingwood"
+        round:
+          type: integer
+          description: AFL round number
+          example: 24
+        venue:
+          type: string
+          description: Match venue
+          example: "MCG"
+        date:
+          type: string
+          format: date
+          description: Match date
+          example: "2025-08-30"
+
+    TopPerformer:
+      type: object
+      required:
+        - name
+        - score
+        - team
+      properties:
+        name:
+          type: string
+          description: Player name
+          example: "Max Gawn"
+        score:
+          type: integer
+          description: Fantasy score
+          example: 145
+        team:
+          type: string
+          description: Team name
+          example: "Melbourne"
+        captain:
+          type: boolean
+          description: Whether this player was captain
+          example: true
+
+    PlayersResponse:
+      type: object
+      required:
+        - status
+        - data
+        - count
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+        count:
+          type: integer
+          description: Number of players returned
+        total:
+          type: integer
+          description: Total number of players available
+        season:
+          type: string
+          description: Season year
+        filters:
+          $ref: '#/components/schemas/PlayerFilters'
+
+    Player:
+      type: object
+      required:
+        - id
+        - name
+        - team
+        - position
+        - price
+        - avg
+      properties:
+        id:
+          type: integer
+          description: Unique player identifier
+          example: 1
+        name:
+          type: string
+          description: Player full name
+          example: "Max Gawn"
+        team:
+          type: string
+          description: AFL team name
+          example: "Melbourne"
+        position:
+          type: string
+          enum: [DEF, MID, RUC, FWD]
+          description: Playing position
+          example: "RUC"
+        price:
+          type: integer
+          description: Current player price in cents
+          example: 800000
+        avg:
+          type: number
+          format: float
+          description: Season average fantasy score
+          example: 105.2
+        lastScore:
+          type: integer
+          description: Most recent fantasy score
+          example: 112
+        ownership:
+          type: number
+          format: float
+          description: Ownership percentage
+          example: 45.8
+
+    SinglePlayerResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        data:
+          $ref: '#/components/schemas/PlayerDetail'
+
+    PlayerDetail:
+      allOf:
+        - $ref: '#/components/schemas/Player'
+        - type: object
+          properties:
+            breakeven:
+              type: integer
+              description: Breakeven score needed for price rise
+              example: 78
+            form:
+              type: string
+              description: Current form rating
+              example: "Excellent"
+            injury:
+              type: string
+              nullable: true
+              description: Injury status
+              example: null
+            stats:
+              $ref: '#/components/schemas/PlayerStats'
+            fixtures:
+              type: array
+              items:
+                $ref: '#/components/schemas/Fixture'
+
+    PlayerStats:
+      type: object
+      properties:
+        games:
+          type: integer
+          description: Games played this season
+          example: 22
+        goals:
+          type: integer
+          description: Goals scored
+          example: 12
+        assists:
+          type: integer
+          description: Goal assists
+          example: 8
+        disposals:
+          type: number
+          format: float
+          description: Average disposals per game
+          example: 18.5
+        marks:
+          type: number
+          format: float
+          description: Average marks per game
+          example: 4.2
+        hitouts:
+          type: number
+          format: float
+          description: Average hitouts per game (ruckmen only)
+          example: 32.1
+
+    Fixture:
+      type: object
+      required:
+        - opponent
+        - venue
+        - difficulty
+      properties:
+        opponent:
+          type: string
+          description: Opposition team
+          example: "Collingwood"
+        venue:
+          type: string
+          description: Match venue
+          example: "MCG"
+        difficulty:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Difficulty rating (1=easy, 5=hard)
+          example: 3
+
+    PlayerFilters:
+      type: object
+      properties:
+        position:
+          type: string
+          description: Applied position filter
+          example: "all"
+
+    TradeScoreRequest:
+      type: object
+      required:
+        - player_in_id
+        - player_out_id
+        - budget
+      properties:
+        player_in_id:
+          type: integer
+          description: ID of player to trade in
+          example: 2
+        player_out_id:
+          type: integer
+          description: ID of player to trade out
+          example: 5
+        budget:
+          type: integer
+          description: Available budget in cents
+          example: 500000
+        current_team:
+          type: array
+          items:
+            type: integer
+          description: Array of current team player IDs
+          example: [1, 3, 4, 6, 7]
+
+    TradeScoreResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        data:
+          $ref: '#/components/schemas/TradeScore'
+
+    TradeScore:
+      type: object
+      required:
+        - score
+        - confidence
+        - recommendation
+        - factors
+      properties:
+        score:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Overall trade score (0-100)
+          example: 75
+        confidence:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Confidence in the recommendation (0-100)
+          example: 82
+        recommendation:
+          type: string
+          description: Human-readable trade recommendation
+          example: "Good trade"
+        factors:
+          $ref: '#/components/schemas/TradeFactors'
+
+    TradeFactors:
+      type: object
+      properties:
+        form:
+          type: integer
+          description: Form factor score
+          example: 35
+        price:
+          type: integer
+          description: Price factor score
+          example: 42
+        fixture:
+          type: integer
+          description: Fixture difficulty factor score
+          example: 28
+        ownership:
+          type: integer
+          description: Ownership factor score
+          example: 15
+
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: string
+          enum: [error]
+        message:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+        details:
+          type: object
+          description: Additional error details
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authenticated requests
+
+security:
+  - ApiKeyAuth: []

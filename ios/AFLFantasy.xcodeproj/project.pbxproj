@@ -17,6 +17,8 @@
 		1A2B3C4D5E6F70819A0B1C35 /* AFLFantasyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C36 /* AFLFantasyTests.swift */; };
 		1A2B3C4D5E6F70819A0B1C37 /* AFLFantasyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C38 /* AFLFantasyUITests.swift */; };
 		1A2B3C4D5E6F70819A0B1C39 /* AFLFantasyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C3A /* AFLFantasyUITestsLaunchTests.swift */; };
+		1E3D91FD2E6C74DC00D0B80B /* AFLAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */; };
+		1E3D91FF2E6C74E200D0B80B /* AFLHapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */; };
 		4185C610773AB530EAAC0F29 /* AdvancedCashCowTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1F732C920D936198BF944 /* AdvancedCashCowTracker.swift */; };
 		4C71DC19B2326061FF3EA268 /* EnhancedDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092D1D98DBF3AA8BF0503D32 /* EnhancedDashboardView.swift */; };
 		5F3F90C39C7B62A75DBE6872 /* AFLFantasyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */; };
@@ -57,6 +59,8 @@
 		1A2B3C4D5E6F70819A0B1C3F /* AFLFantasy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFLFantasy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F70819A0B1C40 /* AFLFantasyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AFLFantasyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F70819A0B1C41 /* AFLFantasyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AFLFantasyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLAudioManager.swift; sourceTree = "<group>"; };
+		1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLHapticsManager.swift; sourceTree = "<group>"; };
 		37D35BFDD4CB0567F5D7AA28 /* CaptainAnalysisView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptainAnalysisView.swift; path = AFLFantasy/Views/CaptainAnalysisView.swift; sourceTree = "<group>"; };
 		3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyAPIClient.swift; path = AFLFantasy/Services/AFLFantasyAPIClient.swift; sourceTree = "<group>"; };
 		45FC36386597468BA584038A /* TabItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TabItem.swift; path = AFLFantasy/Models/TabItem.swift; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 				1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */,
 				1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */,
 				1A2B3C4D5E6F70819A0B1C4A /* Preview Content */,
+				1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */,
+				1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */,
 			);
 			path = AFLFantasy;
 			sourceTree = "<group>";
@@ -290,6 +296,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3D91FD2E6C74DC00D0B80B /* AFLAudioManager.swift in Sources */,
+				1E3D91FF2E6C74E200D0B80B /* AFLHapticsManager.swift in Sources */,
 				1A2B3C4D5E6F70819A0B1C2F /* ContentView.swift in Sources */,
 				1A2B3C4D5E6F70819A0B1C2D /* AFLFantasyApp.swift in Sources */,
 				FC07EF92B5131F1AF937C6A7 /* AFLFantasyDataService.swift in Sources */,

@@ -67,6 +67,8 @@ const samplePerformanceData: RoundData[] = [
 ];
 
 export default function Dashboard() {
+  console.log('📊 Dashboard component rendered');
+  
   // Function to get captain's score from team data
   const getCaptainScore = (teamData: any): number => {
     if (!teamData) return 0;
@@ -89,26 +91,52 @@ export default function Dashboard() {
     return 0;
   };
 
-  const { data: user, isLoading: isLoadingUser } = useQuery({
+  // Default fallback data if team data doesn't load
+  const defaultTeam: TeamData = {
+    id: 1,
+    userId: 1,
+    name: "Bont's Brigade",
+    value: 15800000,
+    score: 2150,
+    overallRank: 12000,
+    trades: 2,
+    captainId: 1
+  };
+
+  const { data: user, isLoading: isLoadingUser, error: userError } = useQuery({
     queryKey: ["/api/me"],
   });
   
-  const { data: team, isLoading: isLoadingTeam } = useQuery<TeamData>({
+  console.log('👤 User query:', { user, isLoadingUser, userError });
+  
+  const { data: team, isLoading: isLoadingTeam, error: teamError } = useQuery<TeamData>({
     queryKey: ["/api/teams/user/1"],
     enabled: !!user,
+    initialData: defaultTeam, // Provide fallback data to prevent loading trap
   });
+  
+  console.log('👥 Team query:', { team, isLoadingTeam, teamError });
 
-  const { data: performances, isLoading: isLoadingPerformances } = useQuery<PerformanceData[]>({
+  const { data: performances, isLoading: isLoadingPerformances, error: performancesError } = useQuery<PerformanceData[]>({
     queryKey: ["/api/teams/1/performances"],
-    enabled: !!team,
+    enabled: true, // Remove dependency on team to prevent chain of loading traps
   });
   
   // Get complete team data for player analysis
-  const { data: teamData, isLoading: isLoadingTeamData } = useQuery<TeamApiResponse>({
+  const { data: teamData, isLoading: isLoadingTeamData, error: teamDataError } = useQuery<TeamApiResponse>({
     queryKey: ["/api/team/data"],
   });
+  
+  // Log any errors for debugging
+  useEffect(() => {
+    const errors = { userError, teamError, performancesError, teamDataError };
+    const hasErrors = Object.values(errors).some(error => error !== null && error !== undefined);
+    if (hasErrors) {
+      console.error('🚨 API Errors:', errors);
+    }
+  }, [userError, teamError, performancesError, teamDataError]);
 
-  const [chartData, setChartData] = useState<RoundData[]>([]);
+  const [chartData, setChartData] = useState<RoundData[]>(samplePerformanceData);
   const [liveTeamScore, setLiveTeamScore] = useState<number>(0);
   const [actualTeamValue, setActualTeamValue] = useState<number>(21818000); // Set to match actual team value from screenshots
   const [playerTypeCounts, setPlayerTypeCounts] = useState<any>({
@@ -156,9 +184,28 @@ export default function Dashboard() {
   }, [performances]);
 
   const isLoading = isLoadingUser || isLoadingTeam || isLoadingPerformances || isLoadingTeamData;
+  
+  console.log('🔍 Dashboard Debug:', {
+    isLoading,
+    isLoadingUser,
+    isLoadingTeam,
+    isLoadingPerformances,
+    isLoadingTeamData,
+    user,
+    team
+  });
 
-  if (isLoading || !team) {
-    return <div>Loading dashboard...</div>;
+  // Show loading state only if we're actually loading the critical user/team data
+  if (isLoadingUser || (isLoadingTeam && !team)) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-white mb-2">AFL Fantasy Platform</h2>
+          <p className="text-gray-400">Loading dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   // Get previous round score for change calculations
@@ -180,7 +227,19 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-4">Dashboard</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <div className="flex items-center gap-2">
+          <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+            Round 8
+          </span>
+          {isLoadingTeamData && (
+            <span className="bg-gray-500 text-white px-3 py-1 rounded-full text-sm">
+              Loading...
+            </span>
+          )}
+        </div>
+      </div>
       
       <div className="grid grid-cols-2 gap-4 mb-4">
         {/* Team Value - calculated from actual player prices */}

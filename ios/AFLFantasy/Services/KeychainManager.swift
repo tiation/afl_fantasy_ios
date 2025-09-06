@@ -6,19 +6,25 @@
 //  Copyright © 2025 AFL AI. All rights reserved.
 //
 
+import Combine
 import Foundation
 import Security
 
 // MARK: - KeychainManager
 
 /// Secure storage manager for AFL Fantasy credentials using iOS Keychain
-class KeychainManager {
+class KeychainManager: ObservableObject {
     // MARK: - Constants
 
     private enum Keys {
         static let aflTeamId = "afl_fantasy_team_id"
         static let aflSessionCookie = "afl_fantasy_session_cookie"
         static let aflAPIToken = "afl_fantasy_api_token"
+        static let userName = "user_name"
+        static let favoriteTeam = "favorite_team"
+        static let hasCompletedOnboarding = "has_completed_onboarding"
+        static let preferredNotifications = "preferred_notifications"
+        static let themeSetting = "theme_setting"
     }
 
     private let service = "com.afl.fantasy.app"
@@ -60,6 +66,112 @@ class KeychainManager {
         delete(key: Keys.aflTeamId)
         delete(key: Keys.aflSessionCookie)
         delete(key: Keys.aflAPIToken)
+    }
+
+    // MARK: - User Preferences & Personalization
+
+    /// Store user's display name
+    func storeUserName(_ name: String) {
+        store(key: Keys.userName, value: name)
+    }
+
+    /// Get user's display name
+    func getUserName() -> String? {
+        retrieve(key: Keys.userName)
+    }
+
+    /// Store user's favorite AFL team
+    func storeFavoriteTeam(_ team: String) {
+        store(key: Keys.favoriteTeam, value: team)
+    }
+
+    /// Get user's favorite AFL team
+    func getFavoriteTeam() -> String? {
+        retrieve(key: Keys.favoriteTeam)
+    }
+
+    /// Mark onboarding as completed
+    func setOnboardingCompleted(_ completed: Bool = true) {
+        store(key: Keys.hasCompletedOnboarding, value: String(completed))
+    }
+
+    /// Check if user has completed onboarding
+    func hasCompletedOnboarding() -> Bool {
+        guard let value = retrieve(key: Keys.hasCompletedOnboarding) else {
+            return false
+        }
+        return value == "true"
+    }
+
+    /// Store notification preferences as JSON string
+    func storeNotificationPreferences(_ preferences: [String: Bool]) {
+        if let data = try? JSONSerialization.data(withJSONObject: preferences),
+           let jsonString = String(data: data, encoding: .utf8)
+        {
+            store(key: Keys.preferredNotifications, value: jsonString)
+        }
+    }
+
+    /// Get notification preferences
+    func getNotificationPreferences() -> [String: Bool] {
+        guard let jsonString = retrieve(key: Keys.preferredNotifications),
+              let data = jsonString.data(using: .utf8),
+              let preferences = try? JSONSerialization.jsonObject(with: data) as? [String: Bool]
+        else {
+            // Return default preferences if none stored
+            return [
+                "trade_alerts": true,
+                "price_changes": true,
+                "injury_updates": true,
+                "captain_suggestions": false,
+                "weekly_summary": true
+            ]
+        }
+        return preferences
+    }
+
+    /// Store theme setting (light, dark, system)
+    func storeThemeSetting(_ theme: String) {
+        store(key: Keys.themeSetting, value: theme)
+    }
+
+    /// Get theme setting
+    func getThemeSetting() -> String {
+        retrieve(key: Keys.themeSetting) ?? "system"
+    }
+
+    /// Complete user profile with all onboarding data
+    func completeUserProfile(
+        name: String,
+        favoriteTeam: String,
+        teamId: String,
+        sessionCookie: String,
+        apiToken: String? = nil
+    ) {
+        // Store user preferences
+        storeUserName(name)
+        storeFavoriteTeam(favoriteTeam)
+
+        // Store AFL Fantasy credentials
+        storeAFLCredentials(teamId: teamId, sessionCookie: sessionCookie, apiToken: apiToken)
+
+        // Mark onboarding as completed
+        setOnboardingCompleted(true)
+    }
+
+    /// Check if user needs onboarding (no credentials or incomplete profile)
+    func needsOnboarding() -> Bool {
+        !hasCompletedOnboarding() || !hasAFLCredentials() || getUserName() == nil
+    }
+
+    /// Clear all user data (for logout or reset)
+    func clearAllUserData() {
+        clearAFLCredentials()
+        delete(key: Keys.userName)
+        delete(key: Keys.favoriteTeam)
+        delete(key: Keys.hasCompletedOnboarding)
+        delete(key: Keys.preferredNotifications)
+        delete(key: Keys.themeSetting)
     }
 
     // MARK: - Generic Keychain Operations

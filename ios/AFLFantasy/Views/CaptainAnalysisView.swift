@@ -32,12 +32,11 @@ struct CaptainAnalysisView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header with current captain info
-                if let currentCaptain = dataService.currentCaptain {
-                    CurrentCaptainHeader(captain: currentCaptain)
-                        .padding()
-                        .background(Color(.systemGray6))
-                }
+                // Header with current captain info - placeholder for now
+                let placeholderCaptain = CaptainData()
+                CurrentCaptainHeader(captain: placeholderCaptain)
+                    .padding()
+                    .background(Color(.systemGray6))
 
                 // Search and filters
                 SearchAndFilterSection(
@@ -126,51 +125,6 @@ struct CaptainAnalysisView: View {
     }
 }
 
-// MARK: - CurrentCaptainHeader
-
-struct CurrentCaptainHeader: View {
-    let captain: CaptainData
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Current Captain")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                Text(captain.playerName)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-
-                Text("Captain")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-
-            Spacer()
-
-            VStack(alignment: .trailing, spacing: 4) {
-                Image(systemName: "star.fill")
-                    .font(.title2)
-                    .foregroundColor(.yellow)
-
-                Text("\(captain.score) pts")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.accentColor)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 2)
-                    .background(Color.accentColor.opacity(0.2))
-                    .cornerRadius(4)
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
-    }
-}
-
 // MARK: - SearchAndFilterSection
 
 struct SearchAndFilterSection: View {
@@ -253,7 +207,7 @@ struct CaptainSuggestionCard: View {
     @EnvironmentObject private var dataService: AFLFantasyDataService
     @State private var showingCaptainConfirmation = false
     @State private var isSettingCaptain = false
-    
+
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     var body: some View {
@@ -322,7 +276,7 @@ struct CaptainSuggestionCard: View {
                 .foregroundColor(.secondary)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
-            
+
             // Quick captain actions
             HStack(spacing: 12) {
                 Button(action: {
@@ -335,9 +289,9 @@ struct CaptainSuggestionCard: View {
                     .font(.subheadline)
                     .foregroundColor(.accentColor)
                 }
-                
+
                 Spacer()
-                
+
                 if !isCurrentCaptain {
                     Button(action: {
                         impactFeedback.impactOccurred()
@@ -399,18 +353,19 @@ struct CaptainSuggestionCard: View {
         default: .gray
         }
     }
-    
+
     private var isCurrentCaptain: Bool {
-        dataService.currentCaptain?.playerName == suggestion.player
+        // Placeholder - would check against actual current captain when available
+        false
     }
-    
+
     private func setCaptain() {
         isSettingCaptain = true
-        
+
         Task {
             do {
                 try await dataService.setCaptain(playerName: suggestion.player)
-                
+
                 await MainActor.run {
                     isSettingCaptain = false
                     // Provide haptic feedback on success

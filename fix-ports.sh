@@ -37,17 +37,33 @@ fi
 # Wait a moment for processes to clean up
 sleep 2
 
-echo -e "${GREEN}✅ Ports cleared${NC}"
-echo -e "${BLUE}🔍 Current port status:${NC}"
+# Count killed processes
+killed_count=0
+[ ! -z "$PROCESS_3000" ] && killed_count=$((killed_count + 1))
+[ ! -z "$PROCESS_4000" ] && killed_count=$((killed_count + 1))
+[ ! -z "$PROCESS_5173" ] && killed_count=$((killed_count + 1))
 
-# Check port status
+echo ""
+echo -e "${BLUE}🔧 Port Cleanup Dashboard${NC}"
+echo "========================"
+echo -e "${BLUE}🔍 Processes checked:${NC} Node.js, Python, Ruby, Java"
+echo -e "${BLUE}🔌 Ports scanned:${NC} 3000, 4000, 5173, 8000, 8080"
+echo -e "${BLUE}🧹 Killed processes:${NC} $killed_count"
+echo -e "${BLUE}📊 Port Status:${NC}"
+
+# Check port status with enhanced display
 for port in 3000 4000 5173; do
     if lsof -ti:$port >/dev/null 2>&1; then
-        echo -e "${RED}❌ Port $port: In use${NC}"
+        process_info=$(lsof -i:$port -P 2>/dev/null | grep LISTEN | awk '{print $1 " (PID:" $2 ")"}' | head -1)
+        echo -e "   ${RED}❌ Port $port: In use by $process_info${NC}"
     else
-        echo -e "${GREEN}✅ Port $port: Available${NC}"
+        echo -e "   ${GREEN}✅ Port $port: Available${NC}"
     fi
 done
 
 echo ""
-echo -e "${GREEN}🚀 Ready to start! Run ./start.sh to launch the platform${NC}"
+echo -e "${GREEN}✅ Port cleanup completed${NC}"
+echo ""
+echo -e "${BLUE}💡 Next steps:${NC}"
+echo "   Run ./start.sh to launch the platform"
+echo "   Or ./status.sh to view the dashboard"

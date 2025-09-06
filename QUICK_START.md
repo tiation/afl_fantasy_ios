@@ -30,6 +30,7 @@ This will start both frontend and backend servers.
 - 🌐 **Web Dashboard**: http://localhost:5173
 - 🔌 **API Endpoints**: http://localhost:5173/api
 - 📊 **Health Check**: http://localhost:5173/api/health
+- 📊 **Status Dashboard**: file://$(pwd)/status.html (opens automatically)
 
 ### 3. Run Tests (Optional)
 ```bash

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -6,6 +6,7 @@ import Sidebar from '@/components/layout/sidebar';
 import Header from '@/components/layout/header';
 import BottomNav from '@/components/layout/bottom-nav';
 import { Button } from '@/components/ui/button';
+import { GlobalSearch } from '@/components/search/global-search';
 import { cn } from '@/lib/utils';
 import {
   Home,
@@ -82,7 +83,9 @@ const Navbar = () => {
 
 // Main Layout Component
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  console.log('🏠 Layout component rendering');
   const isMobile = useIsMobile();
+  console.log('📱 isMobile:', isMobile);
 
   return (
     <TooltipProvider>

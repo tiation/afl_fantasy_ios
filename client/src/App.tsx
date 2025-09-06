@@ -24,6 +24,7 @@ import ContactUs from "@/pages/ContactUs";
 import Features from "@/pages/Features";
 
 function Router() {
+  console.log('🗺️ Router component rendering');
   return (
     <Layout>
       <Switch>
@@ -52,12 +53,18 @@ function Router() {
 }
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <Router />
-    </QueryClientProvider>
-  );
+  console.log('🎨 App component rendering');
+  try {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <Router />
+      </QueryClientProvider>
+    );
+  } catch (error) {
+    console.error('🚪 App render error:', error);
+    return <div>Error loading app: {error.message}</div>;
+  }
 }
 
 export default App;

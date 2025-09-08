@@ -1,0 +1,52 @@
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    curl \
+    chromium \
+    chromium-driver \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy requirements file
+COPY scrapers/requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy scrapers code
+COPY scrapers/ ./scrapers/
+# Copy backend Python code for imports
+COPY backend/python/ ./backend/python/
+# Copy attached assets (player data)
+COPY attached_assets/ ./attached_assets/
+
+# Create data and log directories
+RUN mkdir -p /app/data /app/logs \
+    && chmod -R 755 /app/data /app/logs
+
+# Create non-root user
+RUN groupadd -g 1001 scraper && \
+    useradd -r -u 1001 -g scraper scraper && \
+    chown -R scraper:scraper /app
+
+# Set Chrome path for Selenium
+ENV CHROME_BIN=/usr/bin/chromium \
+    CHROME_DRIVER=/usr/bin/chromedriver \
+    PYTHONUNBUFFERED=1
+
+# Switch to non-root user
+USER scraper
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:9001/health || exit 1
+
+# Expose the port
+EXPOSE 9001
+
+# Command to run the application
+CMD ["python", "scrapers/sync_players.py", "--serve", "--port", "9001"]

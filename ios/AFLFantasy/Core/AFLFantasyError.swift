@@ -115,7 +115,7 @@ enum AFLFantasyError: Error, LocalizedError {
             "Device is not connected to the internet."
         case .serverError:
             "The server encountered an error."
-        case .decodingError(_), .encodingError:
+        case .decodingError, .encodingError:
             "Data serialization error."
         case .dataCorrupted:
             "The data integrity has been compromised."
@@ -146,13 +146,13 @@ enum AFLFantasyError: Error, LocalizedError {
         switch self {
         case .notAuthenticated, .authenticationRequired, .invalidCredentials, .sessionExpired:
             "Please sign in with your AFL Fantasy account credentials."
-        case .networkError(_), .noInternetConnection:
+        case .networkError, .noInternetConnection:
             "Check your internet connection and try again."
         case .invalidURL, .invalidResponse:
             "Please try again. If the problem persists, contact support."
         case .serverError:
             "The issue is on our end. Please try again in a few minutes."
-        case .decodingError(_), .encodingError(_), .dataCorrupted:
+        case .decodingError, .encodingError, .dataCorrupted:
             "Please restart the app and try again."
         case .missingData:
             "Refresh the data or restart the app."
@@ -168,7 +168,7 @@ enum AFLFantasyError: Error, LocalizedError {
             "Contact your administrator to request access."
         case .resourceNotFound:
             "Please check the resource identifier and try again."
-        case .internalError(_), .configurationError:
+        case .internalError, .configurationError:
             "Please restart the app. If the problem persists, reinstall the app."
         case .unknown:
             "Please try again. If the problem persists, contact support."
@@ -193,9 +193,9 @@ extension AFLFantasyError {
     var isRecoverable: Bool {
         switch self {
         case .notAuthenticated, .authenticationRequired, .invalidCredentials, .sessionExpired,
-             .networkError(_), .noInternetConnection, .rateLimited, .invalidInput:
+             .networkError, .noInternetConnection, .rateLimited, .invalidInput:
             true
-        case .internalError(_), .configurationError(_), .dataCorrupted, .unknown:
+        case .internalError, .configurationError, .dataCorrupted, .unknown:
             false
         default:
             true
@@ -205,11 +205,11 @@ extension AFLFantasyError {
     /// Priority level for error reporting
     var severity: ErrorSeverity {
         switch self {
-        case .internalError(_), .configurationError(_), .unknown:
+        case .internalError, .configurationError, .unknown:
             .critical
-        case .serverError(_), .serviceUnavailable, .dataCorrupted:
+        case .serverError, .serviceUnavailable, .dataCorrupted:
             .high
-        case .networkError(_), .decodingError(_), .encodingError(_), .quotaExceeded:
+        case .networkError, .decodingError, .encodingError, .quotaExceeded:
             .medium
         default:
             .low

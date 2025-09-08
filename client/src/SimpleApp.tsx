@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AFLFantasyDashboardImproved from "./components/AFLFantasyDashboard_improved";
+import WorkingDashboard from "./components/WorkingDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
 function SimpleApp() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AFLFantasyDashboardImproved />
+      <WorkingDashboard />
     </QueryClientProvider>
   );
 }

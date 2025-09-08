@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFL Fantasy Coach Dashboard</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .nav-tab:hover {
+            background: #f0f0f0;
+        }
+        
+        .nav-tab.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .docker-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .docker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .docker-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .docker-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            background: #16a34a;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: #2563eb;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .service-card {
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+        
+        .service-card.running {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        
+        .service-card.stopped {
+            background: #fef2f2;
+            border-color: #ef4444;
+        }
+        
+        .service-card.loading {
+            background: #fffbeb;
+            border-color: #f59e0b;
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .service-name {
+            font-weight: 600;
+        }
+        
+        .service-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: auto;
+        }
+        
+        .status-running {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .status-stopped {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .status-loading {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .service-ports {
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        
+        .tool-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .tool-description {
+            color: #666;
+            margin-bottom: 16px;
+        }
+        
+        .coming-soon {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .welcome-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .welcome-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .welcome-text {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .info-card {
+            padding: 16px;
+            border-radius: 8px;
+        }
+        
+        .info-blue {
+            background: #dbeafe;
+        }
+        
+        .info-green {
+            background: #d1fae5;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .info-blue .info-title {
+            color: #1e40af;
+        }
+        
+        .info-green .info-title {
+            color: #065f46;
+        }
+        
+        .info-text {
+            font-size: 0.875rem;
+        }
+        
+        .info-blue .info-text {
+            color: #1e40af;
+        }
+        
+        .info-green .info-text {
+            color: #065f46;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .no-services {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🏆 AFL Fantasy Coach Dashboard</h1>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('docker')">
+                <i data-lucide="play"></i>
+                Docker Control
+            </button>
+            <button class="nav-tab" onclick="showSection('trades')">
+                <i data-lucide="arrow-up-down"></i>
+                Trade Analysis
+            </button>
+            <button class="nav-tab" onclick="showSection('cash')">
+                <i data-lucide="circle-dollar-sign"></i>
+                Cash Tools
+            </button>
+            <button class="nav-tab" onclick="showSection('risk')">
+                <i data-lucide="shield"></i>
+                Risk Analysis
+            </button>
+            <button class="nav-tab" onclick="showSection('ai')">
+                <i data-lucide="sparkles"></i>
+                AI Tools
+            </button>
+        </div>
+        
+        <div id="docker-section">
+            <div class="docker-panel">
+                <div class="docker-header">
+                    <h2 class="docker-title">Docker Services</h2>
+                    <div class="docker-controls">
+                        <button class="btn btn-success" onclick="runServices()" id="run-btn">
+                            <i data-lucide="play"></i>
+                            Run Now
+                        </button>
+                        <button class="btn btn-danger" onclick="stopServices()" id="stop-btn">
+                            <i data-lucide="stop"></i>
+                            Stop All
+                        </button>
+                        <button class="btn btn-primary" onclick="refreshServices()" id="refresh-btn">
+                            <i data-lucide="refresh-cw"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="services-container">
+                    <div class="no-services">
+                        No Docker services found. Use "Run Now" to start services.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="welcome-section">
+                <h3 class="welcome-title">Welcome to AFL Fantasy Coach!</h3>
+                <p class="welcome-text">
+                    This is your comprehensive AFL Fantasy management platform. Use the Docker controls above to start 
+                    all the backend services, then explore the various analysis tools using the navigation tabs.
+                </p>
+                <div class="info-grid">
+                    <div class="info-card info-blue">
+                        <h4 class="info-title">Getting Started</h4>
+                        <p class="info-text">
+                            Click "Run Now" to start all Docker services, then use the tools above to analyze your team.
+                        </p>
+                    </div>
+                    <div class="info-card info-green">
+                        <h4 class="info-title">Features</h4>
+                        <p class="info-text">
+                            Trade analysis, cash generation tracking, risk assessment, and AI-powered insights.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="trades-section" class="hidden">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="calculator"></i>
+                    </div>
+                    <h3 class="tool-title">Trade Calculator</h3>
+                    <p class="tool-description">Calculate comprehensive trade scores and analyze player swaps</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="arrow-up-down"></i>
+                    </div>
+                    <h3 class="tool-title">One Up One Down</h3>
+                    <p class="tool-description">Find optimal trade combinations for maximum value</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cash-section" class="hidden">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="trending-up"></i>
+                    </div>
+                    <h3 class="tool-title">Cash Generation Tracker</h3>
+                    <p class="tool-description">Track projected cash generation for players over time</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="line-chart"></i>
+                    </div>
+                    <h3 class="tool-title">Rookie Price Curves</h3>
+                    <p class="tool-description">Model rookie price trajectories and identify breakeven points</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="risk-section" class="hidden">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="shield"></i>
+                    </div>
+                    <h3 class="tool-title">Tag Watch Monitor</h3>
+                    <p class="tool-description">Monitor players at risk of being tagged by opponents</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <h3 class="tool-title">Injury Risk Tracker</h3>
+                    <p class="tool-description">Track injury risks and late withdrawal patterns</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ai-section" class="hidden">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="trophy"></i>
+                    </div>
+                    <h3 class="tool-title">AI Captain Advisor</h3>
+                    <p class="tool-description">Get AI-powered captain selection recommendations</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3 class="tool-title">Team Structure Analyzer</h3>
+                    <p class="tool-description">Analyze team balance and structure with AI insights</p>
+                    <span class="coming-soon">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let services = [];
+        let loading = false;
+        
+        // Initialize lucide icons
+        lucide.createIcons();
+        
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('[id$="-section"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+        }
+        
+        async function fetchServices() {
+            try {
+                const response = await fetch('/api/docker/status');
+                const data = await response.json();
+                services = data.services || [];
+                renderServices();
+            } catch (error) {
+                console.error('Failed to fetch services:', error);
+            }
+        }
+        
+        function renderServices() {
+            const container = document.getElementById('services-container');
+            
+            if (services.length === 0) {
+                container.innerHTML = '<div class="no-services">No Docker services found. Use "Run Now" to start services.</div>';
+                return;
+            }
+            
+            const servicesHtml = services.map(service => `
+                <div class="service-card ${service.status}">
+                    <div class="service-header">
+                        <span class="service-name">${service.name}</span>
+                        <span class="service-status status-${service.status}">${service.status}</span>
+                    </div>
+                    ${service.ports.length > 0 ? `
+                        <div class="service-ports">
+                            <strong>Ports:</strong> ${service.ports.join(', ')}
+                        </div>
+                    ` : ''}
+                    ${service.healthcheck ? `
+                        <div class="service-ports">
+                            <strong>Health:</strong> ${service.healthcheck}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            container.innerHTML = `<div class="services-grid">${servicesHtml}</div>`;
+        }
+        
+        async function runServices() {
+            if (loading) return;
+            loading = true;
+            updateButtonStates();
+            
+            try {
+                const response = await fetch('/api/docker/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        profiles: ['default', 'dev', 'monitoring']
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    setTimeout(fetchServices, 2000);
+                }
+            } catch (error) {
+                console.error('Failed to start services:', error);
+            } finally {
+                loading = false;
+                updateButtonStates();
+            }
+        }
+        
+        async function stopServices() {
+            if (loading) return;
+            loading = true;
+            updateButtonStates();
+            
+            try {
+                const response = await fetch('/api/docker/stop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    setTimeout(fetchServices, 2000);
+                }
+            } catch (error) {
+                console.error('Failed to stop services:', error);
+            } finally {
+                loading = false;
+                updateButtonStates();
+            }
+        }
+        
+        async function refreshServices() {
+            if (loading) return;
+            loading = true;
+            updateButtonStates();
+            
+            await fetchServices();
+            
+            loading = false;
+            updateButtonStates();
+        }
+        
+        function updateButtonStates() {
+            const buttons = ['run-btn', 'stop-btn', 'refresh-btn'];
+            buttons.forEach(id => {
+                document.getElementById(id).disabled = loading;
+            });
+        }
+        
+        // Initialize
+        fetchServices();
+        setInterval(fetchServices, 10000); // Refresh every 10 seconds
+    </script>
+</body>
+</html>

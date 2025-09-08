@@ -1,0 +1,20 @@
+# Advanced AFL Fantasy Scraper Dependencies
+aiohttp==3.9.1
+asyncpg==0.29.0
+beautifulsoup4==4.12.2
+pandas==2.1.4
+schedule==1.2.0
+python-dotenv==1.0.0
+redis==5.0.1
+requests==2.31.0
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.13.1
+selenium==4.15.2
+webdriver_manager==4.0.1
+prometheus-client==0.19.0
+gunicorn==21.2.0
+pydantic==2.5.2
+fastapi==0.104.1
+uvicorn==0.24.0
+Flask==3.0.0

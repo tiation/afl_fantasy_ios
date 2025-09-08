@@ -33,7 +33,7 @@ public enum TestFixtures {
                 "round": 24
             },
             {
-                "homeTeam": "Carlton", 
+                "homeTeam": "Carlton",
                 "awayTeam": "Brisbane",
                 "startTime": "2025-08-31T14:20:00Z",
                 "round": 24
@@ -48,7 +48,7 @@ public enum TestFixtures {
             },
             {
                 "name": "Clayton Oliver",
-                "team": "Melbourne", 
+                "team": "Melbourne",
                 "score": 128,
                 "position": "MID"
             }
@@ -66,7 +66,7 @@ public enum TestFixtures {
             {
                 "id": 1,
                 "name": "Max Gawn",
-                "team": "Melbourne", 
+                "team": "Melbourne",
                 "position": "RUC",
                 "price": 800000,
                 "averageScore": 105.2,
@@ -76,7 +76,7 @@ public enum TestFixtures {
                 "id": 2,
                 "name": "Clayton Oliver",
                 "team": "Melbourne",
-                "position": "MID", 
+                "position": "MID",
                 "price": 750000,
                 "averageScore": 115.8,
                 "lastScore": 128

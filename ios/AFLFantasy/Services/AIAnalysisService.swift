@@ -205,8 +205,7 @@ class AIAnalysisService: ObservableObject {
             }
 
             if let bestUpgrade = samePositionPlayers
-                .max(by: { $0.seasonProjection.averageProjectedScore < $1.seasonProjection.averageProjectedScore })
-            {
+                .max(by: { $0.seasonProjection.averageProjectedScore < $1.seasonProjection.averageProjectedScore }) {
                 let analysis = TradeAnalysis(
                     playerOut: weakPlayer,
                     playerIn: bestUpgrade,
@@ -558,8 +557,7 @@ class AIAnalysisService: ObservableObject {
         let avgBenchStrength = (defAllocation.benchStrength + midAllocation.benchStrength + rucAllocation
             .benchStrength + fwdAllocation.benchStrength
         ) / 4
-        if avgBenchStrength >= 60 { score += 25 } else if avgBenchStrength >= 45 { score += 20 }
-        else if avgBenchStrength >= 30 { score += 10 }
+        if avgBenchStrength >= 60 { score += 25 } else if avgBenchStrength >= 45 { score += 20 } else if avgBenchStrength >= 30 { score += 10 }
 
         // Premium coverage
         let avgValues = [
@@ -707,16 +705,4 @@ enum TradePriority: String, CaseIterable, Codable {
     case low = "Low"
 }
 
-// MARK: - TradeRecommendation
-
-struct TradeRecommendation: Identifiable, Codable {
-    let id = UUID()
-    let type: TradeType
-    let playerOut: String
-    let playerIn: String
-    let costDifference: Int
-    let score: Double
-    let priority: TradePriority
-    let reasoning: String
-    let analysis: TradeAnalysis
-}
+// The TradeRecommendation struct is imported from Models/TradeAnalysis.swift

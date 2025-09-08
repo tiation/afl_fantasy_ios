@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { DockerControlDashboard } from './DockerControlDashboard';
 import { 
   CircleDollarSign, 
   Shield, 
@@ -264,8 +265,12 @@ export default function AFLFantasyDashboard() {
     { id: "possession_type_profiler", name: "Possession Type Profiler", description: "Profile players based on possession types and fantasy scoring" }
   ];
 
-  return (
+return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      {/* Docker Control Panel */}
+      <div className="mb-6">
+        <DockerControlDashboard />
+      </div>
       <h1 className="text-2xl font-bold mb-4">AFL Fantasy Coach Dashboard</h1>
 
       {/* TRADE TOOLS */}

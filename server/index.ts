@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { metricsMiddleware, healthCheck, metricsEndpoint } from "./middleware/metrics.js";
+import { registerDockerControlRoutes } from './docker-control';
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
@@ -48,6 +49,21 @@ app.get('/metrics', metricsEndpoint);
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../dashboards/index.html'));
 });
+
+// Static routes disabled in development - Vite will handle these
+// app.get('/', (req, res) => {
+//   const clientIndex = app.get("env") === "development"
+//     ? path.join(__dirname, '../client/index.html')
+//     : path.join(__dirname, '../dist/public/index.html');
+//   res.sendFile(clientIndex);
+// });
+
+// app.get(/^(?!\/(api|metrics|dashboards|data|guernseys)\b).*/, (req, res) => {
+//   const clientIndex = app.get("env") === "development"
+//     ? path.join(__dirname, '../client/index.html')
+//     : path.join(__dirname, '../dist/public/index.html');
+//   res.sendFile(clientIndex);
+// });
 
 // Legacy dashboard redirects with deprecation notice
 app.get('/status', (req, res) => {
@@ -101,8 +117,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Register routes first, before Vite setup
+// Register all routes
 (async () => {
+  // Register Docker control API first
+  registerDockerControlRoutes(app);
   // These routes need to be registered BEFORE Vite middleware
   // to prevent Vite from intercepting them
   
@@ -117,12 +135,35 @@ app.use((req, res, next) => {
   });
 
   if (app.get("env") === "development") {
-    await setupVite(app, server);
+    try {
+      await setupVite(app, server);
+      log('Vite middleware configured successfully');
+    } catch (error) {
+      log(`Vite setup failed: ${error.message}`);
+      // Fallback to simple HTML if Vite fails
+      app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api') && !req.path.startsWith('/metrics') && !req.path.startsWith('/dashboard')) {
+          res.send(`
+            <!DOCTYPE html>
+            <html>
+            <head><title>AFL Fantasy Platform - Fallback</title></head>
+            <body style="font-family: sans-serif; padding: 40px; text-align: center;">
+              <h1>🏆 AFL Fantasy Platform</h1>
+              <h2>⚠️ Vite Error - Running in Fallback Mode</h2>
+              <p>Error: ${error.message}</p>
+              <p>Server is running but React app compilation failed.</p>
+            </body>
+            </html>
+          `);
+        }
+      });
+    }
   } else {
     serveStatic(app);
   }
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
+// Use environment PORT or fallback to 5002
+const port = process.env.PORT ? parseInt(process.env.PORT) : 5002;
   
   server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);

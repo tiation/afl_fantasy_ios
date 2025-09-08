@@ -131,35 +131,7 @@ final class GetDashboardDataUseCase: GetDashboardDataUseCaseProtocol {
     }
 }
 
-// MARK: - DashboardData
-
-struct DashboardData {
-    let teamData: TeamData
-    let playerStats: [PlayerStats]
-    let liveScores: LiveScores?
-    let lastUpdated: Date
-
-    // Computed properties for UI
-    var isLiveDataAvailable: Bool {
-        liveScores?.matchesInProgress.isEmpty == false
-    }
-
-    var topPerformers: [PlayerStats] {
-        playerStats
-            .filter { $0.currentScore > 0 }
-            .sorted { $0.currentScore > $1.currentScore }
-            .prefix(5)
-            .compactMap { $0 }
-    }
-
-    var captainCandidates: [PlayerStats] {
-        playerStats
-            .filter { $0.projectedScore ?? 0 > 100 }
-            .sorted { ($0.projectedScore ?? 0) > ($1.projectedScore ?? 0) }
-            .prefix(3)
-            .compactMap { $0 }
-    }
-}
+// DashboardData is now defined in DashboardTypes.swift to avoid duplication
 
 // MARK: - DashboardError
 

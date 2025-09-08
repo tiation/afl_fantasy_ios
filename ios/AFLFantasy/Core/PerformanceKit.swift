@@ -145,8 +145,7 @@ class FastNetworking: ObservableObject {
     func fetchData<T: Codable>(from endpoint: String, type: T.Type) async throws -> T {
         // Check cache first (stale-while-revalidate pattern)
         if let cached = responseCache[endpoint],
-           Date().timeIntervalSince(cached.1) < cacheTimeout
-        {
+           Date().timeIntervalSince(cached.1) < cacheTimeout {
             return try JSONDecoder().decode(T.self, from: cached.0)
         }
 

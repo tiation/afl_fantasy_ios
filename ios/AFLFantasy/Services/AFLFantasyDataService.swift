@@ -50,8 +50,9 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
 
     // MARK: - Dependencies
 
-    private let apiClient: AFLFantasyAPIClient
-    private let keychainManager: KeychainManager
+    private let scraper: AFLFantasyScraperServiceProtocol
+    private let keychain: KeychainService
+    private let dataSyncManager: DataSyncManager
 
     // MARK: - Cache Management
 
@@ -61,11 +62,13 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
     // MARK: - Initialization
 
     init(
-        apiClient: AFLFantasyAPIClient = AFLFantasyAPIClient(),
-        keychainManager: KeychainManager = KeychainManager()
+        scraper: AFLFantasyScraperServiceProtocol = AFLFantasyScraperService.shared,
+        keychain: KeychainService = .shared,
+        appState: AppState = AppState()
     ) {
-        self.apiClient = apiClient
-        self.keychainManager = keychainManager
+        self.scraper = scraper
+        self.keychain = keychain
+        dataSyncManager = DataSyncManager(scraper: scraper, appState: appState)
 
         Task {
             await checkStoredCredentials()
@@ -80,25 +83,27 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
 
     /// Check for stored credentials and authenticate if available
     private func checkStoredCredentials() async {
-        guard keychainManager.hasAFLCredentials(),
-              let teamId = keychainManager.getAFLTeamId(),
-              let sessionCookie = keychainManager.getAFLSessionCookie()
-        else {
-            authenticated = false
-            return
-        }
+        do {
+            let hasTeamId = await keychain.exists(forKey: "afl_team_id")
+            let hasSession = await keychain.exists(forKey: "afl_session_cookie")
 
-        let apiToken = keychainManager.getAFLAPIToken()
-        let result = await authenticate(teamId: teamId, sessionCookie: sessionCookie, apiToken: apiToken)
+            guard hasTeamId, hasSession else {
+                authenticated = false
+                return
+            }
 
-        switch result {
-        case .success:
-            print("✅ Auto-authenticated with stored credentials")
-        case let .failure(error):
-            print("⚠️ Auto-authentication failed: \(error.localizedDescription)")
-            // Clear invalid credentials
-            keychainManager.clearAFLCredentials()
+            // Validate stored credentials
+            let valid = await keychain.validateStoredCredentials()
+            if valid {
+                authenticated = true
+                await dataSyncManager.refreshAllData()
+            } else {
+                try await keychain.clearAllCredentials()
+                authenticated = false
+            }
+        } catch {
             authenticated = false
+            lastError = .authenticationRequired
         }
     }
 
@@ -113,45 +118,42 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
 
         defer { loading = false }
 
-        // Update API client credentials
-        apiClient.storeCredentials(teamId: teamId, sessionCookie: sessionCookie, apiToken: apiToken)
-
-        // Test credentials by fetching dashboard data
-        let result: Result<DashboardData, AFLFantasyError>
         do {
-            let dashboardData = try await apiClient.getDashboardData()
-            result = .success(dashboardData)
-        } catch let error as AFLFantasyAPIClient.AFLAPIError {
-            let aflError = AFLFantasyError.from(aflAPIError: error)
-            result = .failure(aflError)
-        } catch {
-            result = .failure(.networkError(error))
-        }
-
-        switch result {
-        case let .success(dashboardData):
             // Store credentials securely
-            keychainManager.storeAFLCredentials(
-                teamId: teamId,
-                sessionCookie: sessionCookie,
-                apiToken: apiToken
-            )
+            try await keychain.storeTeamId(teamId)
+            try await keychain.storeSessionCookie(sessionCookie)
+            if let token = apiToken {
+                try await keychain.storeAPIToken(token)
+            }
+
+            // Test credentials by fetching team data
+            let teamData = try await scraper.fetchTeamData()
 
             // Update state
             authenticated = true
-            currentDashboardData = dashboardData
-            lastUpdateTime = Date()
+            currentDashboardData = DashboardData(
+                teamValue: .init(teamValue: Double(teamData.teamValue)),
+                teamScore: .init(totalScore: teamData.teamScore),
+                rank: .init(rank: teamData.overallRank),
+                captain: .init(captain: CaptainData.Captain(
+                    name: teamData.captainName,
+                    team: nil,
+                    position: nil
+                ))
+            )
+            lastUpdateTime = teamData.lastUpdated
 
             // Start periodic refresh
             startPeriodicRefresh()
 
             return .success(())
-
-        case let .failure(error):
+        } catch {
+            // Clear credentials on failure
+            try? await keychain.clearAllCredentials()
             authenticated = false
             currentDashboardData = nil
-            lastError = error
-            return .failure(error)
+            lastError = .authenticationRequired
+            return .failure(.authenticationRequired)
         }
     }
 
@@ -160,14 +162,15 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
         refreshTimer?.invalidate()
         refreshTimer = nil
 
-        keychainManager.clearAFLCredentials()
+        Task {
+            try? await keychain.clearAllCredentials()
+            authenticated = false
+            currentDashboardData = nil
+            lastError = nil
+            lastUpdateTime = nil
 
-        authenticated = false
-        currentDashboardData = nil
-        lastError = nil
-        lastUpdateTime = nil
-
-        print("✅ Logged out successfully")
+            print("✅ Logged out successfully")
+        }
     }
 
     // MARK: - Data Fetching
@@ -189,12 +192,19 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
 
             // Update current captain in dashboard data
             if var dashboardData = currentDashboardData {
-                var captainData = CaptainData()
-                captainData.playerName = playerName
-                captainData.score = 0 // Will be updated with actual score
-                captainData.ownershipPercentage = 0.0 // Will be updated with actual data
-                dashboardData.captain = captainData
-                currentDashboardData = dashboardData
+                let newCaptain = CaptainData.Captain(
+                    name: playerName,
+                    team: "Unknown",
+                    position: "Unknown"
+                )
+                let captainWrapper = DashboardData.Captain(captain: newCaptain)
+                let updatedDashboardData = DashboardData(
+                    teamValue: dashboardData.teamValue,
+                    teamScore: dashboardData.teamScore,
+                    rank: dashboardData.rank,
+                    captain: captainWrapper
+                )
+                currentDashboardData = updatedDashboardData
             }
 
             print("✅ Captain set to: \(playerName)")
@@ -216,33 +226,34 @@ class AFLFantasyDataService: ObservableObject, @preconcurrency AFLFantasyDataSer
 
         defer { loading = false }
 
-        let result: Result<DashboardData, AFLFantasyError>
         do {
-            let dashboardData = try await apiClient.getDashboardData()
-            result = .success(dashboardData)
-        } catch let error as AFLFantasyAPIClient.AFLAPIError {
-            let aflError = AFLFantasyError.from(aflAPIError: error)
-            result = .failure(aflError)
-        } catch {
-            result = .failure(.networkError(error))
-        }
+            let teamData = try await scraper.fetchTeamData()
+            let dashboardData = DashboardData(
+                teamValue: .init(teamValue: Double(teamData.teamValue)),
+                teamScore: .init(totalScore: teamData.teamScore),
+                rank: .init(rank: teamData.overallRank),
+                captain: .init(captain: CaptainData.Captain(
+                    name: teamData.captainName,
+                    team: nil,
+                    position: nil
+                ))
+            )
 
-        switch result {
-        case let .success(dashboardData):
             currentDashboardData = dashboardData
-            lastUpdateTime = Date()
+            lastUpdateTime = teamData.lastUpdated
             lastError = nil
             return .success(dashboardData)
+        } catch let error as ScraperError {
+            lastError = .networkError(error)
 
-        case let .failure(error):
-            lastError = error
-
-            // Handle authentication errors by logging out
-            if case .authenticationRequired = error {
+            if error == .missingCredentials || error == .authenticationFailed {
                 logout()
             }
 
-            return .failure(error)
+            return .failure(.networkError(error))
+        } catch {
+            lastError = .networkError(error)
+            return .failure(.networkError(error))
         }
     }
 
@@ -301,8 +312,7 @@ extension AFLFantasyDataService {
 
     /// Get current team value if available
     var currentTeamValue: Double? {
-        guard let totalValue = currentDashboardData?.teamValue.totalValue else { return nil }
-        return Double(totalValue)
+        currentDashboardData?.teamValue.teamValue
     }
 
     /// Get current team score if available
@@ -312,11 +322,11 @@ extension AFLFantasyDataService {
 
     /// Get current rank if available
     var currentRank: Int? {
-        currentDashboardData?.overallRank.currentRank
+        currentDashboardData?.rank.rank
     }
 
     /// Get current captain if available
-    var currentCaptain: CaptainData? {
+    var currentCaptain: DashboardData.Captain? {
         currentDashboardData?.captain
     }
 }

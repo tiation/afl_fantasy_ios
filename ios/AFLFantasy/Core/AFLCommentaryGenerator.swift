@@ -460,7 +460,7 @@ class AFLCommentaryGenerator: ObservableObject {
 
         For production apps, consider:
         1. **Professional Voice Actor** - Hire an AFL commentator or voice actor
-        2. **Audio Production Studio** - Professional recording and mastering  
+        2. **Audio Production Studio** - Professional recording and mastering
         3. **Licensed Commentary** - Use existing AFL commentary with proper licensing
         4. **AI Voice Generation** - Services like ElevenLabs, Murf, or Speechify
 
@@ -586,7 +586,7 @@ class AFLAudioAssetManager {
         let foundFiles = validation.compactMap { $0.value ? $0.key : nil }
         if !foundFiles.isEmpty {
             report += """
-            ## Found Assets  
+            ## Found Assets
             \(foundFiles.map { "✅ \($0)" }.joined(separator: "\n"))
 
             """

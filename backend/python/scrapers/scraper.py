@@ -92,13 +92,45 @@ def filter_rookies(max_price=500000, min_games=2, player_data=None):
 
 def get_dfs_australia_player_data():
     """
-    Get player data using a fallback method with example data
+    Get player data from AFL Fantasy JSON files or CSV files
     
     Returns:
         list: List of player data 
     """
     try:
-        # First try to use existing player_data.json if available
+        # First try to load attached_assets/player_data.json (real AFL Fantasy data)
+        import glob
+        import os
+        
+        json_files = glob.glob("attached_assets/player_data.json")
+        if json_files:
+            json_file = json_files[0]
+            print(f"Using AFL Fantasy JSON file: {json_file}")
+            
+            with open(json_file, "r") as f:
+                raw_data = json.load(f)
+            
+            players = []
+            for player in raw_data:
+                # Map AFL Fantasy data format to our expected format
+                mapped_player = {
+                    "name": player.get("name", "Unknown"),
+                    "team": player.get("team", "Unknown"),
+                    "price": int(player.get("price", 0)),
+                    "breakeven": float(player.get("breakeven", 0)),
+                    "average_score": float(player.get("averageScore", player.get("l5Average", 0))),
+                    "last_score": int(player.get("recentForm", [0])[-1] if player.get("recentForm") else 0),
+                    "projected_score": int(player.get("projectedScore", player.get("averageScore", 0))),
+                    "rounds_played": int(player.get("games", 1)),
+                    "ownership_percentage": float(player.get("ownership", 5.0)),
+                    "position": player.get("position", "UNK")
+                }
+                players.append(mapped_player)
+            
+            print(f"Loaded {len(players)} players from AFL Fantasy JSON file")
+            return players
+        
+        # Fallback: try to use existing player_data.json in current directory
         try:
             existing_players = get_player_data()
             print(f"Using existing player data ({len(existing_players)} players)")
@@ -106,11 +138,9 @@ def get_dfs_australia_player_data():
         except FileNotFoundError:
             print("No existing player data file found")
         
-        # If we have already scaped CSV files in the project, use the newest one
-        import glob
+        # If we have already scraped CSV files in the project, use the newest one
         from datetime import datetime
         import pandas as pd
-        import os
         
         csv_files = glob.glob("attached_assets/*.csv")
         if csv_files:

@@ -1,233 +1,226 @@
-//
-//  MissingTypes.swift
-//  AFL Fantasy Intelligence Platform
-//
-//  Additional type definitions and extensions to support the app
-//  Created by AI Assistant on 6/9/2025.
-//
-
 import Foundation
-import SwiftUI
 
-// MARK: - DesignSystem
+// MARK: - PlayerSortOrder
 
-enum DesignSystem {
-    enum Colors {
-        static let defender: Color = .blue
-        static let midfielder: Color = .green
-        static let ruck: Color = .purple
-        static let forward: Color = .red
-    }
+// PlayerSortOption moved to SharedTypes.swift to avoid duplicate definition
 
-    enum Spacing {
-        static let small: CGFloat = 8
-        static let medium: CGFloat = 16
-        static let large: CGFloat = 24
+// Player sort order
+enum PlayerSortOrder: String, CaseIterable {
+    case score = "Score"
+    case price = "Price"
+    case name = "Name"
+    case position = "Position"
+    case ownership = "Ownership"
+}
+
+// MARK: - PlayerPosition
+
+// Player position enum
+enum PlayerPosition: String, CaseIterable {
+    case defender = "DEF"
+    case midfielder = "MID"
+    case ruck = "RUC"
+    case forward = "FWD"
+}
+
+// MARK: - RiskLevel
+
+// Risk levels
+enum RiskLevel: String, CaseIterable, Codable {
+    case low = "Low"
+    case medium = "Medium"
+    case high = "High"
+    case extreme = "Extreme"
+}
+
+// MARK: - AlertPriority
+
+// Alert priority
+enum AlertPriority: String, CaseIterable, Codable {
+    case low = "Low"
+    case medium = "Medium"
+    case high = "High"
+    case critical = "Critical"
+}
+
+// MARK: - PlayerAnalytics
+
+// Player analytics type
+struct PlayerAnalytics: Codable {
+    let consistency: Double
+    let ceiling: Double
+    let floor: Double
+    let volatility: Double
+    let form: [Int]
+    let projectedScore: Double
+}
+
+// MARK: - PlayerProjection
+
+// Player projection type
+struct PlayerProjection: Codable {
+    let nextRound: Double
+    let threeRound: Double
+    let season: Double
+    let confidence: Double
+}
+
+// MARK: - TeamAnalysis
+
+// Team analysis type
+struct TeamAnalysis: Codable {
+    let overallGrade: String
+    let strengths: [String]
+    let weaknesses: [String]
+    let recommendations: [String]
+    let riskLevel: RiskLevel
+}
+
+// MARK: - PlayerAlert
+
+// Player alert type
+struct PlayerAlert: Codable {
+    let id: String
+    let playerId: String
+    let playerName: String
+    let alertType: String
+    let priority: AlertPriority
+    let message: String
+    let createdAt: Date
+}
+
+// MARK: - NetworkStatus
+
+// Network status enum
+public enum NetworkStatus {
+    case unknown
+    case offline
+    case online
+}
+
+// MARK: - User
+
+// User data type
+public struct User: Codable {
+    public let id: String
+    public let username: String
+    public let email: String
+    public let teamName: String
+
+    public init(id: String, username: String, email: String, teamName: String) {
+        self.id = id
+        self.username = username
+        self.email = email
+        self.teamName = teamName
     }
 }
 
-// MARK: - OfflineAlert
+// MARK: - LiveScores
 
-/// Offline alert types
-enum OfflineAlert: String, CaseIterable {
-    case dataOutdated
-    case connectionLost
-    case syncFailed
+// Live scores type
+struct LiveScores: Codable {
+    let roundNumber: Int
+    let matches: [LiveMatch]
+    let lastUpdated: Date
 
-    var title: String {
-        switch self {
-        case .dataOutdated: "Data Outdated"
-        case .connectionLost: "Connection Lost"
-        case .syncFailed: "Sync Failed"
-        }
-    }
-
-    var message: String {
-        switch self {
-        case .dataOutdated: "Your data may be outdated. Connect to the internet to refresh."
-        case .connectionLost: "Internet connection lost. Some features may be limited."
-        case .syncFailed: "Failed to sync data. Please try again later."
-        }
+    struct LiveMatch: Codable {
+        let homeTeam: String
+        let awayTeam: String
+        let homeScore: Int
+        let awayScore: Int
+        let timeRemaining: String
+        let quarter: Int
     }
 }
 
-// MARK: - DataFreshness
+// MARK: - AppState
 
-/// Data freshness levels
-enum DataFreshness {
-    case fresh
-    case stale
-    case expired
-}
-
-// MARK: - OfflineDataType
-
-/// Data types for offline management
-enum OfflineDataType {
-    case dashboardData
-    case playerStats
-    case teamData
-    case captainSuggestions
-}
-
-// MARK: - AFLFantasyRepositoryProtocol
-
-protocol AFLFantasyRepositoryProtocol {
-    func fetchTeamData() async throws -> TeamData
-    func fetchPlayerStats() async throws -> [PlayerStats]
-    func fetchLiveScores() async throws -> LiveScores
-}
-
-// MARK: - PersistenceManagerProtocol
-
-protocol PersistenceManagerProtocol {
-    func getCachedTeamData() async throws -> TeamData?
-    func cacheTeamData(_ data: TeamData) async throws
-    func getCachedPlayerStats() async throws -> [PlayerStats]?
-    func cachePlayerStats(_ data: [PlayerStats]) async throws
-    func getCachedLiveScores() async throws -> LiveScores?
-    func cacheLiveScores(_ data: LiveScores) async throws
-}
-
-// MARK: - AFLFantasyRepository
-
-/// Simple AFL Fantasy repository implementation
-class AFLFantasyRepository: AFLFantasyRepositoryProtocol {
-    static let shared = AFLFantasyRepository()
-    private init() {}
-
-    func fetchTeamData() async throws -> TeamData {
-        // Stub implementation
-        TeamData()
-    }
-
-    func fetchPlayerStats() async throws -> [PlayerStats] {
-        // Stub implementation
-        []
-    }
-
-    func fetchLiveScores() async throws -> LiveScores {
-        // Stub implementation
-        LiveScores()
-    }
-}
-
-// MARK: - PersistenceManager
-
-/// Simple persistence manager implementation
-class PersistenceManager: PersistenceManagerProtocol {
-    static let shared = PersistenceManager()
-    private init() {}
-
-    func getCachedTeamData() async throws -> TeamData? {
-        nil
-    }
-
-    func cacheTeamData(_ data: TeamData) async throws {
-        // Stub implementation
-    }
-
-    func getCachedPlayerStats() async throws -> [PlayerStats]? {
-        nil
-    }
-
-    func cachePlayerStats(_ data: [PlayerStats]) async throws {
-        // Stub implementation
-    }
-
-    func getCachedLiveScores() async throws -> LiveScores? {
-        nil
-    }
-
-    func cacheLiveScores(_ data: LiveScores) async throws {
-        // Stub implementation
-    }
-}
-
-// MARK: - OfflineManager
-
+// Comprehensive App State
 @MainActor
-class OfflineManager: ObservableObject {
-    @Published var isOnline: Bool = true
-    static let shared = OfflineManager()
+public class AppState: ObservableObject {
+    public static let shared = AppState()
 
-    private init() {}
+    // Player data
+    @Published public var players: [Player] = []
+    @Published public var selectedPlayers: [Player] = []
 
-    func getDataFreshness(for dataType: OfflineDataType) async -> DataFreshness {
-        .fresh // Stub implementation
+    // Loading and error states
+    @Published public var isLoading = false
+    @Published public var error: Error?
+    @Published public var errorMessage: String?
+
+    // Dashboard data
+    @Published public var dashboardData: DashboardData?
+
+    // Authentication
+    @Published public var isAuthenticated = false
+    @Published public var currentUser: User?
+
+    // Network status
+    @Published public var networkStatus: NetworkStatus = .unknown
+
+    public nonisolated init() {}
+
+    // MARK: - Player Methods
+
+    public func updatePlayers(_ players: [Player]) {
+        self.players = players
+    }
+
+    public func updateDashboardData(_ data: DashboardData) {
+        dashboardData = data
+    }
+
+    // MARK: - Error Handling
+
+    public func setError(_ error: Error) {
+        self.error = error
+        errorMessage = error.localizedDescription
+    }
+
+    public func clearError() {
+        error = nil
+        errorMessage = nil
+    }
+
+    // MARK: - Authentication
+
+    public func reset() {
+        isAuthenticated = false
+        currentUser = nil
+        dashboardData = nil
+        isLoading = false
+        clearError()
     }
 }
 
-// MARK: - AFLLogger
+// MARK: - LiveAppState
 
-enum AFLLogger {
-    enum Category {
-        case general
+// Live App State for real-time updates
+@MainActor
+class LiveAppState: AppState {
+    static let liveShared = LiveAppState()
 
-        var logger: AFLLoggerType {
-            AFLLoggerType()
+    @Published var liveScores: LiveScores?
+    @Published var isLiveDataEnabled = true
+    @Published var lastLiveUpdate: Date?
+
+    override init() {
+        super.init()
+        startLiveUpdates()
+    }
+
+    private func startLiveUpdates() {
+        // Would integrate with Docker scraper for live updates
+        Timer.scheduledTimer(withTimeInterval: 30) { _ in
+            Task { @MainActor in
+                await self.fetchLiveData()
+            }
         }
     }
 
-    static func info(_ message: String, category: Category) {
-        print("[INFO] \(message)")
-    }
-
-    static func debug(_ message: String, category: Category) {
-        print("[DEBUG] \(message)")
-    }
-
-    static func warning(_ message: String, category: Category) {
-        print("[WARNING] \(message)")
-    }
-
-    static func error(_ message: String, category: Category) {
-        print("[ERROR] \(message)")
-    }
-}
-
-// MARK: - AFLLoggerType
-
-struct AFLLoggerType {
-    func log(_ message: String) {
-        print(message)
-    }
-}
-
-// MARK: - PerformanceMeasurement
-
-class PerformanceMeasurement {
-    private let name: String
-    private let startTime: Date
-
-    init(_ name: String) {
-        self.name = name
-        startTime = Date()
-    }
-
-    func finish() {
-        let duration = Date().timeIntervalSince(startTime)
-        print("[PERF] \(name): \(String(format: "%.3f", duration))s")
-    }
-}
-
-// MARK: - View Modifiers
-
-extension View {
-    func withOfflineStatus() -> some View {
-        self // Stub implementation
-    }
-
-    func offlineAlert(isPresented: Binding<Bool>, alert: OfflineAlert) -> some View {
-        self.alert(
-            alert.title,
-            isPresented: isPresented,
-            actions: {
-                Button("OK") {}
-            },
-            message: {
-                Text(alert.message)
-            }
-        )
+    private func fetchLiveData() async {
+        // Implementation would connect to Docker scraper
+        lastLiveUpdate = Date()
     }
 }

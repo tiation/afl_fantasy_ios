@@ -106,8 +106,7 @@ class KeychainManager: ObservableObject {
     /// Store notification preferences as JSON string
     func storeNotificationPreferences(_ preferences: [String: Bool]) {
         if let data = try? JSONSerialization.data(withJSONObject: preferences),
-           let jsonString = String(data: data, encoding: .utf8)
-        {
+           let jsonString = String(data: data, encoding: .utf8) {
             store(key: Keys.preferredNotifications, value: jsonString)
         }
     }

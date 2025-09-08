@@ -118,8 +118,8 @@ services:
   # Python scraper service - Data collection and processing
   python_scraper:
     build:
-      context: ./scrapers
-      dockerfile: Dockerfile.scraper
+      context: .
+      dockerfile: scrapers/Dockerfile.scraper
     image: afl-fantasy/python-scraper:latest
     profiles: ["default", "python", "dev", "all"]
     ports:
@@ -138,7 +138,6 @@ services:
       - DFS_AUSTRALIA_API_KEY=${DFS_AUSTRALIA_API_KEY:-}
       - LOG_LEVEL=${LOG_LEVEL:-info}
     volumes:
-      - ./scrapers:/app
       - ./logs:/app/logs
       - ./data:/app/data
     depends_on:
@@ -148,14 +147,8 @@ services:
         condition: service_healthy
     networks:
       - afl-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9001/health"]
-      interval: 60s
-      timeout: 15s
-      retries: 3
-      start_period: 30s
-    command: python sync_players.py --serve --port 9001
+    restart: "no"
+    command: python scrapers/sync_players.py
 
   # PostgreSQL Database
   postgres:

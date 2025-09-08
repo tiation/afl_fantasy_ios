@@ -25,7 +25,6 @@ enum Position: String, CaseIterable, Codable {
     }
 }
 
-
 // MARK: - EnhancedPlayer
 
 struct EnhancedPlayer: Identifiable, Codable {

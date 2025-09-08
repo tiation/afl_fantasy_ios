@@ -19,7 +19,6 @@ const PORT = process.env.PORT || 5174;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
 // Enhanced logging middleware
 app.use((req, res, next) => {
@@ -31,44 +30,18 @@ app.use((req, res, next) => {
 // Serve dashboard assets
 app.use('/dashboards/assets', express.static(path.join(__dirname, 'dashboards/assets')));
 
-// Root endpoint
+// Root endpoint - Serve static dashboard.html
 app.get('/', (req, res) => {
-  res.json({
-    name: '🏆 AFL Fantasy Dashboard Server - Premium Edition',
-    version: '2.0.0',
-    features: [
-      'Beautiful Real-time Dashboard',
-      'System Health Monitoring', 
-      'Interactive API Explorer',
-      'Live Data Streaming',
-      'Mobile-Responsive Design'
-    ],
-    endpoints: {
-      dashboard: '/dashboard',
-      api_health: '/api/health',
-      players: '/v1/players',
-      team_data: '/v1/dashboard',
-      system_status: '/api/system',
-      docs: '/docs'
-    },
-    status: 'operational',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString()
-  });
+  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
+
+// Serve other static files except index.html at root
+app.use(express.static('public', { index: false }));
 
 // Enhanced Dashboard Route
 app.get('/dashboard', (req, res) => {
-  const dashboardPath = path.join(__dirname, 'dashboards', 'index.html');
-  
-  if (fs.existsSync(dashboardPath)) {
-    res.sendFile(dashboardPath);
-  } else {
-    res.status(404).json({ 
-      error: 'Dashboard not found',
-      message: 'Please ensure the dashboard files are properly installed'
-    });
-  }
+  // Redirect to the root, which now serves the dashboard
+  res.redirect('/');
 });
 
 // Legacy redirects (with deprecation notices)
@@ -159,6 +132,86 @@ legacyRoutes.forEach(route => {
 });
 
 // Enhanced API Health Endpoint
+// Docker control API
+
+// Get Docker service status
+app.get('/api/docker/status', async (req, res) => {
+  try {
+    // Mock Docker services for immediate testing
+    // In a real implementation, this would call Docker API
+    const services = [
+      {
+        name: 'api-gateway',
+        status: 'running',
+        ports: ['8080:8080', '8081:8081'],
+        healthcheck: 'healthy'
+      },
+      {
+        name: 'database',
+        status: 'running',
+        ports: ['5432:5432'],
+        healthcheck: 'healthy'
+      },
+      {
+        name: 'data-pipeline',
+        status: 'running',
+        ports: ['9000:9000'],
+        healthcheck: 'healthy'
+      },
+      {
+        name: 'ios-build-service',
+        status: 'stopped',
+        ports: []
+      }
+    ];
+    
+    res.json({ services });
+  } catch (error) {
+    console.error('Error in /api/docker/status:', error);
+    res.status(500).json({ error: 'Failed to get Docker status' });
+  }
+});
+
+// Start Docker services
+app.post('/api/docker/start', (req, res) => {
+  try {
+    const { profiles = ['default'] } = req.body;
+    console.log(`Starting Docker services with profiles: ${profiles.join(', ')}`);
+    
+    // In production, this would execute docker-compose commands
+    // For now, return success with mock data
+    setTimeout(() => {
+      res.json({ 
+        success: true, 
+        message: `Services started with profiles: ${profiles.join(', ')}`
+      });
+    }, 500);
+  } catch (error) {
+    console.error('Error in /api/docker/start:', error);
+    res.status(500).json({ error: 'Failed to start Docker services' });
+  }
+});
+
+// Stop Docker services
+app.post('/api/docker/stop', (req, res) => {
+  try {
+    console.log('Stopping all Docker services');
+    
+    // In production, this would execute docker-compose down
+    // For now, return success
+    setTimeout(() => {
+      res.json({ 
+        success: true, 
+        message: 'All services stopped'
+      });
+    }, 500);
+  } catch (error) {
+    console.error('Error in /api/docker/stop:', error);
+    res.status(500).json({ error: 'Failed to stop Docker services' });
+  }
+});
+
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   const healthData = {
     status: 'healthy',
@@ -950,7 +1003,7 @@ const server = app.listen(PORT, () => {
   console.log(`⏰ Started: ${new Date().toLocaleString()}`);
   console.log('=' .repeat(60));
   console.log('🔗 Available Routes:');
-  console.log(`   📊 Dashboard:     http://localhost:${PORT}/dashboard`);
+console.log(`   📊 Dashboard:     http://localhost:${PORT}/`);
   console.log(`   🏥 Health Check:  http://localhost:${PORT}/api/health`);
   console.log(`   📚 API Docs:      http://localhost:${PORT}/docs`);
   console.log(`   🎯 Players API:   http://localhost:${PORT}/v1/players`);

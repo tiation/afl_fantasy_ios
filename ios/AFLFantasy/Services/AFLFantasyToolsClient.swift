@@ -8,158 +8,11 @@
 //
 
 import Foundation
+import SwiftUI
 
-// MARK: - ToolCategory
-
-enum ToolCategory: String, CaseIterable {
-    case trade
-    case cash
-    case captain
-    case risk
-    case price
-    case fixture
-    case context
-    case ai
-}
-
-// MARK: - TradeAnalysis
-
-struct TradeAnalysis: Codable, Identifiable {
-    let id = UUID()
-    let playerOut: String
-    let playerIn: String
-    let netCost: Int
-    let impactScore: Double
-    let confidence: Double
-    let reasoning: String
-    let warnings: [String]?
-
-    private enum CodingKeys: String, CodingKey {
-        case playerOut = "player_out"
-        case playerIn = "player_in"
-        case netCost = "net_cost"
-        case impactScore = "impact_score"
-        case confidence, reasoning, warnings
-    }
-}
-
-// MARK: - CaptainSuggestionAnalysis
-
-struct CaptainSuggestionAnalysis: Codable, Identifiable {
-    let id = UUID()
-    let player: String
-    let team: String
-    let position: String
-    let projectedScore: Double
-    let confidence: Double
-    let ceiling: Double
-    let floor: Double
-    let reasoning: String
-    let fixture: FixtureAnalysis?
-
-    private enum CodingKeys: String, CodingKey {
-        case player, team, position, confidence, ceiling, floor, reasoning, fixture
-        case projectedScore = "projected_score"
-    }
-}
-
-// MARK: - FixtureAnalysis
-
-struct FixtureAnalysis: Codable {
-    let opponent: String
-    let venue: String
-    let difficulty: String
-    let defensiveVulnerability: Double?
-    let weatherImpact: String?
-
-    private enum CodingKeys: String, CodingKey {
-        case opponent, venue, difficulty
-        case defensiveVulnerability = "defensive_vulnerability"
-        case weatherImpact = "weather_impact"
-    }
-}
-
-// MARK: - CashGenerationTarget
-
-struct CashGenerationTarget: Codable, Identifiable {
-    let id = UUID()
-    let player: String
-    let currentPrice: Int
-    let targetPrice: Int
-    let expectedWeeks: Int
-    let cashGenerated: Int
-    let confidence: Double
-    let breakeven: Int
-    let riskLevel: String
-
-    private enum CodingKeys: String, CodingKey {
-        case player, confidence, breakeven
-        case currentPrice = "current_price"
-        case targetPrice = "target_price"
-        case expectedWeeks = "expected_weeks"
-        case cashGenerated = "cash_generated"
-        case riskLevel = "risk_level"
-    }
-}
-
-// MARK: - RiskAssessment
-
-struct RiskAssessment: Codable, Identifiable {
-    let id = UUID()
-    let player: String
-    let injuryRisk: Double
-    let formRisk: Double
-    let priceRisk: Double
-    let fixtureRisk: Double
-    let overallRisk: String
-    let recommendations: [String]
-
-    private enum CodingKeys: String, CodingKey {
-        case player, recommendations
-        case injuryRisk = "injury_risk"
-        case formRisk = "form_risk"
-        case priceRisk = "price_risk"
-        case fixtureRisk = "fixture_risk"
-        case overallRisk = "overall_risk"
-    }
-}
-
-// MARK: - PriceMovementPrediction
-
-struct PriceMovementPrediction: Codable, Identifiable {
-    let id = UUID()
-    let player: String
-    let currentPrice: Int
-    let predictedChange: Int
-    let confidence: Double
-    let timeframe: String
-    let factors: [String]
-
-    private enum CodingKeys: String, CodingKey {
-        case player, confidence, timeframe, factors
-        case currentPrice = "current_price"
-        case predictedChange = "predicted_change"
-    }
-}
-
-// MARK: - AIRecommendation
-
-struct AIRecommendation: Codable, Identifiable {
-    let id = UUID()
-    let type: String
-    let priority: String
-    let title: String
-    let description: String
-    let actionRequired: Bool
-    let confidence: Double
-    let reasoning: String
-    let data: [String: String]?
-
-    private enum CodingKeys: String, CodingKey {
-        case type, priority, title, description, confidence, reasoning, data
-        case actionRequired = "action_required"
-    }
-}
+// Data models are imported from SharedModels.swift to prevent conflicts
+// SharedModels contains: TradeAnalysis, CaptainSuggestionAnalysis, FixtureAnalysis,
+// CashGenerationTarget, RiskAssessment, PriceMovementPrediction, AIRecommendation
 
 // MARK: - ToolsResponse
 
@@ -460,42 +313,12 @@ class AFLFantasyToolsClient: ObservableObject {
 // MARK: - Extensions for UI Support
 
 extension CaptainSuggestionAnalysis {
-    var confidenceLevel: String {
-        switch confidence {
-        case 0.9...: "Very High"
-        case 0.8 ..< 0.9: "High"
-        case 0.7 ..< 0.8: "Medium"
-        case 0.6 ..< 0.7: "Low"
-        default: "Very Low"
-        }
-    }
-
     var confidenceColor: String {
         switch confidence {
         case 0.8...: "green"
         case 0.7 ..< 0.8: "yellow"
         case 0.6 ..< 0.7: "orange"
         default: "red"
-        }
-    }
-}
-
-extension TradeAnalysis {
-    var impactGrade: String {
-        switch impactScore {
-        case 8...: "A+"
-        case 7 ..< 8: "A"
-        case 6 ..< 7: "B"
-        case 5 ..< 6: "C"
-        default: "D"
-        }
-    }
-
-    var netCostFormatted: String {
-        if netCost > 0 {
-            "+$\(netCost / 1000)k"
-        } else {
-            "-$\(abs(netCost) / 1000)k"
         }
     }
 }

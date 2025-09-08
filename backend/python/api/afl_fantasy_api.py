@@ -12,6 +12,10 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
+# Enable CORS for iOS app
+from flask_cors import CORS
+CORS(app)
+
 # Cache for AFL Fantasy data to avoid excessive scraping
 cache = {
     'data': None,
@@ -38,45 +42,71 @@ def get_cached_data():
     return fetch_fresh_afl_data()
 
 def fetch_fresh_afl_data():
-    """Fetch fresh data from AFL Fantasy scraper"""
+    """Fetch fresh data from AFL Fantasy data service or scraper"""
+    # Import AFL Fantasy data services
+    import sys
+    sys.path.append('../scrapers')
+    from afl_fantasy_data_service import AFLFantasyDataService
+    from afl_fantasy_authenticated_scraper import AFLFantasyAuthenticatedScraper
+
+    # Try data service first (more reliable)
+    print("Trying AFL Fantasy data service...")
     try:
-        # Run the AFL Fantasy scraper
-        result = subprocess.run([
-            'python', 'afl_fantasy_authenticated_scraper.py'
-        ], capture_output=True, text=True, timeout=120)
+        service = AFLFantasyDataService()
+        data = service.get_all_dashboard_data()
         
-        if result.returncode == 0:
-            print("AFL Fantasy scraper executed successfully")
-            
-            # Try to load the saved data file
-            try:
-                with open('afl_fantasy_team_data.json', 'r') as f:
-                    data = json.load(f)
-                
+        if data:
+            if data.get('tokens_configured'):
+                print("Successfully fetched data via data service")
                 # Update cache
                 cache['data'] = data
                 cache['timestamp'] = datetime.now().isoformat()
-                
-                print(f"Loaded AFL Fantasy data: {data}")
                 return data
+            else:
+                print("Data service tokens not configured")
                 
-            except FileNotFoundError:
-                print("AFL Fantasy data file not found")
-                return None
-            except json.JSONDecodeError:
-                print("Invalid JSON in AFL Fantasy data file")
-                return None
-        else:
-            print(f"AFL Fantasy scraper failed with code {result.returncode}")
-            print(f"Stderr: {result.stderr}")
-            return None
-            
-    except subprocess.TimeoutExpired:
-        print("AFL Fantasy scraper timed out")
-        return None
+                # Use mock data for development
+                mock_data = {
+                    'team_value': 12850000,
+                    'player_count': 22,
+                    'team_score': 2156,
+                    'captain_score': 142,
+                    'captain_name': 'N. Daicos',
+                    'captain_ownership': 18.7,
+                    'overall_rank': 42567,
+                    'score_change': 45,
+                    'rank_change': -1200,
+                    'last_updated': datetime.now().isoformat(),
+                    'data_source': 'mock'
+                }
+                
+                # Update cache with mock data
+                cache['data'] = mock_data
+                cache['timestamp'] = datetime.now().isoformat()
+                return mock_data
     except Exception as e:
-        print(f"Error running AFL Fantasy scraper: {e}")
+        print(f"Data service error: {e}")
+
+    # Fallback to Selenium scraper
+    print("Falling back to Selenium scraper...")
+    try:
+        scraper = AFLFantasyAuthenticatedScraper()
+        data = scraper.get_all_dashboard_data()
+        if data:
+            print("Successfully fetched data via scraper")
+            # Update cache
+            cache['data'] = data
+            cache['timestamp'] = datetime.now().isoformat()
+            return data
+        else:
+            print("Scraper failed to fetch data")
+            return None
+    except Exception as e:
+        print(f"Scraper error: {e}")
         return None
+    finally:
+        if 'scraper' in locals():
+            scraper.close()
 
 @app.route('/api/afl-fantasy/dashboard-data', methods=['GET'])
 def get_dashboard_data():
@@ -230,5 +260,39 @@ def refresh_data():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    try:
+        # Try to init the data service to verify dependencies
+        import sys
+        sys.path.append('../scrapers')
+        from afl_fantasy_data_service import AFLFantasyDataService
+        from afl_fantasy_authenticated_scraper import AFLFantasyAuthenticatedScraper
+        
+        service = AFLFantasyDataService()
+        
+        return jsonify({
+            'status': 'ok',
+            'service': 'afl_fantasy_api',
+            'timestamp': datetime.now().isoformat(),
+            'dependencies': {
+                'data_service': True,
+                'scraper': True
+            },
+            'cache': {
+                'enabled': True,
+                'has_data': bool(cache['data']),
+                'last_updated': cache.get('timestamp')
+            },
+            'tokens_configured': service.team_id is not None and service.session_cookie is not None
+        })
+    except Exception as e:
+        print(f"Health check error: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5001, host='127.0.0.1')

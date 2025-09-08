@@ -23,7 +23,7 @@ import {
   ChevronRight,
   Star
 } from "lucide-react";
-import { CashGenCeilingFloorTool } from "./CashGenCeilingFloorTool";
+import CashGenCeilingFloorTool from "./CashGenCeilingFloorTool";
 
 interface DashboardState {
   activeSection: string;

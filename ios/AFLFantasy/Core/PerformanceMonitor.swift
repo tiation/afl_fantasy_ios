@@ -75,7 +75,7 @@ class PerformanceMonitor: ObservableObject {
     }
 
     func getCurrentMemoryUsage() -> Double {
-        let info = mach_task_basic_info()
+        var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
 
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {

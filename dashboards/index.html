@@ -1,314 +1,410 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏆 AFL Fantasy Platform - Operations Dashboard</title>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/dashboards/assets/css/dashboard.css" as="style">
-    <link rel="preload" href="/dashboards/assets/js/dashboard.js" as="script">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMTA5OTZBIi8+Cjwvc3ZnPgo=">
-    
-    <!-- Fonts and critical CSS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="/dashboards/assets/css/dashboard.css">
-    
-    <!-- Reduced motion support -->
-    <style>
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+    <title>AFL Fantasy Command Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
-    <!-- Skip to content link for screen readers -->
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50">
-        Skip to main content
-    </a>
-
-    <!-- Header Navigation -->
-    <header class="header" role="banner">
-        <div class="header-content">
-            <div class="logo-section">
-                <h1 class="logo">
-                    <span class="logo-icon" aria-hidden="true">🏆</span>
-                    AFL Fantasy
-                </h1>
-                <p class="tagline">Operations Dashboard</p>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i data-lucide="zap"></i>
+                </div>
+                <h1>AFL Fantasy Command Center</h1>
             </div>
-            
-            <!-- Desktop Navigation -->
-            <nav class="nav-primary" role="navigation" aria-label="Main navigation">
-                <ul class="nav-list">
-                    <li><button class="nav-item active" data-section="overview" aria-current="page">Overview</button></li>
-                    <li><button class="nav-item" data-section="health">System Health</button></li>
-                    <li><button class="nav-item" data-section="data">Data Pipeline</button></li>
-                    <li><button class="nav-item" data-section="performance">Performance</button></li>
-                    <li><button class="nav-item" data-section="debug">Debug Tools</button></li>
-                </ul>
-            </nav>
-            
-            <!-- Mobile Menu Button -->
-            <button class="mobile-menu-btn md:hidden" aria-label="Toggle navigation menu" aria-expanded="false">
-                <span class="hamburger"></span>
-            </button>
-            
-            <!-- Settings and Help -->
-            <div class="header-actions">
-                <button class="btn-icon" aria-label="Toggle theme" title="Toggle theme">
-                    <span class="theme-icon">🌙</span>
+            <div class="nav-controls">
+                <button class="nav-btn" id="refreshBtn">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Refresh</span>
                 </button>
-                <button class="btn-icon help-btn" aria-label="Open help panel" title="Help">
-                    <span aria-hidden="true">❓</span>
+                <button class="nav-btn" id="settingsBtn">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
                 </button>
+                <div class="connection-status" id="connectionStatus">
+                    <div class="status-dot"></div>
+                    <span>Live</span>
+                </div>
             </div>
         </div>
-        
-        <!-- Mobile Navigation -->
-        <nav class="nav-mobile hidden" role="navigation" aria-label="Mobile navigation">
-            <ul class="mobile-nav-list">
-                <li><a href="#overview" class="mobile-nav-item">📊 Overview</a></li>
-                <li><a href="#health" class="mobile-nav-item">💚 System Health</a></li>
-                <li><a href="#data" class="mobile-nav-item">📡 Data Pipeline</a></li>
-                <li><a href="#performance" class="mobile-nav-item">⚡ Performance</a></li>
-                <li><a href="#debug" class="mobile-nav-item">🔧 Debug Tools</a></li>
-            </ul>
-        </nav>
-    </header>
+    </nav>
 
-    <!-- Main Content -->
-    <main id="main-content" class="main-content" role="main">
-        
-        <!-- Overview Section -->
-        <section id="overview" class="dashboard-section active" role="region" aria-labelledby="overview-title">
-            <header class="section-header">
-                <h2 id="overview-title" class="section-title">System Overview</h2>
-                <p class="section-subtitle">Real-time status and quick actions for your AFL Fantasy Platform</p>
-            </header>
-            
-            <!-- System Status Cards -->
-            <div class="status-grid" role="grid" aria-label="System status overview">
-                <div class="status-card loading" id="system-status-api" role="gridcell">
-                    <header class="card-header">
-                        <h3 class="card-title">
-                            <span class="card-icon" aria-hidden="true">🚀</span>
-                            API Server
-                        </h3>
-                        <button class="help-btn" data-help-id="system-status-api" aria-label="Help for API Server">?</button>
-                    </header>
-                    <div class="card-body">
-                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
-                        <div class="metrics-grid">
-                            <div class="metric">
-                                <span class="metric-label">Response Time</span>
-                                <span class="metric-value loading-text">--</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Uptime</span>
-                                <span class="metric-value loading-text">--</span>
-                            </div>
-                        </div>
-                    </div>
-                    <footer class="card-actions">
-                        <button class="btn-sm" disabled>Restart</button>
-                    </footer>
-                </div>
-                
-                <div class="status-card loading" id="system-status-db" role="gridcell">
-                    <header class="card-header">
-                        <h3 class="card-title">
-                            <span class="card-icon" aria-hidden="true">🗄️</span>
-                            Database
-                        </h3>
-                        <button class="help-btn" data-help-id="system-status-db" aria-label="Help for Database">?</button>
-                    </header>
-                    <div class="card-body">
-                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
-                        <div class="metrics-grid">
-                            <div class="metric">
-                                <span class="metric-label">Connections</span>
-                                <span class="metric-value loading-text">--/--</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Query Time</span>
-                                <span class="metric-value loading-text">-- ms</span>
-                            </div>
-                        </div>
-                    </div>
-                    <footer class="card-actions">
-                        <button class="btn-sm" disabled>Monitor</button>
-                    </footer>
-                </div>
-                
-                <div class="status-card loading" id="system-status-python" role="gridcell">
-                    <header class="card-header">
-                        <h3 class="card-title">
-                            <span class="card-icon" aria-hidden="true">🐍</span>
-                            Python Services
-                        </h3>
-                        <button class="help-btn" data-help-id="system-status-python" aria-label="Help for Python Services">?</button>
-                    </header>
-                    <div class="card-body">
-                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
-                        <div class="metrics-grid">
-                            <div class="metric">
-                                <span class="metric-label">Queue Depth</span>
-                                <span class="metric-value loading-text">--</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Last Scrape</span>
-                                <span class="metric-value loading-text">--</span>
-                            </div>
-                        </div>
-                    </div>
-                    <footer class="card-actions">
-                        <button class="btn-sm" disabled>Refresh</button>
-                    </footer>
-                </div>
-                
-                <div class="status-card loading" id="system-status-ios" role="gridcell">
-                    <header class="card-header">
-                        <h3 class="card-title">
-                            <span class="card-icon" aria-hidden="true">📱</span>
-                            iOS Build
-                        </h3>
-                        <button class="help-btn" data-help-id="system-status-ios" aria-label="Help for iOS Build">?</button>
-                    </header>
-                    <div class="card-body">
-                        <div class="status-indicator loading" aria-live="polite" aria-label="Status loading"></div>
-                        <div class="metrics-grid">
-                            <div class="metric">
-                                <span class="metric-label">Status</span>
-                                <span class="metric-value loading-text">--</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Last Build</span>
-                                <span class="metric-value loading-text">--</span>
-                            </div>
-                        </div>
-                    </div>
-                    <footer class="card-actions">
-                        <button class="btn-sm" disabled>Build</button>
-                    </footer>
-                </div>
-            </div>
-            
-            <!-- Quick Actions -->
-            <div class="quick-actions" role="toolbar" aria-label="Quick actions">
-                <h3 class="actions-title">Quick Actions</h3>
-                <div class="actions-grid">
-                    <button class="action-btn primary" aria-describedby="refresh-desc">
-                        <span class="btn-icon" aria-hidden="true">🔄</span>
-                        Refresh All Data
-                    </button>
-                    <div id="refresh-desc" class="sr-only">Refresh status for all system components</div>
-                    
-                    <button class="action-btn secondary">
-                        <span class="btn-icon" aria-hidden="true">📄</span>
-                        Export Logs
-                    </button>
-                    
-                    <button class="action-btn info">
-                        <span class="btn-icon" aria-hidden="true">🔍</span>
-                        Run Health Check
-                    </button>
-                    
-                    <button class="action-btn warning">
-                        <span class="btn-icon" aria-hidden="true">📖</span>
-                        View Documentation
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-container">
+        <!-- System Status Overview -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>System Status</h2>
+                <div class="section-actions">
+                    <button class="action-btn secondary" id="systemLogsBtn">
+                        <i data-lucide="file-text"></i>
+                        View Logs
                     </button>
                 </div>
             </div>
-            
-            <!-- Recent Activity Feed -->
-            <div class="activity-feed">
-                <h3 class="feed-title">Recent Activity</h3>
-                <div class="activity-list" id="recent-activity" role="log" aria-live="polite" aria-label="Recent system activity">
-                    <div class="activity-item loading">
-                        <span class="activity-time">--:--:--</span>
-                        <span class="activity-message">Loading recent activity...</span>
+            <div class="status-grid">
+                <div class="status-card primary" id="expressStatus">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="server"></i>
+                        </div>
+                        <div class="card-title">Express Server</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-indicator">
+                            <div class="status-dot active"></div>
+                            <span class="status-text">Running</span>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="stat-label">Port</span>
+                                <span class="stat-value">5002</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Uptime</span>
+                                <span class="stat-value" id="expressUptime">--</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Other sections will be loaded dynamically -->
-        <section id="health" class="dashboard-section" role="region" aria-labelledby="health-title" aria-hidden="true">
-            <header class="section-header">
-                <h2 id="health-title" class="section-title">System Health</h2>
-                <p class="section-subtitle">Detailed monitoring and resource usage</p>
-            </header>
-            <div class="coming-soon">
-                <h3>Coming Soon</h3>
-                <p>Detailed system health monitoring is being implemented...</p>
-            </div>
-        </section>
-        
-        <section id="data" class="dashboard-section" role="region" aria-labelledby="data-title" aria-hidden="true">
-            <header class="section-header">
-                <h2 id="data-title" class="section-title">Data Pipeline</h2>
-                <p class="section-subtitle">AFL data scraping and processing status</p>
-            </header>
-            <div class="coming-soon">
-                <h3>Coming Soon</h3>
-                <p>Data pipeline monitoring is being implemented...</p>
-            </div>
-        </section>
-        
-        <section id="performance" class="dashboard-section" role="region" aria-labelledby="performance-title" aria-hidden="true">
-            <header class="section-header">
-                <h2 id="performance-title" class="section-title">Performance</h2>
-                <p class="section-subtitle">API metrics and performance analytics</p>
-            </header>
-            <div class="coming-soon">
-                <h3>Coming Soon</h3>
-                <p>Performance analytics are being implemented...</p>
-            </div>
-        </section>
-        
-        <section id="debug" class="dashboard-section" role="region" aria-labelledby="debug-title" aria-hidden="true">
-            <header class="section-header">
-                <h2 id="debug-title" class="section-title">Debug Tools</h2>
-                <p class="section-subtitle">System diagnostics and troubleshooting</p>
-            </header>
-            <div class="coming-soon">
-                <h3>Coming Soon</h3>
-                <p>Debug tools are being implemented...</p>
-            </div>
-        </section>
-    </main>
 
-    <!-- Help Panel (Slide-over) -->
-    <div class="help-panel" id="help-panel" role="dialog" aria-labelledby="help-title" aria-modal="true" aria-hidden="true">
-        <div class="help-backdrop" aria-label="Close help panel"></div>
-        <div class="help-content">
-            <header class="help-header">
-                <h2 id="help-title" class="help-title">Dashboard Help</h2>
-                <button class="help-close" aria-label="Close help panel">✕</button>
-            </header>
-            <div class="help-body" id="help-body">
-                <p>Loading help content...</p>
+                <div class="status-card secondary" id="databaseStatus">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="database"></i>
+                        </div>
+                        <div class="card-title">PostgreSQL</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-indicator">
+                            <div class="status-dot active"></div>
+                            <span class="status-text">Connected</span>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="stat-label">Port</span>
+                                <span class="stat-value">5432</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">DB</span>
+                                <span class="stat-value">afl_fantasy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card tertiary" id="redisStatus">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="layers"></i>
+                        </div>
+                        <div class="card-title">Redis Cache</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-indicator">
+                            <div class="status-dot active"></div>
+                            <span class="status-text">Active</span>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="stat-label">Port</span>
+                                <span class="stat-value">6379</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Memory</span>
+                                <span class="stat-value" id="redisMemory">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card quaternary" id="scraperStatus">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="spider"></i>
+                        </div>
+                        <div class="card-title">Data Scraper</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-indicator">
+                            <div class="status-dot active"></div>
+                            <span class="status-text">Scraping</span>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="stat-label">Last Run</span>
+                                <span class="stat-value" id="scraperLastRun">--</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Records</span>
+                                <span class="stat-value" id="scraperRecords">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>Performance Metrics</h2>
+                <div class="metric-tabs">
+                    <button class="tab-btn active" data-metric="cpu">CPU</button>
+                    <button class="tab-btn" data-metric="memory">Memory</button>
+                    <button class="tab-btn" data-metric="network">Network</button>
+                </div>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card chart-card">
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+                <div class="metric-card stats-card">
+                    <div class="metric-stats">
+                        <div class="metric-item">
+                            <div class="metric-label">CPU Usage</div>
+                            <div class="metric-value">
+                                <span id="cpuValue">--</span>%
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="cpuBar"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Memory Usage</div>
+                            <div class="metric-value">
+                                <span id="memoryValue">--</span>%
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="memoryBar"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Disk Usage</div>
+                            <div class="metric-value">
+                                <span id="diskValue">--</span>%
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="diskBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AFL Data Pipeline -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>AFL Data Pipeline</h2>
+                <div class="section-actions">
+                    <button class="action-btn primary" id="triggerScrapingBtn">
+                        <i data-lucide="play"></i>
+                        Trigger Scraping
+                    </button>
+                </div>
+            </div>
+            <div class="pipeline-grid">
+                <div class="pipeline-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="card-title">Player Data</div>
+                    </div>
+                    <div class="pipeline-stats">
+                        <div class="pipeline-stat">
+                            <span class="stat-number" id="playerCount">--</span>
+                            <span class="stat-label">Total Players</span>
+                        </div>
+                        <div class="pipeline-stat">
+                            <span class="stat-number" id="playerUpdated">--</span>
+                            <span class="stat-label">Updated Today</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="calendar"></i>
+                        </div>
+                        <div class="card-title">Match Data</div>
+                    </div>
+                    <div class="pipeline-stats">
+                        <div class="pipeline-stat">
+                            <span class="stat-number" id="matchCount">--</span>
+                            <span class="stat-label">Total Matches</span>
+                        </div>
+                        <div class="pipeline-stat">
+                            <span class="stat-number" id="upcomingMatches">--</span>
+                            <span class="stat-label">Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="card-title">Fantasy Scores</div>
+                    </div>
+                    <div class="pipeline-stats">
+                        <div class="pipeline-stat">
+                            <span class="stat-number" id="avgScore">--</span>
+                            <span class="stat-label">Avg Score</span>
+                        </div>
+                        <div class="pipeline-stat">
+                            <span class="stat-number" id="topScore">--</span>
+                            <span class="stat-label">Top Score</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- iOS App Integration -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>iOS App Integration</h2>
+                <div class="connection-indicator" id="iosConnection">
+                    <div class="connection-dot"></div>
+                    <span>Preparing Connection</span>
+                </div>
+            </div>
+            <div class="ios-integration-grid">
+                <div class="integration-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="smartphone"></i>
+                        </div>
+                        <div class="card-title">App Status</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="integration-status">
+                            <div class="status-item">
+                                <span class="status-label">Build Status</span>
+                                <span class="status-value" id="buildStatus">Ready</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Last Sync</span>
+                                <span class="status-value" id="lastSync">--</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">API Version</span>
+                                <span class="status-value">v1.0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="sync"></i>
+                        </div>
+                        <div class="card-title">Data Sync</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="sync-controls">
+                            <button class="control-btn" id="syncPlayersBtn">
+                                <i data-lucide="users"></i>
+                                Sync Players
+                            </button>
+                            <button class="control-btn" id="syncMatchesBtn">
+                                <i data-lucide="calendar"></i>
+                                Sync Matches
+                            </button>
+                            <button class="control-btn" id="syncScoresBtn">
+                                <i data-lucide="trending-up"></i>
+                                Sync Scores
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-time Logs -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>System Logs</h2>
+                <div class="section-actions">
+                    <button class="action-btn secondary" id="clearLogsBtn">
+                        <i data-lucide="trash-2"></i>
+                        Clear
+                    </button>
+                </div>
+            </div>
+            <div class="logs-container">
+                <div class="log-output" id="logOutput">
+                    <div class="log-entry info">
+                        <span class="log-timestamp">[03:55:32]</span>
+                        <span class="log-level">INFO</span>
+                        <span class="log-message">All services started successfully</span>
+                    </div>
+                    <div class="log-entry success">
+                        <span class="log-timestamp">[03:55:30]</span>
+                        <span class="log-level">SUCCESS</span>
+                        <span class="log-message">Health Monitor started</span>
+                    </div>
+                    <div class="log-entry success">
+                        <span class="log-timestamp">[03:55:27]</span>
+                        <span class="log-level">SUCCESS</span>
+                        <span class="log-message">Express server started</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="modal-close" id="closeSettings">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Refresh Interval</label>
+                    <select id="refreshInterval">
+                        <option value="5000">5 seconds</option>
+                        <option value="10000" selected>10 seconds</option>
+                        <option value="30000">30 seconds</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Theme</label>
+                    <select id="themeSelect">
+                        <option value="neon-dark" selected>Neon Dark</option>
+                        <option value="cyber-blue">Cyber Blue</option>
+                        <option value="matrix-green">Matrix Green</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Auto-refresh</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="autoRefresh" checked>
+                        <label for="autoRefresh"></label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notifications -->
-    <div id="toast-container" class="toast-container" role="region" aria-label="Notifications" aria-live="assertive">
-        <!-- Toast messages will be inserted here -->
-    </div>
-
-    <!-- Loading Scripts -->
-    <script src="/dashboards/assets/js/dashboard.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>

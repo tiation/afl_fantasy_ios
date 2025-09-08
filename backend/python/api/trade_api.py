@@ -7,6 +7,19 @@ import subprocess
 import json
 import os
 from datetime import datetime, timedelta
+import sys
+from pathlib import Path
+
+# Add scrapers directory to path
+sys.path.append(str(Path(__file__).parent.parent / 'scrapers'))
+
+# Import the player scraper (conditional to avoid breaking if not available)
+try:
+    from afl_player_scraper import AFLPlayerScraper, integrate_with_api
+    SCRAPER_AVAILABLE = True
+except ImportError:
+    SCRAPER_AVAILABLE = False
+    logging.warning("Player scraper not available - some endpoints will return mock data")
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -820,7 +833,399 @@ def refresh_data():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# ===== NEW ENDPOINTS FOR IOS APP INTEGRATION =====
+
+# Initialize player scraper if available
+player_scraper = None
+if SCRAPER_AVAILABLE:
+    try:
+        player_scraper = AFLPlayerScraper()
+        logger.info("✅ Player scraper initialized")
+    except Exception as e:
+        logger.error(f"❌ Failed to initialize player scraper: {e}")
+        SCRAPER_AVAILABLE = False
+
+@app.route('/api/players', methods=['GET'])
+def get_all_players():
+    """Get all players summary - iOS app endpoint"""
+    try:
+        if player_scraper and SCRAPER_AVAILABLE:
+            players = player_scraper.get_all_players_summary()
+            if players:
+                return jsonify({
+                    'status': 'ok',
+                    'players': players,
+                    'count': len(players)
+                })
+        
+        # Mock data for when scraper is not available
+        mock_players = [
+            {
+                'player_id': 'player_001',
+                'name': 'Max Gawn',
+                'position': 'RUCK',
+                'team': 'MEL',
+                'price': 650000,
+                'average_score': 105.2,
+                'breakeven': 98,
+                'last_score': 112,
+                'ownership': 65.4,
+                'is_cash_cow': False,
+                'is_captain_candidate': True
+            },
+            {
+                'player_id': 'player_002', 
+                'name': 'Sam Walsh',
+                'position': 'MID',
+                'team': 'CAR',
+                'price': 780000,
+                'average_score': 118.7,
+                'breakeven': 105,
+                'last_score': 125,
+                'ownership': 78.2,
+                'is_cash_cow': False,
+                'is_captain_candidate': True
+            },
+            {
+                'player_id': 'player_003',
+                'name': 'Rookie Player',
+                'position': 'DEF', 
+                'team': 'SYD',
+                'price': 350000,
+                'average_score': 65.8,
+                'breakeven': 45,
+                'last_score': 78,
+                'ownership': 15.3,
+                'is_cash_cow': True,
+                'is_captain_candidate': False
+            }
+        ]
+        
+        return jsonify({
+            'status': 'ok',
+            'players': mock_players,
+            'count': len(mock_players),
+            'note': 'Mock data - player scraper not available'
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_all_players: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/players/<player_id>', methods=['GET'])
+def get_player_details(player_id):
+    """Get detailed player information - iOS app endpoint"""
+    try:
+        if player_scraper and SCRAPER_AVAILABLE:
+            player_data = player_scraper.get_player_data(player_id)
+            if player_data:
+                return jsonify({
+                    'status': 'ok',
+                    'player': player_data
+                })
+        
+        # Mock detailed player data
+        mock_player = {
+            'player_id': player_id,
+            'name': f'Player {player_id[-3:]}',
+            'position': 'MID',
+            'team': 'CAR',
+            'price': 650000,
+            'average_score': 105.2,
+            'total_score': 1578,
+            'games_played': 15,
+            'breakeven': 98,
+            'last_score': 112,
+            'form': [95, 108, 112, 89, 118],
+            'ownership': 45.6,
+            'consistency': 85.2,
+            'ceiling': 145,
+            'floor': 68,
+            'injury_risk': 'Low',
+            'projected_scores': [108, 102, 115, 98, 107],
+            'venue_performance': [
+                {'venue': 'MCG', 'average': 110.5, 'games': 3},
+                {'venue': 'Marvel Stadium', 'average': 98.2, 'games': 2}
+            ]
+        }
+        
+        return jsonify({
+            'status': 'ok', 
+            'player': mock_player,
+            'note': 'Mock data - player scraper not available'
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_player_details: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/cash-cows', methods=['GET'])
+def get_cash_cows():
+    """Get cash cow analysis - iOS app endpoint"""
+    try:
+        # Mock cash cow data for now
+        cash_cows = [
+            {
+                'player_name': 'Rookie Defender',
+                'player_id': 'rook_001',
+                'position': 'DEF',
+                'team': 'SYD',
+                'current_price': 350000,
+                'target_price': 480000,
+                'cash_generated': 130000,
+                'projected_weeks': 4,
+                'confidence': 0.85,
+                'sell_urgency': 'Medium',
+                'reasoning': 'Strong recent form with favorable upcoming fixtures. Price rise expected.',
+                'breakeven': 45,
+                'average_score': 68.5,
+                'last_scores': [72, 65, 78, 61, 85]
+            },
+            {
+                'player_name': 'Young Mid',
+                'player_id': 'rook_002', 
+                'position': 'MID',
+                'team': 'GEE',
+                'current_price': 420000,
+                'target_price': 580000,
+                'cash_generated': 160000,
+                'projected_weeks': 6,
+                'confidence': 0.78,
+                'sell_urgency': 'Low',
+                'reasoning': 'Established role, consistent scoring. Longer-term cash generation play.',
+                'breakeven': 52,
+                'average_score': 75.2,
+                'last_scores': [82, 68, 79, 71, 88]
+            }
+        ]
+        
+        return jsonify({
+            'status': 'ok',
+            'cash_cows': cash_cows,
+            'total_generated': sum(cow['cash_generated'] for cow in cash_cows),
+            'total_projected': sum(cow['target_price'] for cow in cash_cows),
+            'count': len(cash_cows)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_cash_cows: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/captain-recommendations', methods=['GET'])
+def get_captain_recommendations():
+    """Get captain recommendations - iOS app endpoint"""
+    try:
+        round_number = request.args.get('round', 1, type=int)
+        
+        # Mock captain recommendations
+        recommendations = [
+            {
+                'player_id': 'cap_001',
+                'name': 'Max Gawn',
+                'position': 'RUCK',
+                'team': 'MEL',
+                'projected_score': 125.5,
+                'confidence': 0.92,
+                'ownership': 45.2,
+                'captaincy_rate': 18.7,
+                'differential_score': 8.2,
+                'matchup_rating': 'Excellent',
+                'venue': 'MCG',
+                'opponent': 'COL',
+                'weather_impact': 'None',
+                'reasoning': 'Dominant ruck with excellent record against Collingwood. Home advantage at MCG.',
+                'risks': ['Minor ankle concern'],
+                'ceiling': 150,
+                'floor': 95
+            },
+            {
+                'player_id': 'cap_002',
+                'name': 'Sam Walsh',
+                'position': 'MID',
+                'team': 'CAR',
+                'projected_score': 118.3,
+                'confidence': 0.88,
+                'ownership': 78.9,
+                'captaincy_rate': 25.4,
+                'differential_score': 2.1,
+                'matchup_rating': 'Good',
+                'venue': 'Marvel Stadium',
+                'opponent': 'ESS',
+                'weather_impact': 'Indoor',
+                'reasoning': 'Consistent performer with high floor. Good matchup against Essendon midfield.',
+                'risks': ['High ownership limits upside'],
+                'ceiling': 140,
+                'floor': 85
+            },
+            {
+                'player_id': 'cap_003',
+                'name': 'Jeremy Cameron',
+                'position': 'FWD',
+                'team': 'GEE',
+                'projected_score': 110.8,
+                'confidence': 0.75,
+                'ownership': 32.1,
+                'captaincy_rate': 8.9,
+                'differential_score': 15.3,
+                'matchup_rating': 'Very Good',
+                'venue': 'GMHBA Stadium',
+                'opponent': 'NTH',
+                'weather_impact': 'Clear',
+                'reasoning': 'Low ownership differential play. North defense has been poor recently.',
+                'risks': ['Forward volatility', 'Weather dependent'],
+                'ceiling': 165,
+                'floor': 60
+            }
+        ]
+        
+        return jsonify({
+            'status': 'ok',
+            'round': round_number,
+            'recommendations': recommendations,
+            'last_updated': datetime.now().isoformat(),
+            'summary': {
+                'safe_pick': recommendations[1]['name'],
+                'differential_pick': recommendations[2]['name'],
+                'premium_pick': recommendations[0]['name']
+            }
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_captain_recommendations: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/ai-insights', methods=['GET'])
+def get_ai_insights():
+    """Get AI insights for dashboard - iOS app endpoint"""
+    try:
+        # Mock AI insights
+        insights = [
+            {
+                'id': 'insight_001',
+                'type': 'trade_opportunity',
+                'title': 'Premium Upgrade Available',
+                'description': 'Consider upgrading your mid-price defender to a premium option. Market conditions favor this move.',
+                'priority': 'high',
+                'confidence': 0.87,
+                'action_required': True,
+                'icon': 'arrow.up.circle.fill',
+                'color': 'green'
+            },
+            {
+                'id': 'insight_002', 
+                'type': 'injury_alert',
+                'title': 'Injury Risk Detected',
+                'description': 'Player in your team has elevated injury risk based on recent match data and load management.',
+                'priority': 'medium',
+                'confidence': 0.72,
+                'action_required': False,
+                'icon': 'exclamationmark.triangle.fill',
+                'color': 'orange'
+            },
+            {
+                'id': 'insight_003',
+                'type': 'captain_suggestion',
+                'title': 'Captain Differential Opportunity', 
+                'description': 'Low ownership premium player with excellent matchup this week - consider for captaincy.',
+                'priority': 'medium',
+                'confidence': 0.81,
+                'action_required': False,
+                'icon': 'crown.fill',
+                'color': 'purple'
+            }
+        ]
+        
+        return jsonify({
+            'status': 'ok',
+            'insights': insights,
+            'count': len(insights),
+            'generated_at': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_ai_insights: {str(e)}")
+        return jsonify({
+            'status': 'error', 
+            'message': str(e)
+        }), 500
+
+@app.route('/api/price-projections', methods=['POST'])
+def get_price_projections():
+    """Get price projections for specific players - iOS app endpoint"""
+    try:
+        data = request.get_json()
+        player_ids = data.get('player_ids', [])
+        
+        if not player_ids:
+            return jsonify({
+                'status': 'error',
+                'message': 'No player IDs provided'
+            }), 400
+        
+        # Mock price projections
+        projections = []
+        for player_id in player_ids:
+            projection = {
+                'player_id': player_id,
+                'current_price': 650000,
+                'projected_prices': {
+                    'week_1': 665000,
+                    'week_2': 672000, 
+                    'week_3': 681000,
+                    'week_4': 695000,
+                    'week_5': 708000
+                },
+                'price_changes': [15000, 7000, 9000, 14000, 13000],
+                'total_change': 58000,
+                'confidence': 0.79,
+                'factors': [
+                    'Recent form trending up',
+                    'Favorable fixture run',
+                    'Low breakeven relative to average'
+                ]
+            }
+            projections.append(projection)
+        
+        return jsonify({
+            'status': 'ok',
+            'projections': projections,
+            'count': len(projections)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in get_price_projections: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+# ===== END NEW ENDPOINTS =====
+
 if __name__ == '__main__':
     print("Starting AFL Fantasy Trade API server...")
     print("Server will be available at: http://127.0.0.1:9001")
+    print("\n📋 Available Endpoints:")
+    print("• GET  /health - Health check")
+    print("• POST /api/trade_score - Trade analysis")
+    print("• GET  /api/players - All players")
+    print("• GET  /api/players/<id> - Player details") 
+    print("• GET  /api/cash-cows - Cash cow analysis")
+    print("• GET  /api/captain-recommendations - Captain suggestions")
+    print("• GET  /api/ai-insights - AI insights for dashboard")
+    print("• POST /api/price-projections - Price projections")
+    print("• GET  /api/afl-fantasy/dashboard-data - Dashboard data")
+    print("• POST /api/afl-fantasy/validate-credentials - Credential validation")
+    print("\n🚀 Starting server on http://127.0.0.1:9001...\n")
     app.run(host='127.0.0.1', port=9001, debug=False, threaded=True)

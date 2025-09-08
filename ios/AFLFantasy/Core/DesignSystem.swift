@@ -273,52 +273,6 @@ extension View {
     }
 }
 
-// MARK: - Custom Button Styles
-
-struct AFLButtonStyle: ButtonStyle {
-    let variant: Variant
-
-    enum Variant {
-        case primary, secondary, ghost
-    }
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(.horizontal, DesignSystem.Spacing.m.value)
-            .padding(.vertical, DesignSystem.Spacing.sm.value)
-            .background(backgroundColorFor(configuration: configuration))
-            .foregroundColor(foregroundColorFor(configuration: configuration))
-            .cornerRadius(DesignSystem.CornerRadius.small.value)
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(DesignSystem.Motion.tasteful, value: configuration.isPressed)
-    }
-
-    private func backgroundColorFor(configuration: Configuration) -> Color {
-        switch variant {
-        case .primary:
-            configuration.isPressed
-                ? DesignSystem.Colors.primary.opacity(0.8)
-                : DesignSystem.Colors.primary
-        case .secondary:
-            configuration.isPressed
-                ? DesignSystem.Colors.surface.opacity(0.8)
-                : DesignSystem.Colors.surface
-        case .ghost:
-            configuration.isPressed
-                ? DesignSystem.Colors.primary.opacity(0.1)
-                : Color.clear
-        }
-    }
-
-    private func foregroundColorFor(configuration: Configuration) -> Color {
-        switch variant {
-        case .primary: .white
-        case .secondary: DesignSystem.Colors.onSurface
-        case .ghost: DesignSystem.Colors.primary
-        }
-    }
-}
-
 // MARK: - Performance-Optimized Components
 
 struct OptimizedAsyncImage: View {
@@ -399,55 +353,4 @@ extension View {
     func minimumTapTarget() -> some View {
         frame(minWidth: 44, minHeight: 44) // HIG minimum tap target
     }
-}
-
-// MARK: - Performance Monitoring
-
-class PerformanceMonitor: ObservableObject {
-    @Published var memoryUsage: Double = 0
-    @Published var renderTime: Double = 0
-
-    static let shared = PerformanceMonitor()
-
-    private init() {
-        startMonitoring()
-    }
-
-    private func startMonitoring() {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            Task { @MainActor in
-                self.updateMemoryUsage()
-            }
-        }
-    }
-
-    @MainActor
-    private func updateMemoryUsage() {
-        let info = mach_task_basic_info()
-        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
-
-        let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
-            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                task_info(
-                    mach_task_self_,
-                    task_flavor_t(MACH_TASK_BASIC_INFO),
-                    $0,
-                    &count
-                )
-            }
-        }
-
-        if kerr == KERN_SUCCESS {
-            memoryUsage = Double(info.resident_size) / (1024 * 1024) // MB
-        }
-    }
-}
-
-// MARK: - Performance Budget Constants
-
-enum PerformanceBudgets {
-    static let maxMemoryUsageMB: Double = 100
-    static let maxColdStartTimeSeconds: Double = 2.0
-    static let maxFrameTimeMS: Double = 16.67 // 60 FPS
-    static let maxNetworkLatencyMS: Double = 500
 }

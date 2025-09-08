@@ -1,13 +1,22 @@
 # Multi-stage build for production optimization
 FROM node:18-alpine AS base
 
-# Install system dependencies for Python integration
+# Install system dependencies and setup Python environment
 RUN apk add --no-cache \
     python3 \
     py3-pip \
+    python3-dev \
     chromium \
     chromium-chromedriver \
-    && ln -sf python3 /usr/bin/python
+    build-base \
+    && ln -sf python3 /usr/bin/python \
+    && python3 -m venv /opt/venv \
+    && . /opt/venv/bin/activate \
+    && pip install --no-cache-dir --upgrade pip \
+    && rm -rf /var/cache/apk/* /tmp/*
+
+# Activate the virtual environment
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Set Chrome path for Selenium
 ENV CHROME_BIN=/usr/bin/chromium-browser \
@@ -22,8 +31,19 @@ COPY requirements.txt ./
 # Install Node.js dependencies
 RUN npm ci --only=production && npm cache clean --force
 
-# Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Install Python dependencies in layers to cache them
+COPY requirements-minimal.txt ./
+RUN . /opt/venv/bin/activate \
+    && pip install --no-cache-dir -r requirements-minimal.txt \
+    && find /opt/venv -name "*.pyc" -delete \
+    && find /opt/venv -name "__pycache__" -exec rm -r {} + || true
+
+# Install remaining Python dependencies
+COPY requirements.txt ./
+RUN . /opt/venv/bin/activate \
+    && pip install --no-cache-dir -r requirements.txt \
+    && find /opt/venv -name "*.pyc" -delete \
+    && find /opt/venv -name "__pycache__" -exec rm -r {} + || true
 
 # Development stage
 FROM base AS development
@@ -40,14 +60,25 @@ RUN npm ci && npm run build
 # Production stage
 FROM node:18-alpine AS production
 
-# Install runtime dependencies
+# Install runtime dependencies and setup Python environment
 RUN apk add --no-cache \
     python3 \
     py3-pip \
+    python3-dev \
     chromium \
     chromium-chromedriver \
     dumb-init \
-    && ln -sf python3 /usr/bin/python
+    build-base \
+    && ln -sf python3 /usr/bin/python \
+    && python3 -m venv /opt/venv \
+    && . /opt/venv/bin/activate \
+    && pip install --no-cache-dir --upgrade pip \
+    && rm -rf /var/cache/apk/* /tmp/*
+
+# Activate the virtual environment and add Python build tools
+ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
@@ -71,7 +102,7 @@ COPY --from=build --chown=nodejs:nodejs /app/*.json ./
 COPY --from=build --chown=nodejs:nodejs /app/attached_assets ./attached_assets
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN . /opt/venv/bin/activate && pip3 install --no-cache-dir -r requirements.txt
 
 # Create data directories
 RUN mkdir -p /app/uploads /app/logs && \

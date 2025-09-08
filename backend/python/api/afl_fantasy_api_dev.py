@@ -185,4 +185,4 @@ if __name__ == '__main__':
     print("  GET /api/afl-fantasy/captain")
     print("  GET /api/afl-fantasy/players")
     print("  GET /api/health")
-    app.run(debug=True, port=5001, host='0.0.0.0')
+    app.run(debug=True, port=5001, host='127.0.0.1')

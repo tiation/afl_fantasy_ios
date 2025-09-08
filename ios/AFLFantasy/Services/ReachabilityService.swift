@@ -31,7 +31,9 @@ class ReachabilityService: ObservableObject {
     }
 
     deinit {
-        stopMonitoring()
+        Task { @MainActor in
+            stopMonitoring()
+        }
     }
 
     // MARK: - Public Methods
@@ -41,7 +43,7 @@ class ReachabilityService: ObservableObject {
 
         monitor.pathUpdateHandler = { [weak self] path in
             Task { @MainActor in
-                await self?.updateConnectionStatus(path)
+                self?.updateConnectionStatus(path)
             }
         }
 
@@ -240,7 +242,7 @@ struct ReachabilityStatusModifier: ViewModifier {
                         .zIndex(999)
                 }
             }
-            .onChange(of: reachability.isReachable) { _, isReachable in
+            .onChange(of: reachability.isReachable) { isReachable in
                 withAnimation(.easeInOut(duration: 0.3)) {
                     showOfflineBanner = !isReachable
                 }

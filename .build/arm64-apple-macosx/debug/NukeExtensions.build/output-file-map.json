@@ -1,0 +1,19 @@
+{
+  "": {
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/master.swiftdeps"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/NukeExtensions/ImageLoadingOptions.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageLoadingOptions.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageLoadingOptions.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageLoadingOptions~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageLoadingOptions.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageLoadingOptions.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/NukeExtensions/ImageViewExtensions.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageViewExtensions.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageViewExtensions.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageViewExtensions~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageViewExtensions.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/ImageViewExtensions.dia"
+  }
+}

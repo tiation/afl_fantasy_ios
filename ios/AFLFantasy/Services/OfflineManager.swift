@@ -29,6 +29,33 @@ class OfflineManager: ObservableObject {
     private let cacheManager = CacheManager()
     private let syncQueue = SyncOperationQueue()
     private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - NetworkStatus Helper
+    
+    struct NetworkStatus {
+        let isOnline: Bool
+        let connectionType: ConnectionType
+    }
+    
+    enum ConnectionType: String {
+        case wifi = "WiFi"
+        case cellular = "Cellular"
+        case ethernet = "Ethernet"
+        case unknown = "Unknown"
+        
+        var icon: String {
+            switch self {
+            case .wifi: "wifi"
+            case .cellular: "antenna.radiowaves.left.and.right"
+            case .ethernet: "cable.connector"
+            case .unknown: "questionmark.circle"
+            }
+        }
+        
+        var isMetered: Bool {
+            self == .cellular
+        }
+    }
 
     // MARK: - Singleton
 
@@ -432,34 +459,6 @@ enum CacheKey: String, CaseIterable {
     case leagueData = "league_data"
 }
 
-// MARK: - ConnectionType
-
-enum ConnectionType: String {
-    case wifi = "WiFi"
-    case cellular = "Cellular"
-    case ethernet = "Ethernet"
-    case unknown = "Unknown"
-
-    var icon: String {
-        switch self {
-        case .wifi: "wifi"
-        case .cellular: "antenna.radiowaves.left.and.right"
-        case .ethernet: "cable.connector"
-        case .unknown: "questionmark.circle"
-        }
-    }
-
-    var isMetered: Bool {
-        self == .cellular
-    }
-}
-
-// MARK: - NetworkStatus
-
-struct NetworkStatus {
-    let isOnline: Bool
-    let connectionType: ConnectionType
-}
 
 // MARK: - DataFreshness
 

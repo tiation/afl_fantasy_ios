@@ -1,0 +1,627 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0BAC050B73E120133992831C /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D572F89C5C418A61D8FB5B /* AlertsView.swift */; };
+		139609CE4400F0267E21DCFC /* PlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE958757AC8740148675677 /* PlayersView.swift */; };
+		141E24BB83F7033DFD756C3B /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8427101FEDA731881961DAC4 /* DesignSystem.swift */; };
+		1D05943FF1566145D9F30542 /* AFLFantasyIntelligenceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */; };
+		4741A2DDB22C1DE923A2A92B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B0D1C8641E3893F344DA8 /* Models.swift */; };
+		7407D63BFFB41860C4423FF4 /* AIToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */; };
+		8B898A400F57B4744539F1B2 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */; };
+		C6284EE130A4C72A1A5E2CD7 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9034CF408A530EF937BC83CF /* APIService.swift */; };
+		DA79FD5A71A21695B06BEA32 /* CashCowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C672214400A6C525B7E32C8A /* CashCowsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3327355F1CF43B9F54F084C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA5C1CFFF1D403F1694ED29D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15BA901012FD152ABD1117BD;
+			remoteInfo = "AFL Fantasy Intelligence";
+		};
+		9F8FA5A1120A0868EFE7F040 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA5C1CFFF1D403F1694ED29D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15BA901012FD152ABD1117BD;
+			remoteInfo = "AFL Fantasy Intelligence";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "AFL Fantasy Intelligence UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "AFL Fantasy Intelligence Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "AFL Fantasy Intelligence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyIntelligenceApp.swift; sourceTree = "<group>"; };
+		8427101FEDA731881961DAC4 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		9034CF408A530EF937BC83CF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		A07B0D1C8641E3893F344DA8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		BAE958757AC8740148675677 /* PlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersView.swift; sourceTree = "<group>"; };
+		C672214400A6C525B7E32C8A /* CashCowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashCowsView.swift; sourceTree = "<group>"; };
+		D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIToolsView.swift; sourceTree = "<group>"; };
+		E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		F7D572F89C5C418A61D8FB5B /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1275F691D1D305E7C9F6AD73 /* CashCows */ = {
+			isa = PBXGroup;
+			children = (
+				C672214400A6C525B7E32C8A /* CashCowsView.swift */,
+			);
+			path = CashCows;
+			sourceTree = "<group>";
+		};
+		1E732D5BC15D41E7EAEEF25C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = UI;
+			path = Tests/UI;
+			sourceTree = "<group>";
+		};
+		2D15EAFC814D6AFF4682CA5E /* Unit */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Unit;
+			path = Tests/Unit;
+			sourceTree = "<group>";
+		};
+		343638768F91966DBEA704AF /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				F7D572F89C5C418A61D8FB5B /* AlertsView.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
+		3AD74231B29E6FE93DA0AC1F /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */,
+				7D2414AFE075C92F6D9BB0A8 /* Core */,
+				C96685EE46268E5FF855D738 /* Features */,
+				9B5312FD2BA3A6C704A6FBE8 /* Shared */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		546CBF4588CCBBC0501C159B /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				9034CF408A530EF937BC83CF /* APIService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		61C8554E2810440545D4D88B /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		6A33995318F115470A87960C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */,
+				06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */,
+				65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6ED794C4509F43ACB9DCB9E6 /* Players */ = {
+			isa = PBXGroup;
+			children = (
+				BAE958757AC8740148675677 /* PlayersView.swift */,
+			);
+			path = Players;
+			sourceTree = "<group>";
+		};
+		7D2414AFE075C92F6D9BB0A8 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				95ADADA44EEEEA81199E0160 /* DesignSystem */,
+				546CBF4588CCBBC0501C159B /* Networking */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		95ADADA44EEEEA81199E0160 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				8427101FEDA731881961DAC4 /* DesignSystem.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		999E17AE7B22CCCCD1826EE5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A07B0D1C8641E3893F344DA8 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9B5312FD2BA3A6C704A6FBE8 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				999E17AE7B22CCCCD1826EE5 /* Models */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A6D1AA4C61F1450BE271F69F = {
+			isa = PBXGroup;
+			children = (
+				3AD74231B29E6FE93DA0AC1F /* Sources */,
+				1E732D5BC15D41E7EAEEF25C /* UI */,
+				2D15EAFC814D6AFF4682CA5E /* Unit */,
+				6A33995318F115470A87960C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C96685EE46268E5FF855D738 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				61C8554E2810440545D4D88B /* AI */,
+				343638768F91966DBEA704AF /* Alerts */,
+				1275F691D1D305E7C9F6AD73 /* CashCows */,
+				D9C33B6B4F7729E1F8FDF6C1 /* Dashboard */,
+				6ED794C4509F43ACB9DCB9E6 /* Players */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		D9C33B6B4F7729E1F8FDF6C1 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EDC80A3C9152FC9B9D1500D /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence" */;
+			buildPhases = (
+				B7434DCC4A45DC236AEF4C8A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AFL Fantasy Intelligence";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Intelligence";
+			productReference = 65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2F4BBD9B7FF4401C4E89126E /* AFL Fantasy Intelligence UI Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 180FB9326835C8FB748EAF7A /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence UI Tests" */;
+			buildPhases = (
+				39CD5466AFD9EAE8C86B7935 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				98725A37BC42294BE29601B2 /* PBXTargetDependency */,
+			);
+			name = "AFL Fantasy Intelligence UI Tests";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Intelligence UI Tests";
+			productReference = 06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		80E6EB14F7BD7030F491D52F /* AFL Fantasy Intelligence Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D3FEAEBC97F412E8DB19052E /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence Tests" */;
+			buildPhases = (
+				F46CC99C5C58FAE6844234D3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C374BE1D3AA4E9759E2014C3 /* PBXTargetDependency */,
+			);
+			name = "AFL Fantasy Intelligence Tests";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Intelligence Tests";
+			productReference = 0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CA5C1CFFF1D403F1694ED29D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					15BA901012FD152ABD1117BD = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					2F4BBD9B7FF4401C4E89126E = {
+						TestTargetID = 15BA901012FD152ABD1117BD;
+					};
+				};
+			};
+			buildConfigurationList = 8874013FDA0295B86BBDDA52 /* Build configuration list for PBXProject "AFL Fantasy Intelligence" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A6D1AA4C61F1450BE271F69F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DCD801BB56547C75A72EF2F2 /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */,
+				80E6EB14F7BD7030F491D52F /* AFL Fantasy Intelligence Tests */,
+				2F4BBD9B7FF4401C4E89126E /* AFL Fantasy Intelligence UI Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		39CD5466AFD9EAE8C86B7935 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7434DCC4A45DC236AEF4C8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D05943FF1566145D9F30542 /* AFLFantasyIntelligenceApp.swift in Sources */,
+				7407D63BFFB41860C4423FF4 /* AIToolsView.swift in Sources */,
+				C6284EE130A4C72A1A5E2CD7 /* APIService.swift in Sources */,
+				0BAC050B73E120133992831C /* AlertsView.swift in Sources */,
+				DA79FD5A71A21695B06BEA32 /* CashCowsView.swift in Sources */,
+				8B898A400F57B4744539F1B2 /* DashboardView.swift in Sources */,
+				141E24BB83F7033DFD756C3B /* DesignSystem.swift in Sources */,
+				4741A2DDB22C1DE923A2A92B /* Models.swift in Sources */,
+				139609CE4400F0267E21DCFC /* PlayersView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F46CC99C5C58FAE6844234D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		98725A37BC42294BE29601B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */;
+			targetProxy = 9F8FA5A1120A0868EFE7F040 /* PBXContainerItemProxy */;
+		};
+		C374BE1D3AA4E9759E2014C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */;
+			targetProxy = 3327355F1CF43B9F54F084C0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		13D89DD669B6C1AAFFBFB94A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "AFL Fantasy Intelligence";
+			};
+			name = Release;
+		};
+		2D9C3E2B661583815EE483D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		3F47C5B6E225A8779F50FB19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aflsi.fantasy-intelligence";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		67CD0BCDD4285CEDD847C71F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFL Fantasy Intelligence.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFL Fantasy Intelligence";
+			};
+			name = Debug;
+		};
+		69E2F8BF5084FD7C2CC6DA3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "AFL Fantasy Intelligence";
+			};
+			name = Debug;
+		};
+		A5EAEB051EB2D26178BC9428 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aflsi.fantasy-intelligence";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B67A3674E2517982C1133940 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFL Fantasy Intelligence.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFL Fantasy Intelligence";
+			};
+			name = Release;
+		};
+		BD77908B9F8FF8470AB13947 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		180FB9326835C8FB748EAF7A /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence UI Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69E2F8BF5084FD7C2CC6DA3E /* Debug */,
+				13D89DD669B6C1AAFFBFB94A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6EDC80A3C9152FC9B9D1500D /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F47C5B6E225A8779F50FB19 /* Debug */,
+				A5EAEB051EB2D26178BC9428 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8874013FDA0295B86BBDDA52 /* Build configuration list for PBXProject "AFL Fantasy Intelligence" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D9C3E2B661583815EE483D5 /* Debug */,
+				BD77908B9F8FF8470AB13947 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D3FEAEBC97F412E8DB19052E /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67CD0BCDD4285CEDD847C71F /* Debug */,
+				B67A3674E2517982C1133940 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DCD801BB56547C75A72EF2F2 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+	};
+	rootObject = CA5C1CFFF1D403F1694ED29D /* Project object */;
+}

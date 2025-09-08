@@ -1,0 +1,1031 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01704BFB481AB168AE18A147 /* MockPreviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68133440A3CEA3FADD52C7A8 /* MockPreviewService.swift */; };
+		10CAD8E38FD0895B421EFE8F /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25FD6409A98C21338A09F6EF /* DashboardViewModel.swift */; };
+		1166D82225D40D812C9420B1 /* TeamOptimizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7353CEA94B095879F7CC47E1 /* TeamOptimizationView.swift */; };
+		1243A3D8F6A16AE23FA1C739 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F25FA1C81AFEDD933DD682F /* NotificationsViewModel.swift */; };
+		13DEC9559B49945621C60325 /* CombineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFD0BCC80C46E2C39C4E559 /* CombineExtensions.swift */; };
+		153E946998A1556BB2F95A67 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360F6C70D45157BB91103B5 /* Services.swift */; };
+		15D74E6B44DEFB3A2CCCB921 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9DE1DDF125033DDEA2D2B5 /* WebSocketManager.swift */; };
+		17C1085F7BEE388523F9F4F4 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9DE1DDF125033DDEA2D2B5 /* WebSocketManager.swift */; };
+		221163B2E9B6AB7FF4C31756 /* CashCowAnalyzerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0ACFE59B253D590BFA606D /* CashCowAnalyzerViewModel.swift */; };
+		23ED50D5C16A0B318768A3BB /* AFLFantasyProWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20902AF95C8E100E71CD720C /* AFLFantasyProWidget.swift */; };
+		24C3A5090659BDBA5B3F5BDE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8344AEF576C2A8F77DF70FC /* ContentView.swift */; };
+		25E9524273D1B8D9A6791E15 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE80197C95610331E6C65DC /* DashboardViewModelTests.swift */; };
+		26A3C52EFD46AE9672E3A40F /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51902B09A9C4CC7D82F95C08 /* TeamManagementView.swift */; };
+		277D866BDB72E08FADA5B2AE /* CombineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFD0BCC80C46E2C39C4E559 /* CombineExtensions.swift */; };
+		2A1B356F6081759C5226972B /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D84989CF530C6D31DEB2D1 /* DashboardView.swift */; };
+		2A341E88F04A17F952977A1F /* CashCowAnalyzerView.swift.bak in Resources */ = {isa = PBXBuildFile; fileRef = CCFFA68617B3351EED97B27A /* CashCowAnalyzerView.swift.bak */; };
+		319CE4C1AEBF90C4C4C5EF43 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15229C267A1801A68738040A /* SettingsView.swift */; };
+		33810C2DB3CF7E951151CB52 /* CashCowAnalyzerView.swift.bak in Resources */ = {isa = PBXBuildFile; fileRef = CCFFA68617B3351EED97B27A /* CashCowAnalyzerView.swift.bak */; };
+		35EA15F6AD1C958E2B5CF29A /* AIRecommendationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7537E948AA08FDE42E8DBF48 /* AIRecommendationCard.swift */; };
+		39578BAC0E89467169C479B5 /* CaptainSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564F6E90ADF58DF8D8D14BA3 /* CaptainSelectionViewModel.swift */; };
+		3990D43E1D05F03431C366CB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15229C267A1801A68738040A /* SettingsView.swift */; };
+		3EA886C7EE3CED32DBB4FD17 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7536CE52C67894F5041F4A /* AlertManager.swift */; };
+		47D087DB57B550A7B9EB3EF3 /* PlayerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E10C6ED0A7CCBB03566C23 /* PlayerCard.swift */; };
+		48B8DD8E0388E64CA5AD6A1C /* AFLFantasyProApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E5AD6DC321930B518F49CC /* AFLFantasyProApp.swift */; };
+		48E1FCF1FD26E72F96C88DB3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8344AEF576C2A8F77DF70FC /* ContentView.swift */; };
+		4DF67CAB9B77D70BE13B9B02 /* CashCowAnalyzerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DD6ADEA46DD48AF443FB1 /* CashCowAnalyzerView.swift */; };
+		4F45BE5D2CC2556C479A32E2 /* CashCowAnalyzerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0ACFE59B253D590BFA606D /* CashCowAnalyzerViewModel.swift */; };
+		4F507F171B7F30BBFB177D7F /* PriceTrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D572CD5F5BE34C94CF1971 /* PriceTrendChart.swift */; };
+		520CAA3E78CAC5A3BE679E8F /* MockPreviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68133440A3CEA3FADD52C7A8 /* MockPreviewService.swift */; };
+		5345034DBEB067E34BD04B8D /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFB5EB2892BDAE95154DBA6 /* Models.swift */; };
+		5E64C040EE8CC8CE87CD6001 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9169D0B956E714D2A564026 /* FeatureFlags.swift */; };
+		62B9445FD7D9198D73DE73D4 /* AIPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F00939981A75039C74EC59 /* AIPredictionCard.swift */; };
+		637AFECB79B03428ACDC2D3F /* CaptainSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF31BEC3D39FFA768D8426EE /* CaptainSelectionView.swift */; };
+		642BCF97AEDC896B847E338E /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59068BE70A7562B3855E9F8 /* SettingsViewModel.swift */; };
+		64E850E26BB80CD8A423FC70 /* TimelineProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D8A87D7AC98A84B93F8A60 /* TimelineProviders.swift */; };
+		73EA93DAE1E52C6175D20FB2 /* AFL Fantasy Pro.app in Resources */ = {isa = PBXBuildFile; fileRef = BA9733D8F5068428FA8A7489 /* AFL Fantasy Pro.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7916B5C313E8CC56BDE81A2F /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D84989CF530C6D31DEB2D1 /* DashboardView.swift */; };
+		86FC776701FD05455DFA8D3C /* TeamManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9FB6B5D8CC4425A85AC30 /* TeamManagementViewModel.swift */; };
+		8C9466FEF90E050A14FBC43D /* ServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ED7764787471467D2D7455 /* ServiceProtocols.swift */; };
+		931A893220C016F7187F2F49 /* ServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ED7764787471467D2D7455 /* ServiceProtocols.swift */; };
+		9A719A36E4B52FEF902B791E /* CashCowAnalyzerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DD6ADEA46DD48AF443FB1 /* CashCowAnalyzerView.swift */; };
+		9B0098607B1E7E64514142D0 /* AIPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F00939981A75039C74EC59 /* AIPredictionCard.swift */; };
+		A06E4D6EB1E61697DB5722F3 /* PriceTrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D572CD5F5BE34C94CF1971 /* PriceTrendChart.swift */; };
+		A0AE4C4C081CC1BA6C68A2C6 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25FD6409A98C21338A09F6EF /* DashboardViewModel.swift */; };
+		A176A9E1DF8E5FB2E4A9C711 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC64C9E6D87FE076E9060D58 /* APIClient.swift */; };
+		A386370BD1FC4743DC4B7BA1 /* APITestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D4FF4BA49A28E341613407 /* APITestView.swift */; };
+		A43B7B0E4B54DA097C7D033A /* CaptainSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF31BEC3D39FFA768D8426EE /* CaptainSelectionView.swift */; };
+		AA52D57E3F705959C88EDBCF /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC64C9E6D87FE076E9060D58 /* APIClient.swift */; };
+		AAA52351DF317355594D09FE /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7536CE52C67894F5041F4A /* AlertManager.swift */; };
+		AB183F82B9DA7CD85B94C0E6 /* TeamStructureChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B40F188C798F6A89F275219 /* TeamStructureChart.swift */; };
+		AF909D00EE220943BD82B481 /* CashCowAnalyzerViewModel.swift.bak in Resources */ = {isa = PBXBuildFile; fileRef = 3D132A2A50A2B6CD79BC7CC9 /* CashCowAnalyzerViewModel.swift.bak */; };
+		B4ABEA56C7C8D799111BCCBA /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ED4D144FE2859FB98E0863 /* Theme.swift */; };
+		B6F01F756BB303A229C4B629 /* TeamManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B9FB6B5D8CC4425A85AC30 /* TeamManagementViewModel.swift */; };
+		B6F0605AD03C97CE4959D64E /* APITestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D4FF4BA49A28E341613407 /* APITestView.swift */; };
+		B70D12F863E19B2141E6C476 /* TeamStructureChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B40F188C798F6A89F275219 /* TeamStructureChart.swift */; };
+		BA38FF11E82EA591920EBFCD /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360F6C70D45157BB91103B5 /* Services.swift */; };
+		BB8F13E17A7E3903CB68FFD2 /* AFLFantasyFreeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531C95DA35D04A50C25AA598 /* AFLFantasyFreeApp.swift */; };
+		BD707664FC25823292CD7D74 /* WidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C92F93E671D1CD8128FB4 /* WidgetViews.swift */; };
+		BEB7DFC282133697A850F24F /* PerformanceChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288373BE64277F6905D035DC /* PerformanceChart.swift */; };
+		BFE4D61A4FD6B040312E9EAA /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E67D6884F048363F913EBD /* NotificationsView.swift */; };
+		C4190A1FAFAA2BF07C969C8C /* CaptainSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564F6E90ADF58DF8D8D14BA3 /* CaptainSelectionViewModel.swift */; };
+		C49E6F29D0A92836EF787E07 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75971AF796EE22A91B3734FB /* FeatureFlags.swift */; };
+		C6F12F35325568690A7F9113 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59068BE70A7562B3855E9F8 /* SettingsViewModel.swift */; };
+		CADCC2046252586A8118EAB8 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F25FA1C81AFEDD933DD682F /* NotificationsViewModel.swift */; };
+		CB72A16241DB08786509B71A /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ED4D144FE2859FB98E0863 /* Theme.swift */; };
+		CFA4B334928A4820C492EE5A /* PlayerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E10C6ED0A7CCBB03566C23 /* PlayerCard.swift */; };
+		D0DFC40E80B4B97F77238FE8 /* TeamOptimizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7353CEA94B095879F7CC47E1 /* TeamOptimizationView.swift */; };
+		DF3203D9A56111388043036A /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E67D6884F048363F913EBD /* NotificationsView.swift */; };
+		E1DBA9FB1755DE34660B743A /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51902B09A9C4CC7D82F95C08 /* TeamManagementView.swift */; };
+		F032AE3F3F529DE07E527DA0 /* CashCowAnalyzerViewModel.swift.bak in Resources */ = {isa = PBXBuildFile; fileRef = 3D132A2A50A2B6CD79BC7CC9 /* CashCowAnalyzerViewModel.swift.bak */; };
+		F388DCFE243DF7E6C04FF49E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597FBB7E904ACD7F7E40846A /* Extensions.swift */; };
+		F3B0B409662875B04EC57DCA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFB5EB2892BDAE95154DBA6 /* Models.swift */; };
+		F3EAD863349A2B8E96F3D60D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597FBB7E904ACD7F7E40846A /* Extensions.swift */; };
+		FBC58E771E27C2BA6099E6C6 /* AIRecommendationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7537E948AA08FDE42E8DBF48 /* AIRecommendationCard.swift */; };
+		FE0B1D6767317151824C6AA3 /* PerformanceChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288373BE64277F6905D035DC /* PerformanceChart.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0EC62BC63AEE326FAD6A509A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8DDB02AFCD4FBABB1BBFBDFE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ADC71EF96799FE236384E704;
+			remoteInfo = "AFL Fantasy Pro";
+		};
+		12294C4CDF5F12A41C4843D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8DDB02AFCD4FBABB1BBFBDFE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ADC71EF96799FE236384E704;
+			remoteInfo = "AFL Fantasy Pro";
+		};
+		92DE709AC2FC3365FAD2440C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8DDB02AFCD4FBABB1BBFBDFE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BD812736090CF2C0656BB22;
+			remoteInfo = "AFL Fantasy Free";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0360F6C70D45157BB91103B5 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
+		15229C267A1801A68738040A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		15B9FB6B5D8CC4425A85AC30 /* TeamManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementViewModel.swift; sourceTree = "<group>"; };
+		1B43038A1BDB3F05D1CD1A36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1F25FA1C81AFEDD933DD682F /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		20902AF95C8E100E71CD720C /* AFLFantasyProWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyProWidget.swift; sourceTree = "<group>"; };
+		21ED4D144FE2859FB98E0863 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		25FD6409A98C21338A09F6EF /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		288373BE64277F6905D035DC /* PerformanceChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceChart.swift; sourceTree = "<group>"; };
+		33E10C6ED0A7CCBB03566C23 /* PlayerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCard.swift; sourceTree = "<group>"; };
+		34D4FF4BA49A28E341613407 /* APITestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITestView.swift; sourceTree = "<group>"; };
+		376FEB148BDDEB0D2FF9A889 /* AFLFantasyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AFLFantasyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		39E5AD6DC321930B518F49CC /* AFLFantasyProApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyProApp.swift; sourceTree = "<group>"; };
+		3D132A2A50A2B6CD79BC7CC9 /* CashCowAnalyzerViewModel.swift.bak */ = {isa = PBXFileReference; lastKnownFileType = text; path = CashCowAnalyzerViewModel.swift.bak; sourceTree = "<group>"; };
+		3E9DE1DDF125033DDEA2D2B5 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		42ED7764787471467D2D7455 /* ServiceProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProtocols.swift; sourceTree = "<group>"; };
+		43E67D6884F048363F913EBD /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		4BFB5EB2892BDAE95154DBA6 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		4E0ACFE59B253D590BFA606D /* CashCowAnalyzerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashCowAnalyzerViewModel.swift; sourceTree = "<group>"; };
+		51902B09A9C4CC7D82F95C08 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
+		531C95DA35D04A50C25AA598 /* AFLFantasyFreeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyFreeApp.swift; sourceTree = "<group>"; };
+		5488DE414ADCB6D57BB2156F /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		564F6E90ADF58DF8D8D14BA3 /* CaptainSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptainSelectionViewModel.swift; sourceTree = "<group>"; };
+		597FBB7E904ACD7F7E40846A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		68133440A3CEA3FADD52C7A8 /* MockPreviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPreviewService.swift; sourceTree = "<group>"; };
+		6C7536CE52C67894F5041F4A /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		6C8E2F6784424C2309608EDB /* coverage_gate.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = coverage_gate.sh; sourceTree = "<group>"; };
+		7353CEA94B095879F7CC47E1 /* TeamOptimizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamOptimizationView.swift; sourceTree = "<group>"; };
+		74F00939981A75039C74EC59 /* AIPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictionCard.swift; sourceTree = "<group>"; };
+		7537E948AA08FDE42E8DBF48 /* AIRecommendationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRecommendationCard.swift; sourceTree = "<group>"; };
+		75971AF796EE22A91B3734FB /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
+		7B40F188C798F6A89F275219 /* TeamStructureChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamStructureChart.swift; sourceTree = "<group>"; };
+		8A85F07C0E854C138A9830CC /* quality.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = quality.sh; sourceTree = "<group>"; };
+		92D572CD5F5BE34C94CF1971 /* PriceTrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendChart.swift; sourceTree = "<group>"; };
+		97D8A87D7AC98A84B93F8A60 /* TimelineProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProviders.swift; sourceTree = "<group>"; };
+		9B7E116DCC0831CCFE6BBA44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9EE80197C95610331E6C65DC /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
+		A12C9941FFD9C0A40A7EDCBB /* AFL Fantasy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFL Fantasy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA5DD6ADEA46DD48AF443FB1 /* CashCowAnalyzerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashCowAnalyzerView.swift; sourceTree = "<group>"; };
+		AAFD0BCC80C46E2C39C4E559 /* CombineExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExtensions.swift; sourceTree = "<group>"; };
+		B97C92F93E671D1CD8128FB4 /* WidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViews.swift; sourceTree = "<group>"; };
+		BA9733D8F5068428FA8A7489 /* AFL Fantasy Pro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFL Fantasy Pro.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1D84989CF530C6D31DEB2D1 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		C3829D02BDF2B5E1EAE5FA20 /* AFL Fantasy Pro Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "AFL Fantasy Pro Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4254027B96383BD6E8E443C /* AFLFantasyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyApp.swift; sourceTree = "<group>"; };
+		C8344AEF576C2A8F77DF70FC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C9169D0B956E714D2A564026 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
+		CCFFA68617B3351EED97B27A /* CashCowAnalyzerView.swift.bak */ = {isa = PBXFileReference; lastKnownFileType = text; path = CashCowAnalyzerView.swift.bak; sourceTree = "<group>"; };
+		DC64C9E6D87FE076E9060D58 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		E59068BE70A7562B3855E9F8 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		EF31BEC3D39FFA768D8426EE /* CaptainSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptainSelectionView.swift; sourceTree = "<group>"; };
+		FFB881C5DEF10949D4522E27 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1AB70903F555763D0FB18D4D /* Pro */ = {
+			isa = PBXGroup;
+			children = (
+				39E5AD6DC321930B518F49CC /* AFLFantasyProApp.swift */,
+				C9169D0B956E714D2A564026 /* FeatureFlags.swift */,
+			);
+			path = Pro;
+			sourceTree = "<group>";
+		};
+		1B007A2B384500350DE4F236 /* TeamManagement */ = {
+			isa = PBXGroup;
+			children = (
+				51902B09A9C4CC7D82F95C08 /* TeamManagementView.swift */,
+				15B9FB6B5D8CC4425A85AC30 /* TeamManagementViewModel.swift */,
+			);
+			path = TeamManagement;
+			sourceTree = "<group>";
+		};
+		3103523A924E5893936F871C /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				6E2D858D5880C76CFCEB8CDF /* Unit */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4341B522C1BBB4B6AFD972D6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				42ED7764787471467D2D7455 /* ServiceProtocols.swift */,
+				0360F6C70D45157BB91103B5 /* Services.swift */,
+				BA7F685F4841F2FCCD976D34 /* Alert */,
+				534B7344DC6E89628BCF51AE /* Preview */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4BD855CBBBEB647BE46B64DF /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				5488DE414ADCB6D57BB2156F /* Debug.xcconfig */,
+				FFB881C5DEF10949D4522E27 /* Release.xcconfig */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		4FA56E73BA8D075A84701837 = {
+			isa = PBXGroup;
+			children = (
+				4BD855CBBBEB647BE46B64DF /* Configs */,
+				9FBE1224D28C64C4C5CB390D /* Resources */,
+				9812200481CA507C41794CEC /* Scripts */,
+				E4CCF7DCBCA7E497E53C5C67 /* Sources */,
+				3103523A924E5893936F871C /* Tests */,
+				88C354C122C8A1D80358A09F /* Widget */,
+				91BDA6DE8825CF157695BD66 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		534B7344DC6E89628BCF51AE /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				68133440A3CEA3FADD52C7A8 /* MockPreviewService.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		5B6C7DCE5C56C2F56DE764D6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				34D4FF4BA49A28E341613407 /* APITestView.swift */,
+				288373BE64277F6905D035DC /* PerformanceChart.swift */,
+				33E10C6ED0A7CCBB03566C23 /* PlayerCard.swift */,
+				92D572CD5F5BE34C94CF1971 /* PriceTrendChart.swift */,
+				7B40F188C798F6A89F275219 /* TeamStructureChart.swift */,
+				DE54C6DC4397767FCF43856C /* AI */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		6449A8C099D8D9FCD71B074E /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				B8DD9CE42B61A1CAEAB37DEA /* CaptainSelection */,
+				67698FF2256202C1CC9831F9 /* CashCowAnalyzer */,
+				7F16BE31DE122D1A20144177 /* Dashboard */,
+				D16D990C6C83AFA06BC59775 /* Notifications */,
+				D6AB326CEF5C5E947B53A551 /* Settings */,
+				1B007A2B384500350DE4F236 /* TeamManagement */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		67698FF2256202C1CC9831F9 /* CashCowAnalyzer */ = {
+			isa = PBXGroup;
+			children = (
+				AA5DD6ADEA46DD48AF443FB1 /* CashCowAnalyzerView.swift */,
+				CCFFA68617B3351EED97B27A /* CashCowAnalyzerView.swift.bak */,
+				4E0ACFE59B253D590BFA606D /* CashCowAnalyzerViewModel.swift */,
+				3D132A2A50A2B6CD79BC7CC9 /* CashCowAnalyzerViewModel.swift.bak */,
+			);
+			path = CashCowAnalyzer;
+			sourceTree = "<group>";
+		};
+		68862D950244A9A2B117A40B /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				DC64C9E6D87FE076E9060D58 /* APIClient.swift */,
+				3E9DE1DDF125033DDEA2D2B5 /* WebSocketManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		699EC75D561DE5A73B244F3F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C8344AEF576C2A8F77DF70FC /* ContentView.swift */,
+				5B6C7DCE5C56C2F56DE764D6 /* Components */,
+				6449A8C099D8D9FCD71B074E /* Features */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6AA608E6D0D3E79E8D3041D9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AAFD0BCC80C46E2C39C4E559 /* CombineExtensions.swift */,
+				597FBB7E904ACD7F7E40846A /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6E2D858D5880C76CFCEB8CDF /* Unit */ = {
+			isa = PBXGroup;
+			children = (
+				9EE80197C95610331E6C65DC /* DashboardViewModelTests.swift */,
+			);
+			path = Unit;
+			sourceTree = "<group>";
+		};
+		7F16BE31DE122D1A20144177 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				C1D84989CF530C6D31DEB2D1 /* DashboardView.swift */,
+				25FD6409A98C21338A09F6EF /* DashboardViewModel.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		88C354C122C8A1D80358A09F /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				20902AF95C8E100E71CD720C /* AFLFantasyProWidget.swift */,
+				9B7E116DCC0831CCFE6BBA44 /* Info.plist */,
+				97D8A87D7AC98A84B93F8A60 /* TimelineProviders.swift */,
+				B97C92F93E671D1CD8128FB4 /* WidgetViews.swift */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
+		8D0D59446A3C2ED3B8AA16F8 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C4254027B96383BD6E8E443C /* AFLFantasyApp.swift */,
+				6AA608E6D0D3E79E8D3041D9 /* Extensions */,
+				B7C2A2E500761C6EA443B717 /* Models */,
+				68862D950244A9A2B117A40B /* Network */,
+				4341B522C1BBB4B6AFD972D6 /* Services */,
+				B278DCBFC9ADFE28A17778B1 /* Theme */,
+				699EC75D561DE5A73B244F3F /* Views */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		91BDA6DE8825CF157695BD66 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A12C9941FFD9C0A40A7EDCBB /* AFL Fantasy.app */,
+				C3829D02BDF2B5E1EAE5FA20 /* AFL Fantasy Pro Widget.appex */,
+				BA9733D8F5068428FA8A7489 /* AFL Fantasy Pro.app */,
+				376FEB148BDDEB0D2FF9A889 /* AFLFantasyTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9812200481CA507C41794CEC /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				6C8E2F6784424C2309608EDB /* coverage_gate.sh */,
+				8A85F07C0E854C138A9830CC /* quality.sh */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		9FBE1224D28C64C4C5CB390D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1B43038A1BDB3F05D1CD1A36 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B278DCBFC9ADFE28A17778B1 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				21ED4D144FE2859FB98E0863 /* Theme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		B7C2A2E500761C6EA443B717 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4BFB5EB2892BDAE95154DBA6 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B8DD9CE42B61A1CAEAB37DEA /* CaptainSelection */ = {
+			isa = PBXGroup;
+			children = (
+				EF31BEC3D39FFA768D8426EE /* CaptainSelectionView.swift */,
+				564F6E90ADF58DF8D8D14BA3 /* CaptainSelectionViewModel.swift */,
+			);
+			path = CaptainSelection;
+			sourceTree = "<group>";
+		};
+		BA7F685F4841F2FCCD976D34 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				6C7536CE52C67894F5041F4A /* AlertManager.swift */,
+			);
+			path = Alert;
+			sourceTree = "<group>";
+		};
+		CD446C0118F8AB780235C3A0 /* Free */ = {
+			isa = PBXGroup;
+			children = (
+				531C95DA35D04A50C25AA598 /* AFLFantasyFreeApp.swift */,
+				75971AF796EE22A91B3734FB /* FeatureFlags.swift */,
+			);
+			path = Free;
+			sourceTree = "<group>";
+		};
+		D16D990C6C83AFA06BC59775 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				43E67D6884F048363F913EBD /* NotificationsView.swift */,
+				1F25FA1C81AFEDD933DD682F /* NotificationsViewModel.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		D6AB326CEF5C5E947B53A551 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				15229C267A1801A68738040A /* SettingsView.swift */,
+				E59068BE70A7562B3855E9F8 /* SettingsViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		DE54C6DC4397767FCF43856C /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				74F00939981A75039C74EC59 /* AIPredictionCard.swift */,
+				7537E948AA08FDE42E8DBF48 /* AIRecommendationCard.swift */,
+				7353CEA94B095879F7CC47E1 /* TeamOptimizationView.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		E4CCF7DCBCA7E497E53C5C67 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				CD446C0118F8AB780235C3A0 /* Free */,
+				1AB70903F555763D0FB18D4D /* Pro */,
+				8D0D59446A3C2ED3B8AA16F8 /* Shared */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1BD812736090CF2C0656BB22 /* AFL Fantasy Free */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB6D52753535280811BAF430 /* Build configuration list for PBXNativeTarget "AFL Fantasy Free" */;
+			buildPhases = (
+				D7C5255457A46F221EE6CC24 /* Sources */,
+				BA1FAFEEF84A5FB2161975BD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AFL Fantasy Free";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Free";
+			productReference = A12C9941FFD9C0A40A7EDCBB /* AFL Fantasy.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2D842FA0AC64FAD91A9D9468 /* AFLFantasyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B74916F0BED3CA09F154DB09 /* Build configuration list for PBXNativeTarget "AFLFantasyTests" */;
+			buildPhases = (
+				C4E0C9A0347C83C4C7572650 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				02EA299121BA2A94BE5D700F /* PBXTargetDependency */,
+				A699FFD9DD9B05D583223B80 /* PBXTargetDependency */,
+			);
+			name = AFLFantasyTests;
+			packageProductDependencies = (
+			);
+			productName = AFLFantasyTests;
+			productReference = 376FEB148BDDEB0D2FF9A889 /* AFLFantasyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5F91FF0BF563983C05318FF9 /* AFL Fantasy Pro Widget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EC702D9E6C05417594AEF63 /* Build configuration list for PBXNativeTarget "AFL Fantasy Pro Widget" */;
+			buildPhases = (
+				55D39067497E8F0793D78163 /* Sources */,
+				FD81273CE46C0F52503D8EAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				481B57CE539373A7B6D38525 /* PBXTargetDependency */,
+			);
+			name = "AFL Fantasy Pro Widget";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Pro Widget";
+			productReference = C3829D02BDF2B5E1EAE5FA20 /* AFL Fantasy Pro Widget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		ADC71EF96799FE236384E704 /* AFL Fantasy Pro */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BA84E0FA602E4736D29FA10 /* Build configuration list for PBXNativeTarget "AFL Fantasy Pro" */;
+			buildPhases = (
+				12FE86C9D078B2D944CAEE80 /* Sources */,
+				4E514532055FDA118F52954F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AFL Fantasy Pro";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Pro";
+			productReference = BA9733D8F5068428FA8A7489 /* AFL Fantasy Pro.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8DDB02AFCD4FBABB1BBFBDFE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					1BD812736090CF2C0656BB22 = {
+						ProvisioningStyle = Automatic;
+					};
+					2D842FA0AC64FAD91A9D9468 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					5F91FF0BF563983C05318FF9 = {
+						ProvisioningStyle = Automatic;
+					};
+					ADC71EF96799FE236384E704 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 507A79E07632A558134D07C9 /* Build configuration list for PBXProject "AFLFantasy" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4FA56E73BA8D075A84701837;
+			minimizedProjectReferenceProxies = 1;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1BD812736090CF2C0656BB22 /* AFL Fantasy Free */,
+				ADC71EF96799FE236384E704 /* AFL Fantasy Pro */,
+				5F91FF0BF563983C05318FF9 /* AFL Fantasy Pro Widget */,
+				2D842FA0AC64FAD91A9D9468 /* AFLFantasyTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E514532055FDA118F52954F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33810C2DB3CF7E951151CB52 /* CashCowAnalyzerView.swift.bak in Resources */,
+				AF909D00EE220943BD82B481 /* CashCowAnalyzerViewModel.swift.bak in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA1FAFEEF84A5FB2161975BD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A341E88F04A17F952977A1F /* CashCowAnalyzerView.swift.bak in Resources */,
+				F032AE3F3F529DE07E527DA0 /* CashCowAnalyzerViewModel.swift.bak in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD81273CE46C0F52503D8EAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73EA93DAE1E52C6175D20FB2 /* AFL Fantasy Pro.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12FE86C9D078B2D944CAEE80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48B8DD8E0388E64CA5AD6A1C /* AFLFantasyProApp.swift in Sources */,
+				62B9445FD7D9198D73DE73D4 /* AIPredictionCard.swift in Sources */,
+				FBC58E771E27C2BA6099E6C6 /* AIRecommendationCard.swift in Sources */,
+				AA52D57E3F705959C88EDBCF /* APIClient.swift in Sources */,
+				A386370BD1FC4743DC4B7BA1 /* APITestView.swift in Sources */,
+				AAA52351DF317355594D09FE /* AlertManager.swift in Sources */,
+				637AFECB79B03428ACDC2D3F /* CaptainSelectionView.swift in Sources */,
+				39578BAC0E89467169C479B5 /* CaptainSelectionViewModel.swift in Sources */,
+				4DF67CAB9B77D70BE13B9B02 /* CashCowAnalyzerView.swift in Sources */,
+				4F45BE5D2CC2556C479A32E2 /* CashCowAnalyzerViewModel.swift in Sources */,
+				277D866BDB72E08FADA5B2AE /* CombineExtensions.swift in Sources */,
+				48E1FCF1FD26E72F96C88DB3 /* ContentView.swift in Sources */,
+				7916B5C313E8CC56BDE81A2F /* DashboardView.swift in Sources */,
+				10CAD8E38FD0895B421EFE8F /* DashboardViewModel.swift in Sources */,
+				F388DCFE243DF7E6C04FF49E /* Extensions.swift in Sources */,
+				5E64C040EE8CC8CE87CD6001 /* FeatureFlags.swift in Sources */,
+				01704BFB481AB168AE18A147 /* MockPreviewService.swift in Sources */,
+				5345034DBEB067E34BD04B8D /* Models.swift in Sources */,
+				BFE4D61A4FD6B040312E9EAA /* NotificationsView.swift in Sources */,
+				CADCC2046252586A8118EAB8 /* NotificationsViewModel.swift in Sources */,
+				FE0B1D6767317151824C6AA3 /* PerformanceChart.swift in Sources */,
+				47D087DB57B550A7B9EB3EF3 /* PlayerCard.swift in Sources */,
+				4F507F171B7F30BBFB177D7F /* PriceTrendChart.swift in Sources */,
+				8C9466FEF90E050A14FBC43D /* ServiceProtocols.swift in Sources */,
+				153E946998A1556BB2F95A67 /* Services.swift in Sources */,
+				319CE4C1AEBF90C4C4C5EF43 /* SettingsView.swift in Sources */,
+				642BCF97AEDC896B847E338E /* SettingsViewModel.swift in Sources */,
+				26A3C52EFD46AE9672E3A40F /* TeamManagementView.swift in Sources */,
+				B6F01F756BB303A229C4B629 /* TeamManagementViewModel.swift in Sources */,
+				D0DFC40E80B4B97F77238FE8 /* TeamOptimizationView.swift in Sources */,
+				AB183F82B9DA7CD85B94C0E6 /* TeamStructureChart.swift in Sources */,
+				CB72A16241DB08786509B71A /* Theme.swift in Sources */,
+				17C1085F7BEE388523F9F4F4 /* WebSocketManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55D39067497E8F0793D78163 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23ED50D5C16A0B318768A3BB /* AFLFantasyProWidget.swift in Sources */,
+				64E850E26BB80CD8A423FC70 /* TimelineProviders.swift in Sources */,
+				BD707664FC25823292CD7D74 /* WidgetViews.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4E0C9A0347C83C4C7572650 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25E9524273D1B8D9A6791E15 /* DashboardViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D7C5255457A46F221EE6CC24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB8F13E17A7E3903CB68FFD2 /* AFLFantasyFreeApp.swift in Sources */,
+				9B0098607B1E7E64514142D0 /* AIPredictionCard.swift in Sources */,
+				35EA15F6AD1C958E2B5CF29A /* AIRecommendationCard.swift in Sources */,
+				A176A9E1DF8E5FB2E4A9C711 /* APIClient.swift in Sources */,
+				B6F0605AD03C97CE4959D64E /* APITestView.swift in Sources */,
+				3EA886C7EE3CED32DBB4FD17 /* AlertManager.swift in Sources */,
+				A43B7B0E4B54DA097C7D033A /* CaptainSelectionView.swift in Sources */,
+				C4190A1FAFAA2BF07C969C8C /* CaptainSelectionViewModel.swift in Sources */,
+				9A719A36E4B52FEF902B791E /* CashCowAnalyzerView.swift in Sources */,
+				221163B2E9B6AB7FF4C31756 /* CashCowAnalyzerViewModel.swift in Sources */,
+				13DEC9559B49945621C60325 /* CombineExtensions.swift in Sources */,
+				24C3A5090659BDBA5B3F5BDE /* ContentView.swift in Sources */,
+				2A1B356F6081759C5226972B /* DashboardView.swift in Sources */,
+				A0AE4C4C081CC1BA6C68A2C6 /* DashboardViewModel.swift in Sources */,
+				F3EAD863349A2B8E96F3D60D /* Extensions.swift in Sources */,
+				C49E6F29D0A92836EF787E07 /* FeatureFlags.swift in Sources */,
+				520CAA3E78CAC5A3BE679E8F /* MockPreviewService.swift in Sources */,
+				F3B0B409662875B04EC57DCA /* Models.swift in Sources */,
+				DF3203D9A56111388043036A /* NotificationsView.swift in Sources */,
+				1243A3D8F6A16AE23FA1C739 /* NotificationsViewModel.swift in Sources */,
+				BEB7DFC282133697A850F24F /* PerformanceChart.swift in Sources */,
+				CFA4B334928A4820C492EE5A /* PlayerCard.swift in Sources */,
+				A06E4D6EB1E61697DB5722F3 /* PriceTrendChart.swift in Sources */,
+				931A893220C016F7187F2F49 /* ServiceProtocols.swift in Sources */,
+				BA38FF11E82EA591920EBFCD /* Services.swift in Sources */,
+				3990D43E1D05F03431C366CB /* SettingsView.swift in Sources */,
+				C6F12F35325568690A7F9113 /* SettingsViewModel.swift in Sources */,
+				E1DBA9FB1755DE34660B743A /* TeamManagementView.swift in Sources */,
+				86FC776701FD05455DFA8D3C /* TeamManagementViewModel.swift in Sources */,
+				1166D82225D40D812C9420B1 /* TeamOptimizationView.swift in Sources */,
+				B70D12F863E19B2141E6C476 /* TeamStructureChart.swift in Sources */,
+				B4ABEA56C7C8D799111BCCBA /* Theme.swift in Sources */,
+				15D74E6B44DEFB3A2CCCB921 /* WebSocketManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		02EA299121BA2A94BE5D700F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BD812736090CF2C0656BB22 /* AFL Fantasy Free */;
+			targetProxy = 92DE709AC2FC3365FAD2440C /* PBXContainerItemProxy */;
+		};
+		481B57CE539373A7B6D38525 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ADC71EF96799FE236384E704 /* AFL Fantasy Pro */;
+			targetProxy = 0EC62BC63AEE326FAD6A509A /* PBXContainerItemProxy */;
+		};
+		A699FFD9DD9B05D583223B80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ADC71EF96799FE236384E704 /* AFL Fantasy Pro */;
+			targetProxy = 12294C4CDF5F12A41C4843D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		196E0D4996F3D077BE0A1CAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Configs/AFLFantasyFree-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasy;
+				PRODUCT_NAME = "AFL Fantasy";
+				SDKROOT = iphoneos;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4735DE48ACCB9D7C36361E0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FFB881C5DEF10949D4522E27 /* Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		5C9756E7CC5FE6692005822D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasyTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFL Fantasy Free.app/AFL Fantasy Free";
+			};
+			name = Release;
+		};
+		690C8379CE5A1C531781B646 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
+				INFOPLIST_FILE = Widget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasyPro.Widget;
+				PRODUCT_NAME = "AFL Fantasy Pro Widget";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7359EA1AF18A826F13697EDA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Configs/AFLFantasyFree-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasy;
+				PRODUCT_NAME = "AFL Fantasy";
+				SDKROOT = iphoneos;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		84C3EDEC2EB015A802C8F32A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Configs/AFLFantasyPro-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasyPro;
+				PRODUCT_NAME = "AFL Fantasy Pro";
+				SDKROOT = iphoneos;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		944C7D98507EA1361D3E6C24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasyTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFL Fantasy Free.app/AFL Fantasy Free";
+			};
+			name = Debug;
+		};
+		B5CB19F8CA82820D7A45B9E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Configs/AFLFantasyPro-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasyPro;
+				PRODUCT_NAME = "AFL Fantasy Pro";
+				SDKROOT = iphoneos;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D3F772CCC312ED18629A0C4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
+				INFOPLIST_FILE = Widget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tiaastor.AFLFantasyPro.Widget;
+				PRODUCT_NAME = "AFL Fantasy Pro Widget";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D88C6113491F76993FEE1DEE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5488DE414ADCB6D57BB2156F /* Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		507A79E07632A558134D07C9 /* Build configuration list for PBXProject "AFLFantasy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D88C6113491F76993FEE1DEE /* Debug */,
+				4735DE48ACCB9D7C36361E0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5EC702D9E6C05417594AEF63 /* Build configuration list for PBXNativeTarget "AFL Fantasy Pro Widget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				690C8379CE5A1C531781B646 /* Debug */,
+				D3F772CCC312ED18629A0C4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8BA84E0FA602E4736D29FA10 /* Build configuration list for PBXNativeTarget "AFL Fantasy Pro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84C3EDEC2EB015A802C8F32A /* Debug */,
+				B5CB19F8CA82820D7A45B9E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B74916F0BED3CA09F154DB09 /* Build configuration list for PBXNativeTarget "AFLFantasyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				944C7D98507EA1361D3E6C24 /* Debug */,
+				5C9756E7CC5FE6692005822D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CB6D52753535280811BAF430 /* Build configuration list for PBXNativeTarget "AFL Fantasy Free" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7359EA1AF18A826F13697EDA /* Debug */,
+				196E0D4996F3D077BE0A1CAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8DDB02AFCD4FBABB1BBFBDFE /* Project object */;
+}

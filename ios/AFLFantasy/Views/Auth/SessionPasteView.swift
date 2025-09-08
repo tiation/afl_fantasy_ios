@@ -128,7 +128,7 @@ struct SessionPasteView: View {
     private var clipboardPreviewSection: some View {
         let scale = showPasteAnimation ? 1.0 : 0.95
         let opacity = showPasteAnimation ? 1.0 : 0.0
-        VStack(spacing: 16) {
+        return VStack(spacing: 16) {
             if isCheckingAnimation {
                 HStack {
                     ProgressView()

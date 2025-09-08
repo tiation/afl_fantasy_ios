@@ -1,0 +1,42 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -project "AFL Fantasy.xcodeproj" -scheme "AFL Fantasy" -sdk iphonesimulator build
+
+Build settings from command line:
+    SDKROOT = iphonesimulator26.0
+
+2025-09-09 04:16:35.472 xcodebuild[51097:400881] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+{ platform:iOS Simulator, arch:arm64, id:CDA633A7-F249-440A-852A-31BF6A44E6B8, OS:26.0, name:Recovery iPhone 15 Pro 174642 }
+{ platform:iOS Simulator, arch:arm64, id:B5F43412-A510-4EF5-AD87-3BAFB7995C04, OS:18.6, name:iPhone 15 }
+{ platform:iOS Simulator, arch:x86_64, id:B5F43412-A510-4EF5-AD87-3BAFB7995C04, OS:18.6, name:iPhone 15 }
+{ platform:iOS Simulator, arch:arm64, id:71D9C34B-B301-4CFF-A638-E5757FC5563A, OS:26.0, name:iPhone 15 Pro }
+{ platform:iOS Simulator, arch:arm64, id:8528CAD8-CE44-4060-9CDD-B909D2F2DE11, OS:26.0, name:iPhone 16 Pro }
+{ platform:iOS Simulator, arch:arm64, id:2D6F1D3A-A9CB-4E39-8896-F9183F9DB13C, OS:26.0, name:iphone }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:00008132-001239C83E03001C, name:My Mac }
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'AFL Fantasy' in project 'AFL Fantasy' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk /Users/tiaastor/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A5308f-3885c01c3e6b6a337905948deab2002efc862078e33f881139a9d2f83bd1a9d0.sdkstatcache
+    cd /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFL\ Fantasy.xcodeproj
+    /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -o /Users/tiaastor/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A5308f-3885c01c3e6b6a337905948deab2002efc862078e33f881139a9d2f83bd1a9d0.sdkstatcache
+
+** BUILD SUCCEEDED **
+

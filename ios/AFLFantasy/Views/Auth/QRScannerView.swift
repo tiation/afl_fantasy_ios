@@ -204,7 +204,7 @@ class QRScannerUIView: UIView {
             instructionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100),
             instructionLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 20),
             instructionLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -20),
-            instructionLabel.heightAnchor.constraint(greaterThanOrEqualConstant: 60)
+            instructionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 60)
         ])
     }
 

@@ -1,0 +1,48 @@
+disabled_rules:
+  - trailing_comma
+  - file_header
+opt_in_rules:
+  - closure_end_indentation
+  - closure_spacing
+  - contains_over_first_not_nil
+  - empty_count
+  - explicit_init
+  - fatal_error_message
+  - file_name
+  - force_unwrapping
+  - implicit_return
+  - let_var_whitespace
+  - modifier_order
+  - redundant_nil_coalescing
+  - strict_fileprivate
+  - toggle_bool
+  - unavailable_function
+  - unowned_variable_capture
+  - yoda_condition
+included: [Sources, Tests]
+excluded: [Generated, .build, Scripts]
+analyzer_rules: [unused_import, unused_declaration]
+
+# Size & complexity
+line_length: { warning: 120, error: 140 }
+file_length: { warning: 400, error: 500 }
+type_body_length: { warning: 300, error: 400 }
+function_body_length: { warning: 40, error: 60 }
+cyclomatic_complexity: { warning: 10, error: 12 }
+nesting: { type_level: 2, statement_level: 3 }
+
+# Safety
+force_cast: error
+force_try: error
+force_unwrapping: error
+
+# Naming
+identifier_name:
+  min_length: 2
+  max_length: 40
+  excluded: [id, x, y, to, up]
+
+trailing_whitespace: error
+vertical_whitespace: { max_empty_lines: 1 }
+
+reporter: "xcode"

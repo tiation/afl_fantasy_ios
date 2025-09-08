@@ -1,0 +1,147 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -project AFLFantasy.xcodeproj -scheme AFLFantasy -destination "platform=iOS Simulator,id=B5F43412-A510-4EF5-AD87-3BAFB7995C04" build ONLY_ACTIVE_ARCH=YES
+
+Build settings from command line:
+    ONLY_ACTIVE_ARCH = YES
+
+2025-09-07 04:08:56.456 xcodebuild[49428:1164072] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, arch:arm64, id:B5F43412-A510-4EF5-AD87-3BAFB7995C04, OS:18.6, name:iPhone 15 }
+{ platform:iOS Simulator, arch:x86_64, id:B5F43412-A510-4EF5-AD87-3BAFB7995C04, OS:18.6, name:iPhone 15 }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'AFLFantasy' in project 'AFLFantasy' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasy/Assets.xcassets /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasy/Preview Content/Preview Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 19ae12c1b6e58edb1d18ffe39ef84402
+Build description path: /Users/tiaastor/Library/Developer/Xcode/DerivedData/AFLFantasy-ebvzjssfqowkqafbfezvgsshhgut/Build/Intermediates.noindex/XCBuildData/19ae12c1b6e58edb1d18ffe39ef84402.xcbuilddata
+error: Failed to decode version info for '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool': The data couldn’t be read because it is missing. (stdout: '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.version</key>
+	<dict>
+		<key>bundle-version</key>
+		<string>24118.1</string>
+		<key>short-bundle-version</key>
+		<string>26.0</string>
+	</dict>
+</dict>
+</plist>
+', stderr: ''
+error: Failed to decode version info for '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool': The data couldn’t be read because it is missing. (stdout: '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.version</key>
+	<dict>
+		<key>bundle-version</key>
+		<string>24118.1</string>
+		<key>short-bundle-version</key>
+		<string>26.0</string>
+	</dict>
+</dict>
+</plist>
+', stderr: ''
+error: Failed to decode version info for '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool': The data couldn’t be read because it is missing. (stdout: '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.version</key>
+	<dict>
+		<key>bundle-version</key>
+		<string>24118.1</string>
+		<key>short-bundle-version</key>
+		<string>26.0</string>
+	</dict>
+</dict>
+</plist>
+', stderr: ''
+error: Failed to decode version info for '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool': The data couldn’t be read because it is missing. (stdout: '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.version</key>
+	<dict>
+		<key>bundle-version</key>
+		<string>24118.1</string>
+		<key>short-bundle-version</key>
+		<string>26.0</string>
+	</dict>
+</dict>
+</plist>
+', stderr: ''
+error: Failed to decode version info for '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool': The data couldn’t be read because it is missing. (stdout: '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.version</key>
+	<dict>
+		<key>bundle-version</key>
+		<string>24118.1</string>
+		<key>short-bundle-version</key>
+		<string>26.0</string>
+	</dict>
+</dict>
+</plist>
+', stderr: ''
+error: Failed to decode version info for '/Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool': The data couldn’t be read because it is missing. (stdout: '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.version</key>
+	<dict>
+		<key>bundle-version</key>
+		<string>24118.1</string>
+		<key>short-bundle-version</key>
+		<string>26.0</string>
+	</dict>
+</dict>
+</plist>
+', stderr: ''
+error: failed to read asset tags: The command `(cd /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios && /Applications/Xcode-beta.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasy/Assets.xcassets '/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasy/Preview Content/Preview Assets.xcassets')` exited with status 1. The command's standard output was:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.errors</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>Unknown argument '--print-asset-tag-combinations'.</string>
+		</dict>
+	</array>
+</dict>
+</plist>
+ (in target 'AFLFantasy' from project 'AFLFantasy')
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Building project AFLFantasy with scheme AFLFantasy
+(1 failure)

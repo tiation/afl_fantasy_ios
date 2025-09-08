@@ -1,0 +1,3 @@
+module SwiftParserDiagnostics {
+    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SwiftParserDiagnostics.build/include/SwiftParserDiagnostics-Swift.h"
+}

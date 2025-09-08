@@ -30,32 +30,32 @@ struct NotificationsSection: View {
         Section(header: Text("🔔 Notifications")) {
             VStack(alignment: .leading, spacing: 8) {
                 Toggle("Breakeven Alerts", isOn: $enableBreakevenAlerts)
-                    .onChange(of: enableBreakevenAlerts) { _, newValue in
+                    .onChange(of: enableBreakevenAlerts) { newValue in
                         handleNotificationToggle("breakeven", newValue)
                     }
 
                 Toggle("Injury Risk Alerts", isOn: $enableInjuryAlerts)
-                    .onChange(of: enableInjuryAlerts) { _, newValue in
+                    .onChange(of: enableInjuryAlerts) { newValue in
                         handleNotificationToggle("injury", newValue)
                     }
 
                 Toggle("Late Team Changes", isOn: $enableLateOutAlerts)
-                    .onChange(of: enableLateOutAlerts) { _, newValue in
+                    .onChange(of: enableLateOutAlerts) { newValue in
                         handleNotificationToggle("lateOut", newValue)
                     }
 
                 Toggle("Trade Recommendations", isOn: $enableTradeAlerts)
-                    .onChange(of: enableTradeAlerts) { _, newValue in
+                    .onChange(of: enableTradeAlerts) { newValue in
                         handleNotificationToggle("trade", newValue)
                     }
 
                 Toggle("Price Change Alerts", isOn: $enablePriceChangeAlerts)
-                    .onChange(of: enablePriceChangeAlerts) { _, newValue in
+                    .onChange(of: enablePriceChangeAlerts) { newValue in
                         handleNotificationToggle("priceChange", newValue)
                     }
 
                 Toggle("Captain Suggestions", isOn: $enableCaptainAlerts)
-                    .onChange(of: enableCaptainAlerts) { _, newValue in
+                    .onChange(of: enableCaptainAlerts) { newValue in
                         handleNotificationToggle("captain", newValue)
                     }
             }

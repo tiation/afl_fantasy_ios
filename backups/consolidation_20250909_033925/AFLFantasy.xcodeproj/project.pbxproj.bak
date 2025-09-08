@@ -1,0 +1,734 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		007C513FAB578935425DB86C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA814E918AB70D143AFC33FB /* KeychainManager.swift */; };
+		02E6DE5EC317772C3C842112 /* AdvancedCaptainAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161FF39413D5191B38144FB7 /* AdvancedCaptainAI.swift */; };
+		06D9624B036B0667438B6C40 /* CaptainAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D35BFDD4CB0567F5D7AA28 /* CaptainAnalysisView.swift */; };
+		143BDD18E2BD596228184899 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FC36386597468BA584038A /* TabItem.swift */; };
+		1A2B3C4D5E6F70819A0B1C2F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */; };
+		1A2B3C4D5E6F70819A0B1C31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */; };
+		1A2B3C4D5E6F70819A0B1C33 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C34 /* Preview Assets.xcassets */; };
+		1A2B3C4D5E6F70819A0B1C35 /* AFLFantasyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C36 /* AFLFantasyTests.swift */; };
+		1A2B3C4D5E6F70819A0B1C37 /* AFLFantasyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C38 /* AFLFantasyUITests.swift */; };
+		1A2B3C4D5E6F70819A0B1C39 /* AFLFantasyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819A0B1C3A /* AFLFantasyUITestsLaunchTests.swift */; };
+		1E3D91FD2E6C74DC00D0B80B /* AFLAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */; };
+		1E3D91FF2E6C74E200D0B80B /* AFLHapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */; };
+		1E988A832E6C929800BA44A4 /* PerformanceMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */; };
+		2504C9E513FB3E7A6AE217F4 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445B67C7D6DA86FB19636641 /* TabItem.swift */; };
+		2F7C534551ACA6F47565946E /* AFLFantasyToolsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FA07BD92099EC6AE4765F /* AFLFantasyToolsClient.swift */; };
+		40A6BD7C2421B78A49A0C88E /* AFLFantasyDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788780879D0188C0A6A88455 /* AFLFantasyDataService.swift */; };
+		4185C610773AB530EAAC0F29 /* AdvancedCashCowTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1F732C920D936198BF944 /* AdvancedCashCowTracker.swift */; };
+		45212ADB916805FF8641A885 /* IntelligentTradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040B1A0EFF1C16C6584E3E8 /* IntelligentTradesView.swift */; };
+		4C71DC19B2326061FF3EA268 /* EnhancedDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092D1D98DBF3AA8BF0503D32 /* EnhancedDashboardView.swift */; };
+		4D52CC6A3F720C10821C1E9C /* AFLFantasyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1021922A71FBD3FBE8AA65DE /* AFLFantasyAPIClient.swift */; };
+		5F3F90C39C7B62A75DBE6872 /* AFLFantasyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */; };
+		6345F051133C9261929F1C7D /* AFLFantasyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBB8EBAF7C898C53E4AD5E7 /* AFLFantasyError.swift */; };
+		73CB61FA33568ED1608AD19B /* AFLFantasyToolsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2341BA8784F273BDDE6416 /* AFLFantasyToolsClient.swift */; };
+		8A0A33CD95D395B795B4B8F7 /* AFLFantasyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75ED839E57BEAC0BC59A24E /* AFLFantasyError.swift */; };
+		8AF494114EF70DD2D6B36838 /* IntelligentTradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C678564444952E6533A9A59F /* IntelligentTradesView.swift */; };
+		965A4AE7B7650B54FF764392 /* AdvancedCaptainAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27C1F0F961E3D129383892F /* AdvancedCaptainAI.swift */; };
+		9AC3C044F26E83110D8E4F5E /* AFLFantasyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9831582C4796F62F0C2918 /* AFLFantasyError.swift */; };
+		A26D3C3D6E96902F5D075EDC /* AdvancedCashCowTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328A45BAB4F5516E210581C5 /* AdvancedCashCowTracker.swift */; };
+		ADD3DB2171C0AB5D9089C6C1 /* AdvancedCashCowTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7B398784473B49CA34C022 /* AdvancedCashCowTracker.swift */; };
+		B2A94C633AA4C025B17DCE16 /* AFLFantasyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECBFC75A5E5D3365685C6E3 /* AFLFantasyAPIClient.swift */; };
+		BEC4ED4C8E2D98FA09AAE302 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8F70C2E31E8DBBA711B51E /* TabItem.swift */; };
+		C1D00D5B974BDB63E6004FEB /* CaptainAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140BC3818058C86814F8A4A8 /* CaptainAnalysisView.swift */; };
+		C49B8AC83E1D18F51710B460 /* AFLFantasyDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71A35B611EE271F3A543FAD /* AFLFantasyDataService.swift */; };
+		C978DB1C9AE4644BBD7C2038 /* CaptainAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1DD0E2726BFCC7CE85B883 /* CaptainAnalysisView.swift */; };
+		CA56BB405087AEA33EC61BCF /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5837683D127651C368662CF /* KeychainManager.swift */; };
+		CB70703CCB0B6764866F32B2 /* IntelligentTradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CFFB7BA5058357D80F9D /* IntelligentTradesView.swift */; };
+		D3EB07F90B4D63D38942CFB0 /* EnhancedDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAB1881C5B07F7C5EC79756 /* EnhancedDashboardView.swift */; };
+		E0EFD5A368AA74AE771F9695 /* EnhancedDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627D261EA3B7783667DC6204 /* EnhancedDashboardView.swift */; };
+		E50CB4EA8BB97B7B755A9A9E /* AFLFantasyToolsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E586938A77CB3219CE47A28 /* AFLFantasyToolsClient.swift */; };
+		E87C92628FF2B7AA556E6662 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CF36D403005BADE1C43BFE /* KeychainManager.swift */; };
+		F5BF82A30A3745F01C553C4C /* AdvancedCaptainAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4938608D4C2D1453069A5845 /* AdvancedCaptainAI.swift */; };
+		FC07EF92B5131F1AF937C6A7 /* AFLFantasyDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90BB8E4AC595B8300E3C14B /* AFLFantasyDataService.swift */; };
+		C991600844DAE7DF854FDEBD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ED2FD03ECB1F8BB408A9F6 /* AppState.swift */; };
+		/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1A2B3C4D5E6F70819A0B1C3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A2B3C4D5E6F70819A0B1C3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A2B3C4D5E6F70819A0B1C3D;
+			remoteInfo = AFLFantasy;
+		};
+		1A2B3C4D5E6F70819A0B1C3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A2B3C4D5E6F70819A0B1C3C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A2B3C4D5E6F70819A0B1C3D;
+			remoteInfo = AFLFantasy;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		092D1D98DBF3AA8BF0503D32 /* EnhancedDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnhancedDashboardView.swift; path = AFLFantasy/Views/EnhancedDashboardView.swift; sourceTree = "<group>"; };
+		1021922A71FBD3FBE8AA65DE /* AFLFantasyAPIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyAPIClient.swift; path = AFLFantasy/Services/AFLFantasyAPIClient.swift; sourceTree = "<group>"; };
+		140BC3818058C86814F8A4A8 /* CaptainAnalysisView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptainAnalysisView.swift; path = AFLFantasy/Views/CaptainAnalysisView.swift; sourceTree = "<group>"; };
+		161FF39413D5191B38144FB7 /* AdvancedCaptainAI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCaptainAI.swift; path = AFLFantasy/Views/AdvancedCaptainAI.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C34 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C36 /* AFLFantasyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C38 /* AFLFantasyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyUITests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C3A /* AFLFantasyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819A0B1C3F /* AFLFantasy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFLFantasy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A2B3C4D5E6F70819A0B1C40 /* AFLFantasyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AFLFantasyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A2B3C4D5E6F70819A0B1C41 /* AFLFantasyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AFLFantasyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLAudioManager.swift; sourceTree = "<group>"; };
+		1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLHapticsManager.swift; sourceTree = "<group>"; };
+		1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceMonitor.swift; sourceTree = "<group>"; };
+		2D8F70C2E31E8DBBA711B51E /* TabItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TabItem.swift; path = AFLFantasy/Models/TabItem.swift; sourceTree = "<group>"; };
+		328A45BAB4F5516E210581C5 /* AdvancedCashCowTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCashCowTracker.swift; path = AFLFantasy/Views/AdvancedCashCowTracker.swift; sourceTree = "<group>"; };
+		37D35BFDD4CB0567F5D7AA28 /* CaptainAnalysisView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptainAnalysisView.swift; path = AFLFantasy/Views/CaptainAnalysisView.swift; sourceTree = "<group>"; };
+		3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyAPIClient.swift; path = AFLFantasy/Services/AFLFantasyAPIClient.swift; sourceTree = "<group>"; };
+		445B67C7D6DA86FB19636641 /* TabItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TabItem.swift; path = AFLFantasy/Models/TabItem.swift; sourceTree = "<group>"; };
+		45FC36386597468BA584038A /* TabItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TabItem.swift; path = AFLFantasy/Models/TabItem.swift; sourceTree = "<group>"; };
+		4938608D4C2D1453069A5845 /* AdvancedCaptainAI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCaptainAI.swift; path = AFLFantasy/Views/AdvancedCaptainAI.swift; sourceTree = "<group>"; };
+		4E586938A77CB3219CE47A28 /* AFLFantasyToolsClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyToolsClient.swift; path = AFLFantasy/Services/AFLFantasyToolsClient.swift; sourceTree = "<group>"; };
+		51F4CFFB7BA5058357D80F9D /* IntelligentTradesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IntelligentTradesView.swift; path = AFLFantasy/Views/IntelligentTradesView.swift; sourceTree = "<group>"; };
+		6040B1A0EFF1C16C6584E3E8 /* IntelligentTradesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IntelligentTradesView.swift; path = AFLFantasy/Views/IntelligentTradesView.swift; sourceTree = "<group>"; };
+		627D261EA3B7783667DC6204 /* EnhancedDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnhancedDashboardView.swift; path = AFLFantasy/Views/EnhancedDashboardView.swift; sourceTree = "<group>"; };
+		62CF36D403005BADE1C43BFE /* KeychainManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainManager.swift; path = AFLFantasy/Services/KeychainManager.swift; sourceTree = "<group>"; };
+		6ECBFC75A5E5D3365685C6E3 /* AFLFantasyAPIClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyAPIClient.swift; path = AFLFantasy/Services/AFLFantasyAPIClient.swift; sourceTree = "<group>"; };
+		788780879D0188C0A6A88455 /* AFLFantasyDataService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyDataService.swift; path = AFLFantasy/Services/AFLFantasyDataService.swift; sourceTree = "<group>"; };
+		7F2341BA8784F273BDDE6416 /* AFLFantasyToolsClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyToolsClient.swift; path = AFLFantasy/Services/AFLFantasyToolsClient.swift; sourceTree = "<group>"; };
+		9A1DD0E2726BFCC7CE85B883 /* CaptainAnalysisView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CaptainAnalysisView.swift; path = AFLFantasy/Views/CaptainAnalysisView.swift; sourceTree = "<group>"; };
+		A75ED839E57BEAC0BC59A24E /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
+		B5837683D127651C368662CF /* KeychainManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainManager.swift; path = AFLFantasy/Services/KeychainManager.swift; sourceTree = "<group>"; };
+		BEAB1881C5B07F7C5EC79756 /* EnhancedDashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnhancedDashboardView.swift; path = AFLFantasy/Views/EnhancedDashboardView.swift; sourceTree = "<group>"; };
+		C4D1F732C920D936198BF944 /* AdvancedCashCowTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCashCowTracker.swift; path = AFLFantasy/Views/AdvancedCashCowTracker.swift; sourceTree = "<group>"; };
+		C678564444952E6533A9A59F /* IntelligentTradesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IntelligentTradesView.swift; path = AFLFantasy/Views/IntelligentTradesView.swift; sourceTree = "<group>"; };
+		D90BB8E4AC595B8300E3C14B /* AFLFantasyDataService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyDataService.swift; path = AFLFantasy/Services/AFLFantasyDataService.swift; sourceTree = "<group>"; };
+		E27C1F0F961E3D129383892F /* AdvancedCaptainAI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCaptainAI.swift; path = AFLFantasy/Views/AdvancedCaptainAI.swift; sourceTree = "<group>"; };
+		E71A35B611EE271F3A543FAD /* AFLFantasyDataService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyDataService.swift; path = AFLFantasy/Services/AFLFantasyDataService.swift; sourceTree = "<group>"; };
+		EA814E918AB70D143AFC33FB /* KeychainManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainManager.swift; path = AFLFantasy/Services/KeychainManager.swift; sourceTree = "<group>"; };
+		EB7B398784473B49CA34C022 /* AdvancedCashCowTracker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdvancedCashCowTracker.swift; path = AFLFantasy/Views/AdvancedCashCowTracker.swift; sourceTree = "<group>"; };
+		F28FA07BD92099EC6AE4765F /* AFLFantasyToolsClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyToolsClient.swift; path = AFLFantasy/Services/AFLFantasyToolsClient.swift; sourceTree = "<group>"; };
+		FF9831582C4796F62F0C2918 /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
+		FFBB8EBAF7C898C53E4AD5E7 /* AFLFantasyError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFLFantasyError.swift; path = AFLFantasy/Core/AFLFantasyError.swift; sourceTree = "<group>"; };
+		81ED2FD03ECB1F8BB408A9F6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFLFantasy/Models/AppState.swift"; sourceTree = "<group>"; };
+		/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A2B3C4D5E6F70819A0B1C42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2B3C4D5E6F70819A0B1C43 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2B3C4D5E6F70819A0B1C44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A2B3C4D5E6F70819A0B1C45 = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70819A0B1C46 /* AFLFantasy */,
+				1A2B3C4D5E6F70819A0B1C47 /* AFLFantasyTests */,
+				1A2B3C4D5E6F70819A0B1C48 /* AFLFantasyUITests */,
+				1A2B3C4D5E6F70819A0B1C49 /* Products */,
+				D90BB8E4AC595B8300E3C14B /* AFLFantasyDataService.swift */,
+				7F2341BA8784F273BDDE6416 /* AFLFantasyToolsClient.swift */,
+				3F99D48D9500B2DF00CA65E9 /* AFLFantasyAPIClient.swift */,
+				62CF36D403005BADE1C43BFE /* KeychainManager.swift */,
+				FF9831582C4796F62F0C2918 /* AFLFantasyError.swift */,
+				45FC36386597468BA584038A /* TabItem.swift */,
+				092D1D98DBF3AA8BF0503D32 /* EnhancedDashboardView.swift */,
+				37D35BFDD4CB0567F5D7AA28 /* CaptainAnalysisView.swift */,
+				161FF39413D5191B38144FB7 /* AdvancedCaptainAI.swift */,
+				C678564444952E6533A9A59F /* IntelligentTradesView.swift */,
+				C4D1F732C920D936198BF944 /* AdvancedCashCowTracker.swift */,
+				E71A35B611EE271F3A543FAD /* AFLFantasyDataService.swift */,
+				F28FA07BD92099EC6AE4765F /* AFLFantasyToolsClient.swift */,
+				6ECBFC75A5E5D3365685C6E3 /* AFLFantasyAPIClient.swift */,
+				B5837683D127651C368662CF /* KeychainManager.swift */,
+				FFBB8EBAF7C898C53E4AD5E7 /* AFLFantasyError.swift */,
+				445B67C7D6DA86FB19636641 /* TabItem.swift */,
+				627D261EA3B7783667DC6204 /* EnhancedDashboardView.swift */,
+				9A1DD0E2726BFCC7CE85B883 /* CaptainAnalysisView.swift */,
+				E27C1F0F961E3D129383892F /* AdvancedCaptainAI.swift */,
+				6040B1A0EFF1C16C6584E3E8 /* IntelligentTradesView.swift */,
+				EB7B398784473B49CA34C022 /* AdvancedCashCowTracker.swift */,
+				788780879D0188C0A6A88455 /* AFLFantasyDataService.swift */,
+				4E586938A77CB3219CE47A28 /* AFLFantasyToolsClient.swift */,
+				1021922A71FBD3FBE8AA65DE /* AFLFantasyAPIClient.swift */,
+				EA814E918AB70D143AFC33FB /* KeychainManager.swift */,
+				A75ED839E57BEAC0BC59A24E /* AFLFantasyError.swift */,
+				2D8F70C2E31E8DBBA711B51E /* TabItem.swift */,
+				BEAB1881C5B07F7C5EC79756 /* EnhancedDashboardView.swift */,
+				140BC3818058C86814F8A4A8 /* CaptainAnalysisView.swift */,
+				4938608D4C2D1453069A5845 /* AdvancedCaptainAI.swift */,
+				51F4CFFB7BA5058357D80F9D /* IntelligentTradesView.swift */,
+				328A45BAB4F5516E210581C5 /* AdvancedCashCowTracker.swift */,
+			);
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F70819A0B1C46 /* AFLFantasy */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70819A0B1C30 /* ContentView.swift */,
+				1A2B3C4D5E6F70819A0B1C32 /* Assets.xcassets */,
+				1A2B3C4D5E6F70819A0B1C4A /* Preview Content */,
+				1E3D91FC2E6C74DB00D0B80B /* AFLAudioManager.swift */,
+				1E3D91FE2E6C74E200D0B80B /* AFLHapticsManager.swift */,
+				1E988A822E6C929800BA44A4 /* PerformanceMonitor.swift */,
+			);
+			path = AFLFantasy;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F70819A0B1C47 /* AFLFantasyTests */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70819A0B1C36 /* AFLFantasyTests.swift */,
+			);
+			path = AFLFantasyTests;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F70819A0B1C48 /* AFLFantasyUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70819A0B1C38 /* AFLFantasyUITests.swift */,
+				1A2B3C4D5E6F70819A0B1C3A /* AFLFantasyUITestsLaunchTests.swift */,
+			);
+			path = AFLFantasyUITests;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F70819A0B1C49 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70819A0B1C3F /* AFLFantasy.app */,
+				1A2B3C4D5E6F70819A0B1C40 /* AFLFantasyTests.xctest */,
+				1A2B3C4D5E6F70819A0B1C41 /* AFLFantasyUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F70819A0B1C4A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70819A0B1C34 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A2B3C4D5E6F70819A0B1C3D /* AFLFantasy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A2B3C4D5E6F70819A0B1C4B /* Build configuration list for PBXNativeTarget "AFLFantasy" */;
+			buildPhases = (
+				1A2B3C4D5E6F70819A0B1C4C /* Sources */,
+				1A2B3C4D5E6F70819A0B1C42 /* Frameworks */,
+				1A2B3C4D5E6F70819A0B1C4D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AFLFantasy;
+			productName = AFLFantasy;
+			productReference = 1A2B3C4D5E6F70819A0B1C3F /* AFLFantasy.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1A2B3C4D5E6F70819A0B1C4E /* AFLFantasyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A2B3C4D5E6F70819A0B1C4F /* Build configuration list for PBXNativeTarget "AFLFantasyTests" */;
+			buildPhases = (
+				1A2B3C4D5E6F70819A0B1C50 /* Sources */,
+				1A2B3C4D5E6F70819A0B1C43 /* Frameworks */,
+				1A2B3C4D5E6F70819A0B1C51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1A2B3C4D5E6F70819A0B1C52 /* PBXTargetDependency */,
+			);
+			name = AFLFantasyTests;
+			productName = AFLFantasyTests;
+			productReference = 1A2B3C4D5E6F70819A0B1C40 /* AFLFantasyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1A2B3C4D5E6F70819A0B1C53 /* AFLFantasyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A2B3C4D5E6F70819A0B1C54 /* Build configuration list for PBXNativeTarget "AFLFantasyUITests" */;
+			buildPhases = (
+				1A2B3C4D5E6F70819A0B1C55 /* Sources */,
+				1A2B3C4D5E6F70819A0B1C44 /* Frameworks */,
+				1A2B3C4D5E6F70819A0B1C56 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1A2B3C4D5E6F70819A0B1C57 /* PBXTargetDependency */,
+			);
+			name = AFLFantasyUITests;
+			productName = AFLFantasyUITests;
+			productReference = 1A2B3C4D5E6F70819A0B1C41 /* AFLFantasyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A2B3C4D5E6F70819A0B1C3C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					1A2B3C4D5E6F70819A0B1C3D = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					1A2B3C4D5E6F70819A0B1C4E = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 1A2B3C4D5E6F70819A0B1C3D;
+					};
+					1A2B3C4D5E6F70819A0B1C53 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 1A2B3C4D5E6F70819A0B1C3D;
+					};
+				};
+			};
+			buildConfigurationList = 1A2B3C4D5E6F70819A0B1C58 /* Build configuration list for PBXProject "AFLFantasy" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A2B3C4D5E6F70819A0B1C45;
+			productRefGroup = 1A2B3C4D5E6F70819A0B1C49 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A2B3C4D5E6F70819A0B1C3D /* AFLFantasy */,
+				1A2B3C4D5E6F70819A0B1C4E /* AFLFantasyTests */,
+				1A2B3C4D5E6F70819A0B1C53 /* AFLFantasyUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1A2B3C4D5E6F70819A0B1C4D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A2B3C4D5E6F70819A0B1C33 /* Preview Assets.xcassets in Resources */,
+				1A2B3C4D5E6F70819A0B1C31 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2B3C4D5E6F70819A0B1C51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2B3C4D5E6F70819A0B1C56 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A2B3C4D5E6F70819A0B1C4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E3D91FD2E6C74DC00D0B80B /* AFLAudioManager.swift in Sources */,
+				1E3D91FF2E6C74E200D0B80B /* AFLHapticsManager.swift in Sources */,
+				1A2B3C4D5E6F70819A0B1C2F /* ContentView.swift in Sources */,
+				FC07EF92B5131F1AF937C6A7 /* AFLFantasyDataService.swift in Sources */,
+				73CB61FA33568ED1608AD19B /* AFLFantasyToolsClient.swift in Sources */,
+				5F3F90C39C7B62A75DBE6872 /* AFLFantasyAPIClient.swift in Sources */,
+				E87C92628FF2B7AA556E6662 /* KeychainManager.swift in Sources */,
+				9AC3C044F26E83110D8E4F5E /* AFLFantasyError.swift in Sources */,
+				143BDD18E2BD596228184899 /* TabItem.swift in Sources */,
+				4C71DC19B2326061FF3EA268 /* EnhancedDashboardView.swift in Sources */,
+				06D9624B036B0667438B6C40 /* CaptainAnalysisView.swift in Sources */,
+				02E6DE5EC317772C3C842112 /* AdvancedCaptainAI.swift in Sources */,
+				1E988A832E6C929800BA44A4 /* PerformanceMonitor.swift in Sources */,
+				8AF494114EF70DD2D6B36838 /* IntelligentTradesView.swift in Sources */,
+				4185C610773AB530EAAC0F29 /* AdvancedCashCowTracker.swift in Sources */,
+				C49B8AC83E1D18F51710B460 /* AFLFantasyDataService.swift in Sources */,
+				2F7C534551ACA6F47565946E /* AFLFantasyToolsClient.swift in Sources */,
+				B2A94C633AA4C025B17DCE16 /* AFLFantasyAPIClient.swift in Sources */,
+				CA56BB405087AEA33EC61BCF /* KeychainManager.swift in Sources */,
+				6345F051133C9261929F1C7D /* AFLFantasyError.swift in Sources */,
+				2504C9E513FB3E7A6AE217F4 /* TabItem.swift in Sources */,
+				E0EFD5A368AA74AE771F9695 /* EnhancedDashboardView.swift in Sources */,
+				C978DB1C9AE4644BBD7C2038 /* CaptainAnalysisView.swift in Sources */,
+				965A4AE7B7650B54FF764392 /* AdvancedCaptainAI.swift in Sources */,
+				45212ADB916805FF8641A885 /* IntelligentTradesView.swift in Sources */,
+				ADD3DB2171C0AB5D9089C6C1 /* AdvancedCashCowTracker.swift in Sources */,
+				40A6BD7C2421B78A49A0C88E /* AFLFantasyDataService.swift in Sources */,
+				E50CB4EA8BB97B7B755A9A9E /* AFLFantasyToolsClient.swift in Sources */,
+				4D52CC6A3F720C10821C1E9C /* AFLFantasyAPIClient.swift in Sources */,
+				007C513FAB578935425DB86C /* KeychainManager.swift in Sources */,
+				8A0A33CD95D395B795B4B8F7 /* AFLFantasyError.swift in Sources */,
+				BEC4ED4C8E2D98FA09AAE302 /* TabItem.swift in Sources */,
+				D3EB07F90B4D63D38942CFB0 /* EnhancedDashboardView.swift in Sources */,
+				C1D00D5B974BDB63E6004FEB /* CaptainAnalysisView.swift in Sources */,
+				F5BF82A30A3745F01C553C4C /* AdvancedCaptainAI.swift in Sources */,
+				CB70703CCB0B6764866F32B2 /* IntelligentTradesView.swift in Sources */,
+				A26D3C3D6E96902F5D075EDC /* AdvancedCashCowTracker.swift in Sources */,
+							C991600844DAE7DF854FDEBD /* AppState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2B3C4D5E6F70819A0B1C50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A2B3C4D5E6F70819A0B1C35 /* AFLFantasyTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2B3C4D5E6F70819A0B1C55 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A2B3C4D5E6F70819A0B1C37 /* AFLFantasyUITests.swift in Sources */,
+				1A2B3C4D5E6F70819A0B1C39 /* AFLFantasyUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1A2B3C4D5E6F70819A0B1C52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A2B3C4D5E6F70819A0B1C3D /* AFLFantasy */;
+			targetProxy = 1A2B3C4D5E6F70819A0B1C3B /* PBXContainerItemProxy */;
+		};
+		1A2B3C4D5E6F70819A0B1C57 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A2B3C4D5E6F70819A0B1C3D /* AFLFantasy */;
+			targetProxy = 1A2B3C4D5E6F70819A0B1C3E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1A2B3C4D5E6F70819A0B1C59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1A2B3C4D5E6F70819A0B1C5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1A2B3C4D5E6F70819A0B1C5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AFLFantasy/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afl.ai.AFLFantasy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A2B3C4D5E6F70819A0B1C5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AFLFantasy/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afl.ai.AFLFantasy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1A2B3C4D5E6F70819A0B1C5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afl.ai.AFLFantasyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFLFantasy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFLFantasy";
+			};
+			name = Debug;
+		};
+		1A2B3C4D5E6F70819A0B1C5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afl.ai.AFLFantasyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFLFantasy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFLFantasy";
+			};
+			name = Release;
+		};
+		1A2B3C4D5E6F70819A0B1C5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afl.ai.AFLFantasyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AFLFantasy;
+			};
+			name = Debug;
+		};
+		1A2B3C4D5E6F70819A0B1C60 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afl.ai.AFLFantasyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AFLFantasy;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A2B3C4D5E6F70819A0B1C4B /* Build configuration list for PBXNativeTarget "AFLFantasy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2B3C4D5E6F70819A0B1C5B /* Debug */,
+				1A2B3C4D5E6F70819A0B1C5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A2B3C4D5E6F70819A0B1C4F /* Build configuration list for PBXNativeTarget "AFLFantasyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2B3C4D5E6F70819A0B1C5D /* Debug */,
+				1A2B3C4D5E6F70819A0B1C5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A2B3C4D5E6F70819A0B1C54 /* Build configuration list for PBXNativeTarget "AFLFantasyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2B3C4D5E6F70819A0B1C5F /* Debug */,
+				1A2B3C4D5E6F70819A0B1C60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A2B3C4D5E6F70819A0B1C58 /* Build configuration list for PBXProject "AFLFantasy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2B3C4D5E6F70819A0B1C59 /* Debug */,
+				1A2B3C4D5E6F70819A0B1C5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A2B3C4D5E6F70819A0B1C3C /* Project object */;
+}

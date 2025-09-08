@@ -1,0 +1,26 @@
+{
+  "": {
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/master.swiftdeps"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/NukeVideo/AVDataAsset.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/AVDataAsset.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/AVDataAsset.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/AVDataAsset~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/AVDataAsset.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/AVDataAsset.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/NukeVideo/ImageDecoders+Video.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/ImageDecoders+Video.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/ImageDecoders+Video.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/ImageDecoders+Video~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/ImageDecoders+Video.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/ImageDecoders+Video.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/NukeVideo/VideoPlayerView.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/VideoPlayerView.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/VideoPlayerView.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/VideoPlayerView~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/VideoPlayerView.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeVideo.build/VideoPlayerView.dia"
+  }
+}

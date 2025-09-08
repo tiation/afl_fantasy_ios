@@ -36,7 +36,7 @@ struct AFLFantasyTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            DashboardView()
+            UnifiedDashboardView()
                 .tabItem {
                     Label(
                         TabItem.dashboard.title,

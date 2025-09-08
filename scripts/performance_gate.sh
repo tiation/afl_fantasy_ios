@@ -55,19 +55,22 @@ check_dependencies() {
 find_project() {
     local project_file
     
-    # Look for .xcodeproj or .xcworkspace
-    if [[ -n "$(find . -maxdepth 2 -name "*.xcworkspace" | head -1)" ]]; then
-        project_file=$(find . -maxdepth 2 -name "*.xcworkspace" | head -1)
-        PROJECT_TYPE="workspace"
+    # Prefer standalone .xcodeproj over embedded workspace
+    if [[ -f "AFL Fantasy.xcodeproj/project.pbxproj" ]]; then
+        project_file="./AFL Fantasy.xcodeproj"
+        PROJECT_TYPE="project"
     elif [[ -n "$(find . -maxdepth 2 -name "*.xcodeproj" | head -1)" ]]; then
         project_file=$(find . -maxdepth 2 -name "*.xcodeproj" | head -1)
         PROJECT_TYPE="project"
+    elif [[ -n "$(find . -maxdepth 2 -name "*.xcworkspace" | head -1)" ]]; then
+        project_file=$(find . -maxdepth 2 -name "*.xcworkspace" | head -1)
+        PROJECT_TYPE="workspace"
     else
         error "No Xcode project or workspace found"
         exit 1
     fi
     
-    PROJECT_FILE=$(basename "$project_file")
+    PROJECT_FILE="$project_file"
     log "Found Xcode $PROJECT_TYPE: $PROJECT_FILE"
 }
 
@@ -75,13 +78,13 @@ find_project() {
 get_scheme() {
     local schemes
     if [[ "$PROJECT_TYPE" == "workspace" ]]; then
-        schemes=$(xcodebuild -workspace "$PROJECT_FILE" -list | grep -A 100 "Schemes:" | grep -v "Schemes:" | head -10 | tr -d ' ')
+        schemes=$(xcodebuild -workspace "$PROJECT_FILE" -list | grep -A 100 "Schemes:" | grep -v "Schemes:" | head -10 | sed 's/^[ \t]*//')
     else
-        schemes=$(xcodebuild -project "$PROJECT_FILE" -list | grep -A 100 "Schemes:" | grep -v "Schemes:" | head -10 | tr -d ' ')
+        schemes=$(xcodebuild -project "$PROJECT_FILE" -list | grep -A 100 "Schemes:" | grep -v "Schemes:" | head -10 | sed 's/^[ \t]*//')
     fi
     
-    # Try to find AFL Fantasy scheme
-    SCHEME=$(echo "$schemes" | grep -i "aflfantasy" | head -1 || echo "$schemes" | head -1)
+    # Try to find AFL Fantasy scheme (preserve spaces)
+    SCHEME=$(echo "$schemes" | grep -i "afl.*fantasy" | head -1 || echo "$schemes" | head -1)
     
     if [[ -z "$SCHEME" ]]; then
         error "No build scheme found"
@@ -95,20 +98,22 @@ get_scheme() {
 build_app() {
     log "Building app for performance testing..."
     
-    local build_cmd
-    if [[ "$PROJECT_TYPE" == "workspace" ]]; then
-        build_cmd="xcodebuild -workspace $PROJECT_FILE -scheme $SCHEME"
-    else
-        build_cmd="xcodebuild -project $PROJECT_FILE -scheme $SCHEME"
-    fi
-    
     # Build for iOS Simulator (faster than device)
-    $build_cmd \
-        -sdk iphonesimulator \
-        -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
-        -configuration Release \
-        -quiet \
-        build-for-testing
+    if [[ "$PROJECT_TYPE" == "workspace" ]]; then
+        xcodebuild -workspace "$PROJECT_FILE" -scheme "$SCHEME" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
+            -configuration Release \
+            -quiet \
+            build-for-testing
+    else
+        xcodebuild -project "$PROJECT_FILE" -scheme "$SCHEME" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
+            -configuration Release \
+            -quiet \
+            build-for-testing
+    fi
     
     if [[ $? -eq 0 ]]; then
         success "Build completed successfully"
@@ -126,23 +131,28 @@ run_performance_tests() {
     local test_results_dir="performance_test_results"
     mkdir -p "$test_results_dir"
     
-    local build_cmd
-    if [[ "$PROJECT_TYPE" == "workspace" ]]; then
-        build_cmd="xcodebuild -workspace $PROJECT_FILE -scheme $SCHEME"
-    else
-        build_cmd="xcodebuild -project $PROJECT_FILE -scheme $SCHEME"
-    fi
-    
     # Run tests that measure performance
-    $build_cmd \
-        -sdk iphonesimulator \
-        -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
-        -configuration Release \
-        -resultBundlePath "$test_results_dir/TestResults.xcresult" \
-        test-without-building || {
-            warn "Performance tests failed or not found"
-            warn "Falling back to build-time analysis"
-        }
+    if [[ "$PROJECT_TYPE" == "workspace" ]]; then
+        xcodebuild -workspace "$PROJECT_FILE" -scheme "$SCHEME" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
+            -configuration Release \
+            -resultBundlePath "$test_results_dir/TestResults.xcresult" \
+            test-without-building || {
+                warn "Performance tests failed or not found"
+                warn "Falling back to build-time analysis"
+            }
+    else
+        xcodebuild -project "$PROJECT_FILE" -scheme "$SCHEME" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
+            -configuration Release \
+            -resultBundlePath "$test_results_dir/TestResults.xcresult" \
+            test-without-building || {
+                warn "Performance tests failed or not found"
+                warn "Falling back to build-time analysis"
+            }
+    fi
 }
 
 # Analyze app size and structure

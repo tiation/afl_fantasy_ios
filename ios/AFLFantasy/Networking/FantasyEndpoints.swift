@@ -110,7 +110,7 @@ extension FantasyEndpoints: APIEndpoint {
     }
 
     // Helper for building the parameters
-    private var queryItems: [URLQueryItem]? {
+    internal var queryItems: [URLQueryItem]? {
         var items = [URLQueryItem]()
 
         switch self {

@@ -10,43 +10,6 @@ import Foundation
 
 import os.log
 
-// MARK: - NetworkError
-
-enum NetworkError: LocalizedError {
-    case invalidURL
-    case noData
-    case unauthorized
-    case rateLimited(retryAfter: TimeInterval)
-    case serverError(statusCode: Int)
-    case decodingError(Error)
-    case requestTimeout
-    case noInternetConnection
-    case unknown(Error)
-
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL:
-            "Invalid URL provided"
-        case .noData:
-            "No data received from server"
-        case .unauthorized:
-            "Unauthorized access - check credentials"
-        case let .rateLimited(retryAfter):
-            "Rate limited - retry after \(retryAfter) seconds"
-        case let .serverError(statusCode):
-            "Server error with status code: \(statusCode)"
-        case .decodingError:
-            "Failed to decode response data"
-        case .requestTimeout:
-            "Request timed out"
-        case .noInternetConnection:
-            "No internet connection available"
-        case let .unknown(error):
-            "Unknown error: \(error.localizedDescription)"
-        }
-    }
-}
-
 // MARK: - NetworkClientProtocol
 
 protocol NetworkClientProtocol {
@@ -257,11 +220,3 @@ struct APIRequestBuilder {
     }
 }
 
-// MARK: - HTTPMethod
-
-enum HTTPMethod: String {
-    case GET
-    case POST
-    case PUT
-    case DELETE
-}

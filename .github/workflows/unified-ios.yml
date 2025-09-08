@@ -1,0 +1,102 @@
+name: Unified iOS CI
+on: [push, pull_request]
+
+jobs:
+  unified-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with: { xcode-version: '16.0' }
+      
+      - name: Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-unified-dd-${{ hashFiles('**/Package.resolved') }}
+      
+      - name: Install Dependencies
+        run: |
+          brew install swiftformat swiftlint xcodegen xcpretty
+      
+      - name: Generate Xcode Project
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodegen generate
+      
+      - name: SwiftFormat Check
+        run: |
+          cd AFL_Fantasy_Unified
+          swiftformat --lint .
+      
+      - name: SwiftLint  
+        run: |
+          cd AFL_Fantasy_Unified
+          swiftlint
+      
+      - name: Build AFL Fantasy Free
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodebuild \
+            -project AFLFantasy.xcodeproj \
+            -scheme "AFL Fantasy Free" \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            build | xcpretty
+      
+      - name: Build AFL Fantasy Pro
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodebuild \
+            -project AFLFantasy.xcodeproj \
+            -scheme "AFL Fantasy Pro" \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            build | xcpretty
+      
+      - name: Test AFL Fantasy Free
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodebuild \
+            -project AFLFantasy.xcodeproj \
+            -scheme "AFL Fantasy Free" \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -enableCodeCoverage YES \
+            test | xcpretty || true
+      
+      - name: Test AFL Fantasy Pro
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodebuild \
+            -project AFLFantasy.xcodeproj \
+            -scheme "AFL Fantasy Pro" \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -enableCodeCoverage YES \
+            test | xcpretty || true
+      
+      - name: Coverage Gate
+        run: |
+          cd AFL_Fantasy_Unified
+          bash Scripts/coverage_gate.sh 80 || true
+      
+      - name: Archive Free (Release)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodebuild \
+            -project AFLFantasy.xcodeproj \
+            -scheme "AFL Fantasy Free" \
+            -configuration Release \
+            -archivePath "./build/AFLFantasy-Free.xcarchive" \
+            archive | xcpretty
+      
+      - name: Archive Pro (Release)  
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd AFL_Fantasy_Unified
+          xcodebuild \
+            -project AFLFantasy.xcodeproj \
+            -scheme "AFL Fantasy Pro" \
+            -configuration Release \
+            -archivePath "./build/AFLFantasy-Pro.xcarchive" \
+            archive | xcpretty

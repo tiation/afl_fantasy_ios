@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>AFL Fantasy Pro</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.aflfantasy.deeplink</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>aflfantasy</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhone</key>
+	<true/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	
+	<!-- Privacy Permissions -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We use tracking to provide personalized player recommendations and improve your AFL Fantasy experience.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location helps us provide venue-specific player insights and local AFL news.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access photos to share your team screenshots and save player statistics charts.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access allows you to capture and share your AFL Fantasy moments.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone access enables voice commands for quick player searches and team management.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Access contacts to invite friends to your AFL Fantasy league.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Calendar access helps us remind you of important AFL Fantasy deadlines and match fixtures.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Set reminders for team changes, trade deadlines, and captain selections.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID for secure and convenient app access.</string>
+	
+	<!-- App Transport Security -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>api.afldata.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<false/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.2</string>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<true/>
+			</dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.0</string>
+			</dict>
+		</dict>
+	</dict>
+	
+	<!-- Background Modes -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>background-fetch</string>
+		<string>background-processing</string>
+		<string>remote-notification</string>
+	</array>
+	
+	<!-- Supported Device Orientations -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	
+	<!-- Launch Screen -->
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>AFL_Orange</string>
+		<key>UIImageName</key>
+		<string>LaunchIcon</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
+		<key>UILaunchScreenMininumTime</key>
+		<real>0.5</real>
+	</dict>
+	
+	<!-- Status Bar -->
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	
+	<!-- Performance & Resource Management -->
+	<key>UIApplicationSupportsShakeToEdit</key>
+	<false/>
+	<key>UIRequiresPersistentWiFi</key>
+	<false/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	
+	<!-- Fonts -->
+	<key>UIAppFonts</key>
+	<array>
+		<string>SFPro-Display-Bold.otf</string>
+		<string>SFPro-Display-Medium.otf</string>
+		<string>SFPro-Display-Regular.otf</string>
+	</array>
+	
+	<!-- Document Types -->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>AFL Fantasy Team Export</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.aflfantasy.team</string>
+			</array>
+		</dict>
+	</array>
+	
+	<!-- Exported UTIs -->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>AFL Fantasy Team Data</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.aflfantasy.team</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>aflt</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/json</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	
+	<!-- Widget Configuration -->
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>NSSupportsLiveActivitiesFrequentUpdates</key>
+	<true/>
+	
+	<!-- Accessibility -->
+	<key>UIAccessibilityEnabled</key>
+	<true/>
+	<key>UIAccessibilityTraits</key>
+	<array>
+		<string>UIAccessibilityTraitNone</string>
+	</array>
+	
+	<!-- Security -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.aflfantasy.viewPlayer</string>
+		<string>com.aflfantasy.manageTrades</string>
+		<string>com.aflfantasy.setCaptain</string>
+	</array>
+	
+	<!-- Network -->
+	<key>NSURLSessionConfiguration</key>
+	<dict>
+		<key>NSURLRequestCachePolicy</key>
+		<integer>1</integer>
+		<key>NSURLRequestNetworkServiceType</key>
+		<integer>6</integer>
+	</dict>
+	
+	<!-- File Sharing -->
+	<key>UIFileSharingEnabled</key>
+	<false/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
+	
+	<!-- Shortcuts -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>ViewDashboardIntent</string>
+		<string>CheckTradesIntent</string>
+		<string>SetCaptainIntent</string>
+		<string>ViewPlayersIntent</string>
+	</array>
+	
+	<!-- Required Device Capabilities -->
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+		<string>telephony</string>
+	</array>
+	
+	<!-- Minimum iOS Version -->
+	<key>MinimumOSVersion</key>
+	<string>16.0</string>
+	
+	<!-- Performance -->
+	<key>UIPrerenderedIcon</key>
+	<false/>
+	<key>UIApplicationExitsOnSuspend</key>
+	<false/>
+	
+	<!-- Custom Properties -->
+	<key>AFL_API_VERSION</key>
+	<string>v1</string>
+	<key>AFL_SEASON</key>
+	<string>2024</string>
+	<key>AFL_DEFAULT_ROUND</key>
+	<integer>1</integer>
+</dict>
+</plist>

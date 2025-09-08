@@ -1,0 +1,12 @@
+# SwiftFormat configuration - Following iOS standards from rules
+--indent 4
+--maxwidth 120
+--wraparguments before-first
+--wrapcollections before-first
+--stripunusedargs closure-only
+--self remove
+--patternlet hoist
+--commas inline
+--trimwhitespace always
+--allman false
+--header ignore

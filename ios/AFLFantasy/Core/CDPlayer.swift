@@ -31,6 +31,84 @@ public class CDPlayer: NSManagedObject {
     @NSManaged public var venuePerformance: Set<CDVenuePerformance>
 }
 
+// MARK: - CDInjuryRisk
+
+@objc(CDInjuryRisk)
+public class CDInjuryRisk: NSManagedObject {
+    @NSManaged public var level: String
+    @NSManaged public var probability: Double
+    @NSManaged public var affectedBodyPart: String?
+    @NSManaged public var expectedReturnDate: Date?
+    @NSManaged public var player: CDPlayer?
+}
+
+// MARK: - CDRoundProjection
+
+@objc(CDRoundProjection)
+public class CDRoundProjection: NSManagedObject {
+    @NSManaged public var round: Int16
+    @NSManaged public var projectedScore: Double
+    @NSManaged public var floor: Double
+    @NSManaged public var ceiling: Double
+    @NSManaged public var confidence: Double
+    @NSManaged public var player: CDPlayer?
+}
+
+// MARK: - CDSeasonProjection
+
+@objc(CDSeasonProjection)
+public class CDSeasonProjection: NSManagedObject {
+    @NSManaged public var totalProjectedScore: Double
+    @NSManaged public var averageProjectedScore: Double
+    @NSManaged public var projectedRank: Int16
+    @NSManaged public var consistency: Double
+    @NSManaged public var player: CDPlayer?
+}
+
+// MARK: - CDPlayerAlert
+
+@objc(CDPlayerAlert)
+public class CDPlayerAlert: NSManagedObject {
+    @NSManaged public var alertType: String
+    @NSManaged public var message: String
+    @NSManaged public var severity: String
+    @NSManaged public var createdDate: Date
+    @NSManaged public var isRead: Bool
+    @NSManaged public var player: CDPlayer?
+}
+
+// MARK: - CDPlayerHistory
+
+@objc(CDPlayerHistory)
+public class CDPlayerHistory: NSManagedObject {
+    @NSManaged public var round: Int16
+    @NSManaged public var score: Double
+    @NSManaged public var goals: Int16
+    @NSManaged public var behinds: Int16
+    @NSManaged public var kicks: Int16
+    @NSManaged public var handballs: Int16
+    @NSManaged public var marks: Int16
+    @NSManaged public var tackles: Int16
+    @NSManaged public var hitouts: Int16
+    @NSManaged public var gameDate: Date
+    @NSManaged public var opponent: String
+    @NSManaged public var venue: String
+    @NSManaged public var player: CDPlayer?
+}
+
+// MARK: - CDVenuePerformance
+
+@objc(CDVenuePerformance)
+public class CDVenuePerformance: NSManagedObject {
+    @NSManaged public var venueName: String
+    @NSManaged public var averageScore: Double
+    @NSManaged public var gamesPlayed: Int16
+    @NSManaged public var highScore: Double
+    @NSManaged public var lowScore: Double
+    @NSManaged public var bias: Double
+    @NSManaged public var player: CDPlayer?
+}
+
 extension CDPlayer {
     static var entityName: String { "CDPlayer" }
 

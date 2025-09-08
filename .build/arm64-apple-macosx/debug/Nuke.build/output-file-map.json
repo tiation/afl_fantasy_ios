@@ -1,0 +1,390 @@
+{
+  "": {
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/master.swiftdeps"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Caching/Cache.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Cache.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Cache.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Cache~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Cache.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Cache.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Caching/DataCache.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCache.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCache.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCache~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCache.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCache.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Caching/DataCaching.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCaching.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCaching.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCaching~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCaching.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataCaching.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Caching/ImageCache.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCache.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCache.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCache~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCache.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCache.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Caching/ImageCaching.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCaching.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCaching.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCaching~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCaching.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageCaching.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Decoding/AssetType.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AssetType.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AssetType.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AssetType~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AssetType.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AssetType.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Decoding/ImageDecoderRegistry.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoderRegistry.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoderRegistry.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoderRegistry~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoderRegistry.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoderRegistry.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Decoding/ImageDecoders+Default.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Default.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Default.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Default~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Default.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Default.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Decoding/ImageDecoders+Empty.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Empty.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Empty.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Empty~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Empty.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoders+Empty.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Decoding/ImageDecoding.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoding.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoding.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoding~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoding.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecoding.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Encoding/ImageEncoders+Default.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+Default.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+Default.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+Default~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+Default.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+Default.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Encoding/ImageEncoders+ImageIO.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+ImageIO.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+ImageIO.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+ImageIO~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+ImageIO.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders+ImageIO.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Encoding/ImageEncoders.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoders.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Encoding/ImageEncoding.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoding.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoding.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoding~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoding.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageEncoding.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/ImageContainer.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageContainer.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageContainer.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageContainer~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageContainer.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageContainer.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/ImageRequest.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequest.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequest.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequest~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequest.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequest.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/ImageResponse.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageResponse.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageResponse.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageResponse~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageResponse.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageResponse.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/ImageTask.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageTask.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageTask.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageTask~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageTask.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageTask.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/Atomic.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Atomic.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Atomic.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Atomic~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Atomic.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Atomic.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/DataPublisher.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataPublisher.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataPublisher.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataPublisher~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataPublisher.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataPublisher.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/Extensions.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Extensions.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Extensions.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Extensions~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Extensions.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Extensions.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/Graphics.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Graphics.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Graphics.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Graphics~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Graphics.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Graphics.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/ImagePublisher.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePublisher.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePublisher.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePublisher~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePublisher.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePublisher.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/ImageRequestKeys.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequestKeys.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequestKeys.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequestKeys~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequestKeys.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageRequestKeys.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/LinkedList.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/LinkedList.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/LinkedList.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/LinkedList~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/LinkedList.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/LinkedList.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/Log.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Log.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Log.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Log~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Log.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Log.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/Operation.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Operation.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Operation.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Operation~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Operation.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/Operation.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/RateLimiter.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/RateLimiter.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/RateLimiter.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/RateLimiter~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/RateLimiter.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/RateLimiter.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Internal/ResumableData.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ResumableData.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ResumableData.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ResumableData~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ResumableData.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ResumableData.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Loading/DataLoader.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoader.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoader.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoader~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoader.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoader.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Loading/DataLoading.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoading.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoading.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoading~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoading.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/DataLoading.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Pipeline/ImagePipeline+Cache.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Cache.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Cache.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Cache~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Cache.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Cache.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Pipeline/ImagePipeline+Configuration.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Configuration.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Configuration.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Configuration~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Configuration.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Configuration.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Pipeline/ImagePipeline+Delegate.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Delegate.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Delegate.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Delegate~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Delegate.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Delegate.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Pipeline/ImagePipeline+Error.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Error.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Error.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Error~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Error.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline+Error.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Pipeline/ImagePipeline.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePipeline.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Prefetching/ImagePrefetcher.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePrefetcher.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePrefetcher.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePrefetcher~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePrefetcher.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImagePrefetcher.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageDecompression.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecompression.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecompression.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecompression~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecompression.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageDecompression.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessing.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessing.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessing.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessing~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessing.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessing.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessingOptions.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessingOptions.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessingOptions.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessingOptions~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessingOptions.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessingOptions.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+Anonymous.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Anonymous.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Anonymous.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Anonymous~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Anonymous.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Anonymous.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+Circle.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Circle.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Circle.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Circle~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Circle.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Circle.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+Composition.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Composition.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Composition.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Composition~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Composition.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Composition.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+CoreImage.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+CoreImage.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+CoreImage.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+CoreImage~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+CoreImage.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+CoreImage.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+GaussianBlur.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+GaussianBlur.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+GaussianBlur.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+GaussianBlur~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+GaussianBlur.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+GaussianBlur.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+Resize.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Resize.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Resize.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Resize~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Resize.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+Resize.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors+RoundedCorners.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+RoundedCorners.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+RoundedCorners.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+RoundedCorners~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+RoundedCorners.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors+RoundedCorners.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Processing/ImageProcessors.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/ImageProcessors.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/AsyncPipelineTask.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncPipelineTask.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncPipelineTask.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncPipelineTask~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncPipelineTask.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncPipelineTask.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/AsyncTask.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncTask.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncTask.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncTask~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncTask.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/AsyncTask.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/TaskFetchOriginalData.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalData.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalData.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalData~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalData.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalData.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/TaskFetchOriginalImage.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalImage.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalImage.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalImage~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalImage.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchOriginalImage.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/TaskFetchWithPublisher.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchWithPublisher.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchWithPublisher.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchWithPublisher~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchWithPublisher.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskFetchWithPublisher.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/TaskLoadData.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadData.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadData.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadData~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadData.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadData.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/Nuke/Sources/Nuke/Tasks/TaskLoadImage.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadImage.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadImage.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadImage~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadImage.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Nuke.build/TaskLoadImage.dia"
+  }
+}

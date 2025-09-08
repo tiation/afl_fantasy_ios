@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Environment Configuration -->
+	<key>Environment</key>
+	<string>Development</string>
+	
+	<!-- API Configuration -->
+	<key>API</key>
+	<dict>
+		<key>BaseURL</key>
+		<string>https://api.afldata.com</string>
+		<key>Version</key>
+		<string>v1</string>
+		<key>Timeout</key>
+		<integer>30</integer>
+		<key>MaxRetries</key>
+		<integer>3</integer>
+		<key>RateLimitDelay</key>
+		<real>1.0</real>
+		<key>CacheTimeout</key>
+		<integer>300</integer>
+	</dict>
+	
+	<!-- AFL Fantasy Configuration -->
+	<key>AFL</key>
+	<dict>
+		<key>CurrentSeason</key>
+		<integer>2024</integer>
+		<key>TotalRounds</key>
+		<integer>23</integer>
+		<key>SalaryCap</key>
+		<integer>13000000</integer>
+		<key>MaxTrades</key>
+		<integer>30</integer>
+		<key>TeamSize</key>
+		<integer>22</integer>
+		<key>BenchSize</key>
+		<integer>8</integer>
+		<key>EmergencySize</key>
+		<integer>1</integer>
+	</dict>
+	
+	<!-- Feature Flags -->
+	<key>FeatureFlags</key>
+	<dict>
+		<key>LiveScoring</key>
+		<true/>
+		<key>PriceProjections</key>
+		<true/>
+		<key>AIRecommendations</key>
+		<true/>
+		<key>AdvancedAnalytics</key>
+		<true/>
+		<key>TradeCalculator</key>
+		<true/>
+		<key>CaptainAdvisor</key>
+		<true/>
+		<key>CashCowTracker</key>
+		<true/>
+		<key>VenueInsights</key>
+		<true/>
+		<key>InjuryTracking</key>
+		<true/>
+		<key>FormAnalysis</key>
+		<true/>
+		<key>WeatherData</key>
+		<false/>
+		<key>SocialSharing</key>
+		<true/>
+		<key>PushNotifications</key>
+		<true/>
+		<key>LiveActivities</key>
+		<true/>
+		<key>Widgets</key>
+		<true/>
+		<key>Shortcuts</key>
+		<true/>
+		<key>DeepLinking</key>
+		<true/>
+		<key>PerformanceMonitoring</key>
+		<true/>
+		<key>CrashReporting</key>
+		<true/>
+		<key>AnalyticsLogging</key>
+		<true/>
+	</dict>
+	
+	<!-- UI Configuration -->
+	<key>UI</key>
+	<dict>
+		<key>DefaultTheme</key>
+		<string>Dark</string>
+		<key>AnimationDuration</key>
+		<real>0.25</real>
+		<key>HapticFeedback</key>
+		<true/>
+		<key>SoundEffects</key>
+		<true/>
+		<key>RefreshInterval</key>
+		<integer>30</integer>
+		<key>CacheImages</key>
+		<true/>
+		<key>ReducedMotion</key>
+		<false/>
+		<key>LargeText</key>
+		<false/>
+		<key>HighContrast</key>
+		<false/>
+	</dict>
+	
+	<!-- Performance Settings -->
+	<key>Performance</key>
+	<dict>
+		<key>MaxConcurrentRequests</key>
+		<integer>6</integer>
+		<key>ImageCacheSize</key>
+		<integer>52428800</integer>
+		<key>DataCacheSize</key>
+		<integer>104857600</integer>
+		<key>MemoryCacheLimit</key>
+		<integer>50</integer>
+		<key>PreloadImages</key>
+		<true/>
+		<key>OptimizeForBattery</key>
+		<false/>
+		<key>BackgroundRefresh</key>
+		<true/>
+		<key>PrefetchData</key>
+		<true/>
+	</dict>
+	
+	<!-- Analytics Configuration -->
+	<key>Analytics</key>
+	<dict>
+		<key>TrackUserEvents</key>
+		<true/>
+		<key>TrackPerformance</key>
+		<true/>
+		<key>TrackErrors</key>
+		<true/>
+		<key>SessionTimeout</key>
+		<integer>1800</integer>
+		<key>BatchSize</key>
+		<integer>100</integer>
+		<key>FlushInterval</key>
+		<integer>300</integer>
+	</dict>
+	
+	<!-- Security Configuration -->
+	<key>Security</key>
+	<dict>
+		<key>RequireBiometrics</key>
+		<false/>
+		<key>SessionTimeout</key>
+		<integer>3600</integer>
+		<key>CertificatePinning</key>
+		<false/>
+		<key>TLSVersion</key>
+		<string>1.2</string>
+		<key>ValidateCertificates</key>
+		<true/>
+		<key>AllowScreenshots</key>
+		<true/>
+		<key>JailbreakDetection</key>
+		<false/>
+	</dict>
+	
+	<!-- Notification Settings -->
+	<key>Notifications</key>
+	<dict>
+		<key>PriceChanges</key>
+		<true/>
+		<key>InjuryUpdates</key>
+		<true/>
+		<key>TradeDeadlines</key>
+		<true/>
+		<key>LiveScores</key>
+		<true/>
+		<key>TeamNews</key>
+		<true/>
+		<key>WeeklyReminders</key>
+		<true/>
+		<key>BreakoutAlerts</key>
+		<true/>
+		<key>FormAlerts</key>
+		<true/>
+		<key>BargainAlerts</key>
+		<true/>
+		<key>CaptainReminders</key>
+		<true/>
+		<key>QuietHours</key>
+		<dict>
+			<key>Enabled</key>
+			<false/>
+			<key>StartTime</key>
+			<string>22:00</string>
+			<key>EndTime</key>
+			<string>07:00</string>
+		</dict>
+	</dict>
+	
+	<!-- Data Sources -->
+	<key>DataSources</key>
+	<dict>
+		<key>PrimaryAPI</key>
+		<string>https://api.afldata.com</string>
+		<key>BackupAPI</key>
+		<string>https://backup-api.afldata.com</string>
+		<key>StaticDataURL</key>
+		<string>https://static.afldata.com</string>
+		<key>ImageCDN</key>
+		<string>https://images.afldata.com</string>
+		<key>WebSocketURL</key>
+		<string>wss://ws.afldata.com</string>
+	</dict>
+	
+	<!-- Debug Settings -->
+	<key>Debug</key>
+	<dict>
+		<key>LogLevel</key>
+		<string>Info</string>
+		<key>NetworkLogging</key>
+		<false/>
+		<key>UIDebugging</key>
+		<false/>
+		<key>MockData</key>
+		<false/>
+		<key>SkipOnboarding</key>
+		<false/>
+		<key>ShowPerformanceOverlay</key>
+		<false/>
+		<key>EnableTestMenus</key>
+		<false/>
+	</dict>
+	
+	<!-- Third Party Services -->
+	<key>ThirdParty</key>
+	<dict>
+		<key>Firebase</key>
+		<dict>
+			<key>Enabled</key>
+			<false/>
+			<key>ProjectId</key>
+			<string>afl-fantasy-pro</string>
+		</dict>
+		<key>Crashlytics</key>
+		<dict>
+			<key>Enabled</key>
+			<false/>
+		</dict>
+		<key>AppleAnalytics</key>
+		<dict>
+			<key>Enabled</key>
+			<true/>
+		</dict>
+	</dict>
+	
+	<!-- Content Settings -->
+	<key>Content</key>
+	<dict>
+		<key>MaxImageSize</key>
+		<integer>2097152</integer>
+		<key>SupportedImageFormats</key>
+		<array>
+			<string>HEIF</string>
+			<string>JPEG</string>
+			<string>PNG</string>
+			<string>WebP</string>
+		</array>
+		<key>MaxVideoLength</key>
+		<integer>300</integer>
+		<key>VideoQuality</key>
+		<string>High</string>
+	</dict>
+	
+	<!-- Accessibility -->
+	<key>Accessibility</key>
+	<dict>
+		<key>VoiceOverEnabled</key>
+		<true/>
+		<key>ReduceMotion</key>
+		<false/>
+		<key>IncreaseContrast</key>
+		<false/>
+		<key>DynamicType</key>
+		<true/>
+		<key>ButtonShapes</key>
+		<false/>
+		<key>GrayscaleMode</key>
+		<false/>
+	</dict>
+	
+	<!-- Localization -->
+	<key>Localization</key>
+	<dict>
+		<key>SupportedLanguages</key>
+		<array>
+			<string>en</string>
+		</array>
+		<key>DefaultLanguage</key>
+		<string>en</string>
+		<key>DateFormat</key>
+		<string>dd/MM/yyyy</string>
+		<key>TimeFormat</key>
+		<string>HH:mm</string>
+		<key>NumberFormat</key>
+		<string>en_AU</string>
+		<key>CurrencyFormat</key>
+		<string>AUD</string>
+	</dict>
+</dict>
+</plist>

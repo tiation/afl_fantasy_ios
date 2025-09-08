@@ -592,50 +592,87 @@ enum AlertSeverity: String, Codable {
 
 // MARK: - API Response Models
 
-struct CashCowData: Codable {
-    let playerId: String
-    let playerName: String
-    let currentPrice: Int
-    let projectedPrice: Int
-    let cashGenerated: Int
-    let recommendation: String
-    let confidence: Double
-    let fpAverage: Double
-    let gamesPlayed: Int
-}
-
-struct CaptainSuggestionResponse: Codable {
-    let playerId: String
-    let playerName: String
-    let projectedPoints: Double
-    let confidence: Double
-    let reasoning: String
-}
-
-struct APIPlayerSummary: Codable {
-    let id: String
-    let name: String
-    let team: String
-    let position: String
-    let price: Int
-    let average: Double
-    let projected: Double
-    let breakeven: Int
-}
+// MARK: - Additional API Response Models
 
 struct APIHealthResponse: Codable {
     let status: String
     let timestamp: String
-    let playersCached: Int
+    let playersCache: Int?
     let lastCacheUpdate: String?
+    
+    private enum CodingKeys: String, CodingKey {
+        case status
+        case timestamp
+        case playersCache = "players_cached"
+        case lastCacheUpdate = "last_cache_update"
+    }
 }
 
 struct APIStatsResponse: Codable {
     let totalPlayers: Int
-    let playersWithData: Int
-    let cashCowsIdentified: Int
-    let lastUpdated: String?
-    let cacheAgeMinutes: Int
+    let totalDataRows: Int
+    let successfulPlayers: Int
+    let failedPlayers: Int
+    
+    private enum CodingKeys: String, CodingKey {
+        case totalPlayers = "total_players"
+        case totalDataRows = "total_data_rows"
+        case successfulPlayers = "successful_players"
+        case failedPlayers = "failed_players"
+    }
+}
+
+struct APIPlayerSummary: Codable, Identifiable {
+    var id: String { playerId }
+    let playerId: String
+    let name: String
+    let team: String?
+    let position: String?
+    let hasData: Bool
+    let fileName: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case playerId = "player_id"
+        case name
+        case team
+        case position
+        case hasData = "has_data"
+        case fileName = "file_name"
+    }
+}
+
+struct CashCowData: Codable, Identifiable {
+    var id: String { playerId }
+    let playerId: String
+    let playerName: String
+    let cashGenerated: Int
+    let recommendation: String
+    let confidence: Double?
+    
+    private enum CodingKeys: String, CodingKey {
+        case playerId = "player_id"
+        case playerName = "player_name"
+        case cashGenerated = "cash_generated"
+        case recommendation
+        case confidence
+    }
+}
+
+struct CaptainSuggestionResponse: Codable, Identifiable {
+    var id: String { playerId }
+    let playerId: String
+    let playerName: String
+    let recommendation: String
+    let confidence: Double
+    let reasoning: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case playerId = "player_id"
+        case playerName = "player_name"
+        case recommendation
+        case confidence
+        case reasoning
+    }
 }
 
 // MARK: - Helper Types

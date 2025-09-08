@@ -34,11 +34,3 @@ protocol AutoSyncProtocol {
     func cancelAutoSync()
 }
 
-// MARK: - DashboardServiceProtocol
-
-protocol DashboardServiceProtocol {
-    var dashboardData: AnyPublisher<DashboardData?, Never> { get }
-    var isLoading: Bool { get }
-
-    func refreshDashboardData() async -> Result<DashboardData, AFLFantasyError>
-}

@@ -27,7 +27,7 @@ final class AFLFantasyRepository: AFLFantasyRepositoryProtocol {
     private let persistenceManager: PersistenceManager
     private let logger = AFLLogger.Category.scraper.logger
 
-    private init(
+    internal init(
         scraperService: AFLFantasyScraperServiceProtocol = AFLFantasyScraperService.shared,
         persistenceManager: PersistenceManager = PersistenceManager.shared
     ) {

@@ -18,7 +18,7 @@ struct ContentView: View {
 
                 VStack(spacing: 20) {
                     NavigationLink("Dashboard") {
-                        DashboardView()
+                        UnifiedDashboardView()
                     }
                     .buttonStyle(.bordered)
 
@@ -40,7 +40,7 @@ struct ContentView: View {
     }
 }
 
-// Note: DashboardView, PlayerListView, and TradeView are implemented
+// Note: UnifiedDashboardView, PlayerListView, and TradeView are implemented
 // in their dedicated files in the Views directory
 
 #Preview {

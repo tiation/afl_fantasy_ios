@@ -1,0 +1,3 @@
+module SnapshotTestingCustomDump {
+    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTestingCustomDump.build/include/SnapshotTestingCustomDump-Swift.h"
+}

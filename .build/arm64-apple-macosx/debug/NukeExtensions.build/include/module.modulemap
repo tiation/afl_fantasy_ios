@@ -1,0 +1,3 @@
+module NukeExtensions {
+    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/NukeExtensions.build/include/NukeExtensions-Swift.h"
+}

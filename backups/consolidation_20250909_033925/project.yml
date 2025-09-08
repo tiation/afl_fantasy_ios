@@ -1,0 +1,45 @@
+name: AFLFantasy
+options:
+  bundleIdPrefix: com.afl.ai
+  deploymentTarget:
+    iOS: "16.4"
+
+targets:
+  AFLFantasy:
+    type: application
+    platform: iOS
+    sources:
+      - path: AFLFantasy
+    settings:
+      INFOPLIST_FILE: AFLFantasy/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.afl.ai.AFLFantasy
+      DEVELOPMENT_TEAM: YLWMNJMZZ3
+      ENABLE_PREVIEWS: YES
+      CODE_SIGN_STYLE: Automatic
+      TARGETED_DEVICE_FAMILY: 1  # iPhone only for now
+
+  AFLFantasyTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [AFLFantasyTests]
+    dependencies:
+      - target: AFLFantasy
+
+schemes:
+  AFLFantasy:
+    build:
+      targets:
+        AFLFantasy: all
+        AFLFantasyTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - AFLFantasyTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

@@ -124,7 +124,7 @@ struct NotificationsView: View {
                 }
                 
                 // Type Filters
-                ForEach(AlertUpdate.AlertType.allCases, id: \.self) { type in
+                ForEach(AlertType.allCases, id: \.self) { type in
                     filterButton(
                         title: filterTitle(for: type),
                         icon: type.icon,
@@ -167,9 +167,9 @@ struct NotificationsView: View {
         }
     }
     
-    private func filterTitle(for type: AlertUpdate.AlertType) -> String {
+    private func filterTitle(for type: AlertType) -> String {
         switch type {
-        case .injury:
+        case .injury, .injuryUpdate:
             return "Injuries"
         case .selection:
             return "Selection"
@@ -179,6 +179,16 @@ struct NotificationsView: View {
             return "Milestones"
         case .system:
             return "System"
+        case .lateOut:
+            return "Late Outs"
+        case .roleChange:
+            return "Role Changes"
+        case .breakingNews:
+            return "Breaking News"
+        case .tradeDeadline:
+            return "Trade Deadlines"
+        case .captainReminder:
+            return "Captain Reminders"
         }
     }
 }
@@ -267,32 +277,35 @@ struct NotificationDetailView: View {
 struct NotificationsView_Previews: PreviewProvider {
     static var sampleNotifications: [AlertNotification] {
         [
-            .init(
+            AlertNotification(
                 id: "1",
-                type: .injury,
                 title: "Marcus Bontempelli Injured",
                 message: "Bontempelli (knee) is expected to miss 1-2 weeks. Consider trading or benching.",
+                type: .injury,
                 timestamp: Date(),
-                data: ["status": "Test", "return": "Round 15"],
-                isRead: false
+                isRead: false,
+                playerId: "player1",
+                data: ["status": "Test", "return": "Round 15"]
             ),
-            .init(
+            AlertNotification(
                 id: "2",
-                type: .priceChange,
                 title: "Price Drop Alert",
                 message: "Nick Daicos has dropped $32k in value. Current price: $878k",
+                type: .priceChange,
                 timestamp: Date().addingTimeInterval(-3600),
-                data: ["magnitude": "-32000", "reason": "Poor form"],
-                isRead: true
+                isRead: true,
+                playerId: "player2",
+                data: ["magnitude": "-32000", "reason": "Poor form"]
             ),
-            .init(
+            AlertNotification(
                 id: "3",
-                type: .selection,
                 title: "Team Selection Update",
                 message: "Sam Walsh named in extended squad for Round 14",
+                type: .selection,
                 timestamp: Date().addingTimeInterval(-7200),
-                data: ["status": "Extended Squad"],
-                isRead: false
+                isRead: false,
+                playerId: "player3",
+                data: ["status": "Extended Squad"]
             )
         ]
     }

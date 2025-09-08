@@ -11,21 +11,38 @@ public struct DockerConfig {
     public let playersEndpoint: String
     public let liveUpdatesWebSocketURL: URL
 
-    public static let development = DockerConfig(
-        baseURL: URL(string: "http://localhost:5000")!,
-        healthEndpoint: "/health",
-        statsEndpoint: "/api/stats",
-        playersEndpoint: "/api/players",
-        liveUpdatesWebSocketURL: URL(string: "ws://localhost:5001/ws")!
-    )
+    public init?(baseURL: String, healthEndpoint: String = "/health", statsEndpoint: String = "/api/stats", playersEndpoint: String = "/api/players", websocketURL: String) {
+        guard let url = URL(string: baseURL),
+              let wsURL = URL(string: websocketURL) else {
+            return nil
+        }
+        
+        self.baseURL = url
+        self.healthEndpoint = healthEndpoint
+        self.statsEndpoint = statsEndpoint
+        self.playersEndpoint = playersEndpoint
+        self.liveUpdatesWebSocketURL = wsURL
+    }
 
-    public static let production = DockerConfig(
-        baseURL: URL(string: "http://docker.tiation.net:5000")!,
-        healthEndpoint: "/health",
-        statsEndpoint: "/api/stats",
-        playersEndpoint: "/api/players",
-        liveUpdatesWebSocketURL: URL(string: "ws://docker.tiation.net:5001/ws")!
-    )
+    public static let development: DockerConfig = {
+        guard let config = DockerConfig(
+            baseURL: "http://localhost:5000",
+            websocketURL: "ws://localhost:5001/ws"
+        ) else {
+            fatalError("Failed to create development DockerConfig - invalid URLs")
+        }
+        return config
+    }()
+
+    public static let production: DockerConfig = {
+        guard let config = DockerConfig(
+            baseURL: "http://docker.tiation.net:5000",
+            websocketURL: "ws://docker.tiation.net:5001/ws"
+        ) else {
+            fatalError("Failed to create production DockerConfig - invalid URLs")
+        }
+        return config
+    }()
 }
 
 // MARK: - DockerServiceProtocol

@@ -8,7 +8,10 @@ import os.log
 class PersistentStore {
     static let shared = PersistentStore()
 
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "PersistentStore")
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "AFLFantasy",
+        category: "PersistentStore"
+    )
 
     // MARK: - Core Data Stack
 

@@ -11,7 +11,10 @@ final class DataStore {
 
     private let persistentStore: PersistentStore
     private let cacheStorage: CacheStorage
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "DataStore")
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "AFLFantasy",
+        category: "DataStore"
+    )
 
     private var cancellables = Set<AnyCancellable>()
 

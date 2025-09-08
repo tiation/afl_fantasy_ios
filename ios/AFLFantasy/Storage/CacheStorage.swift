@@ -9,7 +9,10 @@ final class CacheStorage {
 
     private let fileManager: FileManager
     private let cacheDirectory: URL
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "CacheStorage")
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "AFLFantasy",
+        category: "CacheStorage"
+    )
 
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
@@ -116,7 +119,12 @@ final class CacheStorage {
     // MARK: - Cache Path Generation
 
     private func cacheURL(for key: String) -> URL {
-        let hashedKey = SHA256.hash(data: key.data(using: .utf8)!)
+        guard let keyData = key.data(using: .utf8) else {
+            logger.warning("Failed to convert key to UTF-8 data: \(key)")
+            return cacheDirectory.appendingPathComponent(key.replacingOccurrences(of: "/", with: "_"))
+        }
+        
+        let hashedKey = SHA256.hash(data: keyData)
             .compactMap { String(format: "%02x", $0) }
             .joined()
 

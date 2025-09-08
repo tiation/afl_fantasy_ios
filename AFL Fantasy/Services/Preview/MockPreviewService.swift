@@ -95,176 +95,108 @@ extension PlayerService {
 enum PreviewData {
     static var sampleNotifications: [AlertNotification] {
         [
-            .init(
+            AlertNotification(
                 id: "1",
-                type: .injury,
                 title: "Marcus Bontempelli Injured",
                 message: "Bontempelli (knee) is expected to miss 1-2 weeks",
+                type: .injury,
                 timestamp: Date(),
-                data: ["status": "Test", "return": "Round 15"],
-                isRead: false
+                isRead: false,
+                playerId: "player1",
+                data: ["status": "Test", "return": "Round 15"]
             ),
-            .init(
+            AlertNotification(
                 id: "2",
-                type: .priceChange,
                 title: "Price Drop Alert",
                 message: "Nick Daicos has dropped $32k in value",
+                type: .priceChange,
                 timestamp: Date().addingTimeInterval(-3600),
-                data: ["magnitude": "-32000", "reason": "Poor form"],
-                isRead: true
+                isRead: true,
+                playerId: "player2",
+                data: ["magnitude": "-32000", "reason": "Poor form"]
             ),
-            .init(
+            AlertNotification(
                 id: "3",
-                type: .selection,
                 title: "Team Selection Update",
                 message: "Sam Walsh named in extended squad",
+                type: .selection,
                 timestamp: Date().addingTimeInterval(-7200),
-                data: ["status": "Extended Squad"],
-                isRead: false
+                isRead: false,
+                playerId: "player3",
+                data: ["status": "Extended Squad"]
             )
         ]
     }
     
     static var samplePlayers: [Player] {
         [
-            .init(
+            Player(
                 id: "1",
                 name: "Marcus Bontempelli",
                 team: "WB",
-                position: "MID",
+                position: .midfielder,
                 price: 878000,
-                priceChange: 32000,
-                breakEven: 95,
                 average: 110.5,
-                formTrend: 15,
+                projected: 108.2,
+                breakeven: 95,
+                consistency: .a,
+                priceChange: 32000,
                 ownership: 0.35,
-                ownershipTrend: 0.05,
-                aiInsights: [
-                    "Strong form trend (+15 avg)",
-                    "Favorable upcoming fixtures"
-                ]
+                injuryStatus: .healthy,
+                venueStats: nil,
+                formFactor: 1.15,
+                dvpImpact: 0.05
             ),
-            .init(
+            Player(
                 id: "2",
                 name: "Nick Daicos",
                 team: "COLL",
-                position: "DEF",
+                position: .defender,
                 price: 650000,
-                priceChange: -25000,
-                breakEven: 120,
                 average: 95.2,
-                formTrend: -8,
+                projected: 92.8,
+                breakeven: 120,
+                consistency: .b,
+                priceChange: -25000,
                 ownership: 0.52,
-                ownershipTrend: -0.03,
-                injury: .test,
-                aiInsights: [
-                    "High break-even risk",
-                    "Consider trading"
-                ]
+                injuryStatus: .questionable,
+                venueStats: nil,
+                formFactor: 0.92,
+                dvpImpact: -0.03
             ),
-            .init(
+            Player(
                 id: "3",
                 name: "Max Gawn",
                 team: "MELB",
-                position: "RUC",
+                position: .ruck,
                 price: 750000,
-                priceChange: 0,
-                breakEven: 85,
                 average: 105.8,
-                formTrend: 0,
+                projected: 105.0,
+                breakeven: 85,
+                consistency: .a,
+                priceChange: 0,
                 ownership: 0.18,
-                ownershipTrend: 0,
-                injury: .out(weeks: 2),
-                aiInsights: [
-                    "Strong value opportunity",
-                    "Low ownership upside"
-                ]
+                injuryStatus: .out,
+                venueStats: nil,
+                formFactor: 1.0,
+                dvpImpact: 0.0
             )
         ]
     }
     
     static var sampleTeamStructure: TeamStructure {
-        var structure = TeamStructure()
-        structure.defenders = 6
-        structure.midfielders = 8
-        structure.rucks = 2
-        structure.forwards = 6
-        structure.premiums = 8
-        structure.midPricers = 6
-        structure.rookies = 8
-        return structure
-    }
-    
-    static var sampleAIRecommendations: [AIRecommendation] {
-        [
-            .init(
-                rank: 1,
-                playerName: "Marcus Bontempelli",
-                reason: "Strong form + favorable matchup",
-                confidence: 0.85,
-                details: .init(value: "110.5", subValue: "AVG")
-            ),
-            .init(
-                rank: 2,
-                playerName: "Max Gawn",
-                reason: "Consistent high scorer",
-                confidence: 0.75,
-                details: .init(value: "85", subValue: "B/E")
-            ),
-            .init(
-                rank: 3,
-                playerName: "Jack Macrae",
-                reason: "Good historical vs opponent",
-                confidence: 0.65,
-                details: .init(value: "35%", subValue: "Owned")
-            )
-        ]
-    }
-    
-    static var sampleOptimizationSuggestions: [OptimizationSuggestion] {
-        [
-            .init(
-                type: .trade,
-                title: "Trade Recommendation",
-                description: "Upgrade midfield by trading out underperforming premium",
-                impact: 15,
-                impactType: "Proj. Points",
-                changes: [
-                    .init(from: "Josh Kelly", to: "Marcus Bontempelli")
-                ],
-                confidence: 0.85
-            ),
-            .init(
-                type: .structure,
-                title: "Structure Optimization",
-                description: "Improve forward line by adding more premium players",
-                impact: 25000,
-                impactType: "Total Value",
-                changes: [
-                    .init(from: "Jeremy Cameron", to: "Charlie Curnow"),
-                    .init(from: "Nick Larkey", to: "Harry McKay")
-                ],
-                confidence: 0.75
-            ),
-            .init(
-                type: .captain,
-                title: "Captain Strategy",
-                description: "Optimize captain rotation based on fixtures",
-                impact: 8,
-                impactType: "Avg Points",
-                changes: nil,
-                confidence: 0.90
-            )
-        ]
-    }
-    
-    static var sampleSalaryInfo: SalaryInfo {
-        .init(
-            totalSalary: 12500000,
-            availableSalary: 250000,
-            averagePlayerPrice: 568000,
-            premiumPercentage: 0.35,
-            rookiePercentage: 0.25
+        TeamStructure(
+            totalValue: 12500000,
+            bankBalance: 250000,
+            positionBalance: [
+                .defender: 6,
+                .midfielder: 8,
+                .ruck: 2,
+                .forward: 6
+            ],
+            premiumCount: 8,
+            midPriceCount: 6,
+            rookieCount: 8
         )
     }
 }

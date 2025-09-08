@@ -61,12 +61,21 @@ struct CashGenStats: Codable {
 }
 
 struct CashHistory: Codable, Identifiable {
-    let id = UUID()
+    let id: String
     let playerId: String
     let playerName: String
     let generated: Double
     let date: Date
     let action: CashAction
+    
+    init(id: String = UUID().uuidString, playerId: String, playerName: String, generated: Double, date: Date, action: CashAction) {
+        self.id = id
+        self.playerId = playerId
+        self.playerName = playerName
+        self.generated = generated
+        self.date = date
+        self.action = action
+    }
 }
 
 enum CashAction: String, Codable {
@@ -129,6 +138,7 @@ enum AlertType: String, Codable, Equatable, CaseIterable {
 struct AlertUpdate: Codable {
     let id: String
     let type: AlertType
+    let title: String
     let message: String
     let timestamp: Date
     let playerId: String?
@@ -143,6 +153,7 @@ struct AlertNotification: Codable, Identifiable, Equatable {
     let timestamp: Date
     var isRead: Bool
     let playerId: String?
+    let data: [String: String]?
     
     static func == (lhs: AlertNotification, rhs: AlertNotification) -> Bool {
         return lhs.id == rhs.id
@@ -370,7 +381,7 @@ struct TeamAnalysis: Codable {
     let overallRating: Double
 }
 
-struct BreakEvenTarget: Codable, Identifiable {
+struct BreakEvenTarget: Identifiable {
     let id = UUID()
     let playerId: String
     let playerName: String
@@ -388,7 +399,7 @@ struct BreakEvenTarget: Codable, Identifiable {
     }
 }
 
-struct SellRecommendation: Codable, Identifiable {
+struct SellRecommendation: Identifiable {
     let id = UUID()
     let playerId: String
     let playerName: String
@@ -404,7 +415,7 @@ struct SellRecommendation: Codable, Identifiable {
     }
 }
 
-struct HoldRecommendation: Codable, Identifiable {
+struct HoldRecommendation: Identifiable {
     let id = UUID()
     let playerId: String
     let playerName: String
@@ -413,7 +424,7 @@ struct HoldRecommendation: Codable, Identifiable {
     let expectedGain: Int
 }
 
-struct WatchlistPlayer: Codable, Identifiable {
+struct WatchlistPlayer: Identifiable {
     let id = UUID()
     let playerId: String
     let playerName: String
@@ -486,7 +497,7 @@ struct NotificationPreferences: Codable {
 
 // MARK: - Additional Alert Models
 
-struct Alert: Codable, Identifiable {
+struct Alert: Identifiable {
     let id = UUID()
     let type: AlertType
     let severity: AlertSeverity

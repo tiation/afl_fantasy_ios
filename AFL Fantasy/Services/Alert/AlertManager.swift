@@ -104,12 +104,13 @@ final class AlertManager: ObservableObject {
         // Create notification
         let notification = AlertNotification(
             id: UUID().uuidString,
-            type: update.type,
             title: update.title,
             message: update.message,
+            type: update.type,
             timestamp: update.timestamp,
-            data: update.data,
-            isRead: false
+            isRead: false,
+            playerId: update.playerId,
+            data: update.data
         )
         
         // Update notification history
@@ -178,10 +179,10 @@ final class AlertManager: ObservableObject {
 
 // MARK: - Helper Extensions
 
-extension AlertUpdate.AlertType {
+extension AlertType {
     var icon: String {
         switch self {
-        case .injury:
+        case .injury, .injuryUpdate:
             return "bandage.fill"
         case .selection:
             return "person.fill.checkmark"
@@ -191,12 +192,22 @@ extension AlertUpdate.AlertType {
             return "star.fill"
         case .system:
             return "info.circle.fill"
+        case .lateOut:
+            return "clock.badge.exclamationmark.fill"
+        case .roleChange:
+            return "person.crop.circle.fill.badge.plus"
+        case .breakingNews:
+            return "newspaper.fill"
+        case .tradeDeadline:
+            return "calendar.badge.exclamationmark"
+        case .captainReminder:
+            return "crown.fill"
         }
     }
     
     var color: Color {
         switch self {
-        case .injury:
+        case .injury, .injuryUpdate:
             return Theme.Colors.error
         case .selection:
             return Theme.Colors.success
@@ -206,6 +217,16 @@ extension AlertUpdate.AlertType {
             return Theme.Colors.warning
         case .system:
             return Theme.Colors.textSecondary
+        case .lateOut:
+            return Theme.Colors.error
+        case .roleChange:
+            return Theme.Colors.accent
+        case .breakingNews:
+            return Theme.Colors.warning
+        case .tradeDeadline:
+            return Theme.Colors.error
+        case .captainReminder:
+            return Theme.Colors.accent
         }
     }
 }

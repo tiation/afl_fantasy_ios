@@ -84,7 +84,7 @@ enum CashAction: String, Codable {
     case hold = "HOLD"
 }
 
-struct FieldPlayer: Identifiable, Codable {
+struct FieldPlayer: Identifiable, Codable, Equatable {
     let id: String
     let name: String
     let position: Position
@@ -255,6 +255,37 @@ struct TradeResult: Codable {
     let newBalance: Int
     let structureImpact: TeamStructure
     let projectedPointsChange: Double
+}
+
+struct SavedLine: Codable, Identifiable {
+    let id: String
+    let name: String
+    let lineup: [FieldPlayer]
+    let createdDate: Date
+    let totalValue: Int
+    let totalScore: Int
+    let defCount: Int
+    let midCount: Int
+    let rucCount: Int
+    let fwdCount: Int
+}
+
+struct SalaryInfo: Codable {
+    let totalSalary: Int
+    let availableSalary: Int
+    let averagePlayerPrice: Int
+    let premiumPercentage: Double
+    let rookiePercentage: Double
+}
+
+struct SuggestedTrade: Codable, Identifiable {
+    let id: String
+    let playerOut: Player
+    let playerIn: Player
+    let cashDifference: Int
+    let projectedPointsGain: Double
+    let confidence: Double
+    let reasoning: String
 }
 
 // MARK: - Analysis Models
@@ -472,6 +503,13 @@ struct VenueStats: Codable {
 // MARK: - Settings Models
 
 struct Settings: Codable {
+    let aiEnabled: Bool
+    let liveScoring: Bool
+    let priceAlerts: Bool
+    let theme: ThemeOption
+    let scoreFormat: ScoreFormat
+    let analyticsEnabled: Bool
+    let leaguePrivacy: LeaguePrivacy
     let aiConfidenceThreshold: Double
     let analysisFactors: AnalysisFactors
     let notifications: NotificationPreferences
@@ -495,6 +533,43 @@ struct NotificationPreferences: Codable {
     let captainReminders: Bool
 }
 
+enum ThemeOption: String, CaseIterable, Codable {
+    case system
+    case light
+    case dark
+    
+    var name: String {
+        switch self {
+        case .system:
+            return "System"
+        case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
+        }
+    }
+}
+
+enum ScoreFormat: String, CaseIterable, Codable {
+    case points
+    case fantasy
+    
+    var name: String {
+        switch self {
+        case .points:
+            return "Points"
+        case .fantasy:
+            return "Fantasy Score"
+        }
+    }
+}
+
+enum LeaguePrivacy: String, CaseIterable, Codable {
+    case `public` = "Public"
+    case friendsOnly = "Friends Only"
+    case `private` = "Private"
+}
+
 // MARK: - Additional Alert Models
 
 struct Alert: Identifiable {
@@ -513,6 +588,54 @@ enum AlertSeverity: String, Codable {
     case medium = "MEDIUM"
     case high = "HIGH"
     case critical = "CRITICAL"
+}
+
+// MARK: - API Response Models
+
+struct CashCowData: Codable {
+    let playerId: String
+    let playerName: String
+    let currentPrice: Int
+    let projectedPrice: Int
+    let cashGenerated: Int
+    let recommendation: String
+    let confidence: Double
+    let fpAverage: Double
+    let gamesPlayed: Int
+}
+
+struct CaptainSuggestionResponse: Codable {
+    let playerId: String
+    let playerName: String
+    let projectedPoints: Double
+    let confidence: Double
+    let reasoning: String
+}
+
+struct APIPlayerSummary: Codable {
+    let id: String
+    let name: String
+    let team: String
+    let position: String
+    let price: Int
+    let average: Double
+    let projected: Double
+    let breakeven: Int
+}
+
+struct APIHealthResponse: Codable {
+    let status: String
+    let timestamp: String
+    let playersCached: Int
+    let lastCacheUpdate: String?
+}
+
+struct APIStatsResponse: Codable {
+    let totalPlayers: Int
+    let playersWithData: Int
+    let cashCowsIdentified: Int
+    let lastUpdated: String?
+    let cacheAgeMinutes: Int
 }
 
 // MARK: - Helper Types

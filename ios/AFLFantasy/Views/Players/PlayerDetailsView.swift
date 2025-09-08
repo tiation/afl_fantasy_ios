@@ -402,69 +402,86 @@ struct AlertRow: View {
 // MARK: - Preview
 
 #Preview {
+    let samplePlayer = Player(
+        id: "1",
+        apiId: 12346,
+        name: "Marcus Bontempelli",
+        position: .midfielder,
+        teamId: 3,
+        teamName: "Western Bulldogs",
+        teamAbbreviation: "WBD",
+        currentPrice: 850_000,
+        currentScore: 108,
+        averageScore: 105.5,
+        totalScore: 2310,
+        breakeven: 85,
+        gamesPlayed: 22,
+        consistency: 85.0,
+        ceiling: 145,
+        floor: 85,
+        volatility: 0.22,
+        ownership: 55.2,
+        lastScore: 115,
+        startingPrice: 825_000,
+        priceChange: 25000,
+        priceChangeProbability: 0.78,
+        cashGenerated: 150_000,
+        valueGain: 3.03,
+        isInjured: false,
+        isDoubtful: false,
+        isSuspended: false,
+        injuryRisk: InjuryRisk(
+            riskScore: 0.15,
+            severity: .low,
+            details: "Minor soreness"
+        ),
+        contractStatus: "Signed until 2027",
+        seasonalTrend: [98.0, 108.0, 115.0, 110.0, 105.0],
+        nextRoundProjection: RoundProjection(
+            predictedScore: 110.0,
+            confidence: 0.85,
+            upside: 135.0,
+            downside: 88.0,
+            venue: "Marvel Stadium",
+            opponent: "GWS"
+        ),
+        threeRoundProjection: [
+            RoundProjection(predictedScore: 110.0, confidence: 0.85, upside: 135.0, downside: 88.0, venue: "Marvel Stadium", opponent: "GWS"),
+            RoundProjection(predictedScore: 105.0, confidence: 0.80, upside: 128.0, downside: 82.0, venue: "MCG", opponent: "Collingwood"),
+            RoundProjection(predictedScore: 112.0, confidence: 0.82, upside: 140.0, downside: 85.0, venue: "Marvel Stadium", opponent: "St Kilda")
+        ],
+        seasonProjection: SeasonProjection(
+            projectedAverage: 105.0,
+            projectedTotal: 2310.0,
+            breakEvenRounds: 2,
+            peakRounds: [16, 20, 23]
+        ),
+        venuePerformance: [
+            VenuePerformance(venue: "Marvel Stadium", averageScore: 108.5, gamesPlayed: 12),
+            VenuePerformance(venue: "MCG", averageScore: 102.5, gamesPlayed: 8)
+        ],
+        opponentPerformance: ["GWS": 125.2, "Collingwood": 98.5, "St Kilda": 115.8],
+        isCaptainRecommended: true,
+        isTradeTarget: false,
+        isCashCow: false,
+        alertFlags: [
+            AlertFlag(
+                type: .premiumBreakout,
+                priority: .high,
+                message: "Scoring trend indicates premium breakout"
+            )
+        ]
+    )
+    
     NavigationView {
         PlayerDetailsView(player: EnhancedPlayer(
-            id: "1",
-            name: "Marcus Bontempelli",
-            position: .midfielder,
-            price: 850_000,
-            currentScore: 108,
-            averageScore: 105.5,
-            breakeven: 85,
-            consistency: 85.0,
-            highScore: 145,
-            lowScore: 85,
-            priceChange: 25000,
-            isCashCow: false,
-            isDoubtful: false,
-            isSuspended: false,
-            cashGenerated: 150_000,
-            projectedPeakPrice: 900_000,
-            nextRoundProjection: RoundProjection(
-                round: 1,
-                opponent: "GWS",
-                venue: "Marvel Stadium",
-                projectedScore: 110.0,
-                confidence: 0.85,
-                conditions: WeatherConditions(
-                    temperature: 20.0,
-                    rainProbability: 0.1,
-                    windSpeed: 15.0,
-                    humidity: 65.0
-                )
-            ),
-            seasonProjection: SeasonProjection(
-                projectedTotalScore: 2310.0,
-                projectedAverage: 105.0,
-                premiumPotential: 0.95
-            ),
-            injuryRisk: InjuryRisk(
-                riskLevel: .low,
-                riskScore: 0.15,
-                riskFactors: ["Minor soreness"]
-            ),
-            venuePerformance: [
-                VenuePerformance(
-                    venue: "Marvel Stadium",
-                    gamesPlayed: 12,
-                    averageScore: 108.5,
-                    bias: 1.05
-                ),
-                VenuePerformance(
-                    venue: "MCG",
-                    gamesPlayed: 8,
-                    averageScore: 102.5,
-                    bias: 0.98
-                )
-            ],
-            alertFlags: [
-                AlertFlag(
-                    id: UUID(),
-                    type: .premiumBreakout,
-                    priority: .high,
-                    message: "Scoring trend indicates premium breakout"
-                )
-            ]
+            player: samplePlayer,
+            premiumPotential: 0.95,
+            tradeInScore: 0.8,
+            tradeOutScore: 0.2,
+            captainScore: 0.88,
+            riskScore: 0.15,
+            valueScore: 0.85
         ))
     }
 }

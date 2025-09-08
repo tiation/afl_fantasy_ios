@@ -174,7 +174,7 @@ class ReachabilityService: ObservableObject {
 
 // MARK: - NetworkStatus
 
-enum NetworkStatus: String, CaseIterable {
+public enum NetworkStatus: String, CaseIterable {
     case unknown = "Unknown"
     case disconnected = "Disconnected"
     case connecting = "Connecting"

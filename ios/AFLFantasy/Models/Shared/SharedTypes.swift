@@ -84,6 +84,15 @@ public enum InjuryRiskLevel: String, Codable, CaseIterable {
     case medium
     case high
     case critical
+    
+    public var color: Color {
+        switch self {
+        case .low: .green
+        case .medium: .yellow
+        case .high: .orange
+        case .critical: .red
+        }
+    }
 }
 
 // MARK: - RoundProjection

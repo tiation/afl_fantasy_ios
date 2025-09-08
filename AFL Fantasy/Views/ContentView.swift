@@ -244,9 +244,10 @@ struct ContentView: View {
             }
             .tag(ContentViewModel.Tab.team)
             
-            // Cash Cows
+            // Cash Cows - Temporarily disabled
             NavigationView {
-                CashCowAnalyzerView()
+                Text("Cash Cow Analyzer Coming Soon")
+                    .foregroundColor(.secondary)
             }
             .tabItem {
                 Image(systemName: "dollarsign.circle.fill")

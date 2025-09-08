@@ -17,7 +17,7 @@ struct ScraperResult {
 // MARK: - AFLFantasyScraperService
 
 final class AFLFantasyScraperService: AFLFantasyScraperServiceProtocol {
-    @MainActor static let shared = AFLFantasyScraperService()
+    static let shared = AFLFantasyScraperService()
 
     private init() {}
 

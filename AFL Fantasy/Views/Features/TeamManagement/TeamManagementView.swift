@@ -96,8 +96,8 @@ struct TeamManagementView: View {
             } message: {
                 Text(viewModel.errorMessage)
             }
-            .onAppear {
-                viewModel.loadData()
+            .task {
+                await viewModel.loadData()
             }
         }
     }
@@ -271,7 +271,18 @@ struct FieldView: View {
     }
     
     private func getPlayers(for position: FieldPosition) -> [FieldPlayer] {
-        lineup.filter { $0.position == position }
+        switch position {
+        case .def:
+            return lineup.filter { $0.position == .defender && $0.isOnField }
+        case .mid:
+            return lineup.filter { $0.position == .midfielder && $0.isOnField }
+        case .ruc:
+            return lineup.filter { $0.position == .ruck && $0.isOnField }
+        case .fwd:
+            return lineup.filter { $0.position == .forward && $0.isOnField }
+        case .bench:
+            return lineup.filter { !$0.isOnField }
+        }
     }
 }
 
@@ -385,9 +396,9 @@ struct SuggestedTradeRow: View {
             HStack(spacing: Theme.Spacing.m) {
                 // Out Player
                 VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                    Text(trade.outPlayer)
-                        .font(Theme.Font.bodyBold)
-                        .foregroundColor(Theme.Colors.textPrimary)
+                Text(trade.playerOut.name)
+                    .font(Theme.Font.bodyBold)
+                    .foregroundColor(Theme.Colors.textPrimary)
                     
                     Text("OUT")
                         .font(Theme.Font.caption)
@@ -405,9 +416,9 @@ struct SuggestedTradeRow: View {
                 
                 // In Player
                 VStack(alignment: .trailing, spacing: Theme.Spacing.xxs) {
-                    Text(trade.inPlayer)
-                        .font(Theme.Font.bodyBold)
-                        .foregroundColor(Theme.Colors.textPrimary)
+                Text(trade.playerIn.name)
+                    .font(Theme.Font.bodyBold)
+                    .foregroundColor(Theme.Colors.textPrimary)
                     
                     Text("IN")
                         .font(Theme.Font.caption)
@@ -420,21 +431,21 @@ struct SuggestedTradeRow: View {
                 // Score Impact
                 StatBox(
                     title: "Score Impact",
-                    value: "\(trade.scoreImpact > 0 ? "+" : "")\(trade.scoreImpact)",
-                    valueColor: trade.scoreImpact > 0 ? Theme.Colors.success : Theme.Colors.error
+                    value: "\(trade.projectedPointsGain > 0 ? "+" : "")\(Int(trade.projectedPointsGain))",
+                    valueColor: trade.projectedPointsGain > 0 ? Theme.Colors.success : Theme.Colors.error
                 )
                 
                 // Price Impact
                 StatBox(
                     title: "Price Impact",
-                    value: "$\(abs(trade.priceImpact) / 1000)k",
-                    valueColor: trade.priceImpact > 0 ? Theme.Colors.success : Theme.Colors.error
+                    value: "$\(abs(trade.cashDifference) / 1000)k",
+                    valueColor: trade.cashDifference > 0 ? Theme.Colors.success : Theme.Colors.error
                 )
                 
                 // Break-even
                 StatBox(
-                    title: "Break-even",
-                    value: String(trade.breakEven)
+                    title: "Confidence",
+                    value: "\(Int(trade.confidence * 100))%"
                 )
             }
         }
@@ -446,17 +457,7 @@ struct SuggestedTradeRow: View {
 
 // MARK: - Data Models
 
-struct SavedLine: Identifiable {
-    let id: String
-    let name: String
-    let totalScore: Int
-    let defCount: Int
-    let midCount: Int
-    let rucCount: Int
-    let fwdCount: Int
-}
-
-// FieldPlayer is defined in Models/Models.swift
+// FieldPlayer, SavedLine, SalaryInfo, SuggestedTrade are defined in Models/Models.swift
 
 enum FieldPosition {
     case def
@@ -466,64 +467,53 @@ enum FieldPosition {
     case bench
 }
 
-struct SalaryInfo {
-    let totalSalary: Int
-    let availableSalary: Int
-    let averagePlayerPrice: Int
-    let premiumPercentage: Double
-    let rookiePercentage: Double
-}
-
-struct SuggestedTrade: Identifiable {
-    let id = UUID()
-    let outPlayer: String
-    let inPlayer: String
-    let scoreImpact: Int
-    let priceImpact: Int
-    let breakEven: Int
-}
-
 // MARK: - Preview
 
 struct TeamManagementView_Previews: PreviewProvider {
     static var sampleLines: [SavedLine] {
         [
-            .init(id: "1", name: "Best 22", totalScore: 2150, defCount: 6, midCount: 8, rucCount: 2, fwdCount: 6),
-            .init(id: "2", name: "Value Line", totalScore: 2080, defCount: 6, midCount: 8, rucCount: 2, fwdCount: 6),
-            .init(id: "3", name: "No Risks", totalScore: 1950, defCount: 6, midCount: 8, rucCount: 2, fwdCount: 6)
+            .init(id: "1", name: "Best 22", lineup: [], createdDate: Date(), totalValue: 12500000, totalScore: 2150, defCount: 6, midCount: 8, rucCount: 2, fwdCount: 6),
+            .init(id: "2", name: "Value Line", lineup: [], createdDate: Date(), totalValue: 12000000, totalScore: 2080, defCount: 6, midCount: 8, rucCount: 2, fwdCount: 6),
+            .init(id: "3", name: "No Risks", lineup: [], createdDate: Date(), totalValue: 11500000, totalScore: 1950, defCount: 6, midCount: 8, rucCount: 2, fwdCount: 6)
         ]
     }
     
     static var sampleLineup: [FieldPlayer] {
         [
             // Forwards
-            .init(id: "1", name: "T. Greene", position: .fwd, score: 95, price: 450000),
-            .init(id: "2", name: "J. Amiss", position: .fwd, score: 85, price: 350000),
-            .init(id: "3", name: "N. Daicos", position: .fwd, score: 110, price: 650000),
+            .init(id: "1", name: "T. Greene", position: .forward, price: 450000, isOnField: true, isCaptain: false, isViceCaptain: false),
+            .init(id: "2", name: "J. Amiss", position: .forward, price: 350000, isOnField: true, isCaptain: false, isViceCaptain: false),
+            .init(id: "3", name: "N. Daicos", position: .forward, price: 650000, isOnField: true, isCaptain: true, isViceCaptain: false),
             
             // Midfield
-            .init(id: "4", name: "M. Rowell", position: .mid, score: 105, price: 550000),
-            .init(id: "5", name: "C. Mills", position: .mid, score: 115, price: 750000),
-            .init(id: "6", name: "L. Neale", position: .mid, score: 120, price: 850000),
+            .init(id: "4", name: "M. Rowell", position: .midfielder, price: 550000, isOnField: true, isCaptain: false, isViceCaptain: false),
+            .init(id: "5", name: "C. Mills", position: .midfielder, price: 750000, isOnField: true, isCaptain: false, isViceCaptain: true),
+            .init(id: "6", name: "L. Neale", position: .midfielder, price: 850000, isOnField: true, isCaptain: false, isViceCaptain: false),
             
             // Ruck
-            .init(id: "7", name: "M. Gawn", position: .ruc, score: 125, price: 850000),
+            .init(id: "7", name: "M. Gawn", position: .ruck, price: 850000, isOnField: true, isCaptain: false, isViceCaptain: false),
             
             // Defense
-            .init(id: "8", name: "J. Sicily", position: .def, score: 100, price: 650000),
-            .init(id: "9", name: "L. Ryan", position: .def, score: 90, price: 450000),
-            .init(id: "10", name: "N. Vlastuin", position: .def, score: 85, price: 400000),
+            .init(id: "8", name: "J. Sicily", position: .defender, price: 650000, isOnField: true, isCaptain: false, isViceCaptain: false),
+            .init(id: "9", name: "L. Ryan", position: .defender, price: 450000, isOnField: true, isCaptain: false, isViceCaptain: false),
+            .init(id: "10", name: "N. Vlastuin", position: .defender, price: 400000, isOnField: true, isCaptain: false, isViceCaptain: false),
             
             // Bench
-            .init(id: "11", name: "M. Johnson", position: .bench, score: 65, price: 250000),
-            .init(id: "12", name: "C. Warner", position: .bench, score: 70, price: 280000)
+            .init(id: "11", name: "M. Johnson", position: .midfielder, price: 250000, isOnField: false, isCaptain: false, isViceCaptain: false),
+            .init(id: "12", name: "C. Warner", position: .forward, price: 280000, isOnField: false, isCaptain: false, isViceCaptain: false)
         ]
     }
     
     static var sampleTrades: [SuggestedTrade] {
-        [
-            .init(outPlayer: "L. Ryan", inPlayer: "J. Ridley", scoreImpact: 12, priceImpact: -50000, breakEven: 85),
-            .init(outPlayer: "N. Vlastuin", inPlayer: "B. Dale", scoreImpact: 8, priceImpact: -30000, breakEven: 75)
+        let outPlayer1 = Player(id: "9", name: "L. Ryan", team: "WCE", position: .defender, price: 450000, average: 90.0, projected: 88.0, breakeven: 85, consistency: .b, priceChange: -5000, ownership: 0.15, injuryStatus: .healthy, venueStats: nil, formFactor: nil, dvpImpact: nil)
+        let inPlayer1 = Player(id: "20", name: "J. Ridley", team: "ESS", position: .defender, price: 400000, average: 102.0, projected: 100.0, breakeven: 75, consistency: .a, priceChange: 8000, ownership: 0.25, injuryStatus: .healthy, venueStats: nil, formFactor: nil, dvpImpact: nil)
+        
+        let outPlayer2 = Player(id: "10", name: "N. Vlastuin", team: "RIC", position: .defender, price: 400000, average: 85.0, projected: 82.0, breakeven: 75, consistency: .c, priceChange: -3000, ownership: 0.12, injuryStatus: .healthy, venueStats: nil, formFactor: nil, dvpImpact: nil)
+        let inPlayer2 = Player(id: "21", name: "B. Dale", team: "GWS", position: .defender, price: 370000, average: 93.0, projected: 90.0, breakeven: 65, consistency: .b, priceChange: 5000, ownership: 0.18, injuryStatus: .healthy, venueStats: nil, formFactor: nil, dvpImpact: nil)
+        
+        return [
+            .init(id: "trade1", playerOut: outPlayer1, playerIn: inPlayer1, cashDifference: -50000, projectedPointsGain: 12.0, confidence: 0.85, reasoning: "Ridley offers better scoring potential and value"),
+            .init(id: "trade2", playerOut: outPlayer2, playerIn: inPlayer2, cashDifference: -30000, projectedPointsGain: 8.0, confidence: 0.75, reasoning: "Dale has better role and consistency")
         ]
     }
     

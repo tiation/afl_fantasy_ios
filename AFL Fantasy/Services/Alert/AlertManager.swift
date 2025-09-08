@@ -85,9 +85,10 @@ final class AlertManager: ObservableObject {
         }
         
         // Listen for WebSocket alerts
-        webSocket.onAlert { [weak self] update in
-            self?.handleAlert(update)
-        }
+        // TODO: Implement alert subscription when WebSocket supports it
+        // webSocket.onAlert { [weak self] update in
+        //     self?.handleAlertUpdate(update)
+        // }
         
         // Connect WebSocket
         webSocket.connect()
@@ -169,7 +170,15 @@ final class AlertManager: ObservableObject {
     
     private func updateBadge() {
         Task { @MainActor in
-            UIApplication.shared.applicationIconBadgeNumber = unreadCount
+            if #available(iOS 16.0, *) {
+                UNUserNotificationCenter.current().setBadgeCount(unreadCount) { error in
+                    if let error = error {
+                        print("Failed to set badge count: \(error.localizedDescription)")
+                    }
+                }
+            } else {
+                UIApplication.shared.applicationIconBadgeNumber = unreadCount
+            }
         }
     }
 }

@@ -8,6 +8,9 @@ protocol SettingsServiceProtocol {
     func updateSettings(_ settings: Settings) async throws -> Settings
     func isAIEnabled() async throws -> Bool
     func setAIEnabled(_ enabled: Bool) async throws
+    func getAppVersion() async -> String
+    func updateLeaguePrivacy(_ privacy: String) async throws
+    func openSupport() async throws
 }
 
 // MARK: - Captain AI Service Protocol
@@ -22,6 +25,9 @@ protocol CaptainAIServiceProtocol {
 protocol CashCowServiceProtocol {
     func getCashStats() async throws -> CashGenStats
     func analyzeCashCows() async throws -> [CashCowAnalysis]
+    func getSellRecommendations() async throws -> [SellRecommendation]
+    func getHoldRecommendations() async throws -> [HoldRecommendation]
+    func getWatchlistPlayers() async throws -> [WatchlistPlayer]
 }
 
 // MARK: - Price Service Protocol
@@ -92,6 +98,7 @@ protocol DataServiceProtocol {
     func exportUserData() async throws
 }
 
+
 // MARK: - Service Implementations
 
 final class CaptainAIService: CaptainAIServiceProtocol {
@@ -119,6 +126,69 @@ final class CashCowService: CashCowServiceProtocol {
     
     func analyzeCashCows() async throws -> [CashCowAnalysis] {
         return []
+    }
+    
+    func getSellRecommendations() async throws -> [SellRecommendation] {
+        // Mock implementation - return sample sell recommendations
+        return [
+            SellRecommendation(
+                playerId: "1",
+                playerName: "Sample Player 1",
+                currentPrice: 400000,
+                reason: "Price peaked - good time to cash out",
+                confidence: 0.85,
+                urgency: .high
+            ),
+            SellRecommendation(
+                playerId: "2",
+                playerName: "Sample Player 2",
+                currentPrice: 350000,
+                reason: "Role reduced - sell before price drops",
+                confidence: 0.75,
+                urgency: .medium
+            )
+        ]
+    }
+    
+    func getHoldRecommendations() async throws -> [HoldRecommendation] {
+        // Mock implementation - return sample hold recommendations
+        return [
+            HoldRecommendation(
+                playerId: "3",
+                playerName: "Hold Player 1",
+                reason: "Still rising - hold for 2 more weeks",
+                weeksToHold: 2,
+                expectedGain: 50000
+            ),
+            HoldRecommendation(
+                playerId: "4",
+                playerName: "Hold Player 2",
+                reason: "Break even target not yet reached",
+                weeksToHold: 3,
+                expectedGain: 75000
+            )
+        ]
+    }
+    
+    func getWatchlistPlayers() async throws -> [WatchlistPlayer] {
+        // Mock implementation - return sample watchlist players
+        return [
+            WatchlistPlayer(
+                playerId: "5",
+                playerName: "Watch Player 1",
+                currentPrice: 200000,
+                targetPrice: 300000,
+                breakEven: -10,
+                timeframe: "3 weeks",
+                sellWeek: 8,
+                confidence: 0.90,
+                priceTrajectory: [
+                    PriceProjection(round: 1, price: 220000, confidence: 0.8),
+                    PriceProjection(round: 2, price: 250000, confidence: 0.85),
+                    PriceProjection(round: 3, price: 280000, confidence: 0.9)
+                ]
+            )
+        ]
     }
 }
 

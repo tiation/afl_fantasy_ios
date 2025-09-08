@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TeamOptimizationView: View {
     let suggestions: [OptimizationSuggestion]
-    let selectedId: String?
+    let selectedId: UUID?
     let onSelect: ((OptimizationSuggestion) -> Void)?
     
     var body: some View {

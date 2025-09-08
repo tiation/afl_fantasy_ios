@@ -1,73 +1,191 @@
 import SwiftUI
 
+/// Perfect Dashboard View with iOS HIG compliance, accessibility, and robust error handling
 struct DashboardView: View {
     @StateObject private var viewModel = DashboardViewModel()
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    // Live Stats Section
-                    statsSection
-                    
-                    // Team Structure Section
-                    teamStructureSection
-                    
-                    // Cash Cow Analysis Section
-                    cashCowSection
-                    
-                    // AI Recommendations Section
-                    recommendationsSection
+            ZStack {
+                // Background
+                Theme.Colors.groupedBackground
+                    .ignoresSafeArea()
+                
+                // Content
+                Group {
+                    if viewModel.isLoading && viewModel.liveStats.currentScore == 0 {
+                        // Initial loading state
+                        LoadingState("Loading your dashboard...")
+                    } else if viewModel.showError && !viewModel.isLoading {
+                        // Error state with retry
+                        ErrorState(error: AFLFantasyError.networkError(viewModel.errorMessage)) {
+                            Task { await viewModel.refresh() }
+                        }
+                    } else {
+                        // Main content
+                        dashboardContent
+                    }
                 }
-                .padding()
             }
             .navigationTitle("Dashboard")
+            .navigationBarTitleDisplayMode(.large)
             .refreshable {
                 await viewModel.refresh()
             }
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    viewModel.loadData()
+                }
+            }
             .onAppear {
                 viewModel.loadData()
+            }
+            .alert("Error", isPresented: $viewModel.showError) {
+                Button("Try Again") {
+                    Task { await viewModel.refresh() }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text(viewModel.errorMessage)
             }
         }
     }
     
     @ViewBuilder
+    private var dashboardContent: some View {
+        ScrollView(showsIndicators: false) {
+            LazyVStack(spacing: Theme.Spacing.l) {
+                // Header with live indicator
+                headerSection
+                
+                // Live Stats Section
+                statsSection
+                
+                // Team Structure Section
+                teamStructureSection
+                
+                // Cash Generation Section
+                cashGenerationSection
+                
+                // AI Recommendations Section
+                recommendationsSection
+                
+                // Bottom padding for tab bar
+                Color.clear.frame(height: Theme.Spacing.l)
+            }
+            .padding(.horizontal, Theme.Spacing.m)
+        }
+        .loadingState(viewModel.isLoading)
+    }
+    
+    @ViewBuilder
+    private var headerSection: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+                Text("Welcome back!")
+                    .font(Theme.Font.title2)
+                    .foregroundColor(Theme.Colors.textPrimary)
+                
+                if viewModel.hasLiveGames {
+                    HStack(spacing: Theme.Spacing.xs) {
+                        Circle()
+                            .fill(Theme.Colors.success)
+                            .frame(width: 8, height: 8)
+                            .animation(Theme.Animation.standard, value: viewModel.hasLiveGames)
+                        
+                        Text("Live games in progress")
+                            .font(Theme.Font.callout)
+                            .foregroundColor(Theme.Colors.success)
+                    }
+                } else {
+                    Text("No live games")
+                        .font(Theme.Font.callout)
+                        .foregroundColor(Theme.Colors.textSecondary)
+                }
+            }
+            
+            Spacer()
+            
+            // Notification indicator
+            if viewModel.unreadNotifications > 0 {
+                Button {
+                    viewModel.openNotifications()
+                } label: {
+                    ZStack {
+                        Image(systemName: "bell")
+                            .font(.title2)
+                            .foregroundColor(Theme.Colors.accent)
+                        
+                        if viewModel.unreadNotifications > 0 {
+                            Text("\(min(viewModel.unreadNotifications, 99))")
+                                .font(.caption2)
+                                .foregroundColor(.white)
+                                .padding(4)
+                                .background(Theme.Colors.error)
+                                .clipShape(Circle())
+                                .offset(x: 8, y: -8)
+                        }
+                    }
+                }
+                .minTouchTarget()
+                .accessibilityLabel("Notifications")
+                .accessibilityValue("\(viewModel.unreadNotifications) unread")
+            }
+        }
+        .padding(.vertical, Theme.Spacing.s)
+    }
+    
+    @ViewBuilder
     private var statsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Live Stats")
-                .font(.headline)
-                .foregroundColor(.primary)
+        VStack(alignment: .leading, spacing: Theme.Spacing.m) {
+            SectionHeader(
+                "Live Stats",
+                subtitle: viewModel.hasLiveGames ? "Updating in real-time" : "Next round starting soon"
+            )
             
             LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 16) {
-                StatCard(
-                    title: "Current Score", 
+                GridItem(.flexible(), spacing: Theme.Spacing.m),
+                GridItem(.flexible(), spacing: Theme.Spacing.m)
+            ], spacing: Theme.Spacing.m) {
+                PerfectStatCard(
+                    title: "Current Score",
                     value: "\(viewModel.liveStats.currentScore)",
-                    color: .blue
+                    color: Theme.Colors.score,
+                    icon: "chart.line.uptrend.xyaxis",
+                    subtitle: viewModel.hasLiveGames ? "Live" : "Final"
                 )
-                StatCard(
-                    title: "Rank", 
-                    value: "#\(viewModel.liveStats.rank)",
-                    color: .green
+                
+                PerfectStatCard(
+                    title: "Overall Rank",
+                    value: "#\(viewModel.liveStats.rank.formatted())",
+                    color: Theme.Colors.rank,
+                    icon: "trophy",
+                    subtitle: viewModel.liveStats.rank <= 1000 ? "Top 1K" : "Keep climbing!"
                 )
-                StatCard(
-                    title: "Playing", 
+                
+                PerfectStatCard(
+                    title: "Playing",
                     value: "\(viewModel.liveStats.playersPlaying)",
-                    color: .orange
+                    color: Theme.Colors.success,
+                    icon: "person.fill.checkmark",
+                    subtitle: "of 22 players"
                 )
-                StatCard(
-                    title: "Remaining", 
+                
+                PerfectStatCard(
+                    title: "Yet to Play",
                     value: "\(viewModel.liveStats.playersRemaining)",
-                    color: .purple
+                    color: Theme.Colors.warning,
+                    icon: "clock",
+                    subtitle: "remaining"
                 )
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(radius: 2)
+        .padding(Theme.Spacing.m)
+        .cardStyle(.elevated)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Live Stats")
     }
     
     @ViewBuilder

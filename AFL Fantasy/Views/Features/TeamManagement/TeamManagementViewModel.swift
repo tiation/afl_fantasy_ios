@@ -131,30 +131,34 @@ final class TeamManagementViewModel: ObservableObject {
     // MARK: - Private Methods
     
     private func calculateTeamStructure(from lineup: [FieldPlayer]) -> TeamStructure {
-        var structure = TeamStructure()
+        var positionBalance: [Position: Int] = [
+            .defender: 0,
+            .midfielder: 0,
+            .ruck: 0,
+            .forward: 0
+        ]
         
-        // Count positions
-        for player in lineup where !player.isBench {
-            switch player.position {
-            case .def:
-                structure.defenders += 1
-            case .mid:
-                structure.midfielders += 1
-            case .ruc:
-                structure.rucks += 1
-            case .fwd:
-                structure.forwards += 1
-            case .bench:
-                break
-            }
+        var totalValue = 0
+        
+        // Count positions and calculate total value
+        for player in lineup where player.isOnField {
+            positionBalance[player.position, default: 0] += 1
+            totalValue += player.price
         }
         
         // Price tiers
-        structure.premiums = lineup.filter { $0.price >= 650000 }.count
-        structure.midPricers = lineup.filter { $0.price >= 350000 && $0.price < 650000 }.count
-        structure.rookies = lineup.filter { $0.price < 350000 }.count
+        let premiumCount = lineup.filter { $0.price >= 650000 }.count
+        let midPriceCount = lineup.filter { $0.price >= 350000 && $0.price < 650000 }.count
+        let rookieCount = lineup.filter { $0.price < 350000 }.count
         
-        return structure
+        return TeamStructure(
+            totalValue: totalValue,
+            bankBalance: 13000000 - totalValue, // Assuming 13M salary cap
+            positionBalance: positionBalance,
+            premiumCount: premiumCount,
+            midPriceCount: midPriceCount,
+            rookieCount: rookieCount
+        )
     }
     
     private func handleError(_ error: Error) {

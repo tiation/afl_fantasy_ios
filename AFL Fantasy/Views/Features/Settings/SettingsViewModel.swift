@@ -73,7 +73,7 @@ final class SettingsViewModel: ObservableObject {
                 
                 // App info
                 cacheSize = try await cacheTask
-                appVersion = try await versionTask
+                appVersion = await versionTask
                 
             } catch {
                 handleError(error)
@@ -108,7 +108,7 @@ final class SettingsViewModel: ObservableObject {
     func updateLeaguePrivacy(_ privacy: LeaguePrivacy) {
         Task {
             do {
-                try await settingsService.updateLeaguePrivacy(privacy)
+                try await settingsService.updateLeaguePrivacy(privacy.rawValue)
                 self.leaguePrivacy = privacy
                 showSuccess(message: "League privacy updated successfully")
             } catch {

@@ -446,64 +446,8 @@ private struct CacheItem<T: Codable>: Codable {
 }
 
 // MARK: - NotificationManager
-
-final class NotificationManager: ObservableObject {
-    static let shared = NotificationManager()
-
-    @Published var hasPermission: Bool = false
-
-    private init() {
-        checkPermissionStatus()
-    }
-
-    func requestPermission() async -> Bool {
-        let center = UNUserNotificationCenter.current()
-
-        do {
-            let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
-            await MainActor.run {
-                hasPermission = granted
-            }
-            return granted
-        } catch {
-            print("Failed to request notification permission: \(error)")
-            return false
-        }
-    }
-
-    private func checkPermissionStatus() {
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            DispatchQueue.main.async {
-                self.hasPermission = settings.authorizationStatus == .authorized
-            }
-        }
-    }
-
-    func schedulePlayerAlert(_ player: EnhancedPlayer, type: PlayerAlertType) {
-        guard hasPermission else { return }
-
-        let content = UNMutableNotificationContent()
-        content.title = "AFL Fantasy Alert"
-        content.sound = .default
-
-        switch type {
-        case .priceRise:
-            content.body = "\(player.name)'s price has increased! Consider selling."
-        case .priceWatch:
-            content.body = "\(player.name) is approaching a price change."
-        case .injuryUpdate:
-            content.body = "\(player.name) injury status updated."
-        case .formAlert:
-            content.body = "\(player.name) form has changed significantly."
-        }
-
-        let identifier = "player-\(player.aflPlayerId)-\(type.rawValue)"
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request)
-    }
-}
+// Note: NotificationManager moved to dedicated NotificationManager.swift file
+// to avoid duplicate definitions
 
 // MARK: - PlayerAlertType
 

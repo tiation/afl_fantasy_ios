@@ -1,12 +1,26 @@
 import SwiftUI
 
 struct PerformanceChart: View {
+    let games: [GameStats]
+    let projectedScore: Double
+    
     var body: some View {
-        Text("Performance Chart")
-            .padding()
+        VStack {
+            Text("Performance Chart")
+                .font(.headline)
+            
+            if !games.isEmpty {
+                Text("Games: \(games.count)")
+                    .font(.subheadline)
+            }
+            
+            Text("Projected: \(Int(projectedScore))")
+                .font(.subheadline)
+        }
+        .padding()
     }
 }
 
 #Preview {
-    PerformanceChart()
+    PerformanceChart(games: [], projectedScore: 85.5)
 }

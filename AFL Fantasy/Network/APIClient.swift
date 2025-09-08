@@ -182,3 +182,103 @@ class APIClient {
             .eraseToAnyPublisher()
     }
 }
+
+// MARK: - API Client Extensions for Real Data
+
+extension APIClient {
+    
+    // MARK: - Health & Stats
+    
+    func getHealthStatus() -> AnyPublisher<APIHealthResponse, Error> {
+        get("/health")
+    }
+    
+    func getStatsResponse() -> AnyPublisher<APIStatsResponse, Error> {
+        get("/api/stats/summary")
+    }
+    
+    // MARK: - Player Data
+    
+    func getAllPlayers() -> AnyPublisher<[APIPlayerSummary], Error> {
+        get("/api/players")
+    }
+    
+    func getPlayerDetail(id: String) -> AnyPublisher<PlayerDetailResponse, Error> {
+        get("/api/players/\(id)")
+    }
+    
+    // MARK: - Cash Cow Analysis
+    
+    func getCashCows() -> AnyPublisher<[CashCowData], Error> {
+        get("/api/stats/cash-cows")
+    }
+    
+    // MARK: - Captain Selection
+    
+    func getCaptainSuggestions(venue: String?, opponent: String?) -> AnyPublisher<[CaptainSuggestionResponse], Error> {
+        let body: [String: Any?] = [
+            "venue": venue,
+            "opponent": opponent
+        ]
+        
+        // Filter out nil values
+        let filteredBody = body.compactMapValues { $0 }
+        
+        return post("/api/captain/suggestions", body: filteredBody)
+    }
+    
+    // MARK: - Cache Management
+    
+    func refreshCache() -> AnyPublisher<RefreshResponse, Error> {
+        post("/api/refresh", body: [String: String]())
+    }
+}
+
+// MARK: - Additional Response Models
+
+struct PlayerDetailResponse: Codable {
+    let playerId: String
+    let fileName: String
+    let careerStats: [CareerStat]?
+    let opponentSplits: [OpponentSplit]?
+    let recentForm: [GameResult]?
+    let gameHistory: [GameResult]?
+    let venueStats: [VenueStat]?
+    let playerInfo: APIPlayerSummary
+}
+
+struct CareerStat: Codable {
+    let player: String?
+    let yr: String?
+    let tm: String?
+    let fp: Double?
+    let gp: Int?
+    let price: Int?
+}
+
+struct OpponentSplit: Codable {
+    let opp: String?
+    let gm: Int?
+    let fp: Double?
+    let avg: Double?
+}
+
+struct GameResult: Codable {
+    let date: String?
+    let opponent: String?
+    let fp: Double?
+    let score: Int?
+}
+
+struct VenueStat: Codable {
+    let venue: String?
+    let games: Int?
+    let avg: Double?
+    let best: Double?
+}
+
+struct RefreshResponse: Codable {
+    let status: String
+    let message: String
+    let timestamp: String
+}

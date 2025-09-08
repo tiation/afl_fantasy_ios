@@ -26,45 +26,6 @@ extension UserService {
     }
 }
 
-extension LineService {
-    static var preview: LineService {
-        let service = LineService()
-        // Add mock data here if needed
-        return service
-    }
-}
-
-extension TeamService {
-    static var preview: TeamService {
-        let service = TeamService()
-        // Add mock data here if needed
-        return service
-    }
-}
-
-extension TradeService {
-    static var preview: TradeService {
-        let service = TradeService()
-        // Add mock data here if needed
-        return service
-    }
-}
-
-extension OptimizationService {
-    static var preview: OptimizationService {
-        let service = OptimizationService()
-        // Add mock data here if needed
-        return service
-    }
-}
-
-extension NotificationDataService {
-    static var preview: NotificationDataService {
-        let service = NotificationDataService()
-        // Add mock data here if needed
-        return service
-    }
-}
 
 extension AuthService {
     static var preview: AuthService {
@@ -209,11 +170,6 @@ class PreviewContainer {
     let statsService = StatsService.preview
     let settingsService = SettingsService.preview
     let userService = UserService.preview
-    let lineService = LineService.preview
-    let teamService = TeamService.preview
-    let tradeService = TradeService.preview
-    let optimizationService = OptimizationService.preview
-    let notificationDataService = NotificationDataService.preview
     let authService = AuthService.preview
     let dataService = DataService.preview
     let playerService = PlayerService.preview

@@ -43,10 +43,4 @@ struct PlayerData: Codable, Equatable {
 }
 
 // MARK: - TeamData
-
-struct TeamData: Codable, Equatable {
-    let id: String
-    let name: String
-    let abbreviation: String
-    let players: [PlayerData]
-}
+// Note: TeamData is now defined in DataModels.swift to avoid conflicts

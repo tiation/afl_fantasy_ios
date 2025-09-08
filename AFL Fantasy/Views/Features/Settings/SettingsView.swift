@@ -316,44 +316,6 @@ struct SettingsDetailView: View {
     }
 }
 
-// MARK: - Settings Enums
-
-enum ThemeOption: String, CaseIterable {
-    case system
-    case light
-    case dark
-    
-    var name: String {
-        switch self {
-        case .system:
-            return "System"
-        case .light:
-            return "Light"
-        case .dark:
-            return "Dark"
-        }
-    }
-}
-
-enum ScoreFormat: String, CaseIterable {
-    case points
-    case fantasy
-    
-    var name: String {
-        switch self {
-        case .points:
-            return "Points"
-        case .fantasy:
-            return "Fantasy Score"
-        }
-    }
-}
-
-enum LeaguePrivacy: String, CaseIterable {
-    case `public` = "Public"
-    case friendsOnly = "Friends Only"
-    case `private` = "Private"
-}
 
 // MARK: - Preview
 

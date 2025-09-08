@@ -729,50 +729,77 @@ struct RiskTab: View {
 // MARK: - Preview
 
 #Preview {
-    PlayerDetailView(player: EnhancedPlayer(
+    let samplePlayer = Player(
         id: "1",
+        apiId: 12345,
         name: "Marcus Bontempelli",
         position: .midfielder,
-        price: 750_000,
+        teamId: 3,
+        teamName: "Western Bulldogs",
+        teamAbbreviation: "WBD",
+        currentPrice: 750_000,
         currentScore: 120,
         averageScore: 105.5,
+        totalScore: 2110,
         breakeven: 45,
+        gamesPlayed: 20,
         consistency: 88.0,
-        highScore: 156,
-        lowScore: 62,
+        ceiling: 156,
+        floor: 62,
+        volatility: 0.25,
+        ownership: 45.6,
+        lastScore: 125,
+        startingPrice: 735_000,
         priceChange: 15000,
-        isCashCow: false,
+        priceChangeProbability: 0.85,
+        cashGenerated: 0,
+        valueGain: 2.04,
+        isInjured: false,
         isDoubtful: false,
         isSuspended: false,
-        cashGenerated: 0,
-        projectedPeakPrice: 0,
-        nextRoundProjection: RoundProjection(
-            round: 15,
-            opponent: "Richmond",
-            venue: "Marvel Stadium",
-            projectedScore: 108.0,
-            confidence: 0.82,
-            conditions: WeatherConditions(
-                temperature: 18.0,
-                rainProbability: 0.2,
-                windSpeed: 15.0,
-                humidity: 65.0
-            )
-        ),
-        seasonProjection: SeasonProjection(
-            projectedTotalScore: 2110.0,
-            projectedAverage: 105.5,
-            premiumPotential: 0.95
-        ),
         injuryRisk: InjuryRisk(
-            riskLevel: .low,
             riskScore: 0.15,
-            riskFactors: []
+            severity: .low
+        ),
+        contractStatus: "Signed until 2026",
+        seasonalTrend: [95.0, 105.0, 110.0, 108.0, 112.0],
+        nextRoundProjection: RoundProjection(
+            predictedScore: 108.0,
+            confidence: 0.82,
+            upside: 135.0,
+            downside: 85.0,
+            venue: "Marvel Stadium",
+            opponent: "Richmond"
+        ),
+        threeRoundProjection: [
+            RoundProjection(predictedScore: 108.0, confidence: 0.82, upside: 135.0, downside: 85.0, venue: "Marvel Stadium", opponent: "Richmond"),
+            RoundProjection(predictedScore: 102.0, confidence: 0.78, upside: 125.0, downside: 75.0, venue: "MCG", opponent: "Carlton"),
+            RoundProjection(predictedScore: 115.0, confidence: 0.85, upside: 140.0, downside: 90.0, venue: "Marvel Stadium", opponent: "Essendon")
+        ],
+        seasonProjection: SeasonProjection(
+            projectedAverage: 105.5,
+            projectedTotal: 2110.0,
+            breakEvenRounds: 3,
+            peakRounds: [15, 18, 22]
         ),
         venuePerformance: [
-            VenuePerformance(venue: "Marvel Stadium", gamesPlayed: 8, averageScore: 110.2, bias: 4.7),
-            VenuePerformance(venue: "MCG", gamesPlayed: 6, averageScore: 102.8, bias: -2.7)
+            VenuePerformance(venue: "Marvel Stadium", averageScore: 110.2, gamesPlayed: 8),
+            VenuePerformance(venue: "MCG", averageScore: 102.8, gamesPlayed: 6)
         ],
+        opponentPerformance: ["Richmond": 118.5, "Carlton": 95.2, "Essendon": 125.8],
+        isCaptainRecommended: true,
+        isTradeTarget: false,
+        isCashCow: false,
         alertFlags: []
+    )
+    
+    PlayerDetailView(player: EnhancedPlayer(
+        player: samplePlayer,
+        premiumPotential: 0.95,
+        tradeInScore: 0.7,
+        tradeOutScore: 0.3,
+        captainScore: 0.85,
+        riskScore: 0.15,
+        valueScore: 0.8
     ))
 }

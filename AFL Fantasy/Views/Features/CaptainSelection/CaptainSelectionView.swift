@@ -43,7 +43,7 @@ struct CaptainSelectionView: View {
                             // Recent Performance Chart
                             PerformanceChart(
                                 games: viewModel.selectedPlayerGames,
-                                projectedScore: viewModel.selectedPlayerProjection
+                                projectedScore: viewModel.selectedPlayerProjection ?? 0.0
                             )
                             
                             // Captain Options List
@@ -57,7 +57,7 @@ struct CaptainSelectionView: View {
                     }
                 }
             }
-            .onChange(of: viewModel.selectedPlayerId) { _ in
+            .onChange(of: viewModel.selectedPlayerId) {
                 viewModel.updatePlayerStats()
             }
             .alert("Error", isPresented: $viewModel.showError) {
@@ -93,25 +93,25 @@ struct AIRecommendationsCard: View {
             }
             
             // Recommendations
-            ForEach(recommendations) { rec in
+            ForEach(recommendations, id: \.id) { rec in
                 HStack(spacing: Theme.Spacing.m) {
-                    // Rank Circle
+                    // Type Icon
                     ZStack {
                         Circle()
                             .fill(Theme.Colors.accent.opacity(0.1))
                             .frame(width: 32, height: 32)
                         
-                        Text("\(rec.rank)")
-                            .font(Theme.Font.bodyBold)
+                        Image(systemName: "crown.fill")
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(Theme.Colors.accent)
                     }
                     
                     VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                        Text(rec.playerName)
+                        Text(rec.type.rawValue.capitalized)
                             .font(Theme.Font.bodyBold)
                             .foregroundColor(Theme.Colors.textPrimary)
                         
-                        Text(rec.reason)
+                        Text(rec.reasoning)
                             .font(Theme.Font.caption)
                             .foregroundColor(Theme.Colors.textSecondary)
                     }

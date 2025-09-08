@@ -26,7 +26,7 @@ enum PlayerPosition: String, CaseIterable {
 // MARK: - RiskLevel
 
 // Risk levels
-enum RiskLevel: String, CaseIterable, Codable {
+public enum RiskLevel: String, CaseIterable, Codable {
     case low = "Low"
     case medium = "Medium"
     case high = "High"
@@ -65,16 +65,7 @@ struct PlayerProjection: Codable {
     let confidence: Double
 }
 
-// MARK: - TeamAnalysis
-
-// Team analysis type
-struct TeamAnalysis: Codable {
-    let overallGrade: String
-    let strengths: [String]
-    let weaknesses: [String]
-    let recommendations: [String]
-    let riskLevel: RiskLevel
-}
+// Note: TeamAnalysis is defined in TeamAnalysis.swift
 
 // MARK: - PlayerAlert
 
@@ -89,14 +80,7 @@ struct PlayerAlert: Codable {
     let createdAt: Date
 }
 
-// MARK: - NetworkStatus
-
-// Network status enum
-public enum NetworkStatus {
-    case unknown
-    case offline
-    case online
-}
+// Note: NetworkStatus is defined in ReachabilityService.swift
 
 // MARK: - User
 
@@ -116,22 +100,7 @@ public struct User: Codable {
 }
 
 // MARK: - LiveScores
-
-// Live scores type
-struct LiveScores: Codable {
-    let roundNumber: Int
-    let matches: [LiveMatch]
-    let lastUpdated: Date
-
-    struct LiveMatch: Codable {
-        let homeTeam: String
-        let awayTeam: String
-        let homeScore: Int
-        let awayScore: Int
-        let timeRemaining: String
-        let quarter: Int
-    }
-}
+// Note: LiveScores is now defined in DataModels.swift to avoid conflicts
 
 // MARK: - AppState
 

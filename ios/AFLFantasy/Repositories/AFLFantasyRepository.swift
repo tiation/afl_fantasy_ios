@@ -117,15 +117,11 @@ final class MockAFLFantasyRepository: AFLFantasyRepositoryProtocol {
             throw AFLRepositoryError.mockError
         }
 
+        // Return a mock using TeamData initializer
         return mockTeamData ?? TeamData(
-            teamValue: 12_500_000,
-            remainingSalary: 500_000,
-            teamScore: 1987,
-            overallRank: 5432,
-            captainName: "Marcus Bontempelli",
-            captainScore: 125,
-            rankChange: -15,
-            lastUpdated: Date()
+            team: AFLTeam.hawthorn,
+            players: [],
+            stats: TeamStats(averageScore: 1987.0, totalValue: 12500000, benchStrength: 0.8)
         )
     }
 
@@ -143,9 +139,7 @@ final class MockAFLFantasyRepository: AFLFantasyRepositoryProtocol {
         }
 
         return mockLiveScores ?? LiveScores(
-            currentRound: 15,
-            matchesInProgress: [],
-            playerScores: [:],
+            matches: [],
             lastUpdated: Date()
         )
     }
@@ -170,52 +164,34 @@ final class MockAFLFantasyRepository: AFLFantasyRepositoryProtocol {
     private func generateMockPlayerStats() -> [PlayerStats] {
         [
             PlayerStats(
-                id: "1",
-                name: "Marcus Bontempelli",
-                position: "MID",
-                team: "WBD",
-                price: 850_000,
-                currentScore: 125,
-                averageScore: 118.5,
-                breakeven: 85,
-                last3Games: [125, 110, 135],
-                projectedScore: 130.0,
-                ownership: 45.2,
-                priceChange: 25000,
-                isInjured: false,
-                isDoubtful: false
+                playerId: "1",
+                kicks: 25,
+                handballs: 12,
+                marks: 8,
+                tackles: 4,
+                goals: 2,
+                behinds: 1,
+                fantasyPoints: 125
             ),
             PlayerStats(
-                id: "2",
-                name: "Max Gawn",
-                position: "RUC",
-                team: "MEL",
-                price: 780_000,
-                currentScore: 98,
-                averageScore: 105.2,
-                breakeven: 90,
-                last3Games: [98, 112, 95],
-                projectedScore: 105.0,
-                ownership: 38.7,
-                priceChange: -15000,
-                isInjured: false,
-                isDoubtful: true
+                playerId: "2",
+                kicks: 15,
+                handballs: 8,
+                marks: 10,
+                tackles: 2,
+                goals: 0,
+                behinds: 0,
+                fantasyPoints: 98
             ),
             PlayerStats(
-                id: "3",
-                name: "Sam Walsh",
-                position: "MID",
-                team: "CAR",
-                price: 750_000,
-                currentScore: 115,
-                averageScore: 112.4,
-                breakeven: 80,
-                last3Games: [115, 118, 105],
-                projectedScore: 118.0,
-                ownership: 42.1,
-                priceChange: 30000,
-                isInjured: false,
-                isDoubtful: false
+                playerId: "3",
+                kicks: 22,
+                handballs: 18,
+                marks: 6,
+                tackles: 5,
+                goals: 1,
+                behinds: 2,
+                fantasyPoints: 115
             )
         ]
     }

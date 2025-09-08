@@ -37,7 +37,6 @@ enum CachePolicy {
 
 // MARK: - PersistenceManager
 
-@MainActor
 final class PersistenceManager: ObservableObject {
     static let shared = PersistenceManager()
 

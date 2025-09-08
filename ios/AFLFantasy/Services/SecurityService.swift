@@ -10,6 +10,7 @@ import CryptoKit
 import Foundation
 import Network
 import os.log
+import SwiftUI
 import Security
 
 // MARK: - SecurityService

@@ -153,7 +153,7 @@ class WebSocketManager: ObservableObject {
         }
     }
     
-    private func postSystemNotification(for alert: Alert) {
+    private func postSystemNotification(for alert: AlertUpdate) {
         let content = UNMutableNotificationContent()
         content.title = alert.type.title
         content.body = alert.message

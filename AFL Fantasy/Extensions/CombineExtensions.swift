@@ -30,19 +30,20 @@ extension Publisher {
     }
     
     func asyncMap<T>(_ transform: @escaping (Output) async throws -> T) -> AnyPublisher<T, Error> {
-        flatMap { value -> Future<T, Error> in
-            Future { promise in
-                Task {
-                    do {
-                        let transformed = try await transform(value)
-                        promise(.success(transformed))
-                    } catch {
-                        promise(.failure(error))
+        mapError { $0 as Error }
+            .flatMap { value -> Future<T, Error> in
+                Future { promise in
+                    Task {
+                        do {
+                            let transformed = try await transform(value)
+                            promise(.success(transformed))
+                        } catch {
+                            promise(.failure(error))
+                        }
                     }
                 }
             }
-        }
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
     }
     
     func asyncFilter(_ isIncluded: @escaping (Output) async -> Bool) -> AnyPublisher<Output, Failure> {

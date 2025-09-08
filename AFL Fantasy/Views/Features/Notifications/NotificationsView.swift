@@ -144,7 +144,7 @@ struct NotificationsView: View {
         isSelected: Bool,
         action: @escaping () -> Void
     ) -> some View {
-        Button(action: action) {
+        Button(action: action, label: {
             HStack(spacing: Theme.Spacing.xs) {
                 Image(systemName: icon)
                     .font(.system(size: 12, weight: .semibold))
@@ -156,15 +156,15 @@ struct NotificationsView: View {
             .padding(.horizontal, Theme.Spacing.s)
             .padding(.vertical, Theme.Spacing.xs)
             .background(isSelected ? Theme.Colors.accent : Theme.Colors.background)
-            .cornerRadius(Theme.Radius.full)
+            .cornerRadius(20)
             .overlay(
-                RoundedRectangle(cornerRadius: Theme.Radius.full)
+                RoundedRectangle(cornerRadius: 20)
                     .stroke(
                         isSelected ? Theme.Colors.accent : Theme.Colors.textSecondary.opacity(0.2),
                         lineWidth: 1
                     )
             )
-        }
+        })
     }
     
     private func filterTitle(for type: AlertType) -> String {

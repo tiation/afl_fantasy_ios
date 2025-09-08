@@ -52,7 +52,6 @@
 		4EAFE2243DE0C377377CDD2E /* LegalDocumentStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A380BB5CAAE9C3CBEA6E36D2 /* LegalDocumentStyle.swift */; };
 		5019D9A706D71CBA14EB76EC /* CaptainAdvisorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC13F519F7BB298F2D01350 /* CaptainAdvisorViewModel.swift */; };
 		5310CC6FD56603AB7B31BB05 /* NetworkModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E8F86ADB06792B35F62A16 /* NetworkModels.swift */; };
-		53AFFADEB7DACF023DAD5399 /* ReachabilityServiceCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3919C03CC6DD417EF1B4C1EA /* ReachabilityServiceCore.swift */; };
 		53CFE41482D25B61AAB3A646 /* DashboardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE7F203D990A624B6E65B5E /* DashboardService.swift */; };
 		56145D12F6E5B4CB28569C91 /* CaptainAdvisorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C2CD08C3BDAE3846C6E38CA /* CaptainAdvisorView.swift */; };
 		561D97A09D664CD9B7616578 /* TeamAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F95A9D99EFE808F9C236A712 /* TeamAnalysisView.swift */; };
@@ -181,7 +180,6 @@
 		35ACFC590F74307AA2FC2428 /* AFLFantasyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyError.swift; sourceTree = "<group>"; };
 		3633C137C99C132D3977B638 /* OnboardingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViews.swift; sourceTree = "<group>"; };
 		376FEB148BDDEB0D2FF9A889 /* AFLFantasyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AFLFantasyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3919C03CC6DD417EF1B4C1EA /* ReachabilityServiceCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityServiceCore.swift; sourceTree = "<group>"; };
 		39FF6F9320145D2054DAFAED /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		3CAC9953632254E234F191EA /* FantasyAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasyAPIService.swift; sourceTree = "<group>"; };
 		3F238BDB155EED72108259B4 /* MockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockService.swift; sourceTree = "<group>"; };
@@ -650,7 +648,6 @@
 				8460DCE425537D01A3204DB0 /* PlayerImageService.swift */,
 				000029E81CF1E7D8B4003931 /* PlayerMapper.swift */,
 				4012D9911BF639FB373DFF82 /* ReachabilityService.swift */,
-				3919C03CC6DD417EF1B4C1EA /* ReachabilityServiceCore.swift */,
 				D803E90F04605B2ECB227223 /* SecurityService.swift */,
 				AA79C5D0E90F33F6A77FAD38 /* ServiceProtocols.swift */,
 				699D7BFE74F0B0D2B2BF0521 /* ServiceTypes.swift */,
@@ -853,7 +850,6 @@
 				6976CADD17BAB84607DE990C /* Position.swift in Sources */,
 				220A3608E924D8F4E09BC473 /* QRScannerView.swift in Sources */,
 				95B9108C5AF6D4795486E75E /* ReachabilityService.swift in Sources */,
-				53AFFADEB7DACF023DAD5399 /* ReachabilityServiceCore.swift in Sources */,
 				C7CE881FC6D76D971A91FB48 /* SecurityService.swift in Sources */,
 				916F59245BFB8997B9B888FB /* ServiceProtocols.swift in Sources */,
 				3BA3082E66DAAF97FA7E34F3 /* ServiceTypes.swift in Sources */,

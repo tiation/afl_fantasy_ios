@@ -1,92 +1,102 @@
-# 🏆 AFL Fantasy Intelligence Platform
-### *Enterprise AI-Powered Fantasy Sports Analytics Suite*
+# 🏈 AFL Fantasy iOS App & Scraper System
+### *Production-Ready Fantasy Sports Analytics Platform*
 
-> **LATEST UPDATE:** ✅ Frontend loading issues resolved - Dashboard now loads correctly with optimized React Query configuration
+> **LATEST UPDATE:** ✅ Complete end-to-end data pipeline - iOS app displaying real scraped data from DFS Australia
 
-![Tiation](https://img.shields.io/badge/Built%20by-Tiation-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K)
-![Status](https://img.shields.io/badge/Status-95%25%20Complete-brightgreen?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
-![DevOps Ready](https://img.shields.io/badge/DevOps-Ready-orange?style=for-the-badge)
-
----
-
-## 🚀 Executive Summary
-
-**The AFL Fantasy Intelligence Platform** represents the pinnacle of sports analytics engineering, delivering enterprise-grade fantasy sports intelligence through cutting-edge data science and modern DevOps practices. Built by **Tiation's** elite development team, this platform transforms raw AFL data into actionable insights, empowering fantasy coaches with AI-driven decision-making capabilities.
-
-### ⚡ Platform Status: **95% Production Ready**
-- **630 Authenticated Players** with Round 13 AFL Fantasy data
-- **v3.4.4 Projection Algorithm** deployed with 12.5pt accuracy margin
-- **Real-time DVP Analysis** with authentic matchup difficulty ratings
-- **Complete Fixture Intelligence** covering rounds 20-24
-- **Remaining**: Minor frontend data binding optimizations
+![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge)
+![iOS](https://img.shields.io/badge/Platform-iOS%20Swift-blue?style=for-the-badge)
+![Python](https://img.shields.io/badge/Scrapers-Python-yellow?style=for-the-badge)
+![API](https://img.shields.io/badge/API-Flask-red?style=for-the-badge)
 
 ---
 
-## 📱 Application Screenshots
+## 🚀 System Overview
 
-### iOS App Screenshots
-<div align="center">
-  <img src="docs/screenshots/dashboard_screen.png" alt="Dashboard Screen" width="200" style="margin: 10px;"/>
-  <img src="docs/screenshots/captain_ai_screen.png" alt="Captain AI Screen" width="200" style="margin: 10px;"/>
-  <img src="docs/screenshots/cash_cows_screen.png" alt="Cash Cows Screen" width="200" style="margin: 10px;"/>
-  <img src="docs/screenshots/settings_screen.png" alt="Settings Screen" width="200" style="margin: 10px;"/>
-</div>
+**The AFL Fantasy System** is a sophisticated and fully functional AFL Fantasy analysis platform consisting of three integrated components:
 
-### Key Features Showcased:
-- **📊 Dashboard**: Real-time player analytics with projected scores and price changes
-- **🧠 Captain AI**: Advanced AI-powered captain recommendations with confidence metrics
-- **💰 Cash Cows**: Optimized rookie tracking for cash generation strategies  
-- **⚙️ Settings**: Comprehensive team management and data controls
+1. **🐍 Python Web Scrapers** - Collecting comprehensive data from DFS Australia
+2. **🔗 Flask API Bridge** - Serving scraped data via REST API  
+3. **📱 iOS Swift App** - Consumer interface with real-time data display
+
+### ⚡ Current Status: **PRODUCTION READY** 
+- ✅ **607 player files** successfully scraped from DFS Australia
+- ✅ **88,273+ data rows** with comprehensive AFL Fantasy statistics
+- ✅ **602 players** actively served via Flask API
+- ✅ **iOS app integration** with live data flowing
+- ✅ **99.2% scraping success rate** with robust error handling
 
 ---
 
-## 🏗️ Enterprise Architecture Overview
+## 📊 Data Architecture
 
-### **Technology Stack**
+### **System Components**
 ```mermaid
-graph TB
-    A[React + TypeScript Frontend] --> B[Express.js API Gateway]
-    B --> C[PostgreSQL + Drizzle ORM]
-    B --> D[Python ML Engine]
-    B --> I[Google Gemini AI]
-    B --> J[OpenAI Fallback]
-    D --> E[Multi-Source Data Pipeline]
-    E --> F[DFS Australia API]
-    E --> G[FootyWire Scraper]
-    E --> H[AFL Fantasy Live]
-    I -.-> J[Automatic Fallback]
+graph LR
+    A[DFS Australia] --> B[Python Scrapers]
+    B --> C[Excel Files<br/>607 players]
+    C --> D[Flask API Server]
+    D --> E[iOS Swift App]
+    
+    B --> F[ChromeDriver<br/>Selenium]
+    D --> G[In-Memory Cache<br/>602 players]
+    E --> H[SwiftUI Dashboard<br/>Real-time data]
 ```
 
-| **Layer** | **Technology** | **Purpose** |
-|-----------|----------------|-------------|
-| **Frontend** | React 18 + TypeScript + Tailwind CSS | Modern responsive UI with type safety |
-| **API Gateway** | Express.js + TypeScript | RESTful microservices architecture |
-| **Database** | PostgreSQL + Drizzle ORM | Enterprise-grade data persistence |
-| **ML Engine** | Python + pandas + NumPy | Advanced analytics and AI algorithms |
-| **DevOps** | Docker + CI/CD + Monitoring | Cloud-native deployment pipeline |
+### **Data Flow Pipeline:**
+1. **Scrapers** collect from DFS Australia → Excel files (607 players)
+2. **API server** loads Excel files → In-memory cache (602 players)  
+3. **iOS app** requests data → Flask API → Real-time display
+
+### **Data Quality & Coverage:**
+Each player file contains **6 comprehensive data sheets**:
+1. **Season Summary** - Yearly performance statistics
+2. **vs Opposition** - Team-specific performance analysis  
+3. **Recent Games** - Latest match results and trends
+4. **vs Venues** - Stadium-specific performance data
+5. **vs Specific Opposition** - Head-to-head historical records
+6. **All Games** - Complete game-by-game history
 
 ---
 
-## 🎯 Core Platform Features
+## 🏗️ Technology Stack
 
-### **🧠 AI-Powered Analytics Engine**
-- **Projected Score Algorithm v3.4.4**: 30% season average + 25% recent form + 20% opponent difficulty + 15% position adjustment
-- **Price Prediction Modeling**: Authentic AFL Fantasy price change calculations using magic number formula
-- **Risk Assessment Matrix**: Multi-dimensional trade risk analysis with injury probability modeling
-- **Performance Trend Analysis**: Historical pattern recognition with confidence scoring
+### **Core Technologies**
+| **Component** | **Technology** | **Purpose** |
+|---------------|----------------|-------------|
+| **iOS App** | Swift + SwiftUI + iOS 15+ | Native mobile interface |
+| **API Server** | Python Flask + REST | Data serving and caching |
+| **Scrapers** | Python + Selenium + ChromeDriver | Web scraping automation |
+| **Data Storage** | Excel files + In-memory cache | Structured data persistence |
+| **Web Driver** | ChromeDriver + webdriver-manager | Automated browser control |
 
-### **📊 Real-Time Intelligence Dashboard**
-- **Live Player Statistics**: 630 authenticated players with real-time AFL Fantasy data
-- **Team Composition Analysis**: Advanced salary cap optimization and position balance
-- **Captain Selection AI**: Multi-methodology captain recommendation engine
-- **Cash Generation Tracker**: Rookie price curve modeling and cash cow identification
+---
 
-### **🔍 Advanced Analytics Tools**
-- **DVP Matchup Analysis**: Defense vs Position difficulty ratings (0-10 scale)
-- **Fixture Difficulty Scanner**: Round-by-round opponent strength analysis
-- **Trade Optimization Engine**: Score-based recommendation system
-- **Breakeven Trend Analysis**: Price movement prediction with confidence intervals
+## 🎯 System Features
+
+### **🐍 Python Scraper Suite**
+- **Production Scraper**: `dfs_australia_scraper_full.py` - Process all players with smart resume
+- **Basic Scraper**: `basic_afl_scraper.py` - Site exploration and testing
+- **Analysis Tools**: `analyze_scraped_data.py` - Comprehensive data analysis
+- **File Management**: `rename_player_files.py` - ID to player name conversion
+- **Rate Limiting**: 4-second delays between requests (respectful scraping)
+- **Error Handling**: Continues processing even if individual players fail
+- **Progress Tracking**: Real-time status with completion indicators
+
+### **🔗 Flask API Bridge**
+- **7 REST Endpoints**: Comprehensive data access via HTTP API
+- **In-Memory Caching**: Fast response times (<200ms average)
+- **602 Active Players**: Real-time serving of scraped player data
+- **Cash Cow Analysis**: Automated buy/sell recommendations
+- **Captain Suggestions**: Data-driven recommendations based on historical performance
+- **Health Monitoring**: Built-in status and cache management
+- **Error Recovery**: Robust error handling and logging
+
+### **📱 iOS Swift App**
+- **Real Data Display**: Shows actual cash generation statistics
+- **Player Intelligence**: Access to detailed career stats and opponent splits
+- **Strategic Insights**: Data-driven captain selection and cash cow identification
+- **SwiftUI Interface**: Modern, responsive native iOS design
+- **Live Updates**: Real-time data refresh from API server
 
 ---
 
@@ -94,51 +104,49 @@ graph TB
 
 ### **Prerequisites**
 ```bash
-Node.js >= 18.0.0
-PostgreSQL >= 14.0
 Python >= 3.9
-npm >= 8.0.0
+Xcode >= 14.0 (for iOS app)
+ChromeDriver (auto-managed by webdriver-manager)
+macOS (for iOS development)
 ```
 
-### **1. Environment Setup**
+### **1. Start the Complete System (2 minutes)**
 ```bash
-# Clone the repository
-git clone git@github.com:tiation/afl-fantasy-manager.git
-cd afl-fantasy-manager
+# Navigate to project directory
+cd /Users/tiaastor/workspace/10_projects/afl_fantasy_ios
 
-# Install dependencies
-npm install
+# Start the API server (loads 602 players)
+./start_api.sh
+# ✅ Server starts on http://localhost:4000
 
-# Configure environment variables
-cp .env.example .env
-# Edit .env with your database credentials and API keys
+# Open iOS app in Xcode and run
+# ✅ Dashboard shows real cash cow data
 ```
 
-### **2. Database Initialization**
+### **2. Test the Integration**
 ```bash
-# Push database schema
-npm run db:push
+# Test API endpoints
+curl http://localhost:4000/health
+curl http://localhost:4000/api/players | head -500  
+curl http://localhost:4000/api/stats/cash-cows
 
-# Verify connection
-psql -h localhost -d aflFantasy -U your_username -c "SELECT version();"
+# Verify scraper setup
+source venv/bin/activate && python test_setup.py
 ```
 
-### **3. Development Server**
+### **3. Update Scraped Data**
 ```bash
-# Start development environment
-npm run dev
+# Activate Python environment
+source venv/bin/activate
 
-# Platform accessible at http://localhost:5173
-# API documentation at http://localhost:5173/api/docs
-```
+# Run production scraper (processes remaining players)
+python dfs_australia_scraper_full.py
 
-### **4. Production Deployment**
-```bash
-# Build optimized production bundle
-npm run build
+# Analyze scraped data
+python analyze_scraped_data.py
 
-# Start production server
-npm start
+# Rename files to readable names
+python rename_player_files.py
 ```
 
 ---

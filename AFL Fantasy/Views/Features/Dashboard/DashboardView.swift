@@ -306,27 +306,198 @@ struct DashboardView: View {
     }
 }
 
-struct StatCard: View {
+// MARK: - Perfect Components
+
+/// Perfect stat card with accessibility and visual polish
+struct PerfectStatCard: View {
     let title: String
     let value: String
     let color: Color
+    let icon: String?
+    let subtitle: String?
+    
+    init(
+        title: String, 
+        value: String, 
+        color: Color, 
+        icon: String? = nil, 
+        subtitle: String? = nil
+    ) {
+        self.title = title
+        self.value = value
+        self.color = color
+        self.icon = icon
+        self.subtitle = subtitle
+    }
     
     var body: some View {
-        VStack(spacing: 8) {
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            // Header with icon
+            HStack(spacing: Theme.Spacing.xs) {
+                if let icon = icon {
+                    Image(systemName: icon)
+                        .font(.caption)
+                        .foregroundColor(color)
+                        .frame(width: 16)
+                }
+                
+                Text(title)
+                    .font(Theme.Font.caption)
+                    .foregroundColor(Theme.Colors.textSecondary)
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+            }
             
+            // Main value
             Text(value)
-                .font(.title2)
-                .fontWeight(.semibold)
+                .font(Theme.Font.statMedium)
                 .foregroundColor(color)
+                .minimumScaleFactor(0.8)
+                .lineLimit(1)
+            
+            // Subtitle if provided
+            if let subtitle = subtitle {
+                Text(subtitle)
+                    .font(Theme.Font.caption2)
+                    .foregroundColor(Theme.Colors.textTertiary)
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(color.opacity(0.1))
-        .cornerRadius(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Theme.Spacing.m)
+        .background(color.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous)
+                .stroke(color.opacity(0.2), lineWidth: 0.5)
+        )
+        .accessibilityElement()
+        .accessibilityLabel(title)
+        .accessibilityValue("\(value) \(subtitle ?? "")")
+    }
+}
+
+/// Section header component
+struct SectionHeader: View {
+    let title: String
+    let subtitle: String?
+    let action: (() -> Void)?
+    let actionTitle: String?
+    
+    init(_ title: String, subtitle: String? = nil, actionTitle: String? = nil, action: (() -> Void)? = nil) {
+        self.title = title
+        self.subtitle = subtitle
+        self.action = action
+        self.actionTitle = actionTitle
+    }
+    
+    var body: some View {
+        HStack(alignment: .firstTextBaseline) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                Text(title)
+                    .font(Theme.Font.headline)
+                    .foregroundColor(Theme.Colors.textPrimary)
+                
+                if let subtitle = subtitle {
+                    Text(subtitle)
+                        .font(Theme.Font.caption)
+                        .foregroundColor(Theme.Colors.textSecondary)
+                }
+            }
+            
+            Spacer()
+            
+            if let action = action, let actionTitle = actionTitle {
+                Button(action: action) {
+                    Text(actionTitle)
+                        .font(Theme.Font.callout)
+                        .foregroundColor(Theme.Colors.accent)
+                }
+                .minTouchTarget()
+            }
+        }
+    }
+}
+
+// MARK: - Error Types
+
+enum AFLFantasyError: LocalizedError {
+    case networkError(String)
+    case parseError(String)
+    case unknownError
+    
+    var errorDescription: String? {
+        switch self {
+        case .networkError(let message): return "Network Error: \(message)"
+        case .parseError(let message): return "Parse Error: \(message)"
+        case .unknownError: return "An unknown error occurred"
+        }
+    }
+}
+
+// MARK: - Missing State Components
+
+struct LoadingState: View {
+    let message: String?
+    
+    init(_ message: String? = nil) {
+        self.message = message
+    }
+    
+    var body: some View {
+        VStack(spacing: Theme.Spacing.l) {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: Theme.Colors.accent))
+                .scaleEffect(1.2)
+            
+            if let message = message {
+                Text(message)
+                    .font(Theme.Font.callout)
+                    .foregroundColor(Theme.Colors.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+struct ErrorState: View {
+    let error: Error
+    let retry: (() -> Void)?
+    
+    var body: some View {
+        VStack(spacing: Theme.Spacing.l) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 48, weight: .light))
+                .foregroundColor(Theme.Colors.error)
+            
+            VStack(spacing: Theme.Spacing.xs) {
+                Text("Something went wrong")
+                    .font(Theme.Font.headline)
+                    .foregroundColor(Theme.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+                
+                Text(error.localizedDescription)
+                    .font(Theme.Font.body)
+                    .foregroundColor(Theme.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            
+            if let retry = retry {
+                Button(action: retry) {
+                    Text("Try Again")
+                        .font(Theme.Font.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, Theme.Spacing.xl)
+                        .padding(.vertical, Theme.Spacing.m)
+                        .background(Theme.Colors.accent)
+                        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+                }
+                .minTouchTarget()
+            }
+        }
+        .padding(Theme.Spacing.xl)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

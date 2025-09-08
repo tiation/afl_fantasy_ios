@@ -82,8 +82,12 @@ struct Theme {
         static let title3 = SwiftUI.Font.title3.weight(.semibold)
         
         // Body
+        static let headline = SwiftUI.Font.headline
         static let body = SwiftUI.Font.body
         static let bodyBold = SwiftUI.Font.body.weight(.semibold)
+        static let callout = SwiftUI.Font.callout
+        static let subheadline = SwiftUI.Font.subheadline
+        static let footnote = SwiftUI.Font.footnote
         static let caption = SwiftUI.Font.caption
         static let caption2 = SwiftUI.Font.caption2
         static let captionBold = SwiftUI.Font.caption.weight(.semibold)

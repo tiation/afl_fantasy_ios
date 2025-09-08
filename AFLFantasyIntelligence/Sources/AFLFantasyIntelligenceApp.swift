@@ -119,3 +119,4 @@ struct ContentView_Previews: PreviewProvider {
             .preferredColorScheme(.light)
     }
 }
+#endif

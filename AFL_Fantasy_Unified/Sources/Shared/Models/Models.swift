@@ -1,7 +1,9 @@
+// 🏈 AFL Fantasy Models - Core Models
+// Streamlined to stay under 400 lines (SwiftLint compliant)
+// Additional models are in separate files for better organization
+
 import Foundation
 import Combine
-
-// MARK: - AI Models
 
 struct AIRecommendation: Identifiable, Codable {
     let id: String

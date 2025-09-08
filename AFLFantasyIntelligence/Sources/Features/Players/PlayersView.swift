@@ -237,7 +237,7 @@ struct PlayerRowView: View {
         }
         .dsAccessibility(
             label: "\(player.name), \(player.position.displayName), \(player.team), Price \(player.price), Average \(Int(player.average)), Projected \(Int(player.projected))",
-            traits: .button
+            traits: .isButton
         )
     }
 }

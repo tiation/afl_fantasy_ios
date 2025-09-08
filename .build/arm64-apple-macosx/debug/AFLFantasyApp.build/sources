@@ -1,4 +1,5 @@
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/AFLFantasyApp.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/ContentView.swift
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Architecture.swift
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/DesignSystem/DesignSystem.swift
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Networking/AFLAPIClient.swift
@@ -6,4 +7,5 @@
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardUseCases.swift
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardView.swift
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardViewModel.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/AFLModels.swift
 /Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/Models.swift

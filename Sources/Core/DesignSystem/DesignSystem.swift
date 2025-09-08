@@ -60,15 +60,18 @@ public enum DS {
 
 // MARK: - Typography Extensions
 
+@available(iOS 15.0, *)
 public extension Font {
     static var aflLargeTitle: Font { .largeTitle.weight(.bold) }
     static var aflTitle: Font { .title.weight(.semibold) }
+    @available(iOS 15.0, *)
     static var aflTitle2: Font { .title2.weight(.semibold) }
     static var aflHeadline: Font { .headline }
     static var aflSubheadline: Font { .subheadline }
     static var aflBody: Font { .body }
     static var aflCallout: Font { .callout }
     static var aflCaption: Font { .caption }
+    @available(iOS 15.0, *)
     static var aflCaption2: Font { .caption2 }
 }
 

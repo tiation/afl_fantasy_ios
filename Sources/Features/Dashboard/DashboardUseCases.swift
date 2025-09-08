@@ -27,7 +27,21 @@ final class FetchCashCowsUseCase: BaseUseCase<Void, [CashCow]> {
     
     override func execute(_ input: Void) async throws -> [CashCow] {
         let response: CashCowsResponse = try await apiClient.request(.cashCows)
-        return response.cashCows
+        return response.cashCows.map { cashCowData in
+            CashCow(
+                id: cashCowData.playerId,
+                name: cashCowData.playerName,
+                team: "", // Not provided in CashCowData
+                position: "", // Not provided in CashCowData
+                price: Double(cashCowData.currentPrice),
+                projectedPrice: Double(cashCowData.projectedPrice),
+                potentialGain: Double(cashCowData.cashGenerated),
+                breakeven: 0, // Not provided in CashCowData
+                averageScore: cashCowData.fpAverage,
+                gamesPlayed: cashCowData.gamesPlayed,
+                ownership: 0.0 // Not provided in CashCowData
+            )
+        }
     }
 }
 
@@ -48,7 +62,20 @@ final class FetchCaptainSuggestionsUseCase: BaseUseCase<CaptainRequestInput, [Ca
         ]
         
         let response: CaptainSuggestionsResponse = try await apiClient.request(.captainSuggestions(parameters))
-        return response.suggestions
+        return response.suggestions.map { apiSuggestion in
+            CaptainSuggestion(
+                id: apiSuggestion.playerId,
+                name: apiSuggestion.playerName,
+                team: "", // Not provided in API response
+                projectedScore: apiSuggestion.projectedPoints,
+                ceiling: apiSuggestion.projectedPoints * 1.2, // Estimated
+                floor: apiSuggestion.projectedPoints * 0.8, // Estimated
+                consistency: apiSuggestion.confidence,
+                ownership: 0.0, // Not provided in API response
+                confidence: apiSuggestion.confidence,
+                reasons: [apiSuggestion.reasoning]
+            )
+        }
     }
 }
 
@@ -76,6 +103,7 @@ struct CaptainRequestInput {
 
 // MARK: - Live Stats Use Case (Combine-based)
 
+@available(iOS 15.0, *)
 final class LiveStatsUseCase {
     private let apiClient: AFLAPIClientProtocol
     private let refreshInterval: TimeInterval
@@ -85,22 +113,24 @@ final class LiveStatsUseCase {
         self.refreshInterval = refreshInterval
     }
     
+    @available(iOS 15.0, *)
     func livePlayersPublisher() -> AnyPublisher<[AFLPlayer], Error> {
         Timer.publish(every: refreshInterval, on: .main, in: .common)
             .autoconnect()
             .prepend(Date()) // Emit immediately
-            .flatMap { _ in
+            .flatMap(maxPublishers: .max(1)) { _ in
                 self.apiClient.requestPublisher(.players, responseType: PlayersResponse.self)
                     .map(\.players)
             }
             .eraseToAnyPublisher()
     }
     
+    @available(iOS 15.0, *)
     func liveSummaryPublisher() -> AnyPublisher<SummaryResponse, Error> {
         Timer.publish(every: refreshInterval, on: .main, in: .common)
             .autoconnect()
             .prepend(Date()) // Emit immediately
-            .flatMap { _ in
+            .flatMap(maxPublishers: .max(1)) { _ in
                 self.apiClient.requestPublisher(.summary, responseType: SummaryResponse.self)
             }
             .eraseToAnyPublisher()

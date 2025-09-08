@@ -80,22 +80,8 @@ struct PlayersResponse: Codable {
 }
 
 struct CashCowsResponse: Codable {
-    let cashCows: [CashCow]
+    let cashCows: [CashCowData]
     let criteria: CashCowCriteria
-}
-
-struct CashCow: Codable, Identifiable {
-    let id: String
-    let name: String
-    let team: String
-    let position: String
-    let price: Double
-    let projectedPrice: Double
-    let potentialGain: Double
-    let breakeven: Int
-    let averageScore: Double
-    let gamesPlayed: Int
-    let ownership: Double
 }
 
 struct CashCowCriteria: Codable {
@@ -106,21 +92,8 @@ struct CashCowCriteria: Codable {
 }
 
 struct CaptainSuggestionsResponse: Codable {
-    let suggestions: [CaptainSuggestion]
+    let suggestions: [CaptainSuggestionResponse]
     let criteria: CaptainCriteria
-}
-
-struct CaptainSuggestion: Codable, Identifiable {
-    let id: String
-    let name: String
-    let team: String
-    let projectedScore: Double
-    let ceiling: Double
-    let floor: Double
-    let consistency: Double
-    let ownership: Double
-    let confidence: Double
-    let reasons: [String]
 }
 
 struct CaptainCriteria: Codable {

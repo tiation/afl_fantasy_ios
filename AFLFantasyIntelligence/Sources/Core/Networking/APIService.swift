@@ -16,7 +16,7 @@ final class APIService: ObservableObject {
     
     // MARK: - Initialization
     
-    init(baseURL: String = "http://localhost:4000") {
+    init(baseURL: String = "http://localhost:8080") {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 30
         config.timeoutIntervalForResource = 60

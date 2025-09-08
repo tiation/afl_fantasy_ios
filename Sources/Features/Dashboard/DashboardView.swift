@@ -33,7 +33,8 @@ struct DashboardView: View {
                 .padding(.horizontal, DS.Spacing.l)
                 .padding(.bottom, DS.Spacing.huge)
             }
-            .navigationTitle("AFL Fantasy")\n            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("AFL Fantasy")
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Filters") {

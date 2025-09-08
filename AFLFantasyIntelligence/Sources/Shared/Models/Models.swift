@@ -2,7 +2,6 @@ import Foundation
 
 // MARK: - Core Player Models
 
-@frozen
 struct Player: Codable, Identifiable, Hashable, Sendable {
     let id: String
     let name: String
@@ -22,7 +21,6 @@ struct Player: Codable, Identifiable, Hashable, Sendable {
     }
 }
 
-@frozen
 enum Position: String, Codable, CaseIterable, Sendable {
     case defender = "DEF"
     case midfielder = "MID"
@@ -322,3 +320,4 @@ extension CashCowAnalysis {
         CashCowAnalysis(playerId: "rookie2", playerName: "Cash Generator", currentPrice: 312000, projectedPrice: 365000, cashGenerated: 53000, recommendation: "HOLD", confidence: 0.78, fpAverage: 71.8, gamesPlayed: 9)
     ]
 }
+

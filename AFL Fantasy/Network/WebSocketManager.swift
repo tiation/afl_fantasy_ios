@@ -10,7 +10,7 @@ class WebSocketManager: ObservableObject {
     
     // State publishers
     @Published var isConnected = false
-    @Published var alerts: [Alert] = []
+    @Published var alerts: [AlertUpdate] = []
     @Published var liveScores: [String: Int] = [:]
     
     init() {
@@ -96,8 +96,8 @@ class WebSocketManager: ObservableObject {
                         self.alerts.removeLast()
                     }
                     
-                    // Post notification for system alert if critical
-                    if alert.severity == .critical {
+                    // Post notification for important alerts
+                    if alert.type == .injury || alert.type == .breakingNews {
                         self.postSystemNotification(for: alert)
                     }
                 }
@@ -178,7 +178,7 @@ private struct WebSocketMessage: Codable {
 
 private struct WSResponse: Codable {
     let type: String
-    let alert: Alert?
+    let alert: AlertUpdate?
     let scores: [String: Int]?
 }
 

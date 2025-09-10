@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,10 +13,14 @@
 		1D05943FF1566145D9F30542 /* AFLFantasyIntelligenceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */; };
 		4741A2DDB22C1DE923A2A92B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B0D1C8641E3893F344DA8 /* Models.swift */; };
 		5BE56AED470B0EAE711722A4 /* AISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067738D80ADE62EEC22A1F3B /* AISettingsView.swift */; };
+		73C76E551EBE4C3094363B97 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90DD265FF724EBA976A7DD7 /* KeychainService.swift */; };
 		7407D63BFFB41860C4423FF4 /* AIToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */; };
 		8B898A400F57B4744539F1B2 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */; };
 		8DAD7A60C4139279F49CE221 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4537A3AF191CEF2BABDBAA2 /* OpenAIService.swift */; };
+		BA04DB58B2304ACFB72E4525 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4BBBBDA7D54DB68E02FDBF /* OpenAIService.swift */; };
 		BD1C14C6FE54BD070D355589 /* AIRecommendationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05B760F9F241BF4B30481AB /* AIRecommendationDetailView.swift */; };
+		C1DB37B5DE4E427BAA10F906 /* AIRecommendationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A851F7A4F3094586BFA022B6 /* AIRecommendationDetailView.swift */; };
+		C3FE306D1A9A40AEB59DCB0F /* AISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E37DE46549F470F95BAC1D0 /* AISettingsView.swift */; };
 		C6284EE130A4C72A1A5E2CD7 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9034CF408A530EF937BC83CF /* APIService.swift */; };
 		D663192DD93B13E1E22877B0 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6CC1172522CD9261137508 /* MockData.swift */; };
 		DA79FD5A71A21695B06BEA32 /* CashCowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C672214400A6C525B7E32C8A /* CashCowsView.swift */; };
@@ -42,19 +46,23 @@
 
 /* Begin PBXFileReference section */
 		067738D80ADE62EEC22A1F3B /* AISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISettingsView.swift; sourceTree = "<group>"; };
-		06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "AFL Fantasy Intelligence UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "AFL Fantasy Intelligence Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFL Fantasy Intelligence UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFL Fantasy Intelligence Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D6CC1172522CD9261137508 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		31BD0AE19519D0BD833A44FF /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
-		65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "AFL Fantasy Intelligence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E37DE46549F470F95BAC1D0 /* AISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISettingsView.swift; sourceTree = "<group>"; };
+		65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFL Fantasy Intelligence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyIntelligenceApp.swift; sourceTree = "<group>"; };
 		8427101FEDA731881961DAC4 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		9034CF408A530EF937BC83CF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		A05B760F9F241BF4B30481AB /* AIRecommendationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRecommendationDetailView.swift; sourceTree = "<group>"; };
 		A07B0D1C8641E3893F344DA8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A851F7A4F3094586BFA022B6 /* AIRecommendationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRecommendationDetailView.swift; sourceTree = "<group>"; };
 		BAE958757AC8740148675677 /* PlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersView.swift; sourceTree = "<group>"; };
+		BE4BBBBDA7D54DB68E02FDBF /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		C672214400A6C525B7E32C8A /* CashCowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashCowsView.swift; sourceTree = "<group>"; };
 		D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIToolsView.swift; sourceTree = "<group>"; };
+		D90DD265FF724EBA976A7DD7 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		F4537A3AF191CEF2BABDBAA2 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		F7D572F89C5C418A61D8FB5B /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
@@ -83,6 +91,15 @@
 			);
 			name = UI;
 			path = Tests/UI;
+			sourceTree = "<group>";
+		};
+		1EC476642E7180A500220800 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				BE4BBBBDA7D54DB68E02FDBF /* OpenAIService.swift */,
+				D90DD265FF724EBA976A7DD7 /* KeychainService.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		2D15EAFC814D6AFF4682CA5E /* Unit */ = {
@@ -191,6 +208,7 @@
 				1E732D5BC15D41E7EAEEF25C /* UI */,
 				2D15EAFC814D6AFF4682CA5E /* Unit */,
 				6A33995318F115470A87960C /* Products */,
+				1EC476642E7180A500220800 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -198,6 +216,8 @@
 			isa = PBXGroup;
 			children = (
 				F4537A3AF191CEF2BABDBAA2 /* OpenAIService.swift */,
+				4E37DE46549F470F95BAC1D0 /* AISettingsView.swift */,
+				A851F7A4F3094586BFA022B6 /* AIRecommendationDetailView.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -285,10 +305,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					15BA901012FD152ABD1117BD = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					2F4BBD9B7FF4401C4E89126E = {
@@ -309,7 +328,6 @@
 			packageReferences = (
 				DCD801BB56547C75A72EF2F2 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -353,6 +371,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA04DB58B2304ACFB72E4525 /* OpenAIService.swift in Sources */,
+				73C76E551EBE4C3094363B97 /* KeychainService.swift in Sources */,
+				C3FE306D1A9A40AEB59DCB0F /* AISettingsView.swift in Sources */,
+				C1DB37B5DE4E427BAA10F906 /* AIRecommendationDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +414,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -426,6 +449,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -447,6 +471,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.9;
@@ -460,7 +485,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
 				ENABLE_TESTABILITY = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -470,7 +495,6 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aflsi.fantasy-intelligence";
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -516,7 +540,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YLWMNJMZZ3;
 				ENABLE_TESTABILITY = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -526,7 +550,6 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aflsi.fantasy-intelligence";
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -553,6 +576,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -587,6 +611,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -601,6 +626,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.9;

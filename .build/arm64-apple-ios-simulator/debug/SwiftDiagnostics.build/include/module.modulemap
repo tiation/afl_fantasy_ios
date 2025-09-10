@@ -1,0 +1,3 @@
+module SwiftDiagnostics {
+    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftDiagnostics.build/include/SwiftDiagnostics-Swift.h"
+}

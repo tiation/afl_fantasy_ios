@@ -148,3 +148,4 @@ deployment_package_*.tar.gz
 *.json.bak
 # Local Netlify folder
 .netlify
+archived_apps/ios_legacy_20250910/deepseek-cli

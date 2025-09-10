@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftCompilerPlugin.build/master.swiftdeps"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/swift-syntax/Sources/SwiftCompilerPlugin/CompilerPlugin.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftCompilerPlugin.build/CompilerPlugin.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftCompilerPlugin.build/CompilerPlugin.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftCompilerPlugin.build/CompilerPlugin~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftCompilerPlugin.build/CompilerPlugin.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftCompilerPlugin.build/CompilerPlugin.dia"
+  }
+}

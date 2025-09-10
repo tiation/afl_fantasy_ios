@@ -12,177 +12,246 @@ struct DashboardView: View {
     @State private var showingTeamImport = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Header with API status
+                    // Header with API + Summary
                     apiStatusCard
-                    
+                    if let summary = viewModel.summary {
+                        summaryCards(summary)
+                    }
+
                     // Quick actions
                     quickActionsSection
-                    
-                    // Player list
-                    if !viewModel.players.isEmpty {
-                        playersSection
-                    }
-                    
+
+                    // Filters
+                    filtersSection
+
+                    // Players
+                    playersSection
+
                     // Cash Cow Analysis
-                    if !viewModel.cashCows.isEmpty {
-                        cashCowsSection
-                    }
-                    
+                    if !viewModel.cashCows.isEmpty { cashCowsSection }
+
                     // Captain Suggestions
-                    if !viewModel.captainSuggestions.isEmpty {
-                        captainSuggestionsSection
-                    }
+                    if !viewModel.captainSuggestions.isEmpty { captainSuggestionsSection }
                 }
                 .padding()
             }
             .navigationTitle("AFL Fantasy AI")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Import Team") {
-                        showingTeamImport = true
-                    }
+                    Button("Import Team") { showingTeamImport = true }
                 }
             }
-            .refreshable {
-                await viewModel.refreshData()
-            }
-            .sheet(isPresented: $showingTeamImport) {
-                TeamImportView()
-            }
-            .onAppear {
-                Task {
-                    await viewModel.loadInitialData()
-                }
-            }
+            .refreshable { await viewModel.refreshData() }
+            .sheet(isPresented: $showingTeamImport) { TeamImportView() }
+            .task { await viewModel.loadInitialData() }
+            .overlay(alignment: .top) { errorBanner }
         }
+        .searchable(text: $viewModel.searchText, prompt: "Search players")
     }
     
+    // MARK: - Header
     @ViewBuilder
     private var apiStatusCard: some View {
-        HStack {
+        HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("API Status")
                     .font(.headline)
-                
                 if let health = viewModel.apiHealth {
-                    Text(health.status.capitalized)
-                        .foregroundColor(health.status == "healthy" ? .green : .red)
-                        .font(.subheadline)
-                    
-                    Text("\(health.playersCache ?? 0) players cached")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(health.status == "healthy" ? Color.green : Color.red)
+                            .frame(width: 10, height: 10)
+                        Text(health.status.capitalized)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    if let cached = viewModel.apiHealth?.playersCache {
+                        Text("Cached: \(cached) players")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    if let last = viewModel.apiHealth?.lastCacheUpdate {
+                        Text("Updated: \(last.replacingOccurrences(of: "T", with: " "))")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 } else {
-                    Text("Checking...")
-                        .foregroundColor(.orange)
-                        .font(.subheadline)
+                    HStack(spacing: 8) {
+                        ProgressView().scaleEffect(0.8)
+                        Text("Checking...")
+                            .font(.subheadline)
+                            .foregroundColor(.orange)
+                    }
                 }
             }
-            
             Spacer()
-            
-            Button {
-                Task { await viewModel.checkAPIHealth() }
-            } label: {
+            Button { Task { await viewModel.checkAPIHealth() } } label: {
                 Image(systemName: "arrow.clockwise")
                     .font(.title2)
             }
+            .buttonStyle(.plain)
         }
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
+
+    @ViewBuilder
+    private func summaryCards(_ s: APIStatsResponse) -> some View {
+        HStack(spacing: 12) {
+            metricCard(title: "Players", value: "\(s.totalPlayers)", color: .blue)
+            metricCard(title: "Rows", value: "\(s.totalDataRows)", color: .purple)
+            metricCard(title: "OK", value: "\(s.successfulPlayers)", color: .green)
+            metricCard(title: "Fail", value: "\(s.failedPlayers)", color: .red)
+        }
+    }
+
+    private func metricCard(title: String, value: String, color: Color) -> some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.headline)
+                .foregroundColor(color)
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
     
+    // MARK: - Quick Actions
     @ViewBuilder
     private var quickActionsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Quick Actions")
                 .font(.headline)
-            
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 12) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                 ActionCard(
                     title: "Import Team",
                     subtitle: "Connect your AFL Fantasy",
                     icon: "square.and.arrow.down.fill",
                     color: .blue
-                ) {
-                    showingTeamImport = true
-                }
-                
+                ) { showingTeamImport = true }
                 ActionCard(
                     title: "Refresh Data",
                     subtitle: "Update player stats",
                     icon: "arrow.clockwise",
                     color: .green
-                ) {
-                    Task { await viewModel.refreshData() }
+                ) { Task { await viewModel.refreshData() } }
+            }
+        }
+    }
+
+    // MARK: - Filters
+    @ViewBuilder
+    private var filtersSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Picker("Position", selection: $viewModel.selectedPosition) {
+                    Text("All").tag(Position?.none)
+                    Text("DEF").tag(Position?.some(.defender))
+                    Text("MID").tag(Position?.some(.midfielder))
+                    Text("RUC").tag(Position?.some(.ruck))
+                    Text("FWD").tag(Position?.some(.forward))
+                }
+                .pickerStyle(.segmented)
+
+                Menu {
+                    Picker("Sort by", selection: $viewModel.sort) {
+                        ForEach(PlayerSort.allCases, id: \.self) { sort in
+                            Label(sort.title, systemImage: sort.icon).tag(sort)
+                        }
+                    }
+                } label: {
+                    Label("Sort", systemImage: "arrow.up.arrow.down")
                 }
             }
         }
     }
-    
+
+    // MARK: - Players
     @ViewBuilder
     private var playersSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Players")
                     .font(.headline)
-                
                 Spacer()
-                
-                Text("\(viewModel.players.count)")
+                Text("\(viewModel.filteredPlayers.count)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-            
-            LazyVStack(spacing: 8) {
-                ForEach(viewModel.players.prefix(10)) { player in
-                    PlayerRow(player: player)
-                }
-                
-                if viewModel.players.count > 10 {
-                    Text("... and \(viewModel.players.count - 10) more players")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding()
+
+            Group {
+                if viewModel.isLoading && viewModel.filteredPlayers.isEmpty {
+                    ForEach(0..<5, id: \.self) { _ in
+                        PlayerRow(player: .init(id: "", name: "Loading...", team: "--", position: .midfielder, price: 0, average: 0, projected: 0, breakeven: 0))
+                            .redacted(reason: .placeholder)
+                            .shimmer()
+                    }
+                } else if viewModel.filteredPlayers.isEmpty {
+                    ContentUnavailableView("No players", systemImage: "person.2", description: Text("Try adjusting filters or search."))
+                } else {
+                    LazyVStack(spacing: 8) {
+                        ForEach(viewModel.filteredPlayers.prefix(20)) { player in
+                            PlayerRow(player: player)
+                                .background(Color.clear)
+                        }
+                        if viewModel.filteredPlayers.count > 20 {
+                            Text("... and \(viewModel.filteredPlayers.count - 20) more players")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding()
+                        }
+                    }
                 }
             }
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
     }
-    
+
+    // MARK: - Cash Cows
     @ViewBuilder
     private var cashCowsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Cash Cows Analysis")
                 .font(.headline)
-            
             LazyVStack(spacing: 8) {
-                ForEach(viewModel.cashCows.prefix(5)) { cashCow in
-                    CashCowRow(cashCow: cashCow)
-                }
+                ForEach(viewModel.cashCows.prefix(5)) { CashCowRow(cashCow: $0) }
             }
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
     }
-    
+
+    // MARK: - Captain Suggestions
     @ViewBuilder
     private var captainSuggestionsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Captain Suggestions")
                 .font(.headline)
-            
             LazyVStack(spacing: 8) {
-                ForEach(viewModel.captainSuggestions.prefix(3)) { suggestion in
-                    CaptainSuggestionRow(suggestion: suggestion)
-                }
+                ForEach(viewModel.captainSuggestions.prefix(3)) { CaptainSuggestionRow(suggestion: $0) }
             }
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        }
+    }
+
+    // MARK: - Error Banner
+    @ViewBuilder
+    private var errorBanner: some View {
+        if let err = viewModel.errorMessage {
+            Text(err)
+                .font(.footnote)
+                .foregroundColor(.white)
+                .padding(10)
+                .frame(maxWidth: .infinity)
+                .background(Color.red.opacity(0.9))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding()
+                .transition(.move(edge: .top).combined(with: .opacity))
         }
     }
 }
@@ -331,65 +400,150 @@ struct ActionCard: View {
 @available(iOS 16.0, *)
 @MainActor
 final class DashboardViewModel: ObservableObject {
+    // Data
     @Published var players: [Player] = []
     @Published var cashCows: [CashCowData] = []
     @Published var captainSuggestions: [CaptainSuggestionResponse] = []
     @Published var apiHealth: APIHealthResponse?
+    @Published var summary: APIStatsResponse?
+
+    // UI State
     @Published var isLoading = false
-    
+    @Published var errorMessage: String?
+    @Published var selectedPosition: Position? = nil
+    @Published var searchText: String = ""
+    @Published var sort: PlayerSort = .averageDesc
+
+    var filteredPlayers: [Player] {
+        var list = players
+        if let pos = selectedPosition { list = list.filter { $0.position == pos } }
+        if !searchText.isEmpty {
+            let q = searchText.lowercased()
+            list = list.filter { $0.name.lowercased().contains(q) || $0.team.lowercased().contains(q) }
+        }
+        list = sort.apply(to: list)
+        return list
+    }
+
     private let apiClient = AFLFantasyAPIClient.shared
-    
+
     func loadInitialData() async {
         isLoading = true
         defer { isLoading = false }
-        
-        await checkAPIHealth()
-        await loadPlayers()
-        await loadCashCows()
-        await loadCaptainSuggestions()
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.checkAPIHealth() }
+            group.addTask { await self.loadSummary() }
+            group.addTask { await self.loadPlayers() }
+            group.addTask { await self.loadCashCows() }
+            group.addTask { await self.loadCaptainSuggestions() }
+        }
     }
-    
+
     func refreshData() async {
-        await loadPlayers()
-        await loadCashCows() 
-        await loadCaptainSuggestions()
-        await checkAPIHealth()
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.loadPlayers() }
+            group.addTask { await self.loadCashCows() }
+            group.addTask { await self.loadCaptainSuggestions() }
+            group.addTask { await self.loadSummary() }
+            group.addTask { await self.checkAPIHealth() }
+        }
     }
-    
+
     func checkAPIHealth() async {
         do {
             let health = try await apiClient.healthCheck()
             self.apiHealth = health
         } catch {
-            print("Failed to check API health: \(error)")
+            self.errorMessage = "API health check failed"
         }
     }
-    
+
+    private func loadSummary() async {
+        do {
+            self.summary = try await apiClient.getDataSummary()
+        } catch {
+            // no-op
+        }
+    }
+
     private func loadPlayers() async {
         do {
             let fetchedPlayers = try await apiClient.getAllPlayers()
             self.players = fetchedPlayers
         } catch {
-            print("Failed to load players: \(error)")
+            self.errorMessage = "Failed to load players"
         }
     }
-    
+
     private func loadCashCows() async {
         do {
-            let fetchedCashCows = try await apiClient.getCashCowAnalysis()
-            self.cashCows = fetchedCashCows
+            self.cashCows = try await apiClient.getCashCowAnalysis()
         } catch {
-            print("Failed to load cash cows: \(error)")
+            self.errorMessage = "Failed to load cash cows"
         }
     }
-    
+
     private func loadCaptainSuggestions() async {
         do {
-            let fetchedSuggestions = try await apiClient.getCaptainSuggestions()
-            self.captainSuggestions = fetchedSuggestions
+            self.captainSuggestions = try await apiClient.getCaptainSuggestions()
         } catch {
-            print("Failed to load captain suggestions: \(error)")
+            self.errorMessage = "Failed to load captain suggestions"
         }
+    }
+}
+
+// MARK: - Sorting
+enum PlayerSort: CaseIterable {
+    case priceDesc, priceAsc, averageDesc, averageAsc, breakevenAsc
+
+    var title: String {
+        switch self {
+        case .priceDesc: return "Price ↓"
+        case .priceAsc: return "Price ↑"
+        case .averageDesc: return "Avg ↓"
+        case .averageAsc: return "Avg ↑"
+        case .breakevenAsc: return "BE ↑"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .priceDesc, .priceAsc: return "dollarsign.circle"
+        case .averageDesc, .averageAsc: return "chart.bar"
+        case .breakevenAsc: return "bolt"
+        }
+    }
+
+    func apply(to players: [Player]) -> [Player] {
+        switch self {
+        case .priceDesc: return players.sorted { $0.price > $1.price }
+        case .priceAsc: return players.sorted { $0.price < $1.price }
+        case .averageDesc: return players.sorted { $0.average > $1.average }
+        case .averageAsc: return players.sorted { $0.average < $1.average }
+        case .breakevenAsc: return players.sorted { $0.breakeven < $1.breakeven }
+        }
+    }
+}
+
+// MARK: - Extensions
+extension View {
+    func shimmer() -> some View {
+        self.overlay(
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color.clear, Color.white.opacity(0.3), Color.clear],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .rotationEffect(.degrees(-15))
+                .animation(
+                    .easeInOut(duration: 1.5).repeatForever(autoreverses: false),
+                    value: UUID()
+                )
+        )
+        .clipped()
     }
 }
 

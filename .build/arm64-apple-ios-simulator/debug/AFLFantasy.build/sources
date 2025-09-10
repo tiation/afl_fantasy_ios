@@ -1,0 +1,8 @@
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/AFLFantasyApp.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Networking/AFLFantasyAPIClient.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Security/KeychainManager.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Auth/LoginView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/QRScanner/QRScannerView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/TeamImport/TeamImportView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/Models.swift

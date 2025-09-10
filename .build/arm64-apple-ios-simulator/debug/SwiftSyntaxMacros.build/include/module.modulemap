@@ -1,0 +1,3 @@
+module SwiftSyntaxMacros {
+    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftSyntaxMacros.build/include/SwiftSyntaxMacros-Swift.h"
+}

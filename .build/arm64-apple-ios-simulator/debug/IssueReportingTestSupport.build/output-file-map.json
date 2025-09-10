@@ -1,0 +1,19 @@
+{
+  "": {
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/master.swiftdeps"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/xctest-dynamic-overlay/Sources/IssueReportingTestSupport/SwiftTesting.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/SwiftTesting.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/SwiftTesting.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/SwiftTesting~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/SwiftTesting.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/SwiftTesting.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/checkouts/xctest-dynamic-overlay/Sources/IssueReportingTestSupport/XCTest.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/XCTest.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/XCTest.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/XCTest~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/XCTest.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/IssueReportingTestSupport.build/XCTest.dia"
+  }
+}

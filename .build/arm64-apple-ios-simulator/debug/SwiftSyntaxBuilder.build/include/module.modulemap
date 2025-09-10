@@ -1,0 +1,3 @@
+module SwiftSyntaxBuilder {
+    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftSyntaxBuilder.build/include/SwiftSyntaxBuilder-Swift.h"
+}

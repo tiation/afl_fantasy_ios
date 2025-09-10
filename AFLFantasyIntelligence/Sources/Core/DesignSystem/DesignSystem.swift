@@ -37,6 +37,7 @@ enum DesignSystem {
         static let footnote = Font.footnote
         static let caption = Font.caption
         static let caption2 = Font.caption2
+        static let overline = Font.system(size: 10, weight: .medium).uppercaseSmallCaps()
 
         // Custom styles
         static let heroNumber = Font.system(size: 48, weight: .bold, design: .rounded)
@@ -60,6 +61,10 @@ enum DesignSystem {
         static let onSurface = Color(.label)
         static let onSurfaceSecondary = Color(.secondaryLabel)
         static let onSurfaceVariant = Color(.tertiaryLabel)
+        static let onPrimary = Color.white
+        
+        // Border colors
+        static let outline = Color(.separator)
 
         // Semantic colors
         static let success = Color.green

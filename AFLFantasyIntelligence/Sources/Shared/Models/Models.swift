@@ -214,6 +214,14 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
     case tradeDeadline = "TRADE_DEADLINE"
     case captainReminder = "CAPTAIN_REMINDER"
     case system = "SYSTEM"
+    
+    // Premium alert types
+    case breakingNews = "BREAKING_NEWS"
+    case milestoneReached = "MILESTONE"
+    case priceThreshold = "PRICE_THRESHOLD" 
+    case formAlert = "FORM_ALERT"
+    case fixtureChange = "FIXTURE_CHANGE"
+    case aiRecommendation = "AI_RECOMMENDATION"
 
     var displayName: String {
         switch self {
@@ -224,6 +232,12 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
         case .tradeDeadline: "Trade Deadline"
         case .captainReminder: "Captain Reminder"
         case .system: "System Alert"
+        case .breakingNews: "Breaking News"
+        case .milestoneReached: "Milestone"
+        case .priceThreshold: "Price Target"
+        case .formAlert: "Form Alert"
+        case .fixtureChange: "Fixture Change"
+        case .aiRecommendation: "AI Insight"
         }
     }
 
@@ -236,7 +250,92 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
         case .tradeDeadline: "clock"
         case .captainReminder: "star.circle"
         case .system: "info.circle"
+        case .breakingNews: "newspaper.circle"
+        case .milestoneReached: "trophy.circle"
+        case .priceThreshold: "target"
+        case .formAlert: "chart.line.uptrend.xyaxis.circle"
+        case .fixtureChange: "calendar.badge.exclamationmark"
+        case .aiRecommendation: "brain.head.profile"
         }
+    }
+    
+    var priority: AlertPriority {
+        switch self {
+        case .injury, .lateOut:
+            return .critical
+        case .tradeDeadline, .breakingNews, .fixtureChange:
+            return .high
+        case .priceChange, .roleChange, .priceThreshold, .formAlert, .aiRecommendation:
+            return .medium
+        case .captainReminder, .milestoneReached, .system:
+            return .low
+        }
+    }
+}
+
+// MARK: - AlertPriority
+
+enum AlertPriority: Int, Codable, CaseIterable, Sendable {
+    case low = 0
+    case medium = 1
+    case high = 2
+    case critical = 3
+    
+    var displayName: String {
+        switch self {
+        case .low: "Low"
+        case .medium: "Medium"
+        case .high: "High"
+        case .critical: "Critical"
+        }
+    }
+    
+    var color: String {
+        switch self {
+        case .low: "neutral"
+        case .medium: "info"
+        case .high: "warning"
+        case .critical: "error"
+        }
+    }
+    
+    var systemImage: String {
+        switch self {
+        case .low: "minus.circle"
+        case .medium: "info.circle"
+        case .high: "exclamationmark.circle"
+        case .critical: "exclamationmark.triangle.fill"
+        }
+    }
+}
+
+// MARK: - AlertUpdate
+
+struct AlertUpdate: Codable, Sendable {
+    let id: String
+    let type: AlertType
+    let title: String
+    let message: String
+    let timestamp: Date
+    let playerId: String?
+    let data: [String: String]?
+    
+    init(
+        id: String = UUID().uuidString,
+        type: AlertType,
+        title: String,
+        message: String,
+        timestamp: Date = Date(),
+        playerId: String? = nil,
+        data: [String: String]? = nil
+    ) {
+        self.id = id
+        self.type = type
+        self.title = title
+        self.message = message
+        self.timestamp = timestamp
+        self.playerId = playerId
+        self.data = data
     }
 }
 

@@ -1,0 +1,15 @@
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift
+/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/AlertManager.swift

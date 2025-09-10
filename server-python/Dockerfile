@@ -30,9 +30,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Copy player index from data
-COPY ../data/core/AFL_Fantasy_Player_URLs.xlsx ./AFL_Fantasy_Player_URLs.xlsx
-
 # Create data directory
 RUN mkdir -p /app/data /app/logs
 

@@ -149,3 +149,81 @@ deployment_package_*.tar.gz
 # Local Netlify folder
 .netlify
 archived_apps/ios_legacy_20250910/deepseek-cli
+
+# ====================
+# iOS/Swift/Xcode Build Artifacts
+# ====================
+
+# Xcode
+.build/
+build/
+DerivedData/
+*.xcworkspace
+!default.xcworkspace
+xcuserdata/
+xcshareddata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+
+# Swift Package Manager
+/.build/
+/Packages/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+Package.pins
+Package.resolved
+*.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+
+# Swift Playgrounds
+*.playground
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build
+Carthage/Checkouts
+
+# Swift compilation
+*.swiftmodule/
+*.dSYM/
+*.dSYM.zip
+
+# App packaging
+*.ipa
+*.app
+*.dSYM
+
+# Simulator specific
+*.hmap
+*.ipa
+*.dSYM
+
+# Instruments specific
+*.trace
+
+# Code signing
+*.p8
+*.p12
+*.mobileprovision
+*.provisionprofile
+Secrets/
+configs/
+
+# iOS specific
+*.moved-aside
+iOSInjectionProject/
+
+# Swift version
+.swift-version

@@ -1,3 +1,0 @@
-module SwiftCompilerPlugin {
-    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SwiftCompilerPlugin.build/include/SwiftCompilerPlugin-Swift.h"
-}

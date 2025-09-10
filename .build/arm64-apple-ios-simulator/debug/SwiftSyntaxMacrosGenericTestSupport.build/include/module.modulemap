@@ -1,3 +1,0 @@
-module SwiftSyntaxMacrosGenericTestSupport {
-    header "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-ios-simulator/debug/SwiftSyntaxMacrosGenericTestSupport.build/include/SwiftSyntaxMacrosGenericTestSupport-Swift.h"
-}

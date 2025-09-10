@@ -15,6 +15,9 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // Team Health (quick win)
+                    teamHealthSection
+
                     // Header with API + Summary
                     apiStatusCard
                     if let summary = viewModel.summary {
@@ -52,6 +55,58 @@ struct DashboardView: View {
         .searchable(text: $viewModel.searchText, prompt: "Search players")
     }
     
+    // MARK: - Team Health (Quick Win)
+    @ViewBuilder
+    private var teamHealthSection: some View {
+        let health = TeamHealth.mock
+        DSCard {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 8) {
+                        Text("Team Health")
+                            .font(.headline)
+                        if health.hasAlerts {
+                            Text("\(health.alertCount) alerts")
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.red.opacity(0.9), in: Capsule())
+                        }
+                    }
+                    HStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Bank")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("$\(health.bankBalance.formatted())")
+                                .font(.subheadline)
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Trades")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("\(health.tradesRemaining)")
+                                .font(.subheadline)
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Captain")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(health.captainSet ? "Set" : "Not set")
+                                .font(.subheadline)
+                                .foregroundColor(health.captainSet ? .green : .orange)
+                        }
+                    }
+                    Text("Deadline \(health.deadlineString)")
+                        .font(.caption)
+                        .foregroundColor(health.isDeadlineClose ? .orange : .secondary)
+                }
+                Spacer()
+            }
+        }
+    }
+
     // MARK: - Header
     @ViewBuilder
     private var apiStatusCard: some View {

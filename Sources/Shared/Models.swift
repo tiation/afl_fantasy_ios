@@ -53,7 +53,7 @@ struct Player: Codable, Identifiable {
     let breakeven: Int
 }
 
-enum Position: String, Codable {
+enum Position: String, Codable, CaseIterable {
     case defender = "DEF"
     case midfielder = "MID"
     case ruck = "RUC"
@@ -61,6 +61,15 @@ enum Position: String, Codable {
     
     var shortName: String {
         return self.rawValue
+    }
+    
+    var displayName: String {
+        switch self {
+        case .defender: return "Defender"
+        case .midfielder: return "Midfielder"
+        case .ruck: return "Ruck"
+        case .forward: return "Forward"
+        }
     }
 }
 

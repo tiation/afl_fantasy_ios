@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B9E08AB1FBA14B2BA8180E68 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11DB4BF1996437AB3FAC9D9 /* AlertManager.swift */; };
+		1FD0471144EF43048F23A47B /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCAC4A52A1E43378293D4C5 /* WebSocketManager.swift */; };
+		7CA106E3562248CD80903E8F /* AlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9633A664FCF4AA2B46797B4 /* AlertsViewModel.swift */; };
 		0BAC050B73E120133992831C /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D572F89C5C418A61D8FB5B /* AlertsView.swift */; };
 		139609CE4400F0267E21DCFC /* PlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE958757AC8740148675677 /* PlayersView.swift */; };
 		141E24BB83F7033DFD756C3B /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8427101FEDA731881961DAC4 /* DesignSystem.swift */; };
@@ -45,6 +48,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B11DB4BF1996437AB3FAC9D9 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		1DCAC4A52A1E43378293D4C5 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		E9633A664FCF4AA2B46797B4 /* AlertsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsViewModel.swift; sourceTree = "<group>"; };
 		067738D80ADE62EEC22A1F3B /* AISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISettingsView.swift; sourceTree = "<group>"; };
 		06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFL Fantasy Intelligence UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFL Fantasy Intelligence Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };

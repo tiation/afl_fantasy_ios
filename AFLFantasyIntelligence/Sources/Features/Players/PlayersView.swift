@@ -5,9 +5,9 @@ import SwiftUI
 struct PlayersView: View {
     @EnvironmentObject var apiService: APIService
     @StateObject private var viewModel = PlayersViewModel()
-    @State private var searchText = ""
-    @State private var selectedPosition: Position?
+    @StateObject private var prefs = UserPreferencesService.shared
     @State private var showingFilters = false
+    @State private var showWatchlistOnly = false
 
     var body: some View {
         NavigationView {
@@ -21,12 +21,18 @@ struct PlayersView: View {
             .navigationTitle("Players")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    // Compact API status chip
+                    APIStatusChip()
+                        .environmentObject(apiService)
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showingFilters = true
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease.circle")
                     }
+                    .accessibilityLabel("Filters")
                 }
             }
             .refreshable {
@@ -39,8 +45,13 @@ struct PlayersView: View {
         }
         .task {
             await viewModel.loadPlayers(apiService: apiService)
+            // Restore persisted filters
+            // No-op here because prefs uses @AppStorage
         }
-        .searchable(text: $searchText, prompt: "Search players...")
+        .searchable(text: Binding(
+            get: { prefs.searchText },
+            set: { prefs.searchText = $0 }
+        ), prompt: "Search players...")
     }
 
     // MARK: - Search and Filter Bar
@@ -51,19 +62,27 @@ struct PlayersView: View {
                 // All positions filter chip
                 FilterChip(
                     title: "All",
-                    isSelected: selectedPosition == nil
+                    isSelected: prefs.selectedPosition == nil
                 ) {
-                    selectedPosition = nil
+                    prefs.selectedPosition = nil
                 }
 
                 // Position filter chips
                 ForEach(Position.allCases, id: \.self) { position in
                     FilterChip(
                         title: position.shortName,
-                        isSelected: selectedPosition == position
+                        isSelected: prefs.selectedPosition == position
                     ) {
-                        selectedPosition = selectedPosition == position ? nil : position
+                        prefs.selectedPosition = (prefs.selectedPosition == position ? nil : position)
                     }
+                }
+
+                // Watchlist toggle chip
+                FilterChip(
+                    title: "Watchlist",
+                    isSelected: showWatchlistOnly
+                ) {
+                    showWatchlistOnly.toggle()
                 }
             }
             .padding(.horizontal, DS.Spacing.l)
@@ -115,9 +134,16 @@ struct PlayersView: View {
                 .foregroundColor(DS.Colors.onSurfaceSecondary)
                 .multilineTextAlignment(.center)
 
-            DSButton("Refresh", style: .outline) {
-                Task {
-                    await viewModel.loadPlayers(apiService: apiService)
+            HStack(spacing: DS.Spacing.m) {
+                DSButton("Reset Filters", style: .secondary) {
+                    prefs.selectedPosition = nil
+                    prefs.searchText = ""
+                    showWatchlistOnly = false
+                }
+                DSButton("Refresh", style: .outline) {
+                    Task {
+                        await viewModel.loadPlayers(apiService: apiService)
+                    }
                 }
             }
             .padding(.horizontal, DS.Spacing.xxxl)
@@ -130,20 +156,26 @@ struct PlayersView: View {
     private var filteredPlayers: [Player] {
         var players = viewModel.players
 
+        // Watchlist filter
+        if showWatchlistOnly {
+            let wl = prefs.watchlist
+            players = players.filter { wl.contains($0.id) }
+        }
+
         // Filter by position
-        if let selectedPosition {
-            players = players.filter { $0.position == selectedPosition }
+        if let pos = prefs.selectedPosition {
+            players = players.filter { $0.position == pos }
         }
 
         // Filter by search text
-        if !searchText.isEmpty {
+        if !prefs.searchText.isEmpty {
             players = players.filter {
-                $0.name.localizedCaseInsensitiveContains(searchText) ||
-                    $0.team.localizedCaseInsensitiveContains(searchText)
+                $0.name.localizedCaseInsensitiveContains(prefs.searchText) ||
+                    $0.team.localizedCaseInsensitiveContains(prefs.searchText)
             }
         }
 
-        // Sort by projected score descending
+        // Sort by projected score descending (quick win)
         return players.sorted { $0.projected > $1.projected }
     }
 }
@@ -175,6 +207,7 @@ struct FilterChip: View {
 
 struct PlayerRowView: View {
     let player: Player
+    @StateObject private var prefs = UserPreferencesService.shared
 
     private var playerAccessibilityLabel: String {
         let basicInfo = "\(player.name), \(player.position.displayName), \(player.team)"
@@ -247,6 +280,15 @@ struct PlayerRowView: View {
                         }
                     }
                 }
+
+                // Watchlist star
+                Button(action: { prefs.toggleWatchlist(player.id) }) {
+                    Image(systemName: prefs.isInWatchlist(player.id) ? "star.fill" : "star")
+                        .foregroundColor(prefs.isInWatchlist(player.id) ? DS.Colors.warning : DS.Colors.onSurfaceSecondary)
+                        .dsMinimumHitTarget()
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(prefs.isInWatchlist(player.id) ? "Remove from watchlist" : "Add to watchlist")
             }
         }
         .dsAccessibility(

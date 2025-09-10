@@ -416,42 +416,6 @@ struct AlertDetailView: View {
     }
 }
 
-// MARK: - AlertSettings
-
-struct AlertSettings {
-    // Basic notification types
-    var priceChanges = true
-    var injuries = true
-    var tradeDeadlines = true
-    var captainReminders = true
-    
-    // Premium alert types
-    var breakingNews = true
-    var formAlerts = false
-    var aiRecommendations = true
-    var priceThresholds = false
-    var milestones = true
-    var fixtureChanges = false
-    
-    // Delivery preferences
-    var pushNotifications = true
-    var inAppAlerts = true
-    var emailDigest = false
-    
-    // Priority filtering
-    var minimumPriority: AlertPriority = .low
-    
-    // Custom thresholds
-    var priceChangeThreshold: Double = 10000 // $10k
-    var maxAlertsPerDay: Int = 20
-    
-    // Quiet hours
-    var enableQuietHours = false
-    var quietHoursStart = Date()
-    var quietHoursEnd = Date()
-    
-    static let `default` = AlertSettings()
-}
 
 // MARK: - AlertSettingsView
 

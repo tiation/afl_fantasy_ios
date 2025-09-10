@@ -7,18 +7,28 @@ import UserNotifications
 struct AFLFantasyIntelligenceApp: App {
     // MARK: - Dependencies
 
+    @StateObject private var authService = AuthenticationService()
     @StateObject private var apiService = APIService()
     @StateObject private var alertsViewModel = AlertsViewModel()
+    @StateObject private var teamManager = TeamManager()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(apiService)
-                .environmentObject(alertsViewModel)
-                .preferredColorScheme(nil) // Respect system setting
-                .onAppear {
-                    setupApp()
+            Group {
+                if authService.isAuthenticated {
+                    ContentView()
+                        .environmentObject(apiService)
+                        .environmentObject(alertsViewModel)
+                        .environmentObject(teamManager)
+                } else {
+                    LoginView()
                 }
+            }
+            .environmentObject(authService)
+            .preferredColorScheme(nil) // Respect system setting
+            .onAppear {
+                setupApp()
+            }
         }
     }
 
@@ -71,6 +81,8 @@ struct AFLFantasyIntelligenceApp: App {
 
 struct ContentView: View {
     @EnvironmentObject var apiService: APIService
+    @EnvironmentObject var authService: AuthenticationService
+    @EnvironmentObject var teamManager: TeamManager
     @State private var selectedTab = 0
 
     var body: some View {
@@ -88,27 +100,41 @@ struct ContentView: View {
                     Text("Players")
                 }
                 .tag(1)
+            
+            TeamsView()
+                .tabItem {
+                    Image(systemName: "person.2.badge.plus")
+                    Text("Teams")
+                }
+                .tag(2)
 
             AIToolsView()
                 .tabItem {
                     Image(systemName: "brain.head.profile")
                     Text("AI Tools")
                 }
-                .tag(2)
+                .tag(3)
 
             CashCowsView()
                 .tabItem {
                     Image(systemName: "dollarsign.circle")
                     Text("Cash Cows")
                 }
-                .tag(3)
+                .tag(4)
 
             AlertsView()
                 .tabItem {
                     Image(systemName: "bell")
                     Text("Alerts")
                 }
-                .tag(4)
+                .tag(5)
+            
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person.circle")
+                    Text("Profile")
+                }
+                .tag(6)
         }
         .accentColor(DS.Colors.primary)
     }

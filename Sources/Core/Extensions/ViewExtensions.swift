@@ -1,0 +1,37 @@
+import SwiftUI
+
+// MARK: - View Extensions
+
+extension View {
+    /// Ensures minimum hit target size for accessibility
+    func dsMinimumHitTarget() -> some View {
+        frame(minWidth: 44, minHeight: 44)
+    }
+    
+    /// Accessibility helper with label, hint, and traits
+    func dsAccessibility(label: String, hint: String? = nil, traits: AccessibilityTraits = []) -> some View {
+        accessibilityLabel(label)
+            .accessibilityHint(hint ?? "")
+            .accessibilityAddTraits(traits)
+    }
+    
+    /// Apply shimmer loading effect for placeholder states
+    func shimmer() -> some View {
+        self.overlay(
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color.clear, Color.white.opacity(0.3), Color.clear],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .rotationEffect(.degrees(-15))
+                .animation(
+                    .easeInOut(duration: 1.5).repeatForever(autoreverses: false),
+                    value: UUID()
+                )
+        )
+        .clipped()
+    }
+}

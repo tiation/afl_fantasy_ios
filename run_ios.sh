@@ -19,7 +19,7 @@ NC='\033[0m' # No Color
 DEFAULT_SIMULATOR="iPhone 15"
 API_BASE_URL="http://localhost:4000"
 FRONTEND_URL="http://localhost:5173"
-XCODE_PROJECT="AFLFantasyIntelligence/AFL Fantasy Intelligence.xcodeproj"
+XCODE_PROJECT="ios/AFLFantasyIntelligence/AFL Fantasy Intelligence.xcodeproj"
 APP_SCHEME="AFL Fantasy Intelligence"
 
 # Functions
@@ -134,8 +134,8 @@ check_prerequisites() {
     local errors=0
     
     # Check if we're in the right directory
-    if [ ! -d "AFLFantasyIntelligence" ]; then
-        print_error "AFLFantasyIntelligence directory not found. Please run this from the AFL Fantasy project root."
+    if [ ! -d "ios/AFLFantasyIntelligence" ]; then
+        print_error "ios/AFLFantasyIntelligence directory not found. Please run this from the AFL Fantasy project root."
         errors=$((errors + 1))
     else
         print_success "AFL Fantasy Intelligence project directory found ✓"
@@ -152,7 +152,7 @@ check_prerequisites() {
     
     # Check if xcodeproj exists
     if [ ! -d "$XCODE_PROJECT" ]; then
-        print_error "AFL Fantasy Intelligence.xcodeproj not found in AFLFantasyIntelligence/ directory."
+        print_error "AFL Fantasy Intelligence.xcodeproj not found in ios/AFLFantasyIntelligence/ directory."
         errors=$((errors + 1))
     else
         print_success "Xcode project found ✓"

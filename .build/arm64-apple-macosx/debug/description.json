@@ -1,6 +1,10 @@
 {
   "builtTestProducts" : [
-
+    {
+      "binaryPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.xctest/Contents/MacOS/AFLFantasyIntelligencePackageTests",
+      "packagePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios",
+      "productName" : "AFLFantasyIntelligencePackageTests"
+    }
   ],
   "copyCommands" : {
 
@@ -17,234 +21,6 @@
 
   ],
   "swiftCommands" : {
-    "C.AFLFantasy-arm64-apple-macosx26.0-debug.module" : {
-      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
-      "fileList" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/sources",
-      "importPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules",
-      "inputs" : [
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/AFLFantasyApp.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/APIStatusChip.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSButton.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSCard.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Extensions/ViewExtensions.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Models/TeamHealth.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Networking/AFLFantasyAPIClient.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Security/KeychainManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Services/UserPreferencesService.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Auth/LoginView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/QRScanner/QRScannerView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/TeamImport/TeamImportView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/Models.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/sources"
-        }
-      ],
-      "isLibrary" : false,
-      "moduleName" : "AFLFantasy",
-      "moduleOutputPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasy.swiftmodule",
-      "objects" : [
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/AFLFantasyApp.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/APIStatusChip.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DSButton.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DSCard.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/ViewExtensions.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/TeamHealth.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/AFLFantasyAPIClient.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/KeychainManager.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/UserPreferencesService.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/LoginView.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DashboardView.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/QRScannerView.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/TeamImportView.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/Models.swift.o"
-      ],
-      "otherArguments" : [
-        "-target",
-        "arm64-apple-macosx10.13",
-        "-incremental",
-        "-enable-batch-mode",
-        "-serialize-diagnostics",
-        "-index-store-path",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/index/store",
-        "-Onone",
-        "-enable-testing",
-        "-j10",
-        "-DSWIFT_PACKAGE",
-        "-DDEBUG",
-        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
-        "-module-cache-path",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
-        "-parseable-output",
-        "-Xfrontend",
-        "-entry-point-function-name",
-        "-Xfrontend",
-        "AFLFantasy_main",
-        "-color-diagnostics",
-        "-swift-version",
-        "5",
-        "-plugin-path",
-        "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
-        "-sdk",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
-        "-F",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
-        "-F",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
-        "-I",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
-        "-L",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
-        "-g",
-        "-Xcc",
-        "-isysroot",
-        "-Xcc",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
-        "-Xcc",
-        "-F",
-        "-Xcc",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
-        "-Xcc",
-        "-F",
-        "-Xcc",
-        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
-        "-Xcc",
-        "-fPIC",
-        "-Xcc",
-        "-g",
-        "-package-name",
-        "afl_fantasy_ios"
-      ],
-      "outputFileMapPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/output-file-map.json",
-      "outputs" : [
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/AFLFantasyApp.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/APIStatusChip.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DSButton.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DSCard.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/ViewExtensions.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/TeamHealth.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/AFLFantasyAPIClient.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/KeychainManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/UserPreferencesService.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/LoginView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DashboardView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/QRScannerView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/TeamImportView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/Models.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasy.swiftmodule"
-        }
-      ],
-      "prepareForIndexing" : false,
-      "sources" : [
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/AFLFantasyApp.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/APIStatusChip.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSButton.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSCard.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Extensions/ViewExtensions.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Models/TeamHealth.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Networking/AFLFantasyAPIClient.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Security/KeychainManager.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Services/UserPreferencesService.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Auth/LoginView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/QRScanner/QRScannerView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/TeamImport/TeamImportView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/Models.swift"
-      ],
-      "tempsPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build",
-      "wholeModuleOptimization" : false
-    },
     "C.AFLFantasyIntelligence-arm64-apple-macosx26.0-debug.module" : {
       "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "fileList" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/sources",
@@ -252,103 +28,171 @@
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertsViewModel.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Auth/AuthenticationService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Teams/TeamManager.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Components/Charts.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/APIStatusChip.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSAnimations.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSComponents.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Network/WebSocketManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Preferences/UserPreferencesService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Team/TeamManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/TradeAnalyzerView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertDetailView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertSettingsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/AlertManager.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/WebSocketManager.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/AdvancedFiltersView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailComponents.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Alert.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Analytics/LivePerformance.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/LivePerformanceService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/WebSocketManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift"
         },
         {
           "kind" : "file",
@@ -359,39 +203,56 @@
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/sources"
         }
       ],
-      "isLibrary" : false,
+      "isLibrary" : true,
       "moduleName" : "AFLFantasyIntelligence",
       "moduleOutputPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligence.swiftmodule",
       "objects" : [
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AFLFantasyIntelligenceApp.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/OpenAIService.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertManager.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsViewModel.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AuthenticationService.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AuthenticationService.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/BarcodeScanner.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Charts.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/APIStatusChip.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DSAnimations.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DSComponents.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DesignSystem.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/APIService.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/UserPreferencesService.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/KeychainService.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/TeamManager.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AIRecommendationDetailView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AISettingsView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AIToolsView.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/TradeAnalyzerView.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertDetailView.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertSettingsView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsViewModel.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LoginView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/CashCowsView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DashboardView.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AdvancedFiltersView.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayerDetailComponents.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayerDetailViewModel.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayersView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/ProfileView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/BarcodeScannerView.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/TeamsSupportingViews.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/TeamsView.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Alert.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LivePerformance.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LivePerformanceService.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/MockData.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Models.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertManager.swift.o",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o"
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Models.swift.o"
       ],
       "otherArguments" : [
         "-target",
-        "arm64-apple-macosx10.13",
+        "arm64-apple-macosx12.0",
         "-incremental",
         "-enable-batch-mode",
         "-serialize-diagnostics",
@@ -406,10 +267,10 @@
         "-module-cache-path",
         "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
-        "-Xfrontend",
-        "-entry-point-function-name",
-        "-Xfrontend",
-        "AFLFantasyIntelligence_main",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/include/AFLFantasyIntelligence-Swift.h",
         "-color-diagnostics",
         "-swift-version",
         "5",
@@ -457,6 +318,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AuthenticationService.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AuthenticationService.swift.o"
         },
         {
@@ -465,11 +338,35 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Charts.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/APIStatusChip.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DSAnimations.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DSComponents.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DesignSystem.swift.o"
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/APIService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/UserPreferencesService.swift.o"
         },
         {
           "kind" : "file",
@@ -493,6 +390,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/TradeAnalyzerView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertDetailView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertSettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsView.swift.o"
         },
         {
@@ -510,6 +419,18 @@
         {
           "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AdvancedFiltersView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayerDetailComponents.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayerDetailViewModel.swift.o"
         },
         {
           "kind" : "file",
@@ -533,6 +454,22 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Alert.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LivePerformance.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LivePerformanceService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/MockData.swift.o"
         },
         {
@@ -541,46 +478,292 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligence.swiftmodule"
         }
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Teams/TeamManager.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/AlertManager.swift",
-        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/WebSocketManager.swift"
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertManager.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertsViewModel.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Auth/AuthenticationService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Components/Charts.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/APIStatusChip.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSAnimations.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSComponents.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Network/WebSocketManager.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Preferences/UserPreferencesService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Team/TeamManager.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/TradeAnalyzerView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertDetailView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertSettingsView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/AdvancedFiltersView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailComponents.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailViewModel.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Alert.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Analytics/LivePerformance.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/LivePerformanceService.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/WebSocketManager.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift"
       ],
       "tempsPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AFLFantasyIntelligencePackageTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/sources",
+      "importPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligenceTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AFLFantasyIntelligencePackageTests",
+      "moduleOutputPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligencePackageTests.swiftmodule",
+      "objects" : [
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx12.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/include/AFLFantasyIntelligencePackageTests-Swift.h",
+        "-color-diagnostics",
+        "-plugin-path",
+        "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "afl_fantasy_ios"
+      ],
+      "outputFileMapPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligencePackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AFLFantasyIntelligenceTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/sources",
+      "importPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/UI/SnapshotTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/APIServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/Mocks/MockURLProtocol.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/PlayersViewModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligence.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/SnapshotTesting.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AFLFantasyIntelligenceTests",
+      "moduleOutputPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligenceTests.swiftmodule",
+      "objects" : [
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.swift.o",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-color-diagnostics",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "afl_fantasy_ios"
+      ],
+      "outputFileMapPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules/AFLFantasyIntelligenceTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/UI/SnapshotTests.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/APIServiceTests.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/Mocks/MockURLProtocol.swift",
+        "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/PlayersViewModelTests.swift"
+      ],
+      "tempsPath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build",
       "wholeModuleOptimization" : false
     },
     "C.CustomDump-arm64-apple-macosx26.0-debug.module" : {
@@ -7361,31 +7544,59 @@
 
   },
   "swiftTargetScanArgs" : {
-    "AFLFantasy" : [
+    "AFLFantasyIntelligence" : [
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
-      "AFLFantasy",
+      "AFLFantasyIntelligence",
       "-package-name",
       "afl_fantasy_ios",
       "-c",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/AFLFantasyApp.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/APIStatusChip.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSButton.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSCard.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Extensions/ViewExtensions.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Models/TeamHealth.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Networking/AFLFantasyAPIClient.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Security/KeychainManager.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Services/UserPreferencesService.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Auth/LoginView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/QRScanner/QRScannerView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/TeamImport/TeamImportView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/Models.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertManager.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertsViewModel.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Auth/AuthenticationService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Components/Charts.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/APIStatusChip.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSAnimations.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSComponents.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Network/WebSocketManager.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Preferences/UserPreferencesService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Team/TeamManager.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/TradeAnalyzerView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertDetailView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertSettingsView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/AdvancedFiltersView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailComponents.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailViewModel.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Alert.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Analytics/LivePerformance.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/LivePerformanceService.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/WebSocketManager.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift",
       "-I",
       "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules",
       "-target",
-      "arm64-apple-macosx10.13",
+      "arm64-apple-macosx12.0",
       "-incremental",
       "-enable-batch-mode",
       "-serialize-diagnostics",
@@ -7400,10 +7611,10 @@
       "-module-cache-path",
       "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
-      "-Xfrontend",
-      "-entry-point-function-name",
-      "-Xfrontend",
-      "AFLFantasy_main",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/include/AFLFantasyIntelligence-Swift.h",
       "-color-diagnostics",
       "-swift-version",
       "5",
@@ -7441,42 +7652,18 @@
       "-driver-use-frontend-path",
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ],
-    "AFLFantasyIntelligence" : [
+    "AFLFantasyIntelligencePackageTests" : [
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
-      "AFLFantasyIntelligence",
+      "AFLFantasyIntelligencePackageTests",
       "-package-name",
       "afl_fantasy_ios",
       "-c",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Teams/TeamManager.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/AlertManager.swift",
-      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/WebSocketManager.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.derived/runner.swift",
       "-I",
       "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules",
       "-target",
-      "arm64-apple-macosx10.13",
+      "arm64-apple-macosx12.0",
       "-incremental",
       "-enable-batch-mode",
       "-serialize-diagnostics",
@@ -7484,6 +7671,8 @@
       "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/index/store",
       "-Onone",
       "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
       "-j10",
       "-DSWIFT_PACKAGE",
       "-DDEBUG",
@@ -7491,10 +7680,77 @@
       "-module-cache-path",
       "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/include/AFLFantasyIntelligencePackageTests-Swift.h",
+      "-color-diagnostics",
+      "-plugin-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "afl_fantasy_ios",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AFLFantasyIntelligenceTests" : [
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AFLFantasyIntelligenceTests",
+      "-package-name",
+      "afl_fantasy_ios",
+      "-c",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/UI/SnapshotTests.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/APIServiceTests.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/Mocks/MockURLProtocol.swift",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/PlayersViewModelTests.swift",
+      "-I",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
       "-Xfrontend",
-      "-entry-point-function-name",
-      "-Xfrontend",
-      "AFLFantasyIntelligence_main",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
       "-color-diagnostics",
       "-swift-version",
       "5",
@@ -10017,11 +10273,17 @@
     ]
   },
   "targetDependencyMap" : {
-    "AFLFantasy" : [
-
-    ],
     "AFLFantasyIntelligence" : [
 
+    ],
+    "AFLFantasyIntelligencePackageTests" : [
+      "AFLFantasyIntelligenceTests",
+      "SnapshotTesting",
+      "AFLFantasyIntelligence"
+    ],
+    "AFLFantasyIntelligenceTests" : [
+      "SnapshotTesting",
+      "AFLFantasyIntelligence"
     ],
     "CustomDump" : [
       "XCTestDynamicOverlay",
@@ -10328,7 +10590,17 @@
 
   },
   "testEntryPointCommands" : {
+    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.derived/runner.swift" : {
+      "inputs" : [
 
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.derived/runner.swift"
+        }
+      ]
+    }
   },
   "traitConfiguration" : {
     "default" : {
@@ -10336,166 +10608,6 @@
     }
   },
   "writeCommands" : {
-    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy-entitlement.plist" : {
-      "alwaysOutOfDate" : false,
-      "inputs" : [
-        {
-          "kind" : "virtual",
-          "name" : "<entitlement-plist>"
-        },
-        {
-          "kind" : "virtual",
-          "name" : "<com.apple.security.get-task-allow>"
-        }
-      ],
-      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy-entitlement.plist"
-    },
-    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/sources" : {
-      "alwaysOutOfDate" : false,
-      "inputs" : [
-        {
-          "kind" : "virtual",
-          "name" : "<sources-file-list>"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/AFLFantasyApp.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/APIStatusChip.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSButton.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Components/DSCard.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Extensions/ViewExtensions.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Models/TeamHealth.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Networking/AFLFantasyAPIClient.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Security/KeychainManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Core/Services/UserPreferencesService.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Auth/LoginView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/Dashboard/DashboardView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/QRScanner/QRScannerView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Features/TeamImport/TeamImportView.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/Sources/Shared/Models.swift"
-        }
-      ],
-      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/sources"
-    },
-    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.product/Objects.LinkFileList" : {
-      "alwaysOutOfDate" : false,
-      "inputs" : [
-        {
-          "kind" : "virtual",
-          "name" : "<link-file-list>"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/AFLFantasyAPIClient.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/AFLFantasyApp.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/APIStatusChip.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DSButton.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DSCard.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/DashboardView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/KeychainManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/LoginView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/Models.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/QRScannerView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/TeamHealth.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/TeamImportView.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/UserPreferencesService.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.build/ViewExtensions.swift.o"
-        }
-      ],
-      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasy.product/Objects.LinkFileList"
-    },
-    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence-entitlement.plist" : {
-      "alwaysOutOfDate" : false,
-      "inputs" : [
-        {
-          "kind" : "virtual",
-          "name" : "<entitlement-plist>"
-        },
-        {
-          "kind" : "virtual",
-          "name" : "<com.apple.security.get-task-allow>"
-        }
-      ],
-      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence-entitlement.plist"
-    },
     "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
@@ -10505,108 +10617,190 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/AFLFantasyIntelligenceApp.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/AI/OpenAIService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Alerts/AlertsViewModel.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Auth/AuthenticationService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Authentication/AuthenticationService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Camera/BarcodeScanner.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Core/Teams/TeamManager.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Components/Charts.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/APIStatusChip.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSAnimations.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DSComponents.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/DesignSystem/DesignSystem.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Network/WebSocketManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Networking/APIService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Preferences/UserPreferencesService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Security/KeychainService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Core/Team/TeamManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIRecommendationDetailView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AISettingsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/AIToolsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/AI/TradeAnalyzerView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertDetailView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertSettingsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/AlertManager.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/AFLFantasyIntelligence/Sources/Shared/Services/WebSocketManager.swift"
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Alerts/AlertsViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Authentication/LoginView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/CashCows/CashCowsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Dashboard/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/AdvancedFiltersView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailComponents.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayerDetailViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Players/PlayersView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Profile/ProfileView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/BarcodeScannerView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsSupportingViews.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Features/Teams/TeamsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Alert.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Models/Analytics/LivePerformance.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/LivePerformanceService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Services/WebSocketManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/MockData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Sources/Shared/Models/Models.swift"
         }
       ],
       "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/sources"
     },
-    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.product/Objects.LinkFileList" : {
+    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/sources"
+    },
+    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.product/Objects.LinkFileList" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -10635,7 +10829,27 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/APIStatusChip.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AdvancedFiltersView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Alert.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertDetailView.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertSettingsView.swift.o"
         },
         {
           "kind" : "file",
@@ -10644,6 +10858,14 @@
         {
           "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AlertsViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/AuthenticationService.swift.o"
         },
         {
           "kind" : "file",
@@ -10663,6 +10885,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/Charts.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DSAnimations.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DSComponents.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/DashboardView.swift.o"
         },
         {
@@ -10672,6 +10906,14 @@
         {
           "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/KeychainService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LivePerformance.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/LivePerformanceService.swift.o"
         },
         {
           "kind" : "file",
@@ -10688,6 +10930,14 @@
         {
           "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/OpenAIService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayerDetailComponents.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/PlayerDetailViewModel.swift.o"
         },
         {
           "kind" : "file",
@@ -10711,10 +10961,204 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/TradeAnalyzerView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/UserPreferencesService.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.build/WebSocketManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Any.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/AssertSnapshot.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Async.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/CALayer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/CGPath.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/CaseIterable.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Data.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Deprecations.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Diff.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Diffing.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Encodable.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Internal.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/NSBezierPath.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/NSImage.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/NSView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/NSViewController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/PlistEncoder.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/RecordIssue.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/SceneKit.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/SnapshotTestingConfiguration.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/SnapshotsTestTrait.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Snapshotting.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/SpriteKit.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/String+SpecialCharacters.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/String.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/SwiftUIView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/UIBezierPath.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/UIImage.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/UIView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/UIViewController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/URLRequest.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/View.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/Wait.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/SnapshotTesting.build/XCTAttachment.swift.o"
         }
       ],
-      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligence.product/Objects.LinkFileList"
+      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligencePackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/UI/SnapshotTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/APIServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/Mocks/MockURLProtocol.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/PlayersViewModelTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/sources"
     },
     "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/CustomDump.build/sources" : {
       "alwaysOutOfDate" : false,

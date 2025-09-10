@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/master.swiftdeps"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/UI/SnapshotTests.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/SnapshotTests.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/APIServiceTests.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/APIServiceTests.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/Mocks/MockURLProtocol.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/MockURLProtocol.dia"
+  },
+  "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/ios/AFLFantasyIntelligence/Tests/Unit/PlayersViewModelTests.swift": {
+    "dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.d",
+    "object": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.swift.o",
+    "swiftmodule": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.swiftdeps",
+    "diagnostics": "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/.build/arm64-apple-macosx/debug/AFLFantasyIntelligenceTests.build/PlayersViewModelTests.dia"
+  }
+}

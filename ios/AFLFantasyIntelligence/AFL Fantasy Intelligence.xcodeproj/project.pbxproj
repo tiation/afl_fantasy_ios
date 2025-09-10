@@ -1,0 +1,891 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0B3243BF7B9E9020D09B49DA /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D103CD761C767CF6971FE35E /* BarcodeScannerView.swift */; };
+		0BAC050B73E120133992831C /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D572F89C5C418A61D8FB5B /* AlertsView.swift */; };
+		0FB548BF9771DF8CE953FF2D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D3239AF8A97BC779C2383C /* LoginView.swift */; };
+		139609CE4400F0267E21DCFC /* PlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE958757AC8740148675677 /* PlayersView.swift */; };
+		141E24BB83F7033DFD756C3B /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8427101FEDA731881961DAC4 /* DesignSystem.swift */; };
+		1D05943FF1566145D9F30542 /* AFLFantasyIntelligenceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */; };
+		3F771D5CC306177E2BF554F0 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F830ADEA12601E11E6543186 /* SnapshotTests.swift */; };
+		405F07B1145FA42B1C2D249D /* AlertSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDA5B17672944F72EEFC68 /* AlertSettingsView.swift */; };
+		43B37DD9D1BAF3369A75FBB7 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF7BD0E5329CFCF0063D57F /* ProfileView.swift */; };
+		4741A2DDB22C1DE923A2A92B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B0D1C8641E3893F344DA8 /* Models.swift */; };
+		50E091DD878F16DA678B7598 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6665607275921442437214CC /* AuthenticationService.swift */; };
+		58142B5D65D861CF54B52EAA /* APIStatusChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878C8B8D6E147D13F6C9DE2E /* APIStatusChip.swift */; };
+		5BB9CFACD5CAA71ED754CD21 /* AdvancedFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E5623D21820C53AC1BCF15 /* AdvancedFiltersView.swift */; };
+		5BE56AED470B0EAE711722A4 /* AISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067738D80ADE62EEC22A1F3B /* AISettingsView.swift */; };
+		6F07207D4004BA58DE0DBEEC /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BE877E8A7B6D7E59DD08CC /* WebSocketManager.swift */; };
+		72DB98F6FDFE83F7FA7E79C7 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477E78628727DBED7C0205A2 /* Alert.swift */; };
+		7407D63BFFB41860C4423FF4 /* AIToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */; };
+		7772B653C5892D86684A94B4 /* PlayerDetailComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057A1925BF502EB59D3A901 /* PlayerDetailComponents.swift */; };
+		7AA54DED2FD7239844DA6177 /* EnhancedFloatingTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6708EC12E1667C367AE92341 /* EnhancedFloatingTabBar.swift */; };
+		7F7822CA753A7CC55A6483F9 /* TradeAnalyzerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CED9F9A6E778B03C6D5C43D /* TradeAnalyzerView.swift */; };
+		8274029165B3093F27F97BD4 /* DSComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1A6323E926BEE22895B4E0 /* DSComponents.swift */; };
+		846A035EF6EFF92106DEEEA9 /* BarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8226681E5103D896EDB7929 /* BarcodeScanner.swift */; };
+		8572E82F850188EFF0667CDA /* APIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B657363CE52476EB25F80396 /* APIServiceTests.swift */; };
+		8B898A400F57B4744539F1B2 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */; };
+		8BB8CFAC755DF7DD45580405 /* TeamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5944658B4E28849F75BDF801 /* TeamManager.swift */; };
+		8DAD7A60C4139279F49CE221 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4537A3AF191CEF2BABDBAA2 /* OpenAIService.swift */; };
+		8E99CB2EEE71A8712DEC0ED1 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701D8C59C8DEC2E29664D6E8 /* AlertManager.swift */; };
+		8F8E3EC313DFE29748B78F85 /* AlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A730F18876C405A22C8DAF3 /* AlertsViewModel.swift */; };
+		978180E8A9552062C6EA9D25 /* UserPreferencesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B4F2AC3062A1B5F7761DC /* UserPreferencesService.swift */; };
+		9CE0A3F4FDFB1074645874F7 /* AlertDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1C70454582516C4FB5D2C4 /* AlertDetailView.swift */; };
+		A0FA3442469F5881639BEAA4 /* TeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236D473AD422573931FE21AC /* TeamsView.swift */; };
+		A534142CAB2BF337E09F6E07 /* PlayersViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298C9095804075E32B03722E /* PlayersViewModelTests.swift */; };
+		A7ACD7A177EFC0BDC472FA72 /* DSAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25537BE83EE96013532DE41D /* DSAnimations.swift */; };
+		A908D4FBAE82FFDA44C2C5DA /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E4C8EF166B47CA05E25CBE /* Charts.swift */; };
+		B6F57EE64CB1BD1B99DF7AFF /* PlayerDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FEBD975F856A7D46F606882 /* PlayerDetailViewModel.swift */; };
+		BD1C14C6FE54BD070D355589 /* AIRecommendationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05B760F9F241BF4B30481AB /* AIRecommendationDetailView.swift */; };
+		C6284EE130A4C72A1A5E2CD7 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9034CF408A530EF937BC83CF /* APIService.swift */; };
+		D1D617DDC470CEB94D92DB87 /* LivePerformanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC63562CFBD0DA5768ED0AE /* LivePerformanceService.swift */; };
+		D663192DD93B13E1E22877B0 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6CC1172522CD9261137508 /* MockData.swift */; };
+		D71A496ADEDE0B23F42BD309 /* TeamsSupportingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038C3D10175C3FEA01DF0E47 /* TeamsSupportingViews.swift */; };
+		D8C2376842BB91DF1707B3E4 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041BCC94FEB8977850F2E72C /* MockURLProtocol.swift */; };
+		DA79FD5A71A21695B06BEA32 /* CashCowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C672214400A6C525B7E32C8A /* CashCowsView.swift */; };
+		ED6B73B957637A7C875A2FC5 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BD0AE19519D0BD833A44FF /* KeychainService.swift */; };
+		FDD1F111A53ACD305C97A278 /* LivePerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34EA9D64FC06323716D18C /* LivePerformance.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3327355F1CF43B9F54F084C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA5C1CFFF1D403F1694ED29D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15BA901012FD152ABD1117BD;
+			remoteInfo = "AFL Fantasy Intelligence";
+		};
+		9F8FA5A1120A0868EFE7F040 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA5C1CFFF1D403F1694ED29D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 15BA901012FD152ABD1117BD;
+			remoteInfo = "AFL Fantasy Intelligence";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		038C3D10175C3FEA01DF0E47 /* TeamsSupportingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsSupportingViews.swift; sourceTree = "<group>"; };
+		041BCC94FEB8977850F2E72C /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
+		067738D80ADE62EEC22A1F3B /* AISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISettingsView.swift; sourceTree = "<group>"; };
+		06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "AFL Fantasy Intelligence UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "AFL Fantasy Intelligence Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6B4F2AC3062A1B5F7761DC /* UserPreferencesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesService.swift; sourceTree = "<group>"; };
+		0F1A6323E926BEE22895B4E0 /* DSComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSComponents.swift; sourceTree = "<group>"; };
+		236D473AD422573931FE21AC /* TeamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsView.swift; sourceTree = "<group>"; };
+		25537BE83EE96013532DE41D /* DSAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSAnimations.swift; sourceTree = "<group>"; };
+		298C9095804075E32B03722E /* PlayersViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersViewModelTests.swift; sourceTree = "<group>"; };
+		2D6CC1172522CD9261137508 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		31BD0AE19519D0BD833A44FF /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		40E4C8EF166B47CA05E25CBE /* Charts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
+		477E78628727DBED7C0205A2 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		4DC63562CFBD0DA5768ED0AE /* LivePerformanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePerformanceService.swift; sourceTree = "<group>"; };
+		57DDA5B17672944F72EEFC68 /* AlertSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSettingsView.swift; sourceTree = "<group>"; };
+		5944658B4E28849F75BDF801 /* TeamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManager.swift; sourceTree = "<group>"; };
+		65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "AFL Fantasy Intelligence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6665607275921442437214CC /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		66D3239AF8A97BC779C2383C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		6708EC12E1667C367AE92341 /* EnhancedFloatingTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedFloatingTabBar.swift; sourceTree = "<group>"; };
+		701D8C59C8DEC2E29664D6E8 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		7A730F18876C405A22C8DAF3 /* AlertsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsViewModel.swift; sourceTree = "<group>"; };
+		7B34EA9D64FC06323716D18C /* LivePerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePerformance.swift; sourceTree = "<group>"; };
+		7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLFantasyIntelligenceApp.swift; sourceTree = "<group>"; };
+		8427101FEDA731881961DAC4 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		86BE877E8A7B6D7E59DD08CC /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		878C8B8D6E147D13F6C9DE2E /* APIStatusChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIStatusChip.swift; sourceTree = "<group>"; };
+		8CED9F9A6E778B03C6D5C43D /* TradeAnalyzerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeAnalyzerView.swift; sourceTree = "<group>"; };
+		8FEBD975F856A7D46F606882 /* PlayerDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewModel.swift; sourceTree = "<group>"; };
+		9034CF408A530EF937BC83CF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		A05B760F9F241BF4B30481AB /* AIRecommendationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIRecommendationDetailView.swift; sourceTree = "<group>"; };
+		A07B0D1C8641E3893F344DA8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		B657363CE52476EB25F80396 /* APIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTests.swift; sourceTree = "<group>"; };
+		B8226681E5103D896EDB7929 /* BarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
+		BAE958757AC8740148675677 /* PlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersView.swift; sourceTree = "<group>"; };
+		BDF7BD0E5329CFCF0063D57F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		C672214400A6C525B7E32C8A /* CashCowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashCowsView.swift; sourceTree = "<group>"; };
+		CB1C70454582516C4FB5D2C4 /* AlertDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDetailView.swift; sourceTree = "<group>"; };
+		D103CD761C767CF6971FE35E /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
+		D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIToolsView.swift; sourceTree = "<group>"; };
+		E057A1925BF502EB59D3A901 /* PlayerDetailComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailComponents.swift; sourceTree = "<group>"; };
+		E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		F0E5623D21820C53AC1BCF15 /* AdvancedFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedFiltersView.swift; sourceTree = "<group>"; };
+		F4537A3AF191CEF2BABDBAA2 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		F7D572F89C5C418A61D8FB5B /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
+		F830ADEA12601E11E6543186 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		043EDF2B31A2DB9C32762EE9 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				31BD0AE19519D0BD833A44FF /* KeychainService.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		083775B7D27F93F16CE6C21C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				477E78628727DBED7C0205A2 /* Alert.swift */,
+				9A514FF6F3F625698CD133CF /* Analytics */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		106A2AB0B2349E6DEBA569DA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4DC63562CFBD0DA5768ED0AE /* LivePerformanceService.swift */,
+				86BE877E8A7B6D7E59DD08CC /* WebSocketManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1275F691D1D305E7C9F6AD73 /* CashCows */ = {
+			isa = PBXGroup;
+			children = (
+				C672214400A6C525B7E32C8A /* CashCowsView.swift */,
+			);
+			path = CashCows;
+			sourceTree = "<group>";
+		};
+		1E732D5BC15D41E7EAEEF25C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F830ADEA12601E11E6543186 /* SnapshotTests.swift */,
+			);
+			name = UI;
+			path = Tests/UI;
+			sourceTree = "<group>";
+		};
+		1E78CBD5C9EB04DA83819F8C /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				6665607275921442437214CC /* AuthenticationService.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		2D15EAFC814D6AFF4682CA5E /* Unit */ = {
+			isa = PBXGroup;
+			children = (
+				B657363CE52476EB25F80396 /* APIServiceTests.swift */,
+				298C9095804075E32B03722E /* PlayersViewModelTests.swift */,
+				6F1129F440F2F7108E79EAF3 /* Mocks */,
+			);
+			name = Unit;
+			path = Tests/Unit;
+			sourceTree = "<group>";
+		};
+		343638768F91966DBEA704AF /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				CB1C70454582516C4FB5D2C4 /* AlertDetailView.swift */,
+				57DDA5B17672944F72EEFC68 /* AlertSettingsView.swift */,
+				F7D572F89C5C418A61D8FB5B /* AlertsView.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
+		3AD74231B29E6FE93DA0AC1F /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7E729FEB08707FD441139FBA /* AFLFantasyIntelligenceApp.swift */,
+				7D2414AFE075C92F6D9BB0A8 /* Core */,
+				C96685EE46268E5FF855D738 /* Features */,
+				083775B7D27F93F16CE6C21C /* Models */,
+				106A2AB0B2349E6DEBA569DA /* Services */,
+				9B5312FD2BA3A6C704A6FBE8 /* Shared */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		3B9057CFE774C9D5DAA214E5 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				D103CD761C767CF6971FE35E /* BarcodeScannerView.swift */,
+				038C3D10175C3FEA01DF0E47 /* TeamsSupportingViews.swift */,
+				236D473AD422573931FE21AC /* TeamsView.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
+		4556C8FB5631E4AE3541AA39 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				40E4C8EF166B47CA05E25CBE /* Charts.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		546CBF4588CCBBC0501C159B /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				9034CF408A530EF937BC83CF /* APIService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		61C8554E2810440545D4D88B /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				A05B760F9F241BF4B30481AB /* AIRecommendationDetailView.swift */,
+				067738D80ADE62EEC22A1F3B /* AISettingsView.swift */,
+				D7D43DE507EE81EB1AAA8179 /* AIToolsView.swift */,
+				8CED9F9A6E778B03C6D5C43D /* TradeAnalyzerView.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		65FDB007F3DF789F4F7DDD5A /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				5944658B4E28849F75BDF801 /* TeamManager.swift */,
+			);
+			path = Team;
+			sourceTree = "<group>";
+		};
+		6A33995318F115470A87960C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */,
+				06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */,
+				65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6ED794C4509F43ACB9DCB9E6 /* Players */ = {
+			isa = PBXGroup;
+			children = (
+				F0E5623D21820C53AC1BCF15 /* AdvancedFiltersView.swift */,
+				E057A1925BF502EB59D3A901 /* PlayerDetailComponents.swift */,
+				8FEBD975F856A7D46F606882 /* PlayerDetailViewModel.swift */,
+				BAE958757AC8740148675677 /* PlayersView.swift */,
+			);
+			path = Players;
+			sourceTree = "<group>";
+		};
+		6F1129F440F2F7108E79EAF3 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				041BCC94FEB8977850F2E72C /* MockURLProtocol.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		7D2414AFE075C92F6D9BB0A8 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A98622B4DB3870B4BBB83E6A /* AI */,
+				981848C8B31417E94D50E88C /* Alerts */,
+				1E78CBD5C9EB04DA83819F8C /* Authentication */,
+				D136004BEB9639F93C71E1D0 /* Camera */,
+				4556C8FB5631E4AE3541AA39 /* Components */,
+				95ADADA44EEEEA81199E0160 /* DesignSystem */,
+				546CBF4588CCBBC0501C159B /* Networking */,
+				E866A38827FF22F97ADD79CF /* Preferences */,
+				043EDF2B31A2DB9C32762EE9 /* Security */,
+				65FDB007F3DF789F4F7DDD5A /* Team */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		95ADADA44EEEEA81199E0160 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				878C8B8D6E147D13F6C9DE2E /* APIStatusChip.swift */,
+				8427101FEDA731881961DAC4 /* DesignSystem.swift */,
+				25537BE83EE96013532DE41D /* DSAnimations.swift */,
+				0F1A6323E926BEE22895B4E0 /* DSComponents.swift */,
+				6708EC12E1667C367AE92341 /* EnhancedFloatingTabBar.swift */,
+		
+				10227A0C98284966ACF610A6 /* EnhancedFloatingTabBar.swift */,	);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		981848C8B31417E94D50E88C /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				701D8C59C8DEC2E29664D6E8 /* AlertManager.swift */,
+				7A730F18876C405A22C8DAF3 /* AlertsViewModel.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
+		999E17AE7B22CCCCD1826EE5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2D6CC1172522CD9261137508 /* MockData.swift */,
+				A07B0D1C8641E3893F344DA8 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9A514FF6F3F625698CD133CF /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				7B34EA9D64FC06323716D18C /* LivePerformance.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
+		9B5312FD2BA3A6C704A6FBE8 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				999E17AE7B22CCCCD1826EE5 /* Models */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A6D1AA4C61F1450BE271F69F = {
+			isa = PBXGroup;
+			children = (
+				3AD74231B29E6FE93DA0AC1F /* Sources */,
+				1E732D5BC15D41E7EAEEF25C /* UI */,
+				2D15EAFC814D6AFF4682CA5E /* Unit */,
+				6A33995318F115470A87960C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A98622B4DB3870B4BBB83E6A /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				F4537A3AF191CEF2BABDBAA2 /* OpenAIService.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		B6B7B371278318CBF354A701 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				BDF7BD0E5329CFCF0063D57F /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		C96685EE46268E5FF855D738 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				61C8554E2810440545D4D88B /* AI */,
+				343638768F91966DBEA704AF /* Alerts */,
+				CC882EDCABA3A12D1A216262 /* Authentication */,
+				1275F691D1D305E7C9F6AD73 /* CashCows */,
+				D9C33B6B4F7729E1F8FDF6C1 /* Dashboard */,
+				6ED794C4509F43ACB9DCB9E6 /* Players */,
+				B6B7B371278318CBF354A701 /* Profile */,
+				3B9057CFE774C9D5DAA214E5 /* Teams */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		CC882EDCABA3A12D1A216262 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				66D3239AF8A97BC779C2383C /* LoginView.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		D136004BEB9639F93C71E1D0 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				B8226681E5103D896EDB7929 /* BarcodeScanner.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		D9C33B6B4F7729E1F8FDF6C1 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				E6CE8F9AF06385A7AE175F90 /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		E866A38827FF22F97ADD79CF /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				0D6B4F2AC3062A1B5F7761DC /* UserPreferencesService.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EDC80A3C9152FC9B9D1500D /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence" */;
+			buildPhases = (
+				B7434DCC4A45DC236AEF4C8A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AFL Fantasy Intelligence";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Intelligence";
+			productReference = 65D996EE987DAA7A001A7E52 /* AFL Fantasy Intelligence.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2F4BBD9B7FF4401C4E89126E /* AFL Fantasy Intelligence UI Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 180FB9326835C8FB748EAF7A /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence UI Tests" */;
+			buildPhases = (
+				39CD5466AFD9EAE8C86B7935 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				98725A37BC42294BE29601B2 /* PBXTargetDependency */,
+			);
+			name = "AFL Fantasy Intelligence UI Tests";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Intelligence UI Tests";
+			productReference = 06914F9E3B2A847C5F7125D1 /* AFL Fantasy Intelligence UI Tests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		80E6EB14F7BD7030F491D52F /* AFL Fantasy Intelligence Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D3FEAEBC97F412E8DB19052E /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence Tests" */;
+			buildPhases = (
+				F46CC99C5C58FAE6844234D3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C374BE1D3AA4E9759E2014C3 /* PBXTargetDependency */,
+			);
+			name = "AFL Fantasy Intelligence Tests";
+			packageProductDependencies = (
+			);
+			productName = "AFL Fantasy Intelligence Tests";
+			productReference = 0B4A841106094571047072B1 /* AFL Fantasy Intelligence Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CA5C1CFFF1D403F1694ED29D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					15BA901012FD152ABD1117BD = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					2F4BBD9B7FF4401C4E89126E = {
+						TestTargetID = 15BA901012FD152ABD1117BD;
+					};
+				};
+			};
+			buildConfigurationList = 8874013FDA0295B86BBDDA52 /* Build configuration list for PBXProject "AFL Fantasy Intelligence" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A6D1AA4C61F1450BE271F69F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DCD801BB56547C75A72EF2F2 /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */,
+				80E6EB14F7BD7030F491D52F /* AFL Fantasy Intelligence Tests */,
+				2F4BBD9B7FF4401C4E89126E /* AFL Fantasy Intelligence UI Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		39CD5466AFD9EAE8C86B7935 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F771D5CC306177E2BF554F0 /* SnapshotTests.swift in Sources */,
+		
+				A59C33549B4244E38B094AF7 /* EnhancedFloatingTabBar.swift in Sources */,	);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7434DCC4A45DC236AEF4C8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D05943FF1566145D9F30542 /* AFLFantasyIntelligenceApp.swift in Sources */,
+				BD1C14C6FE54BD070D355589 /* AIRecommendationDetailView.swift in Sources */,
+				5BE56AED470B0EAE711722A4 /* AISettingsView.swift in Sources */,
+				7407D63BFFB41860C4423FF4 /* AIToolsView.swift in Sources */,
+				C6284EE130A4C72A1A5E2CD7 /* APIService.swift in Sources */,
+				58142B5D65D861CF54B52EAA /* APIStatusChip.swift in Sources */,
+				5BB9CFACD5CAA71ED754CD21 /* AdvancedFiltersView.swift in Sources */,
+				72DB98F6FDFE83F7FA7E79C7 /* Alert.swift in Sources */,
+				9CE0A3F4FDFB1074645874F7 /* AlertDetailView.swift in Sources */,
+				8E99CB2EEE71A8712DEC0ED1 /* AlertManager.swift in Sources */,
+				405F07B1145FA42B1C2D249D /* AlertSettingsView.swift in Sources */,
+				0BAC050B73E120133992831C /* AlertsView.swift in Sources */,
+				8F8E3EC313DFE29748B78F85 /* AlertsViewModel.swift in Sources */,
+				50E091DD878F16DA678B7598 /* AuthenticationService.swift in Sources */,
+				846A035EF6EFF92106DEEEA9 /* BarcodeScanner.swift in Sources */,
+				0B3243BF7B9E9020D09B49DA /* BarcodeScannerView.swift in Sources */,
+				DA79FD5A71A21695B06BEA32 /* CashCowsView.swift in Sources */,
+				A908D4FBAE82FFDA44C2C5DA /* Charts.swift in Sources */,
+				A7ACD7A177EFC0BDC472FA72 /* DSAnimations.swift in Sources */,
+				8274029165B3093F27F97BD4 /* DSComponents.swift in Sources */,
+				8B898A400F57B4744539F1B2 /* DashboardView.swift in Sources */,
+				141E24BB83F7033DFD756C3B /* DesignSystem.swift in Sources */,
+				7AA54DED2FD7239844DA6177 /* EnhancedFloatingTabBar.swift in Sources */,
+				ED6B73B957637A7C875A2FC5 /* KeychainService.swift in Sources */,
+				FDD1F111A53ACD305C97A278 /* LivePerformance.swift in Sources */,
+				D1D617DDC470CEB94D92DB87 /* LivePerformanceService.swift in Sources */,
+				0FB548BF9771DF8CE953FF2D /* LoginView.swift in Sources */,
+				D663192DD93B13E1E22877B0 /* MockData.swift in Sources */,
+				4741A2DDB22C1DE923A2A92B /* Models.swift in Sources */,
+				8DAD7A60C4139279F49CE221 /* OpenAIService.swift in Sources */,
+				7772B653C5892D86684A94B4 /* PlayerDetailComponents.swift in Sources */,
+				B6F57EE64CB1BD1B99DF7AFF /* PlayerDetailViewModel.swift in Sources */,
+				139609CE4400F0267E21DCFC /* PlayersView.swift in Sources */,
+				43B37DD9D1BAF3369A75FBB7 /* ProfileView.swift in Sources */,
+				8BB8CFAC755DF7DD45580405 /* TeamManager.swift in Sources */,
+				D71A496ADEDE0B23F42BD309 /* TeamsSupportingViews.swift in Sources */,
+				A0FA3442469F5881639BEAA4 /* TeamsView.swift in Sources */,
+				7F7822CA753A7CC55A6483F9 /* TradeAnalyzerView.swift in Sources */,
+				978180E8A9552062C6EA9D25 /* UserPreferencesService.swift in Sources */,
+				6F07207D4004BA58DE0DBEEC /* WebSocketManager.swift in Sources */,
+		
+				A59C33549B4244E38B094AF7 /* EnhancedFloatingTabBar.swift in Sources */,	);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F46CC99C5C58FAE6844234D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8572E82F850188EFF0667CDA /* APIServiceTests.swift in Sources */,
+				D8C2376842BB91DF1707B3E4 /* MockURLProtocol.swift in Sources */,
+				A534142CAB2BF337E09F6E07 /* PlayersViewModelTests.swift in Sources */,
+		
+				A59C33549B4244E38B094AF7 /* EnhancedFloatingTabBar.swift in Sources */,	);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		98725A37BC42294BE29601B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */;
+			targetProxy = 9F8FA5A1120A0868EFE7F040 /* PBXContainerItemProxy */;
+		};
+		C374BE1D3AA4E9759E2014C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 15BA901012FD152ABD1117BD /* AFL Fantasy Intelligence */;
+			targetProxy = 3327355F1CF43B9F54F084C0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		13D89DD669B6C1AAFFBFB94A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "AFL Fantasy Intelligence";
+			};
+			name = Release;
+		};
+		2D9C3E2B661583815EE483D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		3F47C5B6E225A8779F50FB19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aflsi.fantasy-intelligence";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		67CD0BCDD4285CEDD847C71F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFL Fantasy Intelligence.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFL Fantasy Intelligence";
+			};
+			name = Debug;
+		};
+		69E2F8BF5084FD7C2CC6DA3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "AFL Fantasy Intelligence";
+			};
+			name = Debug;
+		};
+		A5EAEB051EB2D26178BC9428 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_TESTABILITY = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aflsi.fantasy-intelligence";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B67A3674E2517982C1133940 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aflsi.AFLFantasyIntelligenceTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFL Fantasy Intelligence.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFL Fantasy Intelligence";
+			};
+			name = Release;
+		};
+		BD77908B9F8FF8470AB13947 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		180FB9326835C8FB748EAF7A /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence UI Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69E2F8BF5084FD7C2CC6DA3E /* Debug */,
+				13D89DD669B6C1AAFFBFB94A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6EDC80A3C9152FC9B9D1500D /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F47C5B6E225A8779F50FB19 /* Debug */,
+				A5EAEB051EB2D26178BC9428 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8874013FDA0295B86BBDDA52 /* Build configuration list for PBXProject "AFL Fantasy Intelligence" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D9C3E2B661583815EE483D5 /* Debug */,
+				BD77908B9F8FF8470AB13947 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D3FEAEBC97F412E8DB19052E /* Build configuration list for PBXNativeTarget "AFL Fantasy Intelligence Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67CD0BCDD4285CEDD847C71F /* Debug */,
+				B67A3674E2517982C1133940 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DCD801BB56547C75A72EF2F2 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+	};
+	rootObject = CA5C1CFFF1D403F1694ED29D /* Project object */;
+}

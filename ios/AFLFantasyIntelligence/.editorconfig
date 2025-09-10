@@ -1,0 +1,45 @@
+# AFL Fantasy Intelligence iOS App - EditorConfig
+# Ensures consistent editor settings across different editors and IDEs
+
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+[*.{swift,kt,kts,java,js,ts,tsx,css,html}]
+indent_style = space
+indent_size = 2
+max_line_length = 100
+
+[*.swift]
+indent_size = 4
+max_line_length = 120
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.{md,markdown}]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+
+[*.{pbxproj,xcconfig}]
+indent_style = tab
+
+[project.yml]
+indent_size = 2
+
+root = true
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+[*.swift]
+indent_style = space
+indent_size = 4
+max_line_length = 120

@@ -1,141 +1,244 @@
-# 📁 AFL Fantasy iOS Project Structure
+# AFL Fantasy iOS - Project Structure
 
-## Overview
+## 🏗️ Project Organization (Updated September 2025)
 
-The AFL Fantasy iOS app follows a modular architecture with clear separation of concerns. This document outlines the complete project structure after the Core integration improvements completed on September 6, 2025.
+This project has been reorganized for better maintainability and clearer separation of concerns. The primary focus is on the **AFL Fantasy Intelligence** iOS app with supporting backend services.
 
-## 🏗️ Directory Structure
+## 📂 Directory Structure
 
 ```
 afl_fantasy_ios/
-├── ios/
-│   └── AFLFantasy/           # Main iOS app target
-│       ├── AFLFantasyApp.swift                    # App entry point with Core services
-│       ├── ContentView.swift                      # Main UI navigation
-│       │
-│       ├── Core/                                  # Original Core files (not in target)
-│       │   ├── DesignSystem.swift                 # Full design system
-│       │   ├── ReachabilityService.swift          # Network monitoring
-│       │   ├── BackgroundSyncService.swift        # Background sync
-│       │   ├── NetworkClient.swift               # API client
-│       │   ├── CoreDataManager.swift             # Data persistence
-│       │   └── ... (other core services)
-│       │
-│       ├── DesignSystemCore.swift                 # ✅ Integrated design system
-│       ├── ReachabilityServiceCore.swift          # ✅ Integrated reachability
-│       ├── BackgroundSyncServiceCore.swift        # ✅ Integrated background sync
-│       ├── EnhancedViewsCore.swift                # ✅ Enhanced UI components
-│       ├── ConnectionStatusBarCore.swift          # ✅ Status bar component
-│       │
-│       ├── Views/
-│       │   ├── Enhanced/                          # Advanced view implementations
-│       │   │   ├── EnhancedSettingsView.swift    # Full settings with AI controls
-│       │   │   ├── AISettingsView.swift          # AI-specific settings
-│       │   │   ├── DataManagementView.swift      # Data export/import
-│       │   │   └── NotificationSettingsView.swift # Alert preferences
-│       │   └── ... (other views)
-│       │
-│       ├── Models/                                # Data models and extensions
-│       └── ... (other app files)
+├── ios/                          # 🍏 iOS Applications
+│   ├── AFLFantasyIntelligence/   # Primary iOS app (SwiftUI)
+│   │   ├── AFL Fantasy Intelligence.xcodeproj
+│   │   ├── Sources/
+│   │   ├── Resources/
+│   │   └── Scripts/
+│   ├── Sources/                  # Alternative iOS app structure
+│   └── DerivedData/             # Xcode build artifacts
 │
-├── docs/                     # Documentation
-├── scripts/                  # Build and utility scripts
-└── README.md                 # Project overview
+├── server-python/               # 🐍 Python Backend Services
+│   ├── api_server.py           # Main Flask API server with WebSocket
+│   ├── api_server_unified.py   # Alternative unified server
+│   ├── api_server_ws.py        # WebSocket-focused server
+│   ├── requirements.txt        # Python dependencies
+│   ├── scrapers/               # Data scraping modules
+│   ├── api/                    # API route modules
+│   └── utils/                  # Python utilities
+│
+├── server-node/                # 🟢 Node.js/TypeScript Services
+│   ├── server/                 # Main Node backend
+│   └── backend/                # Additional backend services
+│
+├── web-client/                 # 🌐 Web Frontend
+│   ├── client/                 # Main React/Vue web client
+│   ├── admin-dashboard/        # Admin dashboard
+│   ├── dashboards/            # Additional dashboards
+│   └── public/                # Static web assets
+│
+├── data/                       # 📊 Data & Assets
+│   ├── dfs_player_summary/    # Player Excel data files
+│   ├── database/              # Database schemas & scripts
+│   ├── assets/                # Static assets
+│   ├── player_data.json       # Player data exports
+│   ├── user_team.json        # User team configurations
+│   └── dvp_matrix.json       # DvP (Defense vs Position) matrix
+│
+├── infra/                      # 🏭 Infrastructure & DevOps
+│   ├── docker-compose*.yml    # Docker orchestration
+│   ├── Dockerfile*            # Container definitions
+│   ├── k8s/                   # Kubernetes manifests
+│   ├── helm/                  # Helm charts
+│   ├── terraform/             # Infrastructure as Code
+│   ├── monitoring/            # Monitoring configs
+│   └── nginx.conf             # Reverse proxy config
+│
+├── scripts/                    # 🛠️ Development Scripts
+│   ├── advanced_startup.sh    # Advanced setup
+│   ├── build.sh              # Build scripts
+│   ├── deploy.sh             # Deployment
+│   ├── quality.sh            # Code quality checks
+│   ├── setup/                # Setup utilities
+│   └── utilities/            # Data processing scripts
+│
+├── docs/                       # 📚 Documentation
+│   ├── README.md              # Main documentation
+│   ├── API_DOCUMENTATION.md   # API docs
+│   ├── ios/                   # iOS-specific docs
+│   ├── screenshots/           # App screenshots
+│   └── archive/               # Archived docs
+│
+├── tests/                      # 🧪 Test Suites
+│   ├── AFLFantasyAppTests/    # iOS app tests
+│   ├── integration/           # Integration tests
+│   └── fixtures/              # Test data
+│
+├── archive/                    # 📦 Archived/Legacy Code
+│   ├── archived_apps/         # Legacy app versions
+│   ├── backups/               # Project backups
+│   ├── .cleanup_backup/       # Cleanup backups
+│   └── .transformation_backup/ # Migration backups
+│
+├── .github/                    # ⚙️ GitHub Configuration
+│   └── workflows/             # CI/CD workflows
+│
+├── Package.swift              # 🍏 Swift Package Manager (root level)
+├── .swiftformat              # Swift formatting config
+├── .swiftlint.yml            # Swift linting config
+├── .editorconfig             # Editor configuration
+├── package.json              # Node.js dependencies
+├── pnpm-lock.yaml           # Node.js lockfile
+├── tsconfig.json            # TypeScript configuration
+├── vite.config.ts           # Vite configuration
+├── tailwind.config.ts       # Tailwind CSS config
+└── README.md                # Project overview
 ```
 
-## 🔄 Core Integration Status
+## 🚀 Quick Start Commands
 
-### ✅ **Successfully Integrated**
-- **DesignSystemCore.swift**: Complete design system with spacing, typography, colors, shadows, and view extensions
-- **ReachabilityServiceCore.swift**: Network monitoring with offline banner and connectivity status
-- **BackgroundSyncServiceCore.swift**: Background sync with task scheduling and retry logic
-- **EnhancedViewsCore.swift**: Enhanced settings view with AI controls and alert management
-- **ConnectionStatusBarCore.swift**: Network status indicator component
+### Updated Commands for Reorganized Structure
 
-### 🔄 **Integration Method**
-Since the Core directory files weren't included in the Xcode project target, we created integrated versions:
-
-1. **Core files copied into main target**: Each Core service was copied and integrated as `*Core.swift` files
-2. **Full functionality preserved**: All original features and implementations maintained
-3. **View modifiers working**: `.reachabilityStatus()` and `.backgroundSync()` now functional
-4. **Enhanced UI active**: Using `SimpleEnhancedSettingsView` instead of basic settings
-
-### 📝 **TODO: Future Improvements**
-- **Proper Xcode integration**: Add original Core files to Xcode project target
-- **Remove integrated copies**: Once Core files are in target, remove `*Core.swift` versions
-- **Module structure**: Consider creating a separate Core framework/package
-
-## 🎯 Key Components
-
-### 1. App Entry Point (`AFLFantasyApp.swift`)
-- Uses full Core service implementations via integrated files
-- Background sync and reachability monitoring enabled
-- Notification system with demo alerts
-
-### 2. Design System (`DesignSystemCore.swift`)
-- **Spacing**: 8-point grid system (4, 8, 12, 16, 20, 24, 32, 40)
-- **Typography**: Complete type scale with view extensions
-- **Colors**: AFL-themed palette with semantic colors
-- **Motion**: Reduced-motion aware animations
-- **Shadows & Radius**: Consistent elevation system
-
-### 3. Network Services
-- **ReachabilityServiceCore**: Real-time network monitoring with offline banner
-- **BackgroundSyncServiceCore**: Automated data synchronization with background tasks
-- **ConnectionStatusBarCore**: Visual network status indicator
-
-### 4. Enhanced Views
-- **SimpleEnhancedSettingsView**: Feature-rich settings with AI controls
-- **AlertService**: Manages player alerts and notifications
-- **SettingsRow**: Reusable settings row component
-
-## 🛠️ Development Workflow
-
-### Building the App
+#### Start Python API Server
 ```bash
-cd ios/
-xcodebuild -scheme AFLFantasy -configuration Debug -sdk iphonesimulator build
+# Old way:
+cd /Users/tiaastor/workspace/10_projects/afl_fantasy_ios
+python api_server.py
+
+# New way:
+./start-api-server.sh
+# or manually:
+cd server-python && python api_server.py
 ```
 
-### Running Tests
+#### Build iOS App
 ```bash
-xcodebuild -scheme AFLFantasy -configuration Debug -sdk iphonesimulator test
+# Old way:
+xcodebuild -project "AFL Fantasy Intelligence.xcodeproj" -scheme "AFL Fantasy Intelligence" -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+
+# New way:
+./build-ios-app.sh
+# or manually:
+cd ios/AFLFantasyIntelligence && xcodebuild -project "AFL Fantasy Intelligence.xcodeproj" -scheme "AFL Fantasy Intelligence" -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
 ```
 
-### Code Quality
-- SwiftFormat and SwiftLint configured (see `.swiftformat` and `.swiftlint.yml`)
-- Performance monitoring with background sync statistics
-- Accessibility support with VoiceOver labels and reduce motion
+## 🎯 Primary Applications
 
-## 🔧 Build Status
+### 1. AFL Fantasy Intelligence (iOS)
+- **Location**: `ios/AFLFantasyIntelligence/`
+- **Technology**: SwiftUI, iOS 16+
+- **Purpose**: Primary mobile app for AFL Fantasy analysis
+- **Features**: Live scores, player analysis, team management
 
-✅ **Current Status**: Build successful with full Core integration  
-⚠️ **Minor Warnings**: Unused variables in notification setup (non-blocking)  
-🚀 **Performance**: All Core services functional with real-time monitoring
+### 2. Python API Server
+- **Location**: `server-python/api_server.py`
+- **Technology**: Flask, WebSocket, Pandas
+- **Purpose**: Backend API serving player data and live updates
+- **Features**: RESTful API, WebSocket live updates, data caching
 
-## 📋 Team Guidelines
+### 3. Web Dashboard
+- **Location**: `web-client/client/`
+- **Technology**: React/Vue, TypeScript
+- **Purpose**: Web-based dashboard for analysis
+- **Features**: Player stats, team builder, analytics
 
-### When adding new Core functionality:
-1. Create the service in the appropriate `*Core.swift` file
-2. Follow the existing patterns for view modifiers and service integration
-3. Ensure proper error handling and logging
-4. Test thoroughly on device and simulator
+## 🔧 Development Workflow
 
-### When modifying existing views:
-1. Use the integrated `DesignSystemCore` for consistent styling
-2. Leverage `typography()`, `padding()`, and other view extensions
-3. Follow the established spacing and color patterns
-4. Test with dynamic type and accessibility features
+### Prerequisites
+- Xcode 15+ (for iOS development)
+- Python 3.9+ (for backend)
+- Node.js 18+ (for web client)
+- Docker (for containerized deployment)
 
-## 🎯 Next Steps
+### Environment Setup
+```bash
+# Clone and setup
+git clone <repository>
+cd afl_fantasy_ios
 
-1. **Core File Integration**: Add original Core directory files to Xcode target
-2. **Cleanup**: Remove integrated `*Core.swift` files once originals are in target  
-3. **Testing**: Add comprehensive unit tests for Core services
-4. **Documentation**: Add inline documentation for all public APIs
+# iOS Development
+cd ios/AFLFantasyIntelligence
+open "AFL Fantasy Intelligence.xcodeproj"
+
+# Python Backend
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+cd server-python
+pip install -r requirements.txt
+
+# Web Client
+cd web-client/client
+npm install  # or pnpm install
+```
+
+## 📊 Data Flow
+
+1. **Data Sources**: Web scrapers collect AFL player data
+2. **Storage**: Data stored in Excel files (`data/dfs_player_summary/`)
+3. **Processing**: Python backend processes and serves data via API
+4. **Clients**: iOS app and web dashboard consume API data
+5. **Real-time**: WebSocket updates provide live score tracking
+
+## 🚢 Deployment
+
+### Development
+```bash
+./start-api-server.sh  # Start Python backend
+cd web-client/client && npm run dev  # Start web client
+# Open iOS app in Xcode
+```
+
+### Production
+```bash
+cd infra
+docker-compose up -d  # Start all services
+```
+
+## 📝 Key Configuration Files
+
+- **iOS**: `ios/AFLFantasyIntelligence/AFL Fantasy Intelligence.xcodeproj`
+- **Python Backend**: `server-python/requirements.txt`
+- **Web Client**: `web-client/client/package.json`
+- **Infrastructure**: `infra/docker-compose.yml`
+- **CI/CD**: `.github/workflows/`
+
+## 🔍 Migration Notes
+
+This reorganization maintains all functionality while improving:
+- **Clarity**: Clear separation between iOS, backend, web, and infrastructure
+- **Maintainability**: Related files grouped together
+- **Scalability**: Room for additional services and clients
+- **Development Experience**: Clearer entry points and scripts
+
+### Breaking Changes
+- **API Server**: Now located at `server-python/api_server.py`
+- **iOS App**: Now located at `ios/AFLFantasyIntelligence/`
+- **Data Files**: Now located at `data/`
+- **Docker Configs**: Now located at `infra/`
+
+### Helper Scripts
+- `start-api-server.sh`: Starts Python backend from any directory
+- `build-ios-app.sh`: Builds iOS app from any directory
+- Scripts automatically handle path changes and virtual environments
+
+## 🤝 Contributing
+
+When adding new features:
+1. **iOS features**: Add to `ios/AFLFantasyIntelligence/`
+2. **API endpoints**: Add to `server-python/api/`
+3. **Web features**: Add to `web-client/client/`
+4. **Data processing**: Add to `server-python/scrapers/` or `scripts/utilities/`
+5. **Infrastructure**: Add to `infra/`
+6. **Documentation**: Update relevant docs in `docs/`
+
+## 📞 Support
+
+For questions about the new structure:
+1. Check helper scripts: `start-api-server.sh`, `build-ios-app.sh`
+2. Review documentation in `docs/`
+3. Check archived structure in `archive/` for reference
 
 ---
 
-**Last Updated**: September 6, 2025  
-**Integration Status**: ✅ Complete and functional  
-**Build Status**: ✅ Passing with minor warnings
+**Last Updated**: September 10, 2025  
+**Reorganization Status**: ✅ Complete  
+**Primary App**: AFL Fantasy Intelligence iOS

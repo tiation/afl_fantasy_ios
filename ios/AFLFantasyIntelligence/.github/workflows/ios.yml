@@ -1,0 +1,76 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    name: Build and Test
+    runs-on: macos-15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.0'
+      
+      - name: Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-dd-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-dd-
+      
+      - name: Install dependencies
+        run: |
+          brew install swiftformat swiftlint xcpretty
+      
+      - name: SwiftFormat Check
+        run: |
+          swiftformat --lint .
+      
+      - name: SwiftLint
+        run: |
+          swiftlint
+      
+      - name: Build for Testing
+        run: |
+          xcodebuild -scheme "AFL Fantasy Intelligence" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -configuration Debug \
+            build-for-testing | xcpretty
+      
+      - name: Run Unit Tests
+        run: |
+          xcodebuild -scheme "AFL Fantasy Intelligence" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -enableCodeCoverage YES \
+            test | xcpretty
+      
+      - name: Coverage Gate
+        run: |
+          bash Scripts/coverage_gate.sh 80
+      
+      - name: Build Release
+        run: |
+          xcodebuild -scheme "AFL Fantasy Intelligence" \
+            -configuration Release \
+            build | xcpretty
+      
+      - name: Upload Coverage Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            ~/Library/Developer/Xcode/DerivedData/**/Coverage.profdata
+            ~/Library/Developer/Xcode/DerivedData/**/coverage.txt

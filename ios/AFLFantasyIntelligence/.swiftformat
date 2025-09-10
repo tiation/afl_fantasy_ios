@@ -1,0 +1,73 @@
+# AFL Fantasy Intelligence iOS App - SwiftFormat Configuration
+# Enterprise-grade formatting rules following HIG guidelines
+
+--indent 4
+--maxwidth 120
+--wraparguments before-first
+--wrapcollections before-first
+--stripunusedargs closure-only
+--self remove
+--patternlet hoist
+--commas inline
+--trimwhitespace always
+--allman false
+--header ignore
+
+# Additional rules for consistency
+--redundantself remove
+--redundantlet remove
+--redundantget remove
+--redundantinit remove
+--redundantbreak remove
+--redundantbackticks remove
+--redundantextensions always
+--redundantreturn remove
+--redundanttype inferred
+--redundantvoidreturntype remove
+--redundantclosure remove
+--redundantinternal remove
+--redundantrawvalues true
+
+# Wrapping and spacing
+--funcattributes preserve
+--typeattributes preserve
+--varattributes preserve
+--storedvarattribute same-line
+--nospaceoperators ...,..<
+--operatorfunc spaced
+--ranges spaced
+--typedelimiter space
+--trimwhitespace always
+
+# Import organization
+--importgrouping testable-bottom
+
+# Control flow
+--elseposition same-line
+--guardelse next-line
+
+# Closures
+--closingparen balanced
+--trailingclosures
+
+# Numbers
+--decimalgrouping 3,6
+--binarygrouping 4,8
+--octalgrouping 4,8
+--hexgrouping 4,8
+
+# Other formatting
+--semicolons inline
+--yodaswap always
+
+--indent 4
+--maxwidth 120
+--wraparguments before-first
+--wrapcollections before-first
+--stripunusedargs closure-only
+--self remove
+--patternlet hoist
+--commas inline
+--trimwhitespace always
+--allman false
+--header ignore

@@ -3,14 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "AFLFantasy",
+    name: "AFLFantasyIntelligence",
     platforms: [
-        .iOS(.v16)
+        .iOS(.v16),
+        .macOS(.v12)
     ],
     products: [
-        .executable(
-            name: "AFLFantasy",
-            targets: ["AFLFantasy"]
+        .library(
+            name: "AFLFantasyIntelligence",
+            targets: ["AFLFantasyIntelligence"]
         )
     ],
     dependencies: [
@@ -18,15 +19,10 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.0.0")
     ],
     targets: [
-        .executableTarget(
-            name: "AFLFantasy",
-            dependencies: [],
-            path: "Sources"
-        ),
-        .executableTarget(
+        .target(
             name: "AFLFantasyIntelligence",
             dependencies: [],
-            path: "AFLFantasyIntelligence/Sources"
+            path: "ios/AFLFantasyIntelligence/Sources"
         ),
         .testTarget(
             name: "AFLFantasyIntelligenceTests",
@@ -34,7 +30,7 @@ let package = Package(
                 "AFLFantasyIntelligence",
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
             ],
-            path: "AFLFantasyIntelligence/Tests"
+            path: "ios/AFLFantasyIntelligence/Tests"
         )
     ]
 )

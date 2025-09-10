@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-09-10T22:46:46.358812",
+  "tests": {
+    "Player Index": "PASSED",
+    "Scraper Import": "PASSED",
+    "Data Directory": "PASSED",
+    "Scraper Dry Run": "FAILED",
+    "Performance Metrics": "PASSED"
+  },
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1,
+    "success_rate": 80.0
+  }
+}

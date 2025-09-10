@@ -1,0 +1,41 @@
+Here are common AFL Fantasy player IDs for DFS Australia scraping:
+
+Top Players:
+- max-gawn (Melbourne, RUC)
+- marcus-bontempelli (Western Bulldogs, MID)
+- lachie-neale (Brisbane, MID)
+- christian-petracca (Melbourne, MID)
+- touk-miller (Gold Coast, MID)
+- josh-dunkley (Brisbane, MID)
+- harry-sheezel (North Melbourne, DEF)
+- zak-butters (Port Adelaide, MID)
+- nick-daicos (Collingwood, MID)
+- errol-gulden (Sydney, MID)
+
+Premium Defenders:
+- jake-lloyd (Sydney, DEF)
+- jordan-dawson (Adelaide, DEF)
+- jack-sinclair (St Kilda, DEF)
+- isaac-cumming (GWS, DEF)
+- bailey-dale (Western Bulldogs, DEF)
+
+Premium Forwards:
+- jesse-hogan (GWS, FWD)
+- charlie-curnow (Carlton, FWD)
+- jeremy-cameron (Geelong, FWD)
+- taylor-walker (Adelaide, FWD)
+- tom-lynch (Richmond, FWD)
+
+Premium Rucks:
+- brodie-grundy (Melbourne, RUC)
+- oscar-mcinerney (Brisbane, RUC)
+- jarrod-witts (Gold Coast, RUC)
+- rowan-marshall (St Kilda, RUC)
+
+The URL format is typically:
+https://dfsaustralia.com/afl/players/{player-id}/
+
+Would you like me to:
+1. Create a complete list of all 600+ player IDs?
+2. Run the scraper with specific players you're interested in?
+3. Focus on getting updated team data without the full scraper?

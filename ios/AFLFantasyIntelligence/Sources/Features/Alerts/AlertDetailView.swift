@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AlertDetailView: View {
-    let alert: Alert
+    let alert: AlertNotification
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -127,29 +127,4 @@ extension AlertPriority {
     }
 }
 
-extension Alert {
-    var isHighPriority: Bool {
-        return type.priority == .critical || type.priority == .high
-    }
-    
-    var title: String {
-        switch type {
-        case .priceChange:
-            return "Price Change Alert"
-        case .injury:
-            return "Injury Update"
-        case .teamSelection:
-            return "Team Selection"
-        case .breakeven:
-            return "Breakeven Alert"
-        case .trade:
-            return "Trade Recommendation"
-        case .captain:
-            return "Captain Recommendation"
-        }
-    }
-    
-    var priority: AlertPriority {
-        return type.priority
-    }
-}
+// Alert extension methods moved to Models/Alert.swift to avoid conflicts

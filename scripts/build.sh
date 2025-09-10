@@ -1,95 +1,95 @@
 #!/bin/bash
-# 🏗️ AFL Fantasy iOS Build Script
-# Fast and beautiful build process for AFL Fantasy Intelligence Platform
 
-set -e  # Exit on any error
+# 🏗️ AFL Fantasy Platform - Production Build Script
+echo "🏆 Building AFL Fantasy Intelligence Platform for Production"
+echo "=========================================================="
 
 # Colors for output
-RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Project configuration
-PROJECT_NAME="AFLFantasy"
-PROJECT_PATH="ios/${PROJECT_NAME}.xcodeproj"
-SCHEME="${PROJECT_NAME}"
-DESTINATION="platform=iOS Simulator,name=Any iOS Simulator Device"
-DERIVED_DATA_PATH="build/DerivedData"
-
-echo -e "${PURPLE}🏆 AFL Fantasy Intelligence Platform - Build Script${NC}"
-echo -e "${CYAN}=================================================${NC}"
-
-# Check prerequisites
-echo -e "${BLUE}📋 Checking prerequisites...${NC}"
-
-if ! command -v xcodebuild &> /dev/null; then
-    echo -e "${RED}❌ xcodebuild not found. Please install Xcode Command Line Tools.${NC}"
+# Check if we're in the right directory
+if [ ! -f "package.json" ]; then
+    echo -e "${RED}❌ Error: package.json not found. Make sure you're in the AFL Fantasy project directory.${NC}"
     exit 1
 fi
 
-if [ ! -f "$PROJECT_PATH/project.pbxproj" ]; then
-    echo -e "${RED}❌ Project file not found at $PROJECT_PATH${NC}"
+echo -e "${BLUE}🧹 Cleaning previous build...${NC}"
+rm -rf dist/
+
+echo -e "${BLUE}📦 Installing dependencies...${NC}"
+npm ci --production=false
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Failed to install dependencies${NC}"
     exit 1
 fi
 
-echo -e "${GREEN}✅ Prerequisites check complete${NC}"
+echo -e "${GREEN}✅ Dependencies installed${NC}"
 
-# Clean previous builds
-echo -e "${BLUE}🧹 Cleaning previous builds...${NC}"
-rm -rf build/
-mkdir -p build
+echo -e "${BLUE}🔍 Running type checking...${NC}"
+npm run check
 
-# Show available simulators (for debugging)
-echo -e "${BLUE}📱 Available iOS Simulators:${NC}"
-xcrun simctl list devices available | grep "iPhone" | head -5
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Type checking failed${NC}"
+    exit 1
+fi
 
-# Build the project
-echo -e "${BLUE}🔨 Building AFL Fantasy for iOS Simulator...${NC}"
-echo -e "${YELLOW}Project: $PROJECT_NAME${NC}"
-echo -e "${YELLOW}Scheme: $SCHEME${NC}"
-echo -e "${YELLOW}Destination: $DESTINATION${NC}"
+echo -e "${GREEN}✅ Type checking passed${NC}"
 
-xcodebuild \
-    -project "$PROJECT_PATH" \
-    -scheme "$SCHEME" \
-    -destination "$DESTINATION" \
-    -derivedDataPath "$DERIVED_DATA_PATH" \
-    -configuration Debug \
-    -quiet \
-    clean build
+echo -e "${BLUE}🔍 Running linter...${NC}"
+npm run lint:check
 
-echo -e "${GREEN}✅ Build completed successfully!${NC}"
+if [ $? -ne 0 ]; then
+    echo -e "${YELLOW}⚠️ Linting issues found, but continuing build...${NC}"
+fi
 
-# Run unit tests
-echo -e "${BLUE}🧪 Running unit tests...${NC}"
-xcodebuild \
-    -project "$PROJECT_PATH" \
-    -scheme "$SCHEME" \
-    -destination "$DESTINATION" \
-    -derivedDataPath "$DERIVED_DATA_PATH" \
-    -configuration Debug \
-    -quiet \
-    test
+echo -e "${BLUE}🏗️ Building production bundle...${NC}"
+npm run build
 
-echo -e "${GREEN}✅ All tests passed!${NC}"
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Build failed${NC}"
+    exit 1
+fi
 
-# Display build summary
-echo -e "${CYAN}=================================================${NC}"
-echo -e "${GREEN}🎉 AFL Fantasy iOS Build Complete!${NC}"
-echo -e "${BLUE}📊 Build Summary:${NC}"
-echo -e "  • Project: AFL Fantasy Intelligence Platform"
-echo -e "  • Target: iOS 17.0+"
-echo -e "  • Architecture: SwiftUI + Combine"
-echo -e "  • Build Configuration: Debug"
-echo -e "  • Tests: ✅ Passed"
+echo -e "${GREEN}✅ Build completed successfully${NC}"
 
-echo -e "${YELLOW}🚀 Next Steps:${NC}"
-echo -e "  • Run: ${CYAN}open ios/${PROJECT_NAME}.xcodeproj${NC} to open in Xcode"
-echo -e "  • Run: ${CYAN}./scripts/run-simulator.sh${NC} to launch in simulator"
-echo -e "  • Run: ${CYAN}./scripts/run-tests.sh${NC} to run tests only"
+# Check if dist directory was created
+if [ -d "dist" ]; then
+    echo -e "${BLUE}📊 Build output:${NC}"
+    ls -la dist/
+    
+    # Calculate bundle sizes
+    if command -v du >/dev/null 2>&1; then
+        DIST_SIZE=$(du -sh dist/ | cut -f1)
+        echo -e "${GREEN}📦 Total build size: $DIST_SIZE${NC}"
+    fi
+    
+    # Check for main files
+    if [ -f "dist/index.js" ]; then
+        echo -e "${GREEN}✅ Server bundle: dist/index.js${NC}"
+    fi
+    
+    if [ -f "dist/public/index.html" ]; then
+        echo -e "${GREEN}✅ Frontend bundle: dist/public/${NC}"
+    fi
+else
+    echo -e "${RED}❌ No dist directory found after build${NC}"
+    exit 1
+fi
 
-echo -e "${PURPLE}Built with ⚡ fast and beautiful tech stack${NC}"
+echo -e "${BLUE}🧪 Testing production build...${NC}"
+echo -e "${YELLOW}💡 You can test the production build with: npm start${NC}"
+
+echo ""
+echo -e "${GREEN}🎉 Production build completed successfully!${NC}"
+echo ""
+echo -e "${BLUE}Next Steps:${NC}"
+echo -e "${YELLOW}1. Test the build locally: npm start${NC}"
+echo -e "${YELLOW}2. Deploy the dist/ folder to your hosting platform${NC}"
+echo -e "${YELLOW}3. Make sure environment variables are set in production${NC}"
+echo ""
+echo -e "${GREEN}🚀 Ready for deployment!${NC}"

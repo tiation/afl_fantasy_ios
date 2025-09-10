@@ -7,7 +7,7 @@ struct AlertsView: View {
     @EnvironmentObject var alertsViewModel: AlertsViewModel
     @State private var showingSettings = false
 
-    private var displayedAlerts: [Alert] {
+private var displayedAlerts: [AlertNotification] {
         return alertsViewModel.filteredAlerts
     }
 
@@ -496,7 +496,7 @@ struct AlertsView: View {
 // MARK: - AlertRowView
 
 struct AlertRowView: View {
-    let alert: Alert
+    let alert: AlertNotification
     @State private var isPressed = false
     
     @ViewBuilder
@@ -766,7 +766,7 @@ struct AlertDetailView: View {
     }
     
     private var shouldShowActions: Bool {
-        [.priceChange, .trade, .general, .performance].contains(alert.type)
+        [.priceChange, .aiRecommendation, .formAlert].contains(alert.type)
     }
 
     private func enhancedActionButton(title: String, icon: String, color: Color) -> some View {
@@ -828,10 +828,10 @@ struct AlertSettingsView: View {
                 
                 // Alert Types
                 Section("Alert Types") {
-                    ForEach(Alert.AlertType.allCases, id: \.self) { type in
+                    ForEach(AlertType.allCases, id: \.self) { type in
                         HStack {
-                            Image(systemName: type.iconName)
-                                .foregroundColor(type.color)
+                            Image(systemName: type.systemImageName)
+                                .foregroundColor(.primary)
                                 .frame(width: 20)
                             Text(type.displayName)
                             Spacer()
@@ -842,13 +842,12 @@ struct AlertSettingsView: View {
                 
                 // Priority Levels
                 Section("Priority Levels") {
-                    ForEach(Alert.Priority.allCases, id: \.self) { priority in
+                    ForEach(AlertPriority.allCases, id: \.self) { priority in
                         HStack {
                             Text(priority.displayName)
                             Spacer()
                             Toggle("", isOn: .constant(true))
                         }
-                        .foregroundColor(priority.color)
                     }
                 }
             }

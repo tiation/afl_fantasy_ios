@@ -1,279 +1,220 @@
 import Foundation
+import SwiftUI
 import Combine
 
-/// View model for managing alerts and alert settings
-@MainActor
-final class AlertsViewModel: ObservableObject {
-    
-    // MARK: - Published Properties
-    
-    @Published var alerts: [AlertNotification] = []
-    @Published var unreadCount = 0
-    @Published var alertSettings = AlertSettings.default
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    
-    // MARK: - Computed Properties
-    
-    var unreadAlerts: [AlertNotification] {
-        alerts.filter { !$0.isRead }
-    }
-    
-    var criticalAlerts: [AlertNotification] {
-        alerts.filter { $0.priority == .critical }
-    }
-    
-    var recentAlerts: [AlertNotification] {
-        let calendar = Calendar.current
-        let oneDayAgo = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        return alerts.filter { $0.createdAt > oneDayAgo }
-    }
-    
-    // MARK: - Private Properties
+class AlertsViewModel: ObservableObject {
+    @Published var alerts: [Alert] = []
+    @Published var filteredAlerts: [Alert] = []
+    @Published var unreadCount: Int = 0
+    @Published var isConnected: Bool = false
+    @Published var connectionStatus: String = "Disconnected"
+    @Published var lastUpdated: Date = Date()
+    @Published var searchText: String = ""
+    @Published var selectedFilter: AlertFilter = .all
+    @Published var sortOption: AlertManager.SortOption = .timestampDesc
+    @Published var filterCounts: [AlertFilter: Int] = [:]
+    @Published var alertStats: AlertStats = AlertStats()
     
     private let alertManager = AlertManager.shared
     private var cancellables = Set<AnyCancellable>()
     
-    // MARK: - Initialization
+    enum AlertFilter: String, CaseIterable {
+        case all = "All"
+        case unread = "Unread"
+        case critical = "Critical"
+        case high = "High"
+        case medium = "Medium"
+        case low = "Low"
+        
+        var displayName: String {
+            return rawValue
+        }
+        
+        var iconName: String {
+            switch self {
+            case .all: return "bell"
+            case .unread: return "bell.badge"
+            case .critical: return "exclamationmark.triangle.fill"
+            case .high: return "exclamationmark.circle.fill"
+            case .medium: return "info.circle"
+            case .low: return "info.circle"
+            }
+        }
+    }
+    
+    struct AlertStats {
+        var total: Int = 0
+        var critical: Int = 0
+        var high: Int = 0
+        var medium: Int = 0
+        var low: Int = 0
+        var unread: Int = 0
+    }
     
     init() {
         setupBindings()
         loadAlerts()
-        loadAlertSettings()
     }
-    
-    // MARK: - Public Methods
-    
-    /// Load alerts from the alert manager
-    func loadAlerts() {
-        isLoading = true
-        errorMessage = nil
-        
-        Task {
-            do {
-                let loadedAlerts = try await alertManager.getAllAlerts()
-                alerts = loadedAlerts.sorted { $0.createdAt > $1.createdAt }
-                updateUnreadCount()
-                isLoading = false
-            } catch {
-                errorMessage = "Failed to load alerts: \(error.localizedDescription)"
-                isLoading = false
-            }
-        }
-    }
-    
-    /// Mark an alert as read
-    func markAlertAsRead(_ alert: AlertNotification) {
-        guard !alert.isRead else { return }
-        
-        Task {
-            do {
-                try await alertManager.markAlertAsRead(alertId: alert.id)
-                
-                // Update local state
-                if let index = alerts.firstIndex(where: { $0.id == alert.id }) {
-                    alerts[index] = AlertNotification(
-                        id: alert.id,
-                        type: alert.type,
-                        title: alert.title,
-                        message: alert.message,
-                        priority: alert.priority,
-                        createdAt: alert.createdAt,
-                        isRead: true,
-                        actionURL: alert.actionURL,
-                        metadata: alert.metadata
-                    )
-                    updateUnreadCount()
-                }
-            } catch {
-                errorMessage = "Failed to mark alert as read: \(error.localizedDescription)"
-            }
-        }
-    }
-    
-    /// Mark all alerts as read
-    func markAllAlertsAsRead() {
-        let unreadAlertIds = unreadAlerts.map { $0.id }
-        guard !unreadAlertIds.isEmpty else { return }
-        
-        Task {
-            do {
-                try await alertManager.markAllAlertsAsRead()
-                
-                // Update local state
-                alerts = alerts.map { alert in
-                    AlertNotification(
-                        id: alert.id,
-                        type: alert.type,
-                        title: alert.title,
-                        message: alert.message,
-                        priority: alert.priority,
-                        createdAt: alert.createdAt,
-                        isRead: true,
-                        actionURL: alert.actionURL,
-                        metadata: alert.metadata
-                    )
-                }
-                updateUnreadCount()
-            } catch {
-                errorMessage = "Failed to mark all alerts as read: \(error.localizedDescription)"
-            }
-        }
-    }
-    
-    /// Delete an alert
-    func deleteAlert(_ alert: AlertNotification) {
-        Task {
-            do {
-                try await alertManager.deleteAlert(alertId: alert.id)
-                
-                // Remove from local state
-                alerts.removeAll { $0.id == alert.id }
-                updateUnreadCount()
-            } catch {
-                errorMessage = "Failed to delete alert: \(error.localizedDescription)"
-            }
-        }
-    }
-    
-    /// Clear all alerts
-    func clearAllAlerts() {
-        Task {
-            do {
-                try await alertManager.clearAllAlerts()
-                alerts.removeAll()
-                updateUnreadCount()
-            } catch {
-                errorMessage = "Failed to clear all alerts: \(error.localizedDescription)"
-            }
-        }
-    }
-    
-    /// Update alert settings
-    func updateAlertSettings(_ newSettings: AlertSettings) {
-        alertSettings = newSettings
-        
-        Task {
-            do {
-                try await alertManager.updateAlertSettings(newSettings)
-            } catch {
-                errorMessage = "Failed to update alert settings: \(error.localizedDescription)"
-            }
-        }
-    }
-    
-    /// Create a test alert (for development/testing)
-    func createTestAlert() {
-        let testAlert = AlertNotification(
-            id: UUID().uuidString,
-            type: .priceChange,
-            title: "Test Alert",
-            message: "This is a test alert created at \(Date().formatted())",
-            priority: .medium,
-            createdAt: Date(),
-            isRead: false,
-            actionURL: nil,
-            metadata: [:]
-        )
-        
-        alerts.insert(testAlert, at: 0)
-        updateUnreadCount()
-    }
-    
-    /// Refresh alerts from server
-    func refreshAlerts() async {
-        await loadAlertsAsync()
-    }
-    
-    // MARK: - Private Methods
     
     private func setupBindings() {
-        // Listen to alert manager notifications
-        alertManager.alertsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] newAlerts in
-                self?.alerts = newAlerts.sorted { $0.createdAt > $1.createdAt }
-                self?.updateUnreadCount()
+        // Bind to AlertManager
+        alertManager.$alerts
+            .sink { [weak self] alerts in
+                self?.alerts = alerts
+                self?.updateFilteredAlerts()
+                self?.updateStats()
+            }
+            .store(in: &cancellables)
+        
+        alertManager.$unreadCount
+            .assign(to: \.unreadCount, on: self)
+            .store(in: &cancellables)
+        
+        alertManager.$lastUpdated
+            .assign(to: \.lastUpdated, on: self)
+            .store(in: &cancellables)
+        
+        alertManager.$isConnectedToServer
+            .sink { [weak self] isConnected in
+                self?.isConnected = isConnected
+                self?.connectionStatus = isConnected ? "Connected" : "Disconnected"
+            }
+            .store(in: &cancellables)
+        
+        // Update filtered alerts when search text or filter changes
+        Publishers.CombineLatest3($searchText, $selectedFilter, $sortOption)
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .sink { [weak self] _, _, _ in
+                self?.updateFilteredAlerts()
             }
             .store(in: &cancellables)
     }
     
-    private func loadAlertsAsync() async {
-        isLoading = true
-        errorMessage = nil
-        
-        do {
-            let loadedAlerts = try await alertManager.getAllAlerts()
-            alerts = loadedAlerts.sorted { $0.createdAt > $1.createdAt }
-            updateUnreadCount()
-        } catch {
-            errorMessage = "Failed to load alerts: \(error.localizedDescription)"
-        }
-        
-        isLoading = false
+    private func loadAlerts() {
+        // Load from AlertManager
+        alerts = alertManager.alerts
+        updateFilteredAlerts()
+        updateStats()
     }
     
-    private func loadAlertSettings() {
-        Task {
-            do {
-                let settings = try await alertManager.getAlertSettings()
-                alertSettings = settings
-            } catch {
-                // Use default settings if loading fails
-                alertSettings = AlertSettings.default
+    private func updateFilteredAlerts() {
+        var filtered = alerts
+        
+        // Apply search filter
+        if !searchText.isEmpty {
+            filtered = filtered.filter { alert in
+                alert.title.localizedCaseInsensitiveContains(searchText) ||
+                alert.message.localizedCaseInsensitiveContains(searchText)
             }
         }
+        
+        // Apply selected filter
+        switch selectedFilter {
+        case .all:
+            break
+        case .unread:
+            filtered = filtered.filter { !$0.isRead }
+        case .critical:
+            filtered = filtered.filter { $0.priority == .critical }
+        case .high:
+            filtered = filtered.filter { $0.priority == .high }
+        case .medium:
+            filtered = filtered.filter { $0.priority == .medium }
+        case .low:
+            filtered = filtered.filter { $0.priority == .low }
+        }
+        
+        // Apply sorting
+        switch sortOption {
+        case .timestampDesc:
+            filtered = filtered.sorted { $0.timestamp > $1.timestamp }
+        case .timestampAsc:
+            filtered = filtered.sorted { $0.timestamp < $1.timestamp }
+        case .priorityDesc:
+            filtered = filtered.sorted { $0.priority.rawValue > $1.priority.rawValue }
+        case .typeGroup:
+            filtered = filtered.sorted { 
+                if $0.type == $1.type {
+                    return $0.timestamp > $1.timestamp
+                }
+                return $0.type.rawValue < $1.type.rawValue
+            }
+        }
+        
+        filteredAlerts = filtered
+        updateFilterCounts()
     }
     
-    private func updateUnreadCount() {
-        unreadCount = alerts.filter { !$0.isRead }.count
+    private func updateFilterCounts() {
+        filterCounts = [:]
+        filterCounts[.all] = alerts.count
+        filterCounts[.unread] = alerts.filter { !$0.isRead }.count
+        filterCounts[.critical] = alerts.filter { $0.priority == .critical }.count
+        filterCounts[.high] = alerts.filter { $0.priority == .high }.count
+        filterCounts[.medium] = alerts.filter { $0.priority == .medium }.count
+        filterCounts[.low] = alerts.filter { $0.priority == .low }.count
     }
-}
-
-// MARK: - Preview Helper
-
-extension AlertsViewModel {
-    static func preview() -> AlertsViewModel {
-        let viewModel = AlertsViewModel()
-        
-        // Add some mock alerts for preview
-        viewModel.alerts = [
-            AlertNotification(
-                id: "1",
-                type: .priceChange,
-                title: "Price Alert",
-                message: "Max Gawn's price has increased by $25,000",
-                priority: .high,
-                createdAt: Date().addingTimeInterval(-3600),
-                isRead: false,
-                actionURL: nil,
-                metadata: ["playerId": "123", "priceChange": 25000]
-            ),
-            AlertNotification(
-                id: "2",
-                type: .injury,
-                title: "Injury Update",
-                message: "Patrick Dangerfield is a late withdrawal",
-                priority: .critical,
-                createdAt: Date().addingTimeInterval(-7200),
-                isRead: false,
-                actionURL: nil,
-                metadata: ["playerId": "456"]
-            ),
-            AlertNotification(
-                id: "3",
-                type: .teamNews,
-                title: "Team News",
-                message: "Richmond has made 3 changes to their lineup",
-                priority: .medium,
-                createdAt: Date().addingTimeInterval(-10800),
-                isRead: true,
-                actionURL: nil,
-                metadata: ["teamId": "richmond"]
-            )
-        ]
-        
-        viewModel.updateUnreadCount()
-        return viewModel
+    
+    private func updateStats() {
+        let stats = AlertStats(
+            total: alerts.count,
+            critical: alerts.filter { $0.priority == .critical }.count,
+            high: alerts.filter { $0.priority == .high }.count,
+            medium: alerts.filter { $0.priority == .medium }.count,
+            low: alerts.filter { $0.priority == .low }.count,
+            unread: alerts.filter { !$0.isRead }.count
+        )
+        alertStats = stats
+    }
+    
+    // MARK: - Actions
+    
+    func markAsRead(_ alert: Alert) {
+        alertManager.markAsRead(alert)
+    }
+    
+    func markAsUnread(_ alert: Alert) {
+        alertManager.markAsUnread(alert)
+    }
+    
+    func delete(_ alert: Alert) {
+        alertManager.delete(alert)
+    }
+    
+    func markAllAsRead() {
+        alertManager.markAllAsRead()
+    }
+    
+    func clearAllAlerts() {
+        alertManager.clearAllAlerts()
+    }
+    
+    func simulateAlert() {
+        alertManager.simulateAlert()
+    }
+    
+    func simulateWebSocketAlert() {
+        alertManager.simulateAlert(.injury)
+    }
+    
+    func loadSampleData() {
+        alertManager.loadSampleData()
+    }
+    
+    func simulateConnectionTest() {
+        alertManager.testWebSocketConnection()
+    }
+    
+    func reconnectWebSocket() {
+        alertManager.reconnectWebSocket()
+    }
+    
+    func disconnectWebSocket() {
+        isConnected = false
+        connectionStatus = "Disconnected"
+    }
+    
+    func updateAlertSettings(_ newSettings: AlertSettings) {
+        alertManager.updateSettings(newSettings)
     }
 }

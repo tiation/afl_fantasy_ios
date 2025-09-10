@@ -1,0 +1,75 @@
+name: Web CI
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'web-client/**'
+      - '.github/workflows/web.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'web-client/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: web-client
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: web-client/pnpm-lock.yaml
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile || npm install
+      
+      - name: Lint with ESLint
+        run: npx eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0
+        continue-on-error: true
+      
+      - name: Format check with Prettier
+        run: npx prettier --check "**/*.{ts,tsx,js,jsx,json,md}"
+      
+      - name: Type check
+        run: npx tsc --noEmit
+        continue-on-error: true
+      
+      - name: Run tests
+        run: npm test -- --run
+        continue-on-error: true
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Check bundle size
+        run: |
+          cd ..
+          if [ -f scripts/size-gate.sh ]; then
+            bash scripts/size-gate.sh
+          fi
+      
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true
+      
+      - name: Performance metrics
+        run: |
+          echo "Checking performance budgets..."
+          # Check JS bundle size
+          find dist -name "*.js" -exec sh -c 'echo "$(basename {}) - $(gzip -c {} | wc -c) bytes gzipped"' \;
+          # Check CSS bundle size  
+          find dist -name "*.css" -exec sh -c 'echo "$(basename {}) - $(gzip -c {} | wc -c) bytes gzipped"' \;

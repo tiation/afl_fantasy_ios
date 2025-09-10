@@ -163,8 +163,8 @@ services:
       - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-      - ./backups:/backups
+      - ../init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ../data/backups:/backups
     networks:
       - afl-network
     restart: unless-stopped
@@ -209,10 +209,10 @@ services:
     ports:
       - "${STATUS_DASHBOARD_PORT:-8090}:80"
     volumes:
-      - ./dashboard.html:/usr/share/nginx/html/index.html:ro
-      - ./status.json:/usr/share/nginx/html/status.json:ro
+      - ../web-client/dashboards/dashboard.html:/usr/share/nginx/html/index.html:ro
+      - ../status.json:/usr/share/nginx/html/status.json:ro
       - ./nginx.dashboard.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./assets:/usr/share/nginx/html/assets:ro
+      - ../data/assets:/usr/share/nginx/html/assets:ro
     networks:
       - afl-network
     restart: unless-stopped

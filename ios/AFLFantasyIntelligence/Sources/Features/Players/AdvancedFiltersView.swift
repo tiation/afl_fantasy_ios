@@ -463,75 +463,10 @@ struct RangeSlider: View {
     }
 }
 
-struct PerformanceSlider: View {
-    let title: String
-    @Binding var value: Double
-    let range: ClosedRange<Double>
-    let color: Color
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.s) {
-            HStack {
-                Text(title)
-                    .font(DS.Typography.subheadline)
-                    .foregroundColor(DS.Colors.onSurface)
-                
-                Spacer()
-                
-                Text("\(value, specifier: "%.0f")")
-                    .font(DS.Typography.subheadline)
-                    .foregroundColor(color)
-                    .fontWeight(.medium)
-            }
-            
-            Slider(value: $value, in: range, step: 1.0)
-                .tint(color)
-        }
-    }
-}
-
-struct DSToggleStyle: ToggleStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration.label
-                .font(DS.Typography.body)
-                .foregroundColor(DS.Colors.onSurface)
-            
-            Spacer()
-            
-            RoundedRectangle(cornerRadius: 16)
-                .fill(configuration.isOn ? DS.Colors.primary : DS.Colors.surfaceSecondary)
-                .frame(width: 50, height: 30)
-                .overlay(
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 26, height: 26)
-                        .offset(x: configuration.isOn ? 10 : -10)
-                        .animation(DS.Motion.spring, value: configuration.isOn)
-                )
-                .onTapGesture {
-                    configuration.isOn.toggle()
-                }
-        }
-    }
-}
+// These components are now available from Core/DesignSystem/DSExtensions.swift
 
 // MARK: - Supporting Types
-
-struct PerformanceFilters {
-    var minAverage: Double = 60.0
-    var minProjected: Double = 60.0
-    var maxBreakeven: Double = 50.0
-}
-
-// Mock AFL teams
-struct AFLTeam {
-    static let allTeams = [
-        "ADE", "BRI", "CAR", "COL", "ESS", "FRE",
-        "GEE", "GCS", "GWS", "HAW", "MEL", "NTH",
-        "PORT", "RIC", "STK", "SYD", "WB", "WCE"
-    ]
-}
+// (Using PerformanceFilters and AFLTeam from Core)
 
 // MARK: - Previews
 

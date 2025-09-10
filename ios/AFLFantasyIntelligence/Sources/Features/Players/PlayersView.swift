@@ -8,6 +8,7 @@ struct PlayersView: View {
     @StateObject private var prefs = UserPreferencesService.shared
     @State private var showingFilters = false
     @State private var showingAdvancedFilters = false
+    @State private var showingPlayerComparison = false
     @State private var showWatchlistOnly = false
 
     var body: some View {
@@ -41,6 +42,13 @@ struct PlayersView: View {
                         Image(systemName: "slider.horizontal.3")
                     }
                     .accessibilityLabel("Advanced Filters")
+                    
+                    Button {
+                        showingPlayerComparison = true
+                    } label: {
+                        Image(systemName: "person.2.badge.plus")
+                    }
+                    .accessibilityLabel("Compare Players")
                 }
             }
             .refreshable {
@@ -57,6 +65,10 @@ struct PlayersView: View {
             }
             .sheet(isPresented: $showingAdvancedFilters) {
                 AdvancedFiltersView()
+            }
+            .sheet(isPresented: $showingPlayerComparison) {
+                PlayerComparisonView()
+                    .environmentObject(apiService)
             }
         }
         .task {

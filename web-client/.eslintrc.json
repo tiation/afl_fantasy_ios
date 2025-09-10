@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "import", "security", "unicorn"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:security/recommended",
+    "plugin:unicorn/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "max-lines": ["error", { "max": 400, "skipComments": true }],
+    "max-lines-per-function": ["error", { "max": 80 }],
+    "complexity": ["error", 10],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "unicorn/no-array-reduce": "off",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "security/detect-object-injection": "off"
+  }
+}

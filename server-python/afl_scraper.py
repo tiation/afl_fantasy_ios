@@ -21,8 +21,8 @@ options.add_argument("--disable-dev-shm-usage")
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=options)
 
-# Output folder
-output_folder = "dfs_player_summary"
+# Output folder - use centralized data directory
+output_folder = "../data/dfs_player_summary"
 os.makedirs(output_folder, exist_ok=True)
 
 # Table IDs to extract

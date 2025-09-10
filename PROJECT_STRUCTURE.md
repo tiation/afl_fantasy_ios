@@ -110,6 +110,14 @@ python api_server.py
 cd server-python && python api_server.py
 ```
 
+#### Start WebSocket Server (Separate)
+```bash
+# Start dedicated WebSocket server:
+./start-websocket-server.sh
+# or manually:
+cd server-python && python api_server_ws.py
+```
+
 #### Build iOS App
 ```bash
 # Old way:
@@ -187,10 +195,19 @@ cd web-client/client && npm run dev  # Start web client
 # Open iOS app in Xcode
 ```
 
-### Production
+### Production (Docker)
 ```bash
+# Using new reorganized structure:
+docker-compose -f docker-compose.new.yml up -d
+
+# Or using existing infra structure:
 cd infra
 docker-compose up -d  # Start all services
+
+# Start specific services:
+docker-compose -f docker-compose.new.yml --profile api up -d    # Python API only
+docker-compose -f docker-compose.new.yml --profile web up -d    # Web client only
+docker-compose -f docker-compose.new.yml --profile all up -d    # Everything
 ```
 
 ## 📝 Key Configuration Files
@@ -217,7 +234,9 @@ This reorganization maintains all functionality while improving:
 
 ### Helper Scripts
 - `start-api-server.sh`: Starts Python backend from any directory
+- `start-websocket-server.sh`: Starts WebSocket server (port 8081)
 - `build-ios-app.sh`: Builds iOS app from any directory
+- `docker-compose.new.yml`: Updated Docker setup for reorganized structure
 - Scripts automatically handle path changes and virtual environments
 
 ## 🤝 Contributing

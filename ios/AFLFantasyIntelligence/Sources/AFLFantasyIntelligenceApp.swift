@@ -82,6 +82,7 @@ struct AFLFantasyIntelligenceApp: App {
 struct ContentView: View {
     @EnvironmentObject var apiService: APIService
     @EnvironmentObject var authService: AuthenticationService
+    @EnvironmentObject var alertsViewModel: AlertsViewModel
     @EnvironmentObject var teamManager: TeamManager
     @State private var selectedTab = 0
     @State private var previousTab = 0
@@ -138,43 +139,43 @@ struct ContentView: View {
                             title: "Dashboard",
                             icon: "chart.line.uptrend.xyaxis",
                             activeIcon: "chart.line.uptrend.xyaxis",
-                            color: DS.Colors.primary
+                            color: DesignSystem.Colors.primary
                         ),
                         TabItem(
                             id: 1,
                             title: "Players",
                             icon: "person.3",
                             activeIcon: "person.3.fill",
-                            color: DS.Colors.secondary
+                            color: DesignSystem.Colors.secondary
                         ),
                         TabItem(
                             id: 2,
                             title: "Teams",
                             icon: "person.2.badge.plus",
                             activeIcon: "person.2.badge.plus.fill",
-                            color: DS.Colors.info
+                            color: DesignSystem.Colors.info
                         ),
                         TabItem(
                             id: 3,
                             title: "AI Tools",
                             icon: "brain.head.profile",
                             activeIcon: "brain.head.profile",
-                            color: DS.Colors.warning
+                            color: DesignSystem.Colors.warning
                         ),
                         TabItem(
                             id: 4,
                             title: "Alerts",
                             icon: "bell",
                             activeIcon: "bell.fill",
-                            color: DS.Colors.error,
-                            badgeCount: alertsViewModel.unreadCount
+                            color: DesignSystem.Colors.error,
+                            badgeCount: alertsViewModel.unreadCount > 0 ? alertsViewModel.unreadCount : nil
                         ),
                         TabItem(
                             id: 5,
                             title: "Profile",
                             icon: "person.circle",
                             activeIcon: "person.circle.fill",
-                            color: DS.Colors.success
+                            color: DesignSystem.Colors.success
                         )
                     ]
                 )
@@ -220,25 +221,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Tab Models
-
-struct TabItem {
-    let id: Int
-    let title: String
-    let icon: String
-    let activeIcon: String
-    let color: Color
-    let badgeCount: Int
-    
-    init(id: Int, title: String, icon: String, activeIcon: String, color: Color = DS.Colors.primary, badgeCount: Int = 0) {
-        self.id = id
-        self.title = title
-        self.icon = icon
-        self.activeIcon = activeIcon
-        self.color = color
-        self.badgeCount = badgeCount
-    }
-}
+// MARK: - Tab Models (using TabItem from EnhancedFloatingTabBar)
 
 // MARK: - FloatingTabBar
 
@@ -275,7 +258,7 @@ struct FloatingTabBar: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: DS.CornerRadius.xl)
-                .stroke(DS.Colors.outline.opacity(0.1), lineWidth: 1)
+                .stroke(DesignSystem.Colors.outline.opacity(0.1), lineWidth: 1)
         )
     }
 }
@@ -296,10 +279,10 @@ struct TabBarButton: View {
                     // Active background
                     if isSelected {
                         RoundedRectangle(cornerRadius: DS.CornerRadius.medium)
-                            .fill(DS.Colors.primaryGradient)
+                            .fill(DesignSystem.Colors.primaryGradient)
                             .frame(width: 36, height: 36)
                             .shadow(
-                                color: DS.Colors.primary.opacity(0.3),
+                                color: DesignSystem.Colors.primary.opacity(0.3),
                                 radius: 8,
                                 x: 0,
                                 y: 4
@@ -308,14 +291,14 @@ struct TabBarButton: View {
                     
                     Image(systemName: isSelected ? tab.activeIcon : tab.icon)
                         .font(.system(size: 16, weight: isSelected ? .semibold : .medium))
-                        .foregroundColor(isSelected ? .white : DS.Colors.onSurfaceSecondary)
+                        .foregroundColor(isSelected ? .white : DesignSystem.Colors.onSurfaceSecondary)
                         .scaleEffect(isSelected ? 1.1 : 1.0)
                 }
                 .frame(height: 36)
                 
                 Text(tab.title)
                     .font(.system(size: 10, weight: isSelected ? .semibold : .medium))
-                    .foregroundColor(isSelected ? DS.Colors.primary : DS.Colors.onSurfaceSecondary)
+                    .foregroundColor(isSelected ? DesignSystem.Colors.primary : DesignSystem.Colors.onSurfaceSecondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }

@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # Node.js API Server
+  api:
+    build:
+      context: ./server-node
+      dockerfile: Dockerfile
+    container_name: afl-api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DATABASE_URL=${DATABASE_URL}
+      - PYTHON_SCRAPER_URL=http://scraper:8000
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs/api:/app/logs
+    networks:
+      - afl-network
+
+  # Python Scraper Service
+  scraper:
+    build:
+      context: ./server-python
+      dockerfile: Dockerfile
+    container_name: afl-scraper
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHON_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+      - SELENIUM_HEADLESS=true
+      - MAX_WORKERS=4
+    volumes:
+      - ./data:/app/data
+      - ./logs/scraper:/app/logs
+    networks:
+      - afl-network
+    shm_size: 2gb  # For Chrome/Selenium
+
+  # Web Dashboard
+  dashboard:
+    build:
+      context: ./web-client
+      dockerfile: Dockerfile
+    container_name: afl-dashboard
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - afl-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: afl-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - afl-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: afl-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./web-client/dist:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+      - dashboard
+    networks:
+      - afl-network
+
+networks:
+  afl-network:
+    driver: bridge
+
+volumes:
+  redis-data:

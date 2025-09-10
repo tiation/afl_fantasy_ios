@@ -4,12 +4,12 @@ import Foundation
 public struct LiveMatchState: Codable, Identifiable, Hashable {
     public let id: String
     public let roundNumber: Int
-    public let homeTeam: Team
-    public let awayTeam: Team
+    public let homeTeam: String
+    public let awayTeam: String
     public let venue: String
     public let status: MatchStatus
     public let clock: GameClock?
-    public let weather: WeatherConditions?
+    public let weather: String?
     public let lastUpdated: Date
     public let homeScore: TeamScore
     public let awayScore: TeamScore
@@ -17,12 +17,12 @@ public struct LiveMatchState: Codable, Identifiable, Hashable {
     public init(
         id: String,
         roundNumber: Int,
-        homeTeam: Team,
-        awayTeam: Team,
+        homeTeam: String,
+        awayTeam: String,
         venue: String,
         status: MatchStatus,
         clock: GameClock? = nil,
-        weather: WeatherConditions? = nil,
+        weather: String? = nil,
         lastUpdated: Date = Date(),
         homeScore: TeamScore,
         awayScore: TeamScore
@@ -128,7 +128,7 @@ public struct PlayerStatDelta: Codable, Identifiable, Hashable {
     public let id: String
     public let playerId: String
     public let playerName: String
-    public let team: Team
+    public let team: String
     public let position: Position
     public let salary: Int
     
@@ -152,7 +152,7 @@ public struct PlayerStatDelta: Codable, Identifiable, Hashable {
         id: String = UUID().uuidString,
         playerId: String,
         playerName: String,
-        team: Team,
+        team: String,
         position: Position,
         salary: Int,
         currentStats: LivePlayerStats,
@@ -285,6 +285,13 @@ public enum RiskType: String, Codable, CaseIterable {
     case weatherImpact = "WEATHER_IMPACT"
     case matchFlow = "MATCH_FLOW"
     case rotationReduced = "ROTATION_REDUCED"
+}
+
+public enum Severity: String, Codable, CaseIterable {
+    case low = "LOW"
+    case medium = "MEDIUM"
+    case high = "HIGH"
+    case critical = "CRITICAL"
 }
 
 public struct Opportunity: Codable, Identifiable, Hashable {

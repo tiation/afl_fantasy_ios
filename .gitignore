@@ -130,22 +130,29 @@ jspm_packages/
 backup_*
 *_backup.*
 
-# AFL Fantasy specific
-/attached_assets/
-/uploads/
+# AFL Fantasy specific - new structure
+/data/attached_assets/
+/data/uploads/
+/data/backups/
 player_data_backup_*.json
 team_data_backup_*.json
+
+# Server logs and runtime files  
+server-python/*.log
+server-node/*.log
+web-client/*.log
+nohup.out
 
 # Deployment artifacts
 *.tar.gz
 deployment_package_*.tar.gz
 
 # Local data files (keep structure, ignore content)
-/data/
+/data/dfs_player_summary/*.xlsx
+/data/core/*.json.bak
 /cache/
 *.csv
-*.xlsx
-*.json.bak
+/data/assets/production/
 # Local Netlify folder
 .netlify
 archived_apps/ios_legacy_20250910/deepseek-cli
@@ -154,9 +161,11 @@ archived_apps/ios_legacy_20250910/deepseek-cli
 # iOS/Swift/Xcode Build Artifacts
 # ====================
 
-# Xcode
+# Xcode - updated for new structure
 .build/
 build/
+ios/DerivedData/
+ios/.build/
 DerivedData/
 *.xcworkspace
 !default.xcworkspace

@@ -1,0 +1,105 @@
+name: afl-fantasy-reorganized
+
+services:
+  # Python API Server - Main backend
+  python-api:
+    build:
+      context: ./server-python
+      dockerfile: ../infra/Dockerfile.python
+    image: afl-fantasy/python-api:latest
+    ports:
+      - "8080:8080"
+      - "8081:8081"  # WebSocket port
+    environment:
+      - PORT=8080
+      - FLASK_ENV=development
+      - FLASK_DEBUG=true
+    volumes:
+      - ./server-python:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - afl-network
+    restart: unless-stopped
+    profiles: ["default", "api", "all"]
+
+  # Web Client - Frontend dashboard
+  web-client:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./web-client/client:/usr/share/nginx/html:ro
+      - ./web-client/public:/usr/share/nginx/html/public:ro
+      - ./infra/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - afl-network
+    depends_on:
+      - python-api
+    restart: unless-stopped
+    profiles: ["default", "web", "all"]
+
+  # Node.js Backend (if needed)
+  node-backend:
+    build:
+      context: ./server-node
+      dockerfile: ../infra/Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+    volumes:
+      - ./server-node:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - afl-network
+    restart: unless-stopped
+    profiles: ["node", "all"]
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=afl_fantasy
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./data/backups:/backups
+    networks:
+      - afl-network
+    restart: unless-stopped
+    profiles: ["default", "db", "all"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d afl_fantasy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - afl-network
+    restart: unless-stopped
+    profiles: ["default", "db", "all"]
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  afl-network:
+    driver: bridge

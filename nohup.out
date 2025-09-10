@@ -1,3 +1,0 @@
-  File "/Users/tiaastor/workspace/10_projects/afl_fantasy_ios/api_server.py", line 573
-    else:
-IndentationError: unexpected indent

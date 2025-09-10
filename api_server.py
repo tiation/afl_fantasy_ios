@@ -557,7 +557,10 @@ if __name__ == '__main__':
     
     if players_cache:
         print(f"✅ Successfully loaded {len(players_cache)} players")
-        print("🌐 Server starting on http://localhost:8080")
+        
+        # Use PORT environment variable or default to 4000
+        port = int(os.environ.get('PORT', 4000))
+        print(f"🌐 Server starting on http://localhost:{port}")
         print("📋 Available endpoints:")
         print("   GET  /health                    - Health check")
         print("   GET  /api/players              - All players list")
@@ -569,7 +572,7 @@ if __name__ == '__main__':
         print("=" * 60)
         
         # Start the server
-app.run(host='0.0.0.0', port=5500, debug=True)
+        app.run(host='0.0.0.0', port=port, debug=True)
     else:
         print("❌ No player data found! Please check the dfs_player_summary folder exists.")
         print("Expected: ./dfs_player_summary/*.xlsx files")

@@ -13,8 +13,8 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-PROJECT_NAME="AFLFantasy"
-SCHEME="AFLFantasy"
+PROJECT_NAME="AFL Fantasy Intelligence"
+SCHEME="AFL Fantasy Intelligence"
 DESTINATION="platform=iOS Simulator,name=iPhone 15,OS=18.6"
 
 echo -e "${PURPLE}🏆 AFL Fantasy iOS - Quality Gate${NC}"
@@ -65,17 +65,17 @@ run_check "SwiftFormat" "swiftformat --lint . | grep -q 'would have been formatt
 run_check "SwiftLint" "swiftlint --quiet --reporter json | jq -e 'length == 0' > /dev/null 2>&1 || (echo 'SwiftLint violations:' && swiftlint)"
 
 # 4. TODO/FIXME check
-run_check "TODO/FIXME Check" "! grep -r 'TODO\|FIXME' ios/AFLFantasy --include='*.swift' --exclude-dir=build"
+run_check "TODO/FIXME Check" "! grep -r 'TODO\|FIXME' AFLFantasyIntelligence/Sources --include='*.swift' --exclude-dir=build"
 
 # 5. Secrets check
-run_check "Hardcoded Secrets Check" "! grep -r 'api_key\|password\|secret\|token' ios/AFLFantasy --include='*.swift' | grep -v '// Test' | grep -v '// Mock'"
+run_check "Hardcoded Secrets Check" "! grep -r 'api_key\|password\|secret\|token' AFLFantasyIntelligence/Sources --include='*.swift' | grep -v '// Test' | grep -v '// Mock'"
 
 # 6. Build check
 echo -e "${BLUE}🔨 Building project...${NC}"
 BUILD_START_TIME=$(date +%s)
 
 if xcodebuild \
-    -project "ios/$PROJECT_NAME.xcodeproj" \
+    -project "AFLFantasyIntelligence/$PROJECT_NAME.xcodeproj" \
     -scheme "$SCHEME" \
     -destination "$DESTINATION" \
     -configuration Debug \
@@ -96,7 +96,7 @@ echo -e "${BLUE}🧪 Running unit tests...${NC}"
 TEST_START_TIME=$(date +%s)
 
 if xcodebuild \
-    -project "ios/$PROJECT_NAME.xcodeproj" \
+    -project "AFLFantasyIntelligence/$PROJECT_NAME.xcodeproj" \
     -scheme "$SCHEME" \
     -destination "$DESTINATION" \
     -configuration Debug \
@@ -127,7 +127,7 @@ fi
 
 # 9. File size check
 echo -e "${BLUE}📏 Checking file sizes...${NC}"
-LARGE_FILES=$(find ios/AFLFantasy -name "*.swift" -exec wc -l {} + | awk '$1 > 400 {print $2 " (" $1 " lines)"}')
+LARGE_FILES=$(find AFLFantasyIntelligence/Sources -name "*.swift" -exec wc -l {} + | awk '$1 > 400 {print $2 " (" $1 " lines)"}')
 
 if [ -n "$LARGE_FILES" ]; then
     echo -e "${YELLOW}⚠️  Large files found (>400 lines):${NC}"
@@ -142,7 +142,7 @@ echo ""
 echo -e "${BLUE}🏗️ Checking architecture compliance...${NC}"
 
 # Check for MVVM pattern compliance
-VIEWS_WITHOUT_VIEWMODEL=$(grep -r "class.*View\|struct.*View" ios/AFLFantasy --include="*.swift" | grep -v "ViewModel\|Preview" | wc -l)
+VIEWS_WITHOUT_VIEWMODEL=$(grep -r "class.*View\|struct.*View" AFLFantasyIntelligence/Sources --include="*.swift" | grep -v "ViewModel\|Preview" | wc -l)
 if [ "$VIEWS_WITHOUT_VIEWMODEL" -gt 5 ]; then
     echo -e "${YELLOW}⚠️  Many views without ViewModels detected${NC}"
     echo -e "${YELLOW}💡 Consider implementing MVVM pattern${NC}"

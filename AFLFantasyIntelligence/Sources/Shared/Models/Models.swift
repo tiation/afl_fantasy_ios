@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - Core Player Models
+// MARK: - Player
 
 struct Player: Codable, Identifiable, Hashable, Sendable {
     let id: String
@@ -11,35 +11,37 @@ struct Player: Codable, Identifiable, Hashable, Sendable {
     let average: Double
     let projected: Double
     let breakeven: Int
-    
+
     static func == (lhs: Player, rhs: Player) -> Bool {
         lhs.id == rhs.id
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
+
+// MARK: - Position
 
 enum Position: String, Codable, CaseIterable, Sendable {
     case defender = "DEF"
     case midfielder = "MID"
     case ruck = "RUC"
     case forward = "FWD"
-    
+
     var displayName: String {
         switch self {
-        case .defender: return "Defender"
-        case .midfielder: return "Midfielder"
-        case .ruck: return "Ruck"
-        case .forward: return "Forward"
+        case .defender: "Defender"
+        case .midfielder: "Midfielder"
+        case .ruck: "Ruck"
+        case .forward: "Forward"
         }
     }
-    
+
     var shortName: String { rawValue }
 }
 
-// MARK: - AI & Analysis Models
+// MARK: - CaptainSuggestion
 
 struct CaptainSuggestion: Codable, Identifiable, Sendable {
     let playerId: String
@@ -47,9 +49,11 @@ struct CaptainSuggestion: Codable, Identifiable, Sendable {
     let projectedPoints: Double
     let confidence: Double
     let reasoning: String
-    
+
     var id: String { playerId }
 }
+
+// MARK: - CashCowAnalysis
 
 struct CashCowAnalysis: Codable, Identifiable, Sendable {
     let playerId: String
@@ -61,13 +65,15 @@ struct CashCowAnalysis: Codable, Identifiable, Sendable {
     let confidence: Double
     let fpAverage: Double
     let gamesPlayed: Int
-    
+
     var id: String { playerId }
-    
+
     var isGoodCashCow: Bool {
         recommendation == "HOLD" && confidence > 0.6
     }
 }
+
+// MARK: - TradeRecommendation
 
 struct TradeRecommendation: Codable, Identifiable, Sendable {
     let id: String
@@ -77,8 +83,16 @@ struct TradeRecommendation: Codable, Identifiable, Sendable {
     let projectedPointsGain: Double
     let confidence: Double
     let reasoning: String
-    
-    init(id: String = UUID().uuidString, playerOut: Player, playerIn: Player, cashDifference: Int, projectedPointsGain: Double, confidence: Double, reasoning: String) {
+
+    init(
+        id: String = UUID().uuidString,
+        playerOut: Player,
+        playerIn: Player,
+        cashDifference: Int,
+        projectedPointsGain: Double,
+        confidence: Double,
+        reasoning: String
+    ) {
         self.id = id
         self.playerOut = playerOut
         self.playerIn = playerIn
@@ -89,7 +103,7 @@ struct TradeRecommendation: Codable, Identifiable, Sendable {
     }
 }
 
-// MARK: - Dashboard Models
+// MARK: - DashboardData
 
 struct DashboardData: Codable, Sendable {
     let liveStats: LiveStats
@@ -100,13 +114,15 @@ struct DashboardData: Codable, Sendable {
     let alerts: [AlertNotification]
 }
 
+// MARK: - LiveStats
+
 struct LiveStats: Codable, Sendable {
     let currentScore: Int
     let rank: Int
     let playersPlaying: Int
     let playersRemaining: Int
     let averageScore: Double
-    
+
     static let mock = LiveStats(
         currentScore: 1247,
         rank: 12543,
@@ -116,13 +132,15 @@ struct LiveStats: Codable, Sendable {
     )
 }
 
+// MARK: - WeeklyStats
+
 struct WeeklyStats: Codable, Sendable {
     let round: Int
     let projectedScore: Int
     let actualScore: Int?
     let rank: Int?
     let improvement: Double
-    
+
     static let mock = WeeklyStats(
         round: 15,
         projectedScore: 2145,
@@ -132,6 +150,8 @@ struct WeeklyStats: Codable, Sendable {
     )
 }
 
+// MARK: - TeamStructure
+
 struct TeamStructure: Codable, Sendable {
     let totalValue: Int
     let bankBalance: Int
@@ -139,10 +159,10 @@ struct TeamStructure: Codable, Sendable {
     let premiumCount: Int
     let midPriceCount: Int
     let rookieCount: Int
-    
+
     static let mock = TeamStructure(
-        totalValue: 12800000,
-        bankBalance: 156000,
+        totalValue: 12_800_000,
+        bankBalance: 156_000,
         positionBalance: [.defender: 6, .midfielder: 8, .ruck: 2, .forward: 6],
         premiumCount: 8,
         midPriceCount: 9,
@@ -150,7 +170,7 @@ struct TeamStructure: Codable, Sendable {
     )
 }
 
-// MARK: - Alert Models
+// MARK: - AlertNotification
 
 struct AlertNotification: Codable, Identifiable, Equatable, Sendable {
     let id: String
@@ -160,8 +180,16 @@ struct AlertNotification: Codable, Identifiable, Equatable, Sendable {
     let timestamp: Date
     var isRead: Bool
     let playerId: String?
-    
-    init(id: String = UUID().uuidString, title: String, message: String, type: AlertType, timestamp: Date = Date(), isRead: Bool = false, playerId: String? = nil) {
+
+    init(
+        id: String = UUID().uuidString,
+        title: String,
+        message: String,
+        type: AlertType,
+        timestamp: Date = Date(),
+        isRead: Bool = false,
+        playerId: String? = nil
+    ) {
         self.id = id
         self.title = title
         self.message = message
@@ -170,11 +198,13 @@ struct AlertNotification: Codable, Identifiable, Equatable, Sendable {
         self.isRead = isRead
         self.playerId = playerId
     }
-    
+
     static func == (lhs: AlertNotification, rhs: AlertNotification) -> Bool {
         lhs.id == rhs.id
     }
 }
+
+// MARK: - AlertType
 
 enum AlertType: String, Codable, CaseIterable, Sendable {
     case priceChange = "PRICE_CHANGE"
@@ -184,33 +214,33 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
     case tradeDeadline = "TRADE_DEADLINE"
     case captainReminder = "CAPTAIN_REMINDER"
     case system = "SYSTEM"
-    
+
     var displayName: String {
         switch self {
-        case .priceChange: return "Price Change"
-        case .injury: return "Injury Update"
-        case .lateOut: return "Late Out"
-        case .roleChange: return "Role Change"
-        case .tradeDeadline: return "Trade Deadline"
-        case .captainReminder: return "Captain Reminder"
-        case .system: return "System Alert"
+        case .priceChange: "Price Change"
+        case .injury: "Injury Update"
+        case .lateOut: "Late Out"
+        case .roleChange: "Role Change"
+        case .tradeDeadline: "Trade Deadline"
+        case .captainReminder: "Captain Reminder"
+        case .system: "System Alert"
         }
     }
-    
+
     var systemImageName: String {
         switch self {
-        case .priceChange: return "dollarsign.circle"
-        case .injury: return "cross.circle"
-        case .lateOut: return "exclamationmark.triangle"
-        case .roleChange: return "arrow.triangle.swap"
-        case .tradeDeadline: return "clock"
-        case .captainReminder: return "star.circle"
-        case .system: return "info.circle"
+        case .priceChange: "dollarsign.circle"
+        case .injury: "cross.circle"
+        case .lateOut: "exclamationmark.triangle"
+        case .roleChange: "arrow.triangle.swap"
+        case .tradeDeadline: "clock"
+        case .captainReminder: "star.circle"
+        case .system: "info.circle"
         }
     }
 }
 
-// MARK: - Game Models
+// MARK: - GameInfo
 
 struct GameInfo: Codable, Identifiable, Sendable {
     let id: String
@@ -219,7 +249,7 @@ struct GameInfo: Codable, Identifiable, Sendable {
     let status: GameStatus
     let round: Int
     let venue: String
-    
+
     enum GameStatus: String, Codable, Sendable {
         case scheduled = "SCHEDULED"
         case inProgress = "IN_PROGRESS"
@@ -232,9 +262,8 @@ struct GameInfo: Codable, Identifiable, Sendable {
 
 struct APIHealthResponse: Codable, Sendable {
     let status: String
-    let timestamp: String
-    let playersCached: Int
-    let lastCacheUpdate: String?
+    let timestamp: String?
+    let playersLoaded: Int?
 }
 
 struct APIStatsResponse: Codable, Sendable {
@@ -245,7 +274,7 @@ struct APIStatsResponse: Codable, Sendable {
     let cacheAgeMinutes: Int
 }
 
-// MARK: - Settings Models
+// MARK: - AppSettings
 
 struct AppSettings: Codable, Sendable {
     let theme: ThemeOption
@@ -253,7 +282,7 @@ struct AppSettings: Codable, Sendable {
     let priceAlertsEnabled: Bool
     let captainRemindersEnabled: Bool
     let aiConfidenceThreshold: Double
-    
+
     static let `default` = AppSettings(
         theme: .system,
         notificationsEnabled: true,
@@ -263,21 +292,122 @@ struct AppSettings: Codable, Sendable {
     )
 }
 
+// MARK: - ThemeOption
+
 enum ThemeOption: String, CaseIterable, Codable, Sendable {
     case system
     case light
     case dark
-    
+
     var displayName: String {
         switch self {
-        case .system: return "System"
-        case .light: return "Light"
-        case .dark: return "Dark"
+        case .system: "System"
+        case .light: "Light"
+        case .dark: "Dark"
         }
     }
 }
 
-// MARK: - Error Models
+// MARK: - AI Models
+
+// MARK: - AIRecommendation
+
+struct AIRecommendation: Codable, Identifiable, Sendable {
+    let id: UUID
+    let type: AIRecommendationType
+    let content: String
+    let confidence: Double
+    let insights: [String]
+    let suggestedActions: [String]
+    let timestamp: Date
+    let round: Int?
+    let playerIds: [String]
+    
+    init(
+        id: UUID = UUID(),
+        type: AIRecommendationType,
+        content: String,
+        confidence: Double,
+        insights: [String] = [],
+        suggestedActions: [String] = [],
+        timestamp: Date = Date(),
+        round: Int? = nil,
+        playerIds: [String] = []
+    ) {
+        self.id = id
+        self.type = type
+        self.content = content
+        self.confidence = confidence
+        self.insights = insights
+        self.suggestedActions = suggestedActions
+        self.timestamp = timestamp
+        self.round = round
+        self.playerIds = playerIds
+    }
+    
+    // Simplified initializer for OpenAIService compatibility
+    init(
+        type: AIRecommendationType,
+        content: String,
+        confidence: Double,
+        timestamp: Date
+    ) {
+        self.id = UUID()
+        self.type = type
+        self.content = content
+        self.confidence = confidence
+        self.insights = []
+        self.suggestedActions = []
+        self.timestamp = timestamp
+        self.round = nil
+        self.playerIds = []
+    }
+}
+
+// MARK: - AIRecommendationType
+
+enum AIRecommendationType: String, Codable, CaseIterable, Sendable {
+    case captainAdvice = "Captain Advice"
+    case tradeAdvice = "Trade Advice"
+    case priceAnalysis = "Price Analysis"
+    case teamStructure = "Team Structure"
+}
+
+// MARK: - OpenAIError
+
+enum OpenAIError: Error, LocalizedError, Sendable {
+    case invalidAPIKey
+    case noAPIKey
+    case networkError(String)
+    case apiError(String)
+    case invalidResponse
+    case quotaExceeded
+    case unauthorized
+    case httpError(Int)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidAPIKey:
+            return "Invalid OpenAI API key"
+        case .noAPIKey:
+            return "No OpenAI API key configured. Please add your API key in settings."
+        case .networkError(let message):
+            return "Network error: \(message)"
+        case .apiError(let message):
+            return "API error: \(message)"
+        case .invalidResponse:
+            return "Invalid response from OpenAI"
+        case .quotaExceeded:
+            return "OpenAI quota exceeded"
+        case .unauthorized:
+            return "Unauthorized access to OpenAI API"
+        case .httpError(let code):
+            return "HTTP error: \(code)"
+        }
+    }
+}
+
+// MARK: - AFLFantasyError
 
 enum AFLFantasyError: Error, LocalizedError, Sendable {
     case networkError(String)
@@ -285,39 +415,19 @@ enum AFLFantasyError: Error, LocalizedError, Sendable {
     case apiError(String)
     case unauthorized
     case serverError
-    
+
     var errorDescription: String? {
         switch self {
-        case .networkError(let message):
-            return "Network Error: \(message)"
-        case .dataError(let message):
-            return "Data Error: \(message)"
-        case .apiError(let message):
-            return "API Error: \(message)"
+        case let .networkError(message):
+            "Network Error: \(message)"
+        case let .dataError(message):
+            "Data Error: \(message)"
+        case let .apiError(message):
+            "API Error: \(message)"
         case .unauthorized:
-            return "Unauthorized access"
+            "Unauthorized access"
         case .serverError:
-            return "Server error occurred"
+            "Server error occurred"
         }
     }
 }
-
-// MARK: - Mock Data Extensions
-
-extension Player {
-    static let mockPlayers = [
-        Player(id: "1", name: "Marcus Bontempelli", team: "WB", position: .midfielder, price: 715000, average: 118.5, projected: 125.0, breakeven: -15),
-        Player(id: "2", name: "Max Gawn", team: "MELB", position: .ruck, price: 652000, average: 105.2, projected: 108.0, breakeven: -12),
-        Player(id: "3", name: "Nick Daicos", team: "COLL", position: .defender, price: 598000, average: 98.7, projected: 102.0, breakeven: 8),
-        Player(id: "4", name: "Errol Gulden", team: "SYD", position: .midfielder, price: 587000, average: 96.4, projected: 99.0, breakeven: 5),
-        Player(id: "5", name: "Zak Butters", team: "PA", position: .forward, price: 612000, average: 101.3, projected: 104.0, breakeven: -8)
-    ]
-}
-
-extension CashCowAnalysis {
-    static let mockCashCows = [
-        CashCowAnalysis(playerId: "rookie1", playerName: "Rookie Rising", currentPrice: 278000, projectedPrice: 320000, cashGenerated: 42000, recommendation: "HOLD", confidence: 0.85, fpAverage: 67.2, gamesPlayed: 8),
-        CashCowAnalysis(playerId: "rookie2", playerName: "Cash Generator", currentPrice: 312000, projectedPrice: 365000, cashGenerated: 53000, recommendation: "HOLD", confidence: 0.78, fpAverage: 71.8, gamesPlayed: 9)
-    ]
-}
-

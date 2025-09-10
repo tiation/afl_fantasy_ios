@@ -1,450 +1,398 @@
+//
+//  DashboardView.swift
+//
+//  Main dashboard with real AFL Fantasy data
+//
+
 import SwiftUI
 
+@available(iOS 16.0, *)
 struct DashboardView: View {
-    @StateObject private var viewModel: DashboardViewModel
-    @State private var showingFilters = false
-    
-    init(viewModel: DashboardViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
-    }
+    @StateObject private var viewModel = DashboardViewModel()
+    @State private var showingTeamImport = false
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ScrollView {
-                LazyVStack(spacing: DS.Spacing.l) {
-                    // Summary Stats Section
-                    summarySection
+                VStack(spacing: 20) {
+                    // Header with API status
+                    apiStatusCard
                     
-                    // Quick Actions Section
+                    // Quick actions
                     quickActionsSection
                     
-                    // Top Performers Section
-                    topPerformersSection
+                    // Player list
+                    if !viewModel.players.isEmpty {
+                        playersSection
+                    }
                     
-                    // Cash Cows Section
-                    cashCowsSection
+                    // Cash Cow Analysis
+                    if !viewModel.cashCows.isEmpty {
+                        cashCowsSection
+                    }
                     
-                    // Captain Suggestions Section
-                    captainSuggestionsSection
-                    
-                    // All Players Section
-                    playersSection
+                    // Captain Suggestions
+                    if !viewModel.captainSuggestions.isEmpty {
+                        captainSuggestionsSection
+                    }
                 }
-                .padding(.horizontal, DS.Spacing.l)
-                .padding(.bottom, DS.Spacing.huge)
+                .padding()
             }
-            .navigationTitle("AFL Fantasy")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("AFL Fantasy AI")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Filters") {
-                        showingFilters = true
+                    Button("Import Team") {
+                        showingTeamImport = true
                     }
-                    .foregroundColor(.aflPrimary)
                 }
             }
-            .searchable(text: $viewModel.searchText, prompt: "Search players...")
             .refreshable {
-                await viewModel.refresh()
+                await viewModel.refreshData()
             }
-            .sheet(isPresented: $showingFilters) {
-                FiltersView(viewModel: viewModel)
+            .sheet(isPresented: $showingTeamImport) {
+                TeamImportView()
             }
-            .task {
-                await viewModel.refresh()
-            }
-        }
-    }
-    
-    // MARK: - Summary Section
-    @ViewBuilder
-    private var summarySection: some View {
-        Card {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                Text("League Summary")
-                    .font(.aflTitle2)
-                    .foregroundColor(.textPrimary)
-                
-                switch viewModel.summaryState {
-                case .idle, .loading:
-                    HStack {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                        Text("Loading summary...")
-                            .font(.aflBody)
-                            .foregroundColor(.textSecondary)
-                    }
-                    
-                case .loaded(let summary):
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: DS.Spacing.m) {
-                        StatChip(title: "Total Players", value: "\(summary.totalPlayers)")
-                        StatChip(title: "Teams", value: "\(summary.totalTeams)")
-                        StatChip(title: "Avg Price", value: "$\(Int(summary.averagePrice / 1000))k")
-                        StatChip(title: "Max Price", value: "$\(Int(summary.highestPrice / 1000))k")
-                    }
-                    
-                case .error(let error):
-                    ErrorView(message: error.localizedDescription) {
-                        Task { await viewModel.loadSummary() }
-                    }
+            .onAppear {
+                Task {
+                    await viewModel.loadInitialData()
                 }
             }
         }
     }
     
-    // MARK: - Quick Actions Section
+    @ViewBuilder
+    private var apiStatusCard: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("API Status")
+                    .font(.headline)
+                
+                if let health = viewModel.apiHealth {
+                    Text(health.status.capitalized)
+                        .foregroundColor(health.status == "healthy" ? .green : .red)
+                        .font(.subheadline)
+                    
+                    Text("\(health.playersCache ?? 0) players cached")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text("Checking...")
+                        .foregroundColor(.orange)
+                        .font(.subheadline)
+                }
+            }
+            
+            Spacer()
+            
+            Button {
+                Task { await viewModel.checkAPIHealth() }
+            } label: {
+                Image(systemName: "arrow.clockwise")
+                    .font(.title2)
+            }
+        }
+        .padding()
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+    
     @ViewBuilder
     private var quickActionsSection: some View {
-        Card {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                Text("Quick Actions")
-                    .font(.aflTitle2)
-                    .foregroundColor(.textPrimary)
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Quick Actions")
+                .font(.headline)
+            
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 12) {
+                ActionCard(
+                    title: "Import Team",
+                    subtitle: "Connect your AFL Fantasy",
+                    icon: "square.and.arrow.down.fill",
+                    color: .blue
+                ) {
+                    showingTeamImport = true
+                }
                 
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: DS.Spacing.s) {
-                    PrimaryButton(title: "My Team") {
-                        // Navigate to team view
-                    }
-                    
-                    PrimaryButton(title: "Trades") {
-                        // Navigate to trades view
-                    }
-                    
-                    PrimaryButton(title: "Leagues") {
-                        // Navigate to leagues view
-                    }
-                    
-                    PrimaryButton(title: "Alerts") {
-                        // Navigate to alerts view
-                    }
+                ActionCard(
+                    title: "Refresh Data",
+                    subtitle: "Update player stats",
+                    icon: "arrow.clockwise",
+                    color: .green
+                ) {
+                    Task { await viewModel.refreshData() }
                 }
             }
         }
     }
     
-    // MARK: - Top Performers Section
-    @ViewBuilder
-    private var topPerformersSection: some View {
-        Card {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                HStack {
-                    Text("Top Performers")
-                        .font(.aflTitle2)
-                        .foregroundColor(.textPrimary)
-                    
-                    Spacer()
-                    
-                    Button("See All") {
-                        // Navigate to full list
-                    }
-                    .font(.aflCaption)
-                    .foregroundColor(.aflPrimary)
-                }
-                
-                if viewModel.topPerformers.isEmpty {
-                    Text("No data available")
-                        .font(.aflBody)
-                        .foregroundColor(.textSecondary)
-                } else {
-                    LazyVStack(spacing: DS.Spacing.s) {
-                        ForEach(viewModel.topPerformers, id: \.id) { player in
-                            PlayerRow(player: player, showDetail: true) {
-                                // Navigate to player detail
-                            }
-                            
-                            if player.id != viewModel.topPerformers.last?.id {
-                                Divider()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    // MARK: - Cash Cows Section
-    @ViewBuilder
-    private var cashCowsSection: some View {
-        Card {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                HStack {
-                    Text("Cash Cows")
-                        .font(.aflTitle2)
-                        .foregroundColor(.textPrimary)
-                    
-                    Spacer()
-                    
-                    Button("See All") {
-                        // Navigate to full list
-                    }
-                    .font(.aflCaption)
-                    .foregroundColor(.aflPrimary)
-                }
-                
-                switch viewModel.cashCowsState {
-                case .idle, .loading:
-                    HStack {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                        Text("Loading cash cows...")
-                            .font(.aflBody)
-                            .foregroundColor(.textSecondary)
-                    }
-                    
-                case .loaded(let cashCows):
-                    if cashCows.isEmpty {
-                        Text("No cash cows found")
-                            .font(.aflBody)
-                            .foregroundColor(.textSecondary)
-                    } else {
-                        LazyVStack(spacing: DS.Spacing.s) {
-                            ForEach(Array(cashCows.prefix(3)), id: \.id) { cow in
-                                CashCowRow(cashCow: cow)
-                                
-                                if cow.id != cashCows.prefix(3).last?.id {
-                                    Divider()
-                                }
-                            }
-                        }
-                    }
-                    
-                case .error(let error):
-                    ErrorView(message: error.localizedDescription) {
-                        Task { await viewModel.loadCashCows() }
-                    }
-                }
-            }
-        }
-    }
-    
-    // MARK: - Captain Suggestions Section
-    @ViewBuilder
-    private var captainSuggestionsSection: some View {
-        Card {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                HStack {
-                    Text("Captain Suggestions")
-                        .font(.aflTitle2)
-                        .foregroundColor(.textPrimary)
-                    
-                    Spacer()
-                    
-                    Button("See All") {
-                        // Navigate to full list
-                    }
-                    .font(.aflCaption)
-                    .foregroundColor(.aflPrimary)
-                }
-                
-                switch viewModel.captainSuggestionsState {
-                case .idle, .loading:
-                    HStack {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                        Text("Loading suggestions...")
-                            .font(.aflBody)
-                            .foregroundColor(.textSecondary)
-                    }
-                    
-                case .loaded(let suggestions):
-                    if suggestions.isEmpty {
-                        Text("No suggestions available")
-                            .font(.aflBody)
-                            .foregroundColor(.textSecondary)
-                    } else {
-                        LazyVStack(spacing: DS.Spacing.s) {
-                            ForEach(Array(suggestions.prefix(3)), id: \.id) { suggestion in
-                                CaptainSuggestionRow(suggestion: suggestion)
-                                
-                                if suggestion.id != suggestions.prefix(3).last?.id {
-                                    Divider()
-                                }
-                            }
-                        }
-                    }
-                    
-                case .error(let error):
-                    ErrorView(message: error.localizedDescription) {
-                        Task { await viewModel.loadCaptainSuggestions() }
-                    }
-                }
-            }
-        }
-    }
-    
-    // MARK: - Players Section
     @ViewBuilder
     private var playersSection: some View {
-        Card {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                HStack {
-                    Text("All Players")
-                        .font(.aflTitle2)
-                        .foregroundColor(.textPrimary)
-                    
-                    Spacer()
-                    
-                    Text("\(viewModel.filteredPlayers.count) players")
-                        .font(.aflCaption)
-                        .foregroundColor(.textSecondary)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Players")
+                    .font(.headline)
+                
+                Spacer()
+                
+                Text("\(viewModel.players.count)")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.players.prefix(10)) { player in
+                    PlayerRow(player: player)
                 }
                 
-                switch viewModel.playersState {
-                case .idle:
-                    Text("Tap to load players")
-                        .font(.aflBody)
-                        .foregroundColor(.textSecondary)
-                    
-                case .loading:
-                    LoadingView(message: "Loading players...")
-                    
-                case .loaded:
-                    if viewModel.filteredPlayers.isEmpty {
-                        Text("No players match your filters")
-                            .font(.aflBody)
-                            .foregroundColor(.textSecondary)
-                    } else {
-                        LazyVStack(spacing: DS.Spacing.s) {
-                            ForEach(Array(viewModel.filteredPlayers.prefix(10)), id: \.id) { player in
-                                PlayerRow(player: player, showDetail: true) {
-                                    // Navigate to player detail
-                                }
-                                
-                                if player.id != viewModel.filteredPlayers.prefix(10).last?.id {
-                                    Divider()
-                                }
-                            }
-                        }
-                        
-                        if viewModel.filteredPlayers.count > 10 {
-                            Button("View All \(viewModel.filteredPlayers.count) Players") {
-                                // Navigate to full list
-                            }
-                            .font(.aflCallout)
-                            .foregroundColor(.aflPrimary)
-                            .padding(.top, DS.Spacing.s)
-                        }
-                    }
-                    
-                case .error(let error):
-                    ErrorView(message: error.localizedDescription) {
-                        Task { await viewModel.loadPlayers() }
-                    }
+                if viewModel.players.count > 10 {
+                    Text("... and \(viewModel.players.count - 10) more players")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding()
                 }
             }
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        }
+    }
+    
+    @ViewBuilder
+    private var cashCowsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Cash Cows Analysis")
+                .font(.headline)
+            
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.cashCows.prefix(5)) { cashCow in
+                    CashCowRow(cashCow: cashCow)
+                }
+            }
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        }
+    }
+    
+    @ViewBuilder
+    private var captainSuggestionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Captain Suggestions")
+                .font(.headline)
+            
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.captainSuggestions.prefix(3)) { suggestion in
+                    CaptainSuggestionRow(suggestion: suggestion)
+                }
+            }
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
     }
 }
 
 // MARK: - Supporting Views
 
+@available(iOS 16.0, *)
+struct PlayerRow: View {
+    let player: Player
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(player.name)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Text("\(player.team) • \(player.position.rawValue)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("$\(player.price / 1000)K")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Text("Avg: \(player.average, specifier: "%.1f")")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+    }
+}
+
+@available(iOS 16.0, *)
 struct CashCowRow: View {
-    let cashCow: CashCow
+    let cashCow: CashCowData
     
     var body: some View {
-        HStack(spacing: DS.Spacing.m) {
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                Text(cashCow.name)
-                    .font(.aflSubheadline)
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(cashCow.playerName)
+                    .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(.textPrimary)
                 
-                Text("\(cashCow.team) • \(cashCow.position)")
-                    .font(.aflCaption)
-                    .foregroundColor(.textSecondary)
+                Text(cashCow.recommendation)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
             
             Spacer()
             
-            VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
-                Text("$\(Int(cashCow.price / 1000))k")
-                    .font(.aflSubheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.textPrimary)
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("$\(cashCow.cashGenerated)K")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.green)
                 
-                Text("+$\(Int(cashCow.potentialGain / 1000))k")
-                    .font(.aflCaption)
-                    .foregroundColor(.success)
+                if let confidence = cashCow.confidence {
+                    Text("\(confidence * 100, specifier: "%.0f")% confidence")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
         }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
     }
 }
 
+@available(iOS 16.0, *)
 struct CaptainSuggestionRow: View {
-    let suggestion: CaptainSuggestion
+    let suggestion: CaptainSuggestionResponse
     
     var body: some View {
-        HStack(spacing: DS.Spacing.m) {
-            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                Text(suggestion.name)
-                    .font(.aflSubheadline)
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(suggestion.playerName)
+                    .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(.textPrimary)
                 
-                Text(suggestion.team)
-                    .font(.aflCaption)
-                    .foregroundColor(.textSecondary)
+                Text(suggestion.reasoning)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
             }
             
             Spacer()
             
-            VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
-                Text("\(Int(suggestion.projectedScore))")
-                    .font(.aflSubheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.textPrimary)
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(suggestion.recommendation)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.blue)
                 
-                Text("\(Int(suggestion.confidence * 100))% confidence")
-                    .font(.aflCaption)
-                    .foregroundColor(.success)
+                Text("\(suggestion.confidence * 100, specifier: "%.0f")%")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+    }
+}
+
+@available(iOS 16.0, *)
+struct ActionCard: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let color: Color
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(color)
+                
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+// MARK: - ViewModel
+
+@available(iOS 16.0, *)
+@MainActor
+final class DashboardViewModel: ObservableObject {
+    @Published var players: [Player] = []
+    @Published var cashCows: [CashCowData] = []
+    @Published var captainSuggestions: [CaptainSuggestionResponse] = []
+    @Published var apiHealth: APIHealthResponse?
+    @Published var isLoading = false
+    
+    private let apiClient = AFLFantasyAPIClient.shared
+    
+    func loadInitialData() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        await checkAPIHealth()
+        await loadPlayers()
+        await loadCashCows()
+        await loadCaptainSuggestions()
+    }
+    
+    func refreshData() async {
+        await loadPlayers()
+        await loadCashCows() 
+        await loadCaptainSuggestions()
+        await checkAPIHealth()
+    }
+    
+    func checkAPIHealth() async {
+        do {
+            let health = try await apiClient.healthCheck()
+            self.apiHealth = health
+        } catch {
+            print("Failed to check API health: \(error)")
+        }
+    }
+    
+    private func loadPlayers() async {
+        do {
+            let fetchedPlayers = try await apiClient.getAllPlayers()
+            self.players = fetchedPlayers
+        } catch {
+            print("Failed to load players: \(error)")
+        }
+    }
+    
+    private func loadCashCows() async {
+        do {
+            let fetchedCashCows = try await apiClient.getCashCowAnalysis()
+            self.cashCows = fetchedCashCows
+        } catch {
+            print("Failed to load cash cows: \(error)")
+        }
+    }
+    
+    private func loadCaptainSuggestions() async {
+        do {
+            let fetchedSuggestions = try await apiClient.getCaptainSuggestions()
+            self.captainSuggestions = fetchedSuggestions
+        } catch {
+            print("Failed to load captain suggestions: \(error)")
         }
     }
 }
 
-struct FiltersView: View {
-    @ObservedObject var viewModel: DashboardViewModel
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationStack {
-            List {
-                Section("Position") {
-                    Picker("Position", selection: $viewModel.selectedPosition) {
-                        Text("All Positions").tag(nil as PlayerPosition?)
-                        ForEach(viewModel.availablePositions, id: \.self) { position in
-                            Text(position.displayName).tag(position as PlayerPosition?)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                }
-                
-                Section("Team") {
-                    Picker("Team", selection: $viewModel.selectedTeam) {
-                        Text("All Teams").tag(nil as String?)
-                        ForEach(viewModel.availableTeams, id: \.self) { team in
-                            Text(team).tag(team as String?)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                }
-                
-                Section {
-                    Button("Clear All Filters") {
-                        viewModel.clearFilters()
-                    }
-                    .foregroundColor(.aflPrimary)
-                }
-            }
-            .navigationTitle("Filters")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
+#Preview {
+    DashboardView()
 }

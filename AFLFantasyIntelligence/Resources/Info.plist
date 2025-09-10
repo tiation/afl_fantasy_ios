@@ -34,10 +34,6 @@
 				<true/>
 				<key>NSExceptionMinimumTLSVersion</key>
 				<string>1.0</string>
-				<key>NSExceptionPorts</key>
-				<array>
-					<integer>8080</integer>
-				</array>
 			</dict>
 		</dict>
 	</dict>

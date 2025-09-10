@@ -1,16 +1,18 @@
 import SwiftUI
 
+// MARK: - AlertsView
+
 struct AlertsView: View {
     @EnvironmentObject var alertsViewModel: AlertsViewModel
     @State private var showingSettings = false
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: DS.Spacing.l) {
                     // Summary Section
                     alertsSummarySection
-                    
+
                     // Alerts List
                     alertsList
                 }
@@ -39,16 +41,16 @@ struct AlertsView: View {
             alertsViewModel.markAllAsRead()
         }
     }
-    
+
     // MARK: - Summary Section
-    
+
     private var alertsSummarySection: some View {
         DSCard {
             VStack(alignment: .leading, spacing: DS.Spacing.m) {
                 Text("Alert Center")
                     .font(DS.Typography.headline)
                     .foregroundColor(DS.Colors.onSurface)
-                
+
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: DS.Spacing.m) {
                     VStack {
                         Text("\(alertsViewModel.unreadCount)")
@@ -58,7 +60,7 @@ struct AlertsView: View {
                             .font(DS.Typography.caption)
                             .foregroundColor(DS.Colors.onSurfaceSecondary)
                     }
-                    
+
                     VStack {
                         Text("\(alertsViewModel.alerts.count)")
                             .font(DS.Typography.statNumber)
@@ -67,7 +69,7 @@ struct AlertsView: View {
                             .font(DS.Typography.caption)
                             .foregroundColor(DS.Colors.onSurfaceSecondary)
                     }
-                    
+
                     VStack {
                         Text("\(alertsViewModel.criticalCount)")
                             .font(DS.Typography.statNumber)
@@ -80,9 +82,9 @@ struct AlertsView: View {
             }
         }
     }
-    
+
     // MARK: - Alerts List
-    
+
     private var alertsList: some View {
         LazyVStack(spacing: DS.Spacing.m) {
             if alertsViewModel.alerts.isEmpty {
@@ -97,20 +99,20 @@ struct AlertsView: View {
             }
         }
     }
-    
+
     // MARK: - Empty State
-    
+
     private var emptyStateView: some View {
         DSCard {
             VStack(spacing: DS.Spacing.l) {
                 Image(systemName: "bell.slash")
                     .font(.system(size: 48))
                     .foregroundColor(DS.Colors.onSurfaceVariant)
-                
+
                 Text("No Alerts")
                     .font(DS.Typography.title3)
                     .foregroundColor(DS.Colors.onSurface)
-                
+
                 Text("You're all caught up! New alerts will appear here.")
                     .font(DS.Typography.body)
                     .foregroundColor(DS.Colors.onSurfaceSecondary)
@@ -121,11 +123,11 @@ struct AlertsView: View {
     }
 }
 
-// MARK: - Alert Row View
+// MARK: - AlertRowView
 
 struct AlertRowView: View {
     let alert: AlertNotification
-    
+
     var body: some View {
         DSCard {
             HStack(spacing: DS.Spacing.m) {
@@ -134,24 +136,24 @@ struct AlertRowView: View {
                     .font(.title2)
                     .foregroundColor(alert.type.color)
                     .frame(width: 24, height: 24)
-                
+
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     Text(alert.title)
                         .font(DS.Typography.headline)
                         .foregroundColor(DS.Colors.onSurface)
-                    
+
                     Text(alert.message)
                         .font(DS.Typography.body)
                         .foregroundColor(DS.Colors.onSurfaceSecondary)
                         .lineLimit(3)
-                    
+
                     Text(alert.timestamp.formatted(.relative(presentation: .named)))
                         .font(DS.Typography.caption)
                         .foregroundColor(DS.Colors.onSurfaceVariant)
                 }
-                
+
                 Spacer()
-                
+
                 if !alert.isRead {
                     Circle()
                         .fill(DS.Colors.primary)
@@ -162,17 +164,17 @@ struct AlertRowView: View {
         .opacity(alert.isRead ? 0.7 : 1.0)
         .dsAccessibility(
             label: "\(alert.type.displayName): \(alert.title). \(alert.message)",
-            traits: .button
+            traits: .isButton
         )
     }
 }
 
-// MARK: - Alert Settings View
+// MARK: - AlertSettingsView
 
 struct AlertSettingsView: View {
     @Environment(\.dismiss) var dismiss
     @State private var settings = AlertSettings.default
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -182,7 +184,7 @@ struct AlertSettingsView: View {
                     Toggle("Trade Deadlines", isOn: $settings.tradeDeadlines)
                     Toggle("Captain Reminders", isOn: $settings.captainReminders)
                 }
-                
+
                 Section("Delivery") {
                     Toggle("Push Notifications", isOn: $settings.pushNotifications)
                     Toggle("In-App Alerts", isOn: $settings.inAppAlerts)
@@ -196,7 +198,7 @@ struct AlertSettingsView: View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         // TODO: Save settings
@@ -208,7 +210,7 @@ struct AlertSettingsView: View {
     }
 }
 
-// MARK: - Supporting Types
+// MARK: - AlertSettings
 
 struct AlertSettings {
     var priceChanges = true
@@ -217,45 +219,45 @@ struct AlertSettings {
     var captainReminders = true
     var pushNotifications = true
     var inAppAlerts = true
-    
+
     static let `default` = AlertSettings()
 }
 
-// MARK: - View Model
+// MARK: - AlertsViewModel
 
 @MainActor
 final class AlertsViewModel: ObservableObject {
     @Published var alerts: [AlertNotification] = []
-    
+
     var unreadCount: Int {
         alerts.filter { !$0.isRead }.count
     }
-    
+
     var criticalCount: Int {
         alerts.filter { $0.type == .injury || $0.type == .lateOut }.count
     }
-    
+
     init() {
         loadMockAlerts()
     }
-    
+
     func markAsRead(_ alert: AlertNotification) {
         if let index = alerts.firstIndex(where: { $0.id == alert.id }) {
             alerts[index].isRead = true
         }
     }
-    
+
     func markAllAsRead() {
         for index in alerts.indices {
             alerts[index].isRead = true
         }
     }
-    
+
     func refresh() {
         // TODO: Fetch real alerts from API
         loadMockAlerts()
     }
-    
+
     private func loadMockAlerts() {
         alerts = [
             AlertNotification(
@@ -292,19 +294,19 @@ extension AlertType {
     var color: Color {
         switch self {
         case .priceChange:
-            return DS.Colors.primary
+            DS.Colors.primary
         case .injury:
-            return DS.Colors.error
+            DS.Colors.error
         case .lateOut:
-            return DS.Colors.warning
+            DS.Colors.warning
         case .roleChange:
-            return DS.Colors.info
+            DS.Colors.info
         case .tradeDeadline:
-            return DS.Colors.warning
+            DS.Colors.warning
         case .captainReminder:
-            return DS.Colors.success
+            DS.Colors.success
         case .system:
-            return DS.Colors.neutral
+            DS.Colors.neutral
         }
     }
 }
@@ -312,10 +314,10 @@ extension AlertType {
 // MARK: - Previews
 
 #if DEBUG
-struct AlertsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertsView()
-            .environmentObject(AlertsViewModel())
+    struct AlertsView_Previews: PreviewProvider {
+        static var previews: some View {
+            AlertsView()
+                .environmentObject(AlertsViewModel())
+        }
     }
-}
 #endif

@@ -1,18 +1,20 @@
 import SwiftUI
 
+// MARK: - PlayersView
+
 struct PlayersView: View {
     @EnvironmentObject var apiService: APIService
     @StateObject private var viewModel = PlayersViewModel()
     @State private var searchText = ""
-    @State private var selectedPosition: Position? = nil
+    @State private var selectedPosition: Position?
     @State private var showingFilters = false
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 // Search and Filter Bar
                 searchAndFilterBar
-                
+
                 // Players List
                 playersList
             }
@@ -40,9 +42,9 @@ struct PlayersView: View {
         }
         .searchable(text: $searchText, prompt: "Search players...")
     }
-    
+
     // MARK: - Search and Filter Bar
-    
+
     private var searchAndFilterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: DS.Spacing.s) {
@@ -53,7 +55,7 @@ struct PlayersView: View {
                 ) {
                     selectedPosition = nil
                 }
-                
+
                 // Position filter chips
                 ForEach(Position.allCases, id: \.self) { position in
                     FilterChip(
@@ -68,14 +70,19 @@ struct PlayersView: View {
         }
         .padding(.vertical, DS.Spacing.s)
     }
-    
+
     // MARK: - Players List
-    
+
     private var playersList: some View {
         List {
             ForEach(filteredPlayers) { player in
                 PlayerRowView(player: player)
-                    .listRowInsets(EdgeInsets(top: DS.Spacing.s, leading: DS.Spacing.l, bottom: DS.Spacing.s, trailing: DS.Spacing.l))
+                    .listRowInsets(EdgeInsets(
+                        top: DS.Spacing.s,
+                        leading: DS.Spacing.l,
+                        bottom: DS.Spacing.s,
+                        trailing: DS.Spacing.l
+                    ))
                     .listRowBackground(Color.clear)
             }
         }
@@ -90,24 +97,24 @@ struct PlayersView: View {
             }
         }
     }
-    
+
     // MARK: - Empty State
-    
+
     private var emptyStateView: some View {
         VStack(spacing: DS.Spacing.l) {
             Image(systemName: "person.3")
                 .font(.system(size: 48))
                 .foregroundColor(DS.Colors.onSurfaceVariant)
-            
+
             Text("No players found")
                 .font(DS.Typography.title3)
                 .foregroundColor(DS.Colors.onSurface)
-            
+
             Text("Try adjusting your search or filters")
                 .font(DS.Typography.body)
                 .foregroundColor(DS.Colors.onSurfaceSecondary)
                 .multilineTextAlignment(.center)
-            
+
             DSButton("Refresh", style: .outline) {
                 Task {
                     await viewModel.loadPlayers(apiService: apiService)
@@ -117,37 +124,37 @@ struct PlayersView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var filteredPlayers: [Player] {
         var players = viewModel.players
-        
+
         // Filter by position
-        if let selectedPosition = selectedPosition {
+        if let selectedPosition {
             players = players.filter { $0.position == selectedPosition }
         }
-        
+
         // Filter by search text
         if !searchText.isEmpty {
-            players = players.filter { 
+            players = players.filter {
                 $0.name.localizedCaseInsensitiveContains(searchText) ||
-                $0.team.localizedCaseInsensitiveContains(searchText)
+                    $0.team.localizedCaseInsensitiveContains(searchText)
             }
         }
-        
+
         // Sort by projected score descending
         return players.sorted { $0.projected > $1.projected }
     }
 }
 
-// MARK: - Filter Chip
+// MARK: - FilterChip
 
 struct FilterChip: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
@@ -164,11 +171,18 @@ struct FilterChip: View {
     }
 }
 
-// MARK: - Player Row View
+// MARK: - PlayerRowView
 
 struct PlayerRowView: View {
     let player: Player
-    
+
+    private var playerAccessibilityLabel: String {
+        let basicInfo = "\(player.name), \(player.position.displayName), \(player.team)"
+        let priceInfo = "Price \(player.price)"
+        let statsInfo = "Average \(Int(player.average)), Projected \(Int(player.projected))"
+        return "\(basicInfo), \(priceInfo), \(statsInfo)"
+    }
+
     var body: some View {
         DSCard(padding: DS.Spacing.m) {
             HStack(spacing: DS.Spacing.m) {
@@ -176,34 +190,34 @@ struct PlayerRowView: View {
                 Circle()
                     .fill(DS.Colors.positionColor(for: player.position))
                     .frame(width: 12, height: 12)
-                
+
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     Text(player.name)
                         .font(DS.Typography.headline)
                         .foregroundColor(DS.Colors.onSurface)
-                    
+
                     HStack {
                         Text(player.team)
                             .font(DS.Typography.caption)
                             .foregroundColor(DS.Colors.onSurfaceSecondary)
-                        
+
                         Text("•")
                             .font(DS.Typography.caption)
                             .foregroundColor(DS.Colors.onSurfaceSecondary)
-                        
+
                         Text(player.position.displayName)
                             .font(DS.Typography.caption)
                             .foregroundColor(DS.Colors.positionColor(for: player.position))
                     }
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
                     Text("$\(player.price.formatted())")
                         .font(DS.Typography.headline)
                         .foregroundColor(DS.Colors.onSurface)
-                    
+
                     HStack(spacing: DS.Spacing.s) {
                         VStack(alignment: .center, spacing: 2) {
                             Text("\(Int(player.average))")
@@ -213,7 +227,7 @@ struct PlayerRowView: View {
                                 .font(.system(size: 8))
                                 .foregroundColor(DS.Colors.onSurfaceSecondary)
                         }
-                        
+
                         VStack(alignment: .center, spacing: 2) {
                             Text("\(Int(player.projected))")
                                 .font(DS.Typography.caption)
@@ -222,7 +236,7 @@ struct PlayerRowView: View {
                                 .font(.system(size: 8))
                                 .foregroundColor(DS.Colors.onSurfaceSecondary)
                         }
-                        
+
                         VStack(alignment: .center, spacing: 2) {
                             Text("\(player.breakeven)")
                                 .font(DS.Typography.caption)
@@ -236,18 +250,18 @@ struct PlayerRowView: View {
             }
         }
         .dsAccessibility(
-            label: "\(player.name), \(player.position.displayName), \(player.team), Price \(player.price), Average \(Int(player.average)), Projected \(Int(player.projected))",
+            label: playerAccessibilityLabel,
             traits: .isButton
         )
     }
 }
 
-// MARK: - Filters Sheet
+// MARK: - FiltersView
 
 struct FiltersView: View {
     @Binding var selectedPosition: Position?
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: DS.Spacing.l) {
@@ -255,13 +269,13 @@ struct FiltersView: View {
                     Text("Position")
                         .font(DS.Typography.headline)
                         .foregroundColor(DS.Colors.onSurface)
-                    
+
                     VStack(spacing: DS.Spacing.s) {
                         Button("All Positions") {
                             selectedPosition = nil
                         }
                         .foregroundColor(selectedPosition == nil ? DS.Colors.primary : DS.Colors.onSurface)
-                        
+
                         ForEach(Position.allCases, id: \.self) { position in
                             Button(position.displayName) {
                                 selectedPosition = position
@@ -270,7 +284,7 @@ struct FiltersView: View {
                         }
                     }
                 }
-                
+
                 Spacer()
             }
             .padding(DS.Spacing.l)
@@ -287,31 +301,33 @@ struct FiltersView: View {
     }
 }
 
-// MARK: - View Model
+// MARK: - PlayersViewModel
 
 @MainActor
 final class PlayersViewModel: ObservableObject {
     @Published var players: [Player] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
-    
+
     func loadPlayers(apiService: APIService) async {
         isLoading = true
         errorMessage = nil
-        
+
         defer { isLoading = false }
-        
+
         do {
             let fetchedPlayers = try await apiService.fetchAllPlayers()
             players = fetchedPlayers
+            print("✅ Loaded \(fetchedPlayers.count) players from API")
         } catch {
             errorMessage = error.localizedDescription
             print("❌ Failed to load players: \(error)")
             
-            // Use mock data as fallback for development
-            #if DEBUG
-            players = Player.mockPlayers
-            #endif
+            // Try to fallback to mock data only if API is completely unreachable
+            if players.isEmpty {
+                players = Player.mockPlayers
+                print("🔄 Using mock data fallback")
+            }
         }
     }
 }
@@ -319,20 +335,20 @@ final class PlayersViewModel: ObservableObject {
 // MARK: - Previews
 
 #if DEBUG
-struct PlayersView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlayersView()
-            .environmentObject(APIService.mock)
-    }
-}
-
-struct PlayerRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            PlayerRowView(player: Player.mockPlayers[0])
-            PlayerRowView(player: Player.mockPlayers[1])
+    struct PlayersView_Previews: PreviewProvider {
+        static var previews: some View {
+            PlayersView()
+                .environmentObject(APIService.mock)
         }
-        .padding()
     }
-}
+
+    struct PlayerRowView_Previews: PreviewProvider {
+        static var previews: some View {
+            VStack {
+                PlayerRowView(player: Player.mockPlayers[0])
+                PlayerRowView(player: Player.mockPlayers[1])
+            }
+            .padding()
+        }
+    }
 #endif

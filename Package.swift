@@ -3,39 +3,38 @@
 import PackageDescription
 
 let package = Package(
-    name: "AFLFantasyApp",
+    name: "AFLFantasy",
     platforms: [
-        .iOS(.v17),
-        .macOS(.v10_15)
+        .iOS(.v16)
     ],
     products: [
         .executable(
-            name: "AFLFantasyApp",
-            targets: ["AFLFantasyApp"]
+            name: "AFLFantasy",
+            targets: ["AFLFantasy"]
         )
     ],
     dependencies: [
-        // Networking
-        .package(url: "https://github.com/kean/Nuke", from: "12.0.0"),
-        
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.0.0")
     ],
     targets: [
         .executableTarget(
-            name: "AFLFantasyApp",
-            dependencies: [
-                "Nuke"
-            ],
+            name: "AFLFantasy",
+            dependencies: [],
             path: "Sources"
         ),
+        .executableTarget(
+            name: "AFLFantasyIntelligence",
+            dependencies: [],
+            path: "AFLFantasyIntelligence/Sources"
+        ),
         .testTarget(
-            name: "AFLFantasyAppTests",
+            name: "AFLFantasyIntelligenceTests",
             dependencies: [
-                "AFLFantasyApp",
+                "AFLFantasyIntelligence",
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
             ],
-            path: "Tests/AFLFantasyAppTests"
+            path: "AFLFantasyIntelligence/Tests"
         )
     ]
 )

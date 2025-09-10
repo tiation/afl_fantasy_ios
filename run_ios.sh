@@ -19,8 +19,8 @@ NC='\033[0m' # No Color
 DEFAULT_SIMULATOR="iPhone 15"
 API_BASE_URL="http://localhost:4000"
 FRONTEND_URL="http://localhost:5173"
-XCODE_PROJECT="ios/AFLFantasy.xcodeproj"
-APP_SCHEME="AFLFantasy"
+XCODE_PROJECT="AFLFantasyIntelligence/AFL Fantasy Intelligence.xcodeproj"
+APP_SCHEME="AFL Fantasy Intelligence"
 
 # Functions
 print_header() {
@@ -134,11 +134,11 @@ check_prerequisites() {
     local errors=0
     
     # Check if we're in the right directory
-    if [ ! -d "ios" ]; then
-        print_error "ios directory not found. Please run this from the AFL Fantasy project root."
+    if [ ! -d "AFLFantasyIntelligence" ]; then
+        print_error "AFLFantasyIntelligence directory not found. Please run this from the AFL Fantasy project root."
         errors=$((errors + 1))
     else
-        print_success "iOS project directory found ✓"
+        print_success "AFL Fantasy Intelligence project directory found ✓"
     fi
     
     # Check if Xcode is available
@@ -152,7 +152,7 @@ check_prerequisites() {
     
     # Check if xcodeproj exists
     if [ ! -d "$XCODE_PROJECT" ]; then
-        print_error "AFLFantasy.xcodeproj not found in ios/ directory."
+        print_error "AFL Fantasy Intelligence.xcodeproj not found in AFLFantasyIntelligence/ directory."
         errors=$((errors + 1))
     else
         print_success "Xcode project found ✓"
@@ -208,7 +208,8 @@ boot_simulator() {
     print_section "Setting up iOS Simulator"
     
     # Find the simulator device ID
-    local device_id=$(xcrun simctl list devices | grep "$SIMULATOR_DEVICE" | grep -v "unavailable" | head -1 | grep -o '([^)]*)' | tr -d '()')
+    local device_line=$(xcrun simctl list devices | grep "$SIMULATOR_DEVICE" | grep -v "unavailable" | head -1)
+    local device_id=$(echo "$device_line" | grep -o '([A-F0-9-]*)' | head -1 | tr -d '()')
     
     if [ -z "$device_id" ]; then
         print_error "Simulator '$SIMULATOR_DEVICE' not found"
@@ -220,7 +221,7 @@ boot_simulator() {
     print_step "Using simulator: $SIMULATOR_DEVICE ($device_id)"
     
     # Check if simulator is already booted
-    local device_state=$(xcrun simctl list devices | grep "$device_id" | grep -o "Booted\|Shutdown")
+    local device_state=$(echo "$device_line" | grep -o "Booted\|Shutdown")
     
     if [ "$device_state" != "Booted" ]; then
         print_step "Booting simulator..."
@@ -245,11 +246,12 @@ boot_simulator() {
 build_and_run_app() {
     print_section "Building iOS App"
     
-    cd ios
+    # Build from project root since the Xcode project is at AFLFantasyIntelligence/AFL Fantasy Intelligence.xcodeproj
     
     local build_args=(
+        "-project" "$XCODE_PROJECT"
         "-scheme" "$APP_SCHEME"
-        "-destination" "platform=iOS Simulator,name=$SIMULATOR_DEVICE"
+        "-destination" "platform=iOS Simulator,id=$SIMULATOR_DEVICE_ID"
         "-configuration" "Debug"
     )
     
@@ -271,14 +273,16 @@ build_and_run_app() {
     if [ "$BUILD_ONLY" = false ]; then
         print_step "Installing and launching app..."
         
-        # Install the app
-        local app_path=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" -path "*/Build/Products/Debug-iphonesimulator/*AFLFantasy.app" | head -1)
+        # Install the app  
+        local app_path=$(find ~/Library/Developer/Xcode/DerivedData -type d -name "AFL Fantasy Intelligence.app" | grep "Build/Products/Debug-iphonesimulator" | grep -v "Index.noindex" | head -1)
         
         if [ -n "$app_path" ]; then
+            print_step "Installing app from: $app_path"
             xcrun simctl install "$SIMULATOR_DEVICE_ID" "$app_path"
             
-            # Launch the app
-            local bundle_id=$(defaults read "$app_path/Info" CFBundleIdentifier 2>/dev/null || echo "com.aflFantasy.app")
+            # Launch the app with the correct bundle ID
+            local bundle_id="com.aflsi.fantasy-intelligence"
+            print_step "Launching app with bundle ID: $bundle_id"
             xcrun simctl launch "$SIMULATOR_DEVICE_ID" "$bundle_id"
             
             print_success "App launched in simulator ✓"
@@ -286,8 +290,6 @@ build_and_run_app() {
             print_warning "Could not find built app to install"
         fi
     fi
-    
-    cd ..
 }
 
 # Open in Xcode

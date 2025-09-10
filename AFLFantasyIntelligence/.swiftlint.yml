@@ -29,7 +29,7 @@ file_length: { warning: 400, error: 500 }
 type_body_length: { warning: 300, error: 400 }
 function_body_length: { warning: 40, error: 60 }
 cyclomatic_complexity: { warning: 10, error: 12 }
-nesting: { type_level: 2, statement_level: 3 }
+nesting: { type_level: 2 }
 
 # Safety
 force_cast: error

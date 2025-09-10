@@ -106,7 +106,7 @@ Each player file contains **6 comprehensive data sheets**:
 ```bash
 Python >= 3.9
 Xcode >= 14.0 (for iOS app)
-ChromeDriver (auto-managed by webdriver-manager)
+ChromeDriVer (auto-managed by webdriver-manager)
 macOS (for iOS development)
 ```
 
@@ -119,7 +119,8 @@ cd /Users/tiaastor/workspace/10_projects/afl_fantasy_ios
 ./start_api.sh
 # ✅ Server starts on http://localhost:4000
 
-# Open iOS app in Xcode and run
+# Open AFLFantasyIntelligence app in Xcode and run
+open "AFLFantasyIntelligence/AFL Fantasy Intelligence.xcodeproj"
 # ✅ Dashboard shows real cash cow data
 ```
 

@@ -2,6 +2,7 @@ import SwiftUI
 
 // MARK: - View Extensions
 
+@available(iOS 14.0, *)
 extension View {
     /// Ensures minimum hit target size for accessibility
     func dsMinimumHitTarget() -> some View {
@@ -16,10 +17,11 @@ extension View {
     }
     
     /// Apply shimmer loading effect for placeholder states
-    func shimmer() -> some View {
+    func shimmerEffect() -> some View {
         self.overlay(
             Rectangle()
-                .fill(
+                .foregroundColor(Color.clear)
+                .background(
                     LinearGradient(
                         colors: [Color.clear, Color.white.opacity(0.3), Color.clear],
                         startPoint: .leading,
@@ -27,10 +29,6 @@ extension View {
                     )
                 )
                 .rotationEffect(.degrees(-15))
-                .animation(
-                    .easeInOut(duration: 1.5).repeatForever(autoreverses: false),
-                    value: UUID()
-                )
         )
         .clipped()
     }

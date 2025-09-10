@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - TeamHealth Models
 
+@available(iOS 13.0, *)
 struct TeamHealth: Codable {
     let bankBalance: Int
     let tradesRemaining: Int
@@ -25,6 +26,19 @@ struct TeamHealth: Codable {
         self.teamValue = 12500000 // $12.5M
         self.currentScore = 2134
         self.rank = 47291
+    }
+    
+    init(bankBalance: Int, tradesRemaining: Int, captainSet: Bool, viceCaptainSet: Bool, nextRoundDeadline: Date, injuredPlayers: [InjuredPlayer], suspendedPlayers: [SuspendedPlayer], teamValue: Int, currentScore: Int, rank: Int) {
+        self.bankBalance = bankBalance
+        self.tradesRemaining = tradesRemaining
+        self.captainSet = captainSet
+        self.viceCaptainSet = viceCaptainSet
+        self.nextRoundDeadline = nextRoundDeadline
+        self.injuredPlayers = injuredPlayers
+        self.suspendedPlayers = suspendedPlayers
+        self.teamValue = teamValue
+        self.currentScore = currentScore
+        self.rank = rank
     }
     
     // MARK: - Computed Properties

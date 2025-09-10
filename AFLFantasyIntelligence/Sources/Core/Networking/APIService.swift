@@ -99,6 +99,73 @@ final class APIService: ObservableObject {
         try await request(endpoint: .stats, responseType: APIStatsResponse.self)
     }
 
+    // MARK: - Authentication API
+    
+    func authenticate(email: String, password: String) async throws -> AuthResponse {
+        let body = LoginRequest(email: email, password: password)
+        return try await request(
+            endpoint: .login,
+            method: .POST,
+            body: body,
+            responseType: AuthResponse.self
+        )
+    }
+    
+    func refreshToken(_ token: String) async throws -> AuthResponse {
+        let body = RefreshTokenRequest(refreshToken: token)
+        return try await request(
+            endpoint: .refreshToken,
+            method: .POST,
+            body: body,
+            responseType: AuthResponse.self
+        )
+    }
+    
+    // MARK: - Team Management API
+    
+    func fetchUserTeams(userId: String) async throws -> [FantasyTeamResponse] {
+        try await request(
+            endpoint: .userTeams(userId),
+            responseType: [FantasyTeamResponse].self
+        )
+    }
+    
+    func fetchTeamDetails(teamCode: String) async throws -> FantasyTeamResponse {
+        try await request(
+            endpoint: .teamDetails(teamCode),
+            responseType: FantasyTeamResponse.self
+        )
+    }
+    
+    func addTeamToUser(userId: String, teamCode: String) async throws -> FantasyTeamResponse {
+        let body = AddTeamRequest(teamCode: teamCode)
+        return try await request(
+            endpoint: .addTeam(userId),
+            method: .POST,
+            body: body,
+            responseType: FantasyTeamResponse.self
+        )
+    }
+    
+    func removeTeamFromUser(userId: String, teamId: String) async throws {
+        struct EmptyResponse: Codable {}
+        _ = try await request(
+            endpoint: .removeTeam(userId, teamId),
+            method: .DELETE,
+            responseType: EmptyResponse.self
+        )
+    }
+    
+    func setActiveTeam(userId: String, teamId: String) async throws -> FantasyTeamResponse {
+        let body = SetActiveTeamRequest(teamId: teamId)
+        return try await request(
+            endpoint: .setActiveTeam(userId),
+            method: .PUT,
+            body: body,
+            responseType: FantasyTeamResponse.self
+        )
+    }
+
     // MARK: - Cache Refresh
 
     func refreshCache() async throws {
@@ -181,6 +248,55 @@ private struct CaptainRequest: Codable {
     let opponent: String?
 }
 
+// MARK: - Authentication Models
+
+struct LoginRequest: Codable {
+    let email: String
+    let password: String
+}
+
+struct RefreshTokenRequest: Codable {
+    let refreshToken: String
+}
+
+struct AuthResponse: Codable {
+    let user: UserResponse
+    let accessToken: String
+    let refreshToken: String
+    let expiresIn: Int
+}
+
+struct UserResponse: Codable {
+    let id: String
+    let email: String
+    let name: String
+    let createdAt: String
+    let teams: [FantasyTeamResponse]?
+    let activeTeamId: String?
+}
+
+// MARK: - Team Management Models
+
+struct FantasyTeamResponse: Codable {
+    let id: String
+    let name: String
+    let code: String
+    let league: String
+    let isActive: Bool
+    let players: [String]
+    let rank: Int?
+    let points: Int?
+    let createdAt: String
+}
+
+struct AddTeamRequest: Codable {
+    let teamCode: String
+}
+
+struct SetActiveTeamRequest: Codable {
+    let teamId: String
+}
+
 // MARK: - EmptyBody
 
 private struct EmptyBody: Codable {}
@@ -195,6 +311,17 @@ enum APIEndpoint {
     case captainSuggestions
     case stats
     case refreshCache
+    
+    // Authentication endpoints
+    case login
+    case refreshToken
+    
+    // Team management endpoints
+    case userTeams(String) // userId
+    case teamDetails(String) // teamCode
+    case addTeam(String) // userId
+    case removeTeam(String, String) // userId, teamId
+    case setActiveTeam(String) // userId
 
     var path: String {
         switch self {
@@ -212,6 +339,24 @@ enum APIEndpoint {
             "/api/stats/summary"
         case .refreshCache:
             "/api/refresh"
+        
+        // Authentication
+        case .login:
+            "/api/auth/login"
+        case .refreshToken:
+            "/api/auth/refresh"
+            
+        // Team management
+        case let .userTeams(userId):
+            "/api/users/\(userId)/teams"
+        case let .teamDetails(teamCode):
+            "/api/teams/\(teamCode)"
+        case let .addTeam(userId):
+            "/api/users/\(userId)/teams"
+        case let .removeTeam(userId, teamId):
+            "/api/users/\(userId)/teams/\(teamId)"
+        case let .setActiveTeam(userId):
+            "/api/users/\(userId)/active-team"
         }
     }
 }

@@ -52,5 +52,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan AFL Fantasy team barcodes and QR codes.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID for secure and convenient sign-in to your AFL Fantasy account.</string>
 </dict>
 </plist>

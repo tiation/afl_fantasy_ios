@@ -1,8 +1,13 @@
 import Foundation
 import SwiftUI
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 // MARK: - UserPreferencesService
 
+@available(iOS 14.0, *)
 @MainActor
 final class UserPreferencesService: ObservableObject {
     static let shared = UserPreferencesService()
@@ -66,8 +71,10 @@ final class UserPreferencesService: ObservableObject {
         saveWatchlist()
         
         // Haptic feedback
+        #if canImport(UIKit)
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
+        #endif
     }
     
     func removeFromWatchlist(_ playerId: String) {
@@ -75,8 +82,10 @@ final class UserPreferencesService: ObservableObject {
         saveWatchlist()
         
         // Haptic feedback
+        #if canImport(UIKit)
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
+        #endif
     }
     
     func isInWatchlist(_ playerId: String) -> Bool {
@@ -151,7 +160,7 @@ final class UserPreferencesService: ObservableObject {
 
 // MARK: - PlayerSort Extension
 
-extension PlayerSort: RawRepresentable, CaseIterable {
+extension PlayerSort: RawRepresentable {
     public init?(rawValue: String) {
         switch rawValue {
         case "priceDesc": self = .priceDesc

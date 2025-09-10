@@ -55,126 +55,202 @@ struct DashboardView: View {
         .searchable(text: $viewModel.searchText, prompt: "Search players")
     }
     
-    // MARK: - Team Health (Quick Win)
+    // MARK: - Team Health (Premium Hero Card)
     @ViewBuilder
     private var teamHealthSection: some View {
         let health = TeamHealth.mock
-        DSCard {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 8) {
-                        Text("Team Health")
-                            .font(.headline)
-                        if health.hasAlerts {
-                            Text("\(health.alertCount) alerts")
-                                .font(.caption)
+        
+        DSGradientCard(gradient: DS.Colors.primaryGradient) {
+            VStack(alignment: .leading, spacing: DS.Spacing.m) {
+                HStack {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        HStack(spacing: DS.Spacing.s) {
+                            Image(systemName: "heart.fill")
                                 .foregroundColor(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.red.opacity(0.9), in: Capsule())
+                                .font(DS.Typography.title3)
+                            
+                            Text("Team Health")
+                                .font(DS.Typography.brandHeadline)
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            if health.hasAlerts {
+                                DSStatusBadge(text: "\(health.alertCount) alerts", style: .warning)
+                            } else {
+                                DSStatusBadge(text: "All good", style: .success)
+                            }
                         }
+                        
+                        Text("Deadline \(health.deadlineString)")
+                            .font(DS.Typography.caption)
+                            .foregroundColor(.white.opacity(0.8))
                     }
-                    HStack(spacing: 16) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Bank")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text("$\(health.bankBalance.formatted())")
-                                .font(.subheadline)
-                        }
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Trades")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text("\(health.tradesRemaining)")
-                                .font(.subheadline)
-                        }
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Captain")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(health.captainSet ? "Set" : "Not set")
-                                .font(.subheadline)
-                                .foregroundColor(health.captainSet ? .green : .orange)
-                        }
-                    }
-                    Text("Deadline \(health.deadlineString)")
-                        .font(.caption)
-                        .foregroundColor(health.isDeadlineClose ? .orange : .secondary)
                 }
-                Spacer()
+                
+                HStack(spacing: DS.Spacing.l) {
+                    TeamHealthMetric(
+                        title: "Bank",
+                        value: "$\(health.bankBalance.formatted())",
+                        icon: "dollarsign.circle.fill",
+                        color: DS.Colors.accent
+                    )
+                    
+                    TeamHealthMetric(
+                        title: "Trades",
+                        value: "\(health.tradesRemaining)",
+                        icon: "arrow.left.arrow.right.circle.fill",
+                        color: .white.opacity(0.9)
+                    )
+                    
+                    TeamHealthMetric(
+                        title: "Captain",
+                        value: health.captainSet ? "Set" : "Not set",
+                        icon: "star.circle.fill",
+                        color: health.captainSet ? DS.Colors.success : DS.Colors.warning
+                    )
+                }
+                
+                // Progress indicator for deadline
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Time to deadline")
+                        .font(DS.Typography.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    ProgressView(value: health.isDeadlineClose ? 0.8 : 0.3)
+                        .tint(.white)
+                        .background(.white.opacity(0.3))
+                }
             }
         }
     }
 
-    // MARK: - Header
+    // MARK: - API Status (Enhanced Design)
     @ViewBuilder
     private var apiStatusCard: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("API Status")
-                    .font(.headline)
-                if let health = viewModel.apiHealth {
-                    HStack(spacing: 6) {
-                        Circle()
-                            .fill(health.status == "healthy" ? Color.green : Color.red)
-                            .frame(width: 10, height: 10)
-                        Text(health.status.capitalized)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+        DSCard(style: .glass) {
+            HStack(spacing: DS.Spacing.m) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack(spacing: DS.Spacing.s) {
+                        Image(systemName: "server.rack")
+                            .foregroundColor(DS.Colors.primary)
+                            .font(DS.Typography.title3)
+                        
+                        Text("API Status")
+                            .font(DS.Typography.headline)
+                            .foregroundColor(DS.Colors.onSurface)
                     }
-                    if let cached = viewModel.apiHealth?.playersCache {
-                        Text("Cached: \(cached) players")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    if let last = viewModel.apiHealth?.lastCacheUpdate {
-                        Text("Updated: \(last.replacingOccurrences(of: "T", with: " "))")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                } else {
-                    HStack(spacing: 8) {
-                        ProgressView().scaleEffect(0.8)
-                        Text("Checking...")
-                            .font(.subheadline)
-                            .foregroundColor(.orange)
+                    
+                    if let health = viewModel.apiHealth {
+                        HStack(spacing: DS.Spacing.s) {
+                            DSProgressRing(
+                                progress: health.status == "healthy" ? 1.0 : 0.0,
+                                size: 24,
+                                lineWidth: 3,
+                                color: health.status == "healthy" ? DS.Colors.success : DS.Colors.error
+                            )
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(health.status.capitalized)
+                                    .font(DS.Typography.subheadline)
+                                    .foregroundColor(health.status == "healthy" ? DS.Colors.success : DS.Colors.error)
+                                
+                                if let cached = viewModel.apiHealth?.playersCache {
+                                    Text("\(cached) players cached")
+                                        .font(DS.Typography.caption)
+                                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                                }
+                            }
+                        }
+                        
+                        if let last = viewModel.apiHealth?.lastCacheUpdate {
+                            Text("Updated: \(last.replacingOccurrences(of: "T", with: " "))")
+                                .font(DS.Typography.caption2)
+                                .foregroundColor(DS.Colors.onSurfaceVariant)
+                        }
+                    } else {
+                        HStack(spacing: DS.Spacing.s) {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .tint(DS.Colors.warning)
+                            
+                            Text("Checking connection...")
+                                .font(DS.Typography.subheadline)
+                                .foregroundColor(DS.Colors.warning)
+                        }
                     }
                 }
+                
+                Spacer()
+                
+                Button { 
+                    Task { 
+                        await viewModel.checkAPIHealth() 
+                    } 
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .font(DS.Typography.title2)
+                        .foregroundColor(DS.Colors.primary)
+                        .dsMinimumHitTarget()
+                }
+                .buttonStyle(.plain)
             }
-            Spacer()
-            Button { Task { await viewModel.checkAPIHealth() } } label: {
-                Image(systemName: "arrow.clockwise")
-                    .font(.title2)
-            }
-            .buttonStyle(.plain)
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
 
     @ViewBuilder
     private func summaryCards(_ s: APIStatsResponse) -> some View {
-        HStack(spacing: 12) {
-            metricCard(title: "Players", value: "\(s.totalPlayers)", color: .blue)
-            metricCard(title: "Rows", value: "\(s.totalDataRows)", color: .purple)
-            metricCard(title: "OK", value: "\(s.successfulPlayers)", color: .green)
-            metricCard(title: "Fail", value: "\(s.failedPlayers)", color: .red)
+        LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ], spacing: DS.Spacing.m) {
+            EnhancedMetricCard(
+                title: "Total Players",
+                value: s.totalPlayers,
+                icon: "person.3.fill",
+                gradient: DS.Colors.primaryGradient
+            )
+            
+            EnhancedMetricCard(
+                title: "Data Rows",
+                value: s.totalDataRows,
+                icon: "chart.bar.fill",
+                gradient: LinearGradient(
+                    colors: [DS.Colors.midfielder, DS.Colors.midfielder.opacity(0.7)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            
+            EnhancedMetricCard(
+                title: "Success Rate",
+                value: s.successfulPlayers,
+                icon: "checkmark.circle.fill",
+                gradient: LinearGradient(
+                    colors: [DS.Colors.success, DS.Colors.successLight],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                suffix: "/\(s.totalPlayers)"
+            )
+            
+            EnhancedMetricCard(
+                title: "Failed",
+                value: s.failedPlayers,
+                icon: "exclamationmark.triangle.fill",
+                gradient: s.failedPlayers > 0 ? 
+                    LinearGradient(
+                        colors: [DS.Colors.error, DS.Colors.errorLight],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ) : 
+                    LinearGradient(
+                        colors: [DS.Colors.neutral, DS.Colors.neutralLight],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+            )
         }
-    }
-
-    private func metricCard(title: String, value: String, color: Color) -> some View {
-        VStack(spacing: 4) {
-            Text(value)
-                .font(.headline)
-                .foregroundColor(color)
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
     }
     
     // MARK: - Quick Actions
@@ -313,36 +389,189 @@ struct DashboardView: View {
 
 // MARK: - Supporting Views
 
+// MARK: - TeamHealthMetric
+@available(iOS 16.0, *)
+struct TeamHealthMetric: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: icon)
+                    .foregroundColor(color)
+                    .font(DS.Typography.caption)
+                
+                Text(title)
+                    .font(DS.Typography.caption)
+                    .foregroundColor(.white.opacity(0.8))
+                    .textCase(.uppercase)
+            }
+            
+            Text(value)
+                .font(DS.Typography.smallStat)
+                .foregroundColor(.white)
+                .fontWeight(.semibold)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+// MARK: - EnhancedMetricCard
+@available(iOS 16.0, *)
+struct EnhancedMetricCard: View {
+    let title: String
+    let value: Int
+    let icon: String
+    let gradient: LinearGradient
+    let suffix: String?
+    
+    @State private var isVisible = false
+    
+    init(title: String, value: Int, icon: String, gradient: LinearGradient, suffix: String? = nil) {
+        self.title = title
+        self.value = value
+        self.icon = icon
+        self.gradient = gradient
+        self.suffix = suffix
+    }
+    
+    var body: some View {
+        DSCard(style: .gradient(gradient)) {
+            VStack(alignment: .leading, spacing: DS.Spacing.s) {
+                HStack {
+                    Image(systemName: icon)
+                        .foregroundColor(.white)
+                        .font(DS.Typography.title3)
+                    
+                    Spacer()
+                    
+                    // Optional trend indicator could go here
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack(alignment: .lastTextBaseline, spacing: 2) {
+                        if isVisible {
+                            DSAnimatedCounter(
+                                value: value,
+                                font: DS.Typography.statNumber,
+                                color: .white
+                            )
+                        } else {
+                            Text("0")
+                                .font(DS.Typography.statNumber)
+                                .foregroundColor(.white)
+                        }
+                        
+                        if let suffix {
+                            Text(suffix)
+                                .font(DS.Typography.caption)
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                    }
+                    
+                    Text(title)
+                        .font(DS.Typography.caption)
+                        .foregroundColor(.white.opacity(0.9))
+                        .textCase(.uppercase)
+                        .tracking(0.5)
+                }
+            }
+        }
+        .aspectRatio(1.4, contentMode: .fit)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.6).delay(Double.random(in: 0...0.5))) {
+                isVisible = true
+            }
+        }
+    }
+}
+
 @available(iOS 16.0, *)
 struct PlayerRow: View {
     let player: Player
     
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(player.name)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+        DSCard(padding: DS.Spacing.m) {
+            HStack(spacing: DS.Spacing.m) {
+                // Position indicator with gradient
+                Circle()
+                    .fill(DS.Colors.positionGradient(for: player.position))
+                    .frame(width: 12, height: 12)
+                    .shadow(color: DS.Colors.positionColor(for: player.position).opacity(0.3), radius: 2)
                 
-                Text("\(player.team) • \(player.position.rawValue)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("$\(player.price / 1000)K")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(player.name)
+                        .font(DS.Typography.headline)
+                        .foregroundColor(DS.Colors.onSurface)
+                    
+                    HStack(spacing: DS.Spacing.xs) {
+                        Text(player.team)
+                            .font(DS.Typography.caption)
+                            .foregroundColor(DS.Colors.onSurfaceSecondary)
+                        
+                        Text("•")
+                            .font(DS.Typography.caption)
+                            .foregroundColor(DS.Colors.onSurfaceSecondary)
+                        
+                        Text(player.position.displayName)
+                            .font(DS.Typography.caption)
+                            .foregroundColor(DS.Colors.positionColor(for: player.position))
+                    }
+                }
                 
-                Text("Avg: \(player.average, specifier: "%.1f")")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
+                    Text("$\(player.price / 1000)K")
+                        .font(DS.Typography.price)
+                        .foregroundColor(DS.Colors.onSurface)
+                    
+                    HStack(spacing: DS.Spacing.s) {
+                        StatPill(label: "AVG", value: "\(Int(player.average))")
+                        StatPill(label: "PROJ", value: "\(Int(player.projected))", color: DS.Colors.primary)
+                        StatPill(
+                            label: "BE", 
+                            value: "\(player.breakeven)", 
+                            color: player.breakeven < 0 ? DS.Colors.success : DS.Colors.error
+                        )
+                    }
+                }
             }
         }
-        .padding(.horizontal)
-        .padding(.vertical, 8)
+    }
+}
+
+// MARK: - StatPill
+@available(iOS 16.0, *)
+struct StatPill: View {
+    let label: String
+    let value: String
+    let color: Color
+    
+    init(label: String, value: String, color: Color = DS.Colors.onSurfaceSecondary) {
+        self.label = label
+        self.value = value
+        self.color = color
+    }
+    
+    var body: some View {
+        VStack(alignment: .center, spacing: 1) {
+            Text(value)
+                .font(DS.Typography.microStat)
+                .foregroundColor(color)
+                .fontWeight(.medium)
+            
+            Text(label)
+                .font(.system(size: 8, weight: .medium))
+                .foregroundColor(DS.Colors.onSurfaceVariant)
+                .textCase(.uppercase)
+        }
+        .frame(minWidth: 24)
     }
 }
 

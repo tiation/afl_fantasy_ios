@@ -16,6 +16,7 @@ final class AuthenticationService: ObservableObject {
     // MARK: - Private Properties
     
     private let keychain = KeychainService.shared
+    private let apiService = APIService()
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Constants
@@ -158,32 +159,64 @@ final class AuthenticationService: ObservableObject {
     // MARK: - Private Methods
     
     private func authenticateWithAFLFantasy(email: String, password: String) async throws -> User {
-        // Simulate network delay
-        try await Task.sleep(nanoseconds: 1_500_000_000)
-        
-        // Mock authentication - replace with actual AFL Fantasy API
-        if email.isEmpty || password.isEmpty {
-            throw AuthenticationError.invalidCredentials
-        }
-        
-        // Simulate different responses
-        if email == "demo@aflapp.com" && password == "password" {
+        do {
+            let authResponse = try await apiService.authenticate(email: email, password: password)
+            
+            // Convert API response to User model
+            let teams = authResponse.user.teams?.map { teamResponse in
+                FantasyTeam(
+                    id: teamResponse.id,
+                    name: teamResponse.name,
+                    code: teamResponse.code,
+                    league: teamResponse.league,
+                    isActive: teamResponse.isActive,
+                    players: teamResponse.players,
+                    rank: teamResponse.rank,
+                    points: teamResponse.points,
+                    createdAt: ISO8601DateFormatter().date(from: teamResponse.createdAt) ?? Date()
+                )
+            } ?? []
+            
             return User(
-                id: "user_123",
-                email: email,
-                name: "Demo User",
-                fantasyTeams: [
-                    FantasyTeam(
-                        id: "team_1",
-                        name: "Demo Team",
-                        code: "ABC123",
-                        league: "Classic"
-                    )
-                ],
-                authToken: "mock_token_12345"
+                id: authResponse.user.id,
+                email: authResponse.user.email,
+                name: authResponse.user.name,
+                fantasyTeams: teams,
+                authToken: authResponse.accessToken,
+                createdAt: ISO8601DateFormatter().date(from: authResponse.user.createdAt) ?? Date()
             )
-        } else {
-            throw AuthenticationError.invalidCredentials
+            
+        } catch let error as AFLFantasyError {
+            switch error {
+            case .unauthorized:
+                throw AuthenticationError.invalidCredentials
+            case .networkError(let message):
+                throw AuthenticationError.networkError(message)
+            case .apiError(let message):
+                throw AuthenticationError.networkError(message)
+            default:
+                throw AuthenticationError.unknownError
+            }
+        } catch {
+            // Fallback to demo mode for development
+            if email == "demo@aflapp.com" && password == "password" {
+                return User(
+                    id: "demo_user_123",
+                    email: email,
+                    name: "Demo User",
+                    fantasyTeams: [
+                        FantasyTeam(
+                            id: "demo_team_1",
+                            name: "Demo Team",
+                            code: "ABC123",
+                            league: "Classic"
+                        )
+                    ],
+                    authToken: "demo_token_12345"
+                )
+            } else {
+                throw AuthenticationError.invalidCredentials
+            }
         }
     }
     

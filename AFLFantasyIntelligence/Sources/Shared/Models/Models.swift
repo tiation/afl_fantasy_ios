@@ -19,6 +19,59 @@ struct Player: Codable, Identifiable, Hashable, Sendable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+    
+    static let mockPlayers: [Player] = [
+        Player(
+            id: "1",
+            name: "Marcus Bontempelli",
+            team: "WB",
+            position: .midfielder,
+            price: 725000,
+            average: 105.2,
+            projected: 108.5,
+            breakeven: -15
+        ),
+        Player(
+            id: "2",
+            name: "Clayton Oliver",
+            team: "MEL",
+            position: .midfielder,
+            price: 680000,
+            average: 98.7,
+            projected: 102.1,
+            breakeven: -8
+        ),
+        Player(
+            id: "3",
+            name: "Jordan Dawson",
+            team: "ADE",
+            position: .defender,
+            price: 420000,
+            average: 89.2,
+            projected: 92.8,
+            breakeven: 45
+        ),
+        Player(
+            id: "4",
+            name: "Nick Daicos",
+            team: "COL",
+            position: .defender,
+            price: 380000,
+            average: 95.8,
+            projected: 98.3,
+            breakeven: 38
+        ),
+        Player(
+            id: "5",
+            name: "Max Gawn",
+            team: "MEL",
+            position: .ruck,
+            price: 615000,
+            average: 112.4,
+            projected: 115.2,
+            breakeven: -12
+        )
+    ]
 }
 
 // MARK: - Position
@@ -53,6 +106,46 @@ struct CaptainSuggestion: Codable, Identifiable, Sendable {
     var id: String { playerId }
 }
 
+// MARK: - CaptainSuggestionResponse
+
+struct CaptainSuggestionResponse: Codable, Identifiable, Sendable {
+    let playerId: String
+    let playerName: String
+    let projectedPoints: Double
+    let confidence: Double
+    let reasoning: String
+    let recommendation: String
+
+    var id: String { playerId }
+    
+    static let mockData: [CaptainSuggestionResponse] = [
+        CaptainSuggestionResponse(
+            playerId: "1",
+            playerName: "Marcus Bontempelli",
+            projectedPoints: 125.8,
+            confidence: 0.89,
+            reasoning: "Excellent recent form against this opponent",
+            recommendation: "Strong Captain Choice"
+        ),
+        CaptainSuggestionResponse(
+            playerId: "2",
+            playerName: "Clayton Oliver",
+            projectedPoints: 118.3,
+            confidence: 0.82,
+            reasoning: "Consistent high scores at home ground",
+            recommendation: "Safe Captain Option"
+        ),
+        CaptainSuggestionResponse(
+            playerId: "3",
+            playerName: "Christian Petracca",
+            projectedPoints: 115.6,
+            confidence: 0.75,
+            reasoning: "Good matchup but injury concern",
+            recommendation: "Risky but High Upside"
+        )
+    ]
+}
+
 // MARK: - CashCowAnalysis
 
 struct CashCowAnalysis: Codable, Identifiable, Sendable {
@@ -71,6 +164,58 @@ struct CashCowAnalysis: Codable, Identifiable, Sendable {
     var isGoodCashCow: Bool {
         recommendation == "HOLD" && confidence > 0.6
     }
+}
+
+// MARK: - CashCowData
+
+struct CashCowData: Codable, Identifiable, Sendable {
+    let playerId: String
+    let playerName: String
+    let currentPrice: Int
+    let projectedPrice: Int
+    let cashGenerated: Int
+    let recommendation: String
+    let confidence: Double?
+    let fpAverage: Double
+    let gamesPlayed: Int
+    
+    var id: String { playerId }
+    
+    static let mockData: [CashCowData] = [
+        CashCowData(
+            playerId: "1",
+            playerName: "Jordan Dawson",
+            currentPrice: 420000,
+            projectedPrice: 480000,
+            cashGenerated: 60000,
+            recommendation: "HOLD - Strong cash generation",
+            confidence: 0.85,
+            fpAverage: 89.2,
+            gamesPlayed: 8
+        ),
+        CashCowData(
+            playerId: "2",
+            playerName: "Nick Daicos",
+            currentPrice: 380000,
+            projectedPrice: 450000,
+            cashGenerated: 70000,
+            recommendation: "HOLD - Excellent value",
+            confidence: 0.92,
+            fpAverage: 95.8,
+            gamesPlayed: 7
+        ),
+        CashCowData(
+            playerId: "3",
+            playerName: "Harley Reid",
+            currentPrice: 290000,
+            projectedPrice: 350000,
+            cashGenerated: 60000,
+            recommendation: "HOLD - Rising star",
+            confidence: 0.78,
+            fpAverage: 67.4,
+            gamesPlayed: 9
+        )
+    ]
 }
 
 // MARK: - TradeRecommendation
@@ -362,15 +507,40 @@ struct GameInfo: Codable, Identifiable, Sendable {
 struct APIHealthResponse: Codable, Sendable {
     let status: String
     let timestamp: String?
-    let playersLoaded: Int?
+    let playersCache: Int?
+    let lastCacheUpdate: String?
+    
+    // Legacy compatibility
+    var playersLoaded: Int? { playersCache }
+    
+    static let mock = APIHealthResponse(
+        status: "healthy",
+        timestamp: "2025-09-10T06:35:46Z",
+        playersCache: 603,
+        lastCacheUpdate: "2025-09-10T06:30:00Z"
+    )
 }
 
 struct APIStatsResponse: Codable, Sendable {
     let totalPlayers: Int
-    let playersWithData: Int
-    let cashCowsIdentified: Int
+    let successfulPlayers: Int
+    let failedPlayers: Int
+    let totalDataRows: Int
     let lastUpdated: String?
     let cacheAgeMinutes: Int
+    
+    // Legacy compatibility
+    var playersWithData: Int { successfulPlayers }
+    var cashCowsIdentified: Int { 12 }
+    
+    static let mock = APIStatsResponse(
+        totalPlayers: 603,
+        successfulPlayers: 603,
+        failedPlayers: 0,
+        totalDataRows: 15075,
+        lastUpdated: "2025-09-10T06:30:00Z",
+        cacheAgeMinutes: 5
+    )
 }
 
 // MARK: - AppSettings

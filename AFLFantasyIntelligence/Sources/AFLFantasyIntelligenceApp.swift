@@ -84,59 +84,200 @@ struct ContentView: View {
     @EnvironmentObject var authService: AuthenticationService
     @EnvironmentObject var teamManager: TeamManager
     @State private var selectedTab = 0
+    @State private var previousTab = 0
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            DashboardView(selectedTab: $selectedTab)
-                .tabItem {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                    Text("Dashboard")
-                }
-                .tag(0)
+        ZStack {
+            // Main tab content
+            TabView(selection: $selectedTab) {
+                DashboardView(selectedTab: $selectedTab)
+                    .tabItem { EmptyView() }
+                    .tag(0)
 
-            PlayersView()
-                .tabItem {
-                    Image(systemName: "person.3")
-                    Text("Players")
-                }
-                .tag(1)
+                PlayersView()
+                    .tabItem { EmptyView() }
+                    .tag(1)
+                
+                TeamsView()
+                    .tabItem { EmptyView() }
+                    .tag(2)
+
+                AIToolsView()
+                    .tabItem { EmptyView() }
+                    .tag(3)
+
+                AlertsView()
+                    .tabItem { EmptyView() }
+                    .tag(4)
+                
+                ProfileView()
+                    .tabItem { EmptyView() }
+                    .tag(5)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .ignoresSafeArea(.all, edges: .bottom)
             
-            TeamsView()
-                .tabItem {
-                    Image(systemName: "person.2.badge.plus")
-                    Text("Teams")
-                }
-                .tag(2)
-
-            AIToolsView()
-                .tabItem {
-                    Image(systemName: "brain.head.profile")
-                    Text("AI Tools")
-                }
-                .tag(3)
-
-            CashCowsView()
-                .tabItem {
-                    Image(systemName: "dollarsign.circle")
-                    Text("Cash Cows")
-                }
-                .tag(4)
-
-            AlertsView()
-                .tabItem {
-                    Image(systemName: "bell")
-                    Text("Alerts")
-                }
-                .tag(5)
-            
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person.circle")
-                    Text("Profile")
-                }
-                .tag(6)
+            // Custom floating tab bar
+            VStack {
+                Spacer()
+                
+                FloatingTabBar(
+                    selectedTab: $selectedTab,
+                    tabs: [
+                        TabItem(
+                            id: 0,
+                            title: "Dashboard",
+                            icon: "chart.line.uptrend.xyaxis",
+                            activeIcon: "chart.line.uptrend.xyaxis"
+                        ),
+                        TabItem(
+                            id: 1,
+                            title: "Players",
+                            icon: "person.3",
+                            activeIcon: "person.3.fill"
+                        ),
+                        TabItem(
+                            id: 2,
+                            title: "Teams",
+                            icon: "person.2.badge.plus",
+                            activeIcon: "person.2.badge.plus.fill"
+                        ),
+                        TabItem(
+                            id: 3,
+                            title: "AI Tools",
+                            icon: "brain.head.profile",
+                            activeIcon: "brain.head.profile"
+                        ),
+                        TabItem(
+                            id: 4,
+                            title: "Alerts",
+                            icon: "bell",
+                            activeIcon: "bell.fill"
+                        ),
+                        TabItem(
+                            id: 5,
+                            title: "Profile",
+                            icon: "person.circle",
+                            activeIcon: "person.circle.fill"
+                        )
+                    ]
+                )
+                .padding(.horizontal, DS.Spacing.l)
+                .padding(.bottom, 8)
+            }
         }
-        .accentColor(DS.Colors.primary)
+        .onChange(of: selectedTab) { newValue in
+            // Add haptic feedback for tab changes
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
+            previousTab = newValue
+        }
+    }
+}
+
+// MARK: - Tab Models
+
+struct TabItem {
+    let id: Int
+    let title: String
+    let icon: String
+    let activeIcon: String
+}
+
+// MARK: - FloatingTabBar
+
+struct FloatingTabBar: View {
+    @Binding var selectedTab: Int
+    let tabs: [TabItem]
+    @State private var tabFrames: [Int: CGRect] = [:]
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(tabs, id: \.id) { tab in
+                TabBarButton(
+                    tab: tab,
+                    isSelected: selectedTab == tab.id
+                ) {
+                    withAnimation(DS.Motion.spring) {
+                        selectedTab = tab.id
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .padding(.horizontal, DS.Spacing.s)
+        .padding(.vertical, DS.Spacing.m)
+        .background(
+            RoundedRectangle(cornerRadius: DS.CornerRadius.xl)
+                .fill(.regularMaterial)
+                .shadow(
+                    color: DS.Shadow.large.color,
+                    radius: DS.Shadow.large.radius,
+                    x: DS.Shadow.large.x,
+                    y: DS.Shadow.large.y
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: DS.CornerRadius.xl)
+                .stroke(DS.Colors.outline.opacity(0.1), lineWidth: 1)
+        )
+    }
+}
+
+// MARK: - TabBarButton
+
+struct TabBarButton: View {
+    let tab: TabItem
+    let isSelected: Bool
+    let action: () -> Void
+    
+    @State private var isPressed = false
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: DS.Spacing.xs) {
+                ZStack {
+                    // Active background
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: DS.CornerRadius.medium)
+                            .fill(DS.Colors.primaryGradient)
+                            .frame(width: 36, height: 36)
+                            .shadow(
+                                color: DS.Colors.primary.opacity(0.3),
+                                radius: 8,
+                                x: 0,
+                                y: 4
+                            )
+                    }
+                    
+                    Image(systemName: isSelected ? tab.activeIcon : tab.icon)
+                        .font(.system(size: 16, weight: isSelected ? .semibold : .medium))
+                        .foregroundColor(isSelected ? .white : DS.Colors.onSurfaceSecondary)
+                        .scaleEffect(isSelected ? 1.1 : 1.0)
+                }
+                .frame(height: 36)
+                
+                Text(tab.title)
+                    .font(.system(size: 10, weight: isSelected ? .semibold : .medium))
+                    .foregroundColor(isSelected ? DS.Colors.primary : DS.Colors.onSurfaceSecondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+        }
+        .buttonStyle(.plain)
+        .scaleEffect(isPressed ? 0.9 : 1.0)
+        .onLongPressGesture(minimumDuration: 0) {
+            // On press complete
+        } onPressingChanged: { pressing in
+            withAnimation(DS.Motion.springFast) {
+                isPressed = pressing
+            }
+        }
+        .dsAccessibility(
+            label: tab.title,
+            hint: isSelected ? "Currently selected" : "Tap to switch to \(tab.title)",
+            traits: isSelected ? [.button, .selected] : .button
+        )
     }
 }
 
@@ -149,7 +290,9 @@ struct ContentView: View {
         static var previews: some View {
             ContentView()
                 .environmentObject(APIService.mock)
+                .environmentObject(AuthenticationService())
                 .environmentObject(AlertsViewModel())
+                .environmentObject(TeamManager.mock)
                 .preferredColorScheme(.light)
         }
     }

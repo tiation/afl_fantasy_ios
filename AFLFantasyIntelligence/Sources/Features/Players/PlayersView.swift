@@ -39,8 +39,13 @@ struct PlayersView: View {
                 await viewModel.loadPlayers(apiService: apiService)
             }
             .sheet(isPresented: $showingFilters) {
-                FiltersView(selectedPosition: $selectedPosition)
-                    .presentationDetents([.medium])
+                FiltersView(
+                    selectedPosition: Binding(
+                        get: { prefs.selectedPosition },
+                        set: { prefs.selectedPosition = $0 }
+                    )
+                )
+                .presentationDetents([.medium])
             }
         }
         .task {
@@ -208,93 +213,198 @@ struct FilterChip: View {
 struct PlayerRowView: View {
     let player: Player
     @StateObject private var prefs = UserPreferencesService.shared
+    @State private var isPressed = false
+    @State private var showingDetails = false
 
     private var playerAccessibilityLabel: String {
         let basicInfo = "\(player.name), \(player.position.displayName), \(player.team)"
-        let priceInfo = "Price \(player.price)"
+        let priceInfo = "Price $\(player.price.formatted())"
         let statsInfo = "Average \(Int(player.average)), Projected \(Int(player.projected))"
         return "\(basicInfo), \(priceInfo), \(statsInfo)"
     }
 
     var body: some View {
-        DSCard(padding: DS.Spacing.m) {
-            HStack(spacing: DS.Spacing.m) {
-                // Position indicator
-                Circle()
-                    .fill(DS.Colors.positionColor(for: player.position))
-                    .frame(width: 12, height: 12)
-
-                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    Text(player.name)
-                        .font(DS.Typography.headline)
-                        .foregroundColor(DS.Colors.onSurface)
-
-                    HStack {
-                        Text(player.team)
-                            .font(DS.Typography.caption)
-                            .foregroundColor(DS.Colors.onSurfaceSecondary)
-
-                        Text("•")
-                            .font(DS.Typography.caption)
-                            .foregroundColor(DS.Colors.onSurfaceSecondary)
-
-                        Text(player.position.displayName)
-                            .font(DS.Typography.caption)
-                            .foregroundColor(DS.Colors.positionColor(for: player.position))
+        Button {
+            showingDetails = true
+        } label: {
+            DSCard(style: .elevated, padding: DS.Spacing.l) {
+                HStack(spacing: DS.Spacing.m) {
+                    // Enhanced position indicator with gradient
+                    ZStack {
+                        Circle()
+                            .fill(DS.Colors.positionGradient(for: player.position))
+                            .frame(width: 40, height: 40)
+                            .shadow(
+                                color: DS.Colors.positionColor(for: player.position).opacity(0.3),
+                                radius: 4,
+                                x: 0,
+                                y: 2
+                            )
+                        
+                        Text(player.position.shortName)
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
                     }
-                }
 
-                Spacer()
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        Text(player.name)
+                            .font(DS.Typography.headline)
+                            .foregroundColor(DS.Colors.onSurface)
+                            .multilineTextAlignment(.leading)
 
-                VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
-                    Text("$\(player.price.formatted())")
-                        .font(DS.Typography.headline)
-                        .foregroundColor(DS.Colors.onSurface)
-
-                    HStack(spacing: DS.Spacing.s) {
-                        VStack(alignment: .center, spacing: 2) {
-                            Text("\(Int(player.average))")
-                                .font(DS.Typography.caption)
-                                .foregroundColor(DS.Colors.onSurface)
-                            Text("AVG")
-                                .font(.system(size: 8))
+                        HStack(spacing: DS.Spacing.xs) {
+                            Text(player.team)
+                                .font(DS.Typography.subheadline)
                                 .foregroundColor(DS.Colors.onSurfaceSecondary)
-                        }
-
-                        VStack(alignment: .center, spacing: 2) {
-                            Text("\(Int(player.projected))")
-                                .font(DS.Typography.caption)
-                                .foregroundColor(DS.Colors.primary)
-                            Text("PROJ")
-                                .font(.system(size: 8))
-                                .foregroundColor(DS.Colors.onSurfaceSecondary)
-                        }
-
-                        VStack(alignment: .center, spacing: 2) {
-                            Text("\(player.breakeven)")
-                                .font(DS.Typography.caption)
-                                .foregroundColor(player.breakeven < 0 ? DS.Colors.success : DS.Colors.error)
-                            Text("BE")
-                                .font(.system(size: 8))
-                                .foregroundColor(DS.Colors.onSurfaceSecondary)
+                                .fontWeight(.medium)
+                            
+                            // Premium ownership indicator (mock)
+                            if player.price > 600000 {
+                                DSStatusBadge(text: "Premium", style: .custom(DS.Colors.accent))
+                            } else if player.price < 350000 {
+                                DSStatusBadge(text: "Rookie", style: .info)
+                            }
                         }
                     }
-                }
 
-                // Watchlist star
-                Button(action: { prefs.toggleWatchlist(player.id) }) {
-                    Image(systemName: prefs.isInWatchlist(player.id) ? "star.fill" : "star")
-                        .foregroundColor(prefs.isInWatchlist(player.id) ? DS.Colors.warning : DS.Colors.onSurfaceSecondary)
-                        .dsMinimumHitTarget()
+                    Spacer()
+
+                    VStack(alignment: .trailing, spacing: DS.Spacing.s) {
+                        Text("$\(player.price / 1000)K")
+                            .font(DS.Typography.price)
+                            .foregroundColor(DS.Colors.onSurface)
+                            .fontWeight(.semibold)
+
+                        HStack(spacing: DS.Spacing.s) {
+                            EnhancedStatPill(
+                                label: "AVG", 
+                                value: "\(Int(player.average))",
+                                color: DS.Colors.onSurface
+                            )
+                            
+                            EnhancedStatPill(
+                                label: "PROJ", 
+                                value: "\(Int(player.projected))",
+                                color: DS.Colors.primary,
+                                isHighlighted: true
+                            )
+                            
+                            EnhancedStatPill(
+                                label: "BE", 
+                                value: "\(player.breakeven)",
+                                color: player.breakeven < 0 ? DS.Colors.success : DS.Colors.error
+                            )
+                        }
+                    }
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(prefs.isInWatchlist(player.id) ? "Remove from watchlist" : "Add to watchlist")
             }
+        }
+        .buttonStyle(.plain)
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .onLongPressGesture(minimumDuration: 0) { _ in
+            // On press
+        } onPressingChanged: { pressing in
+            withAnimation(DS.Motion.springFast) {
+                isPressed = pressing
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            // Watchlist star overlay
+            Button(action: { 
+                withAnimation(DS.Motion.spring) {
+                    prefs.toggleWatchlist(player.id)
+                }
+            }) {
+                Image(systemName: prefs.isInWatchlist(player.id) ? "star.fill" : "star")
+                    .foregroundColor(prefs.isInWatchlist(player.id) ? DS.Colors.accent : DS.Colors.onSurfaceSecondary)
+                    .font(.title3)
+                    .dsMinimumHitTarget()
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(prefs.isInWatchlist(player.id) ? "Remove from watchlist" : "Add to watchlist")
+            .offset(x: -8, y: 8)
         }
         .dsAccessibility(
             label: playerAccessibilityLabel,
             traits: .isButton
         )
+        .sheet(isPresented: $showingDetails) {
+            PlayerDetailView(player: player)
+        }
+    }
+}
+
+// MARK: - EnhancedStatPill
+
+struct EnhancedStatPill: View {
+    let label: String
+    let value: String
+    let color: Color
+    let isHighlighted: Bool
+    
+    init(label: String, value: String, color: Color, isHighlighted: Bool = false) {
+        self.label = label
+        self.value = value
+        self.color = color
+        self.isHighlighted = isHighlighted
+    }
+    
+    var body: some View {
+        VStack(alignment: .center, spacing: 2) {
+            Text(value)
+                .font(DS.Typography.microStat)
+                .foregroundColor(color)
+                .fontWeight(isHighlighted ? .bold : .medium)
+            
+            Text(label)
+                .font(.system(size: 8, weight: .medium))
+                .foregroundColor(isHighlighted ? color : DS.Colors.onSurfaceVariant)
+                .textCase(.uppercase)
+        }
+        .padding(.horizontal, DS.Spacing.xs)
+        .padding(.vertical, 2)
+        .background(
+            RoundedRectangle(cornerRadius: DS.CornerRadius.small)
+                .fill(isHighlighted ? color.opacity(0.1) : Color.clear)
+        )
+        .frame(minWidth: 32)
+    }
+}
+
+// MARK: - PlayerDetailView (Placeholder)
+
+struct PlayerDetailView: View {
+    let player: Player
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Player Details")
+                    .font(DS.Typography.title)
+                
+                Text(player.name)
+                    .font(DS.Typography.headline)
+                    .padding()
+                
+                Text("Detailed stats and analysis would go here")
+                    .font(DS.Typography.body)
+                    .foregroundColor(DS.Colors.onSurfaceSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                
+                Spacer()
+            }
+            .navigationTitle("Player Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
     }
 }
 

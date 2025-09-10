@@ -130,7 +130,7 @@ final class TeamImportViewModel: ObservableObject {
     @Published var teamSummary: ImportedTeamData?
     @Published var apiHealth: APIHealthResponse?
 
-    private let keychainManager = KeychainManager()
+    private let keychainManager = KeychainManager.shared
     private let apiClient = AFLFantasyAPIClient.shared
     
     init() {

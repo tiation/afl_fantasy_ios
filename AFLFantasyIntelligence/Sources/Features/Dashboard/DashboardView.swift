@@ -59,30 +59,50 @@ struct DashboardView: View {
     // MARK: - Header Section
 
     private var headerSection: some View {
-        DSCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.m) {
+        DSCard(style: .gradient(DS.Colors.primaryGradient)) {
+            VStack(alignment: .leading, spacing: DS.Spacing.l) {
+                // Hero content
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                         Text("Round \(viewModel.weeklyStats.round)")
-                            .font(DS.Typography.headline)
-                            .foregroundColor(DS.Colors.onSurface)
+                            .font(DS.Typography.brandHeadline)
+                            .foregroundColor(.white.opacity(0.9))
 
-                        Text("Current Season")
-                            .font(DS.Typography.caption)
-                            .foregroundColor(DS.Colors.onSurfaceSecondary)
+                        Text("2024 AFL Fantasy Season")
+                            .font(DS.Typography.subheadline)
+                            .foregroundColor(.white.opacity(0.7))
                     }
 
                     Spacer()
 
-                    VStack(alignment: .trailing) {
-                        Text("\(viewModel.liveStats.currentScore)")
-                            .font(DS.Typography.heroNumber)
-                            .foregroundColor(DS.Colors.primary)
+                    VStack(alignment: .trailing, spacing: DS.Spacing.xs) {
+                        DSAnimatedCounter(
+                            value: viewModel.liveStats.currentScore,
+                            font: DS.Typography.heroNumber,
+                            color: .white
+                        )
 
                         Text("Total Score")
                             .font(DS.Typography.caption)
-                            .foregroundColor(DS.Colors.onSurfaceSecondary)
+                            .foregroundColor(.white.opacity(0.8))
                     }
+                }
+                
+                // Progress indicator for round completion
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack {
+                        Text("Round Progress")
+                            .font(DS.Typography.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                        Spacer()
+                        Text("\(viewModel.liveStats.playersPlaying)/22 played")
+                            .font(DS.Typography.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    
+                    ProgressView(value: Double(viewModel.liveStats.playersPlaying), total: 22)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .white))
+                        .scaleEffect(x: 1, y: 1.5, anchor: .center)
                 }
             }
         }
@@ -94,10 +114,36 @@ struct DashboardView: View {
     // MARK: - Live Performance Section
 
     private var livePerformanceSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.m) {
-            Text("Live Performance")
-                .font(DS.Typography.title3)
-                .foregroundColor(DS.Colors.onSurface)
+        VStack(alignment: .leading, spacing: DS.Spacing.l) {
+            HStack {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Live Performance")
+                        .font(DS.Typography.brandTitle)
+                        .foregroundColor(DS.Colors.onSurface)
+                    
+                    Text("Real-time team statistics")
+                        .font(DS.Typography.caption)
+                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                }
+                
+                Spacer()
+                
+                // Live indicator
+                HStack(spacing: DS.Spacing.xs) {
+                    Circle()
+                        .fill(DS.Colors.error)
+                        .frame(width: 8, height: 8)
+                        .scaleEffect(1.0)
+                        .animation(
+                            Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true),
+                            value: Date().timeIntervalSince1970
+                        )
+                    
+                    Text("LIVE")
+                        .font(DS.Typography.badge)
+                        .foregroundColor(DS.Colors.error)
+                }
+            }
 
             LazyVGrid(
                 columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.m), count: 2),
@@ -106,82 +152,137 @@ struct DashboardView: View {
                 DSStatCard(
                     title: "Current Rank",
                     value: "#\(viewModel.liveStats.rank.formatted())",
-                    trend: nil,
-                    icon: "chart.bar"
+                    trend: determineRankTrend(),
+                    icon: "chart.bar",
+                    style: .prominent
                 )
 
                 DSStatCard(
-                    title: "Average Score",
+                    title: "vs Average",
                     value: String(format: "%.0f", viewModel.liveStats.averageScore),
                     trend: viewModel.liveStats.currentScore > Int(viewModel.liveStats.averageScore) ?
                         .up("+\(viewModel.liveStats.currentScore - Int(viewModel.liveStats.averageScore))") :
                         .down("\(viewModel.liveStats.currentScore - Int(viewModel.liveStats.averageScore))"),
-                    icon: "person.3"
+                    icon: "person.3",
+                    style: .gradient
                 )
 
                 DSStatCard(
-                    title: "Players Playing",
-                    value: "\(viewModel.liveStats.playersPlaying)/22",
-                    trend: nil,
-                    icon: "figure.run"
+                    title: "Active Players",
+                    value: "\(viewModel.liveStats.playersPlaying)",
+                    trend: .neutral,
+                    icon: "figure.run",
+                    style: .standard
                 )
 
                 DSStatCard(
-                    title: "Players Remaining",
+                    title: "Yet to Play",
                     value: "\(viewModel.liveStats.playersRemaining)",
                     trend: nil,
-                    icon: "clock"
+                    icon: "clock",
+                    style: .minimal
                 )
             }
         }
+    }
+    
+    private func determineRankTrend() -> DSStatCard.Trend? {
+        // Mock rank change logic - in real app, compare with previous rank
+        let rankChange = Int.random(in: -500...200)
+        if rankChange > 0 {
+            return .up("+\(rankChange)")
+        } else if rankChange < 0 {
+            return .down("\(rankChange)")
+        }
+        return .neutral
     }
 
     // MARK: - Team Structure Section
 
     private var teamStructureSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.m) {
-            Text("Team Structure")
-                .font(DS.Typography.title3)
-                .foregroundColor(DS.Colors.onSurface)
+        VStack(alignment: .leading, spacing: DS.Spacing.l) {
+            HStack {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Team Structure")
+                        .font(DS.Typography.brandTitle)
+                        .foregroundColor(DS.Colors.onSurface)
+                    
+                    Text("Value breakdown and player positions")
+                        .font(DS.Typography.caption)
+                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                }
+                
+                Spacer()
+            }
 
-            DSCard {
-                VStack(spacing: DS.Spacing.m) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Total Value")
-                                .font(DS.Typography.subheadline)
-                                .foregroundColor(DS.Colors.onSurfaceSecondary)
-                            Text("$\(viewModel.teamStructure.totalValue.formatted())")
-                                .font(DS.Typography.statNumber)
+            VStack(spacing: DS.Spacing.m) {
+                // Financial Overview Cards
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.m), count: 2),
+                    spacing: DS.Spacing.m
+                ) {
+                    DSStatCard(
+                        title: "Total Value",
+                        value: "$\(viewModel.teamStructure.totalValue.formatted())",
+                        trend: nil,
+                        icon: "chart.pie",
+                        style: .elevated,
+                        useAnimatedCounter: true
+                    )
+                    
+                    DSStatCard(
+                        title: "Bank Balance",
+                        value: "$\(viewModel.teamStructure.bankBalance.formatted())",
+                        trend: viewModel.teamStructure.bankBalance > 500000 ? 
+                            .up("Healthy") : 
+                            (viewModel.teamStructure.bankBalance > 100000 ? .neutral : .down("Low")),
+                        icon: "banknote",
+                        style: .gradient,
+                        useAnimatedCounter: true
+                    )
+                }
+                
+                // Position Balance Card
+                DSCard(style: .elevated) {
+                    VStack(alignment: .leading, spacing: DS.Spacing.m) {
+                        HStack {
+                            Image(systemName: "person.3.fill")
+                                .font(.title3)
+                                .foregroundColor(DS.Colors.primary)
+                            
+                            Text("Position Balance")
+                                .font(DS.Typography.headline)
                                 .foregroundColor(DS.Colors.onSurface)
+                            
+                            Spacer()
                         }
-
-                        Spacer()
-
-                        VStack(alignment: .trailing) {
-                            Text("Bank")
-                                .font(DS.Typography.subheadline)
-                                .foregroundColor(DS.Colors.onSurfaceSecondary)
-                            Text("$\(viewModel.teamStructure.bankBalance.formatted())")
-                                .font(DS.Typography.statNumber)
-                                .foregroundColor(DS.Colors.success)
-                        }
-                    }
-
-                    Divider()
-
-                    HStack {
-                        ForEach(Position.allCases, id: \.self) { position in
-                            VStack {
-                                Text(position.shortName)
-                                    .font(DS.Typography.caption)
-                                    .foregroundColor(DS.Colors.onSurfaceSecondary)
-
-                                Text("\(viewModel.teamStructure.positionBalance[position] ?? 0)")
-                                    .font(DS.Typography.smallStat)
-                                    .foregroundColor(DS.Colors.positionColor(for: position))
+                        
+                        LazyVGrid(
+                            columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.s), count: 4),
+                            spacing: DS.Spacing.m
+                        ) {
+                            ForEach(Position.allCases, id: \.self) { position in
+                                VStack(spacing: DS.Spacing.xs) {
+                                    Text(position.shortName)
+                                        .font(DS.Typography.caption)
+                                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                                    
+                                    ZStack {
+                                        Circle()
+                                            .fill(DS.Colors.positionColor(for: position).opacity(0.1))
+                                            .frame(width: 36, height: 36)
+                                        
+                                        Text("\(viewModel.teamStructure.positionBalance[position] ?? 0)")
+                                            .font(DS.Typography.smallStat)
+                                            .foregroundColor(DS.Colors.positionColor(for: position))
+                                            .fontWeight(.semibold)
+                                    }
+                                    
+                                    Text(position.maxCount > 0 ? "/\(position.maxCount)" : "")
+                                        .font(.system(size: 10))
+                                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                                }
                             }
-                            .frame(maxWidth: .infinity)
                         }
                     }
                 }
@@ -192,33 +293,104 @@ struct DashboardView: View {
     // MARK: - Weekly Projection Section
 
     private var weeklyProjectionSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.m) {
-            Text("Weekly Projection")
-                .font(DS.Typography.title3)
-                .foregroundColor(DS.Colors.onSurface)
+        VStack(alignment: .leading, spacing: DS.Spacing.l) {
+            HStack {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Weekly Projection")
+                        .font(DS.Typography.brandTitle)
+                        .foregroundColor(DS.Colors.onSurface)
+                    
+                    Text("AI-powered score predictions")
+                        .font(DS.Typography.caption)
+                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                }
+                
+                Spacer()
+                
+                DSStatusBadge(
+                    text: "AI Powered",
+                    style: .success
+                )
+            }
 
-            DSCard {
-                HStack {
+            DSGradientCard(gradient: LinearGradient(
+                colors: [DS.Colors.primary, DS.Colors.primary.opacity(0.7)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )) {
+                HStack(spacing: DS.Spacing.l) {
                     VStack(alignment: .leading, spacing: DS.Spacing.s) {
-                        Text("Projected Score")
-                            .font(DS.Typography.subheadline)
-                            .foregroundColor(DS.Colors.onSurfaceSecondary)
+                        HStack(spacing: DS.Spacing.xs) {
+                            Image(systemName: "brain.head.profile")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.8))
+                            
+                            Text("Projected Score")
+                                .font(DS.Typography.subheadline)
+                                .foregroundColor(.white.opacity(0.8))
+                        }
 
-                        Text("\(viewModel.weeklyStats.projectedScore)")
-                            .font(DS.Typography.statNumber)
-                            .foregroundColor(DS.Colors.primary)
+                        DSAnimatedCounter(value: Double(viewModel.weeklyStats.projectedScore))
+                            .font(DS.Typography.heroTitle)
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
 
-                        Text("Based on AI analysis")
-                            .font(DS.Typography.caption)
-                            .foregroundColor(DS.Colors.onSurfaceVariant)
+                        HStack(spacing: DS.Spacing.s) {
+                            Text("Confidence:")
+                                .font(DS.Typography.caption)
+                                .foregroundColor(.white.opacity(0.7))
+                            
+                            DSProgressRing(
+                                progress: 0.85, // Mock confidence level
+                                lineWidth: 2
+                            )
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(.white)
+                            
+                            Text("85%")
+                                .font(DS.Typography.caption)
+                                .foregroundColor(.white.opacity(0.9))
+                                .fontWeight(.medium)
+                        }
                     }
 
                     Spacer()
 
-                    Image(systemName: "brain.head.profile")
-                        .font(.largeTitle)
-                        .foregroundColor(DS.Colors.primary.opacity(0.3))
+                    VStack(spacing: DS.Spacing.s) {
+                        DSProgressRing(
+                            progress: Double(viewModel.weeklyStats.projectedScore) / 2500.0,
+                            lineWidth: 6
+                        )
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.white)
+                        
+                        Text("vs 2500 avg")
+                            .font(DS.Typography.caption)
+                            .foregroundColor(.white.opacity(0.7))
+                    }
                 }
+            }
+            
+            // Additional insights cards
+            LazyVGrid(
+                columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.m), count: 2),
+                spacing: DS.Spacing.m
+            ) {
+                DSStatCard(
+                    title: "Best Captain",
+                    value: "Grundy", // Mock data
+                    trend: .up("127 pts"),
+                    icon: "star.circle",
+                    style: .elevated
+                )
+                
+                DSStatCard(
+                    title: "Risk Level",
+                    value: "Medium", // Mock data
+                    trend: .neutral,
+                    icon: "shield.checkered",
+                    style: .minimal
+                )
             }
         }
     }
@@ -226,28 +398,120 @@ struct DashboardView: View {
     // MARK: - Quick Actions Section
 
     private var quickActionsSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.m) {
-            Text("Quick Actions")
-                .font(DS.Typography.title3)
-                .foregroundColor(DS.Colors.onSurface)
+        VStack(alignment: .leading, spacing: DS.Spacing.l) {
+            HStack {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Quick Actions")
+                        .font(DS.Typography.brandTitle)
+                        .foregroundColor(DS.Colors.onSurface)
+                    
+                    Text("Popular shortcuts and tools")
+                        .font(DS.Typography.caption)
+                        .foregroundColor(DS.Colors.onSurfaceSecondary)
+                }
+                
+                Spacer()
+            }
 
-            VStack(spacing: DS.Spacing.s) {
-                DSButton("Get Captain Suggestions", style: .primary) {
+            VStack(spacing: DS.Spacing.m) {
+                // Primary action card
+                Button {
                     withAnimation {
-                        selectedTab = 2 // AI Tools
+                        selectedTab = 3 // AI Tools
+                    }
+                } label: {
+                    DSGradientCard {
+                        HStack(spacing: DS.Spacing.m) {
+                            Image(systemName: "brain.head.profile")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color.white.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                            
+                            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                Text("Get Captain Suggestions")
+                                    .font(DS.Typography.headline)
+                                    .foregroundColor(.white)
+                                    .fontWeight(.medium)
+                                
+                                Text("AI-powered recommendations")
+                                    .font(DS.Typography.caption)
+                                    .foregroundColor(.white.opacity(0.8))
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "arrow.right.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(.white.opacity(0.8))
+                        }
                     }
                 }
-
-                DSButton("View Cash Cows", style: .secondary) {
-                    withAnimation {
-                        selectedTab = 3 // Cash Cows
+                .buttonStyle(PlainButtonStyle())
+                
+                // Secondary action cards
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.m), count: 2),
+                    spacing: DS.Spacing.m
+                ) {
+                    Button {
+                        withAnimation {
+                            selectedTab = 4 // Cash Cows
+                        }
+                    } label: {
+                        DSCard(style: .elevated) {
+                            VStack(spacing: DS.Spacing.s) {
+                                Image(systemName: "chart.line.uptrend.xyaxis")
+                                    .font(.title2)
+                                    .foregroundColor(DS.Colors.success)
+                                    .frame(width: 40, height: 40)
+                                    .background(DS.Colors.success.opacity(0.1))
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                
+                                Text("Cash Cows")
+                                    .font(DS.Typography.body)
+                                    .foregroundColor(DS.Colors.onSurface)
+                                    .fontWeight(.medium)
+                                
+                                Text("Value picks")
+                                    .font(DS.Typography.caption)
+                                    .foregroundColor(DS.Colors.onSurfaceSecondary)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, DS.Spacing.s)
+                        }
                     }
-                }
-
-                DSButton("Check Price Changes", style: .outline) {
-                    withAnimation {
-                        selectedTab = 4 // Alerts
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button {
+                        withAnimation {
+                            selectedTab = 5 // Alerts
+                        }
+                    } label: {
+                        DSCard(style: .elevated) {
+                            VStack(spacing: DS.Spacing.s) {
+                                Image(systemName: "bell.badge")
+                                    .font(.title2)
+                                    .foregroundColor(DS.Colors.warning)
+                                    .frame(width: 40, height: 40)
+                                    .background(DS.Colors.warning.opacity(0.1))
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                
+                                Text("Price Changes")
+                                    .font(DS.Typography.body)
+                                    .foregroundColor(DS.Colors.onSurface)
+                                    .fontWeight(.medium)
+                                
+                                Text("Market alerts")
+                                    .font(DS.Typography.caption)
+                                    .foregroundColor(DS.Colors.onSurfaceSecondary)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, DS.Spacing.s)
+                        }
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }

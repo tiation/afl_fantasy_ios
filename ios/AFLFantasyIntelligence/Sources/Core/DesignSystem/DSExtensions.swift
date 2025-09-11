@@ -1,127 +1,146 @@
 import SwiftUI
 
-// MARK: - DS Extensions for Advanced Filters
+// MARK: - Design System Extensions
 
-extension DS {
-    struct Motion {
-        static let spring = Animation.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0.2)
-        static let springFast = Animation.spring(response: 0.2, dampingFraction: 0.8, blendDuration: 0.1)
-    }
-    
-    struct CornerRadius {
-        static let small: CGFloat = 4
-        static let medium: CGFloat = 8
-        static let large: CGFloat = 12
-        static let xl: CGFloat = 16
-    }
-    
-    struct Shadow {
-        static let large = ShadowStyle(
-            color: Color.black.opacity(0.1),
-            radius: 8,
-            x: 0,
-            y: 4
-        )
-    }
-}
-
-struct ShadowStyle {
-    let color: Color
-    let radius: CGFloat
-    let x: CGFloat
-    let y: CGFloat
-}
-
-// MARK: - DS Extensions for Position Colors
-
-extension DS.Colors {
-    static func positionColor(for position: Position) -> Color {
-        switch position {
+// MARK: - Position Colors
+extension Position {
+    var color: Color {
+        switch self {
         case .defender: return .blue
         case .midfielder: return .green
-        case .ruck: return .orange
+        case .ruck: return .purple
         case .forward: return .red
         }
     }
-    
-    static var info: Color { .blue }
-    static var surfaceSecondary: Color { Color(UIColor.secondarySystemBackground) }
-    static var primaryGradient: LinearGradient {
-        LinearGradient(
-            colors: [primary, primary.opacity(0.8)],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-    static var accent: Color { .orange }
 }
 
-// MARK: - DSToggleStyle
-
+// MARK: - Enhanced Toggle Style
 struct DSToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack {
             configuration.label
-            
             Spacer()
-            
-            RoundedRectangle(cornerRadius: 16)
-                .fill(configuration.isOn ? DS.Colors.primary : Color(UIColor.systemGray4))
-                .frame(width: 44, height: 24)
-                .overlay(
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 20, height: 20)
-                        .offset(x: configuration.isOn ? 8 : -8)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isOn)
-                )
-                .onTapGesture {
-                    configuration.isOn.toggle()
-                }
+            Button(action: { configuration.isOn.toggle() }) {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(configuration.isOn ? DS.Colors.primary : DS.Colors.surface)
+                    .frame(width: 44, height: 24)
+                    .overlay(
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 20, height: 20)
+                            .offset(x: configuration.isOn ? 8 : -8)
+                            .animation(.spring(response: 0.3), value: configuration.isOn)
+                    )
+            }
+            .buttonStyle(PlainButtonStyle())
         }
     }
 }
 
-// MARK: - PerformanceSlider
-
+// MARK: - Performance Slider
 struct PerformanceSlider: View {
     let title: String
     @Binding var value: Double
     let range: ClosedRange<Double>
-    let color: Color
+    let step: Double
+    let unit: String
     
     var body: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.s) {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack {
                 Text(title)
                     .font(DS.Typography.body)
                     .foregroundColor(DS.Colors.onSurface)
-                
                 Spacer()
-                
-                Text(String(format: "%.1f", value))
-                    .font(DS.Typography.body)
-                    .foregroundColor(color)
-                    .fontWeight(.medium)
+                Text("\(Int(value))\(unit)")
+                    .font(DS.Typography.caption)
+                    .foregroundColor(DS.Colors.onSurfaceSecondary)
+                    .padding(.horizontal, DS.Spacing.xs)
+                    .padding(.vertical, DS.Spacing.xxs)
+                    .background(DS.Colors.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
             }
             
-            Slider(value: $value, in: range)
-                .tint(color)
+            Slider(value: $value, in: range, step: step)
+                .tint(DS.Colors.primary)
         }
     }
 }
 
-// MARK: - DSAccessibility
+// MARK: - Chip View
+struct ChipView: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(DS.Typography.caption)
+                .fontWeight(.medium)
+                .foregroundColor(isSelected ? .white : DS.Colors.onSurface)
+                .padding(.horizontal, DS.Spacing.m)
+                .padding(.vertical, DS.Spacing.s)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(isSelected ? DS.Colors.primary : DS.Colors.surface)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(DS.Colors.outline, lineWidth: isSelected ? 0 : 1)
+                        )
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .animation(.easeInOut(duration: 0.2), value: isSelected)
+    }
+}
 
+// MARK: - Loading States
+struct LoadingDots: View {
+    @State private var animating = false
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            ForEach(0..<3, id: \.self) { index in
+                Circle()
+                    .fill(DS.Colors.primary)
+                    .frame(width: 6, height: 6)
+                    .scaleEffect(animating ? 1.2 : 0.8)
+                    .animation(
+                        Animation.easeInOut(duration: 0.6)
+                            .repeatForever(autoreverses: true)
+                            .delay(Double(index) * 0.2),
+                        value: animating
+                    )
+            }
+        }
+        .onAppear {
+            animating = true
+        }
+    }
+}
+
+// MARK: - View Extensions
 extension View {
-    func dsAccessibility(
-        label: String,
-        hint: String? = nil,
-        traits: AccessibilityTraits = []
-    ) -> some View {
+    func dsCardShadow() -> some View {
+        self.shadow(
+            color: DS.Colors.shadow.opacity(0.1),
+            radius: 8,
+            x: 0,
+            y: 2
+        )
+    }
+    
+    func dsButtonPress(isPressed: Bool) -> some View {
         self
-            .accessibilityLabel(label)
-            .accessibilityHint(hint ?? "")
-            .accessibilityAddTraits(traits)
+            .scaleEffect(isPressed ? 0.95 : 1.0)
+            .opacity(isPressed ? 0.8 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: isPressed)
+    }
+    
+    /// Adds proper padding for the floating tab bar at the bottom
+    /// Use this for ScrollView content that needs to be scrollable above the floating tab bar
+    func dsFloatingTabBarPadding() -> some View {
+        self.padding(.bottom, 104) // 80pt tab bar height + 8pt bottom padding + 16pt extra spacing
     }
 }

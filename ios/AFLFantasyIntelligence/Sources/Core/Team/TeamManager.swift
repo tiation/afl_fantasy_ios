@@ -11,6 +11,11 @@ final class TeamManager: ObservableObject {
     @Published var currentRound: Int = 1
     @Published var isLoading: Bool = false
     
+    // Multiple team management
+    @Published var teams: [FantasyTeam] = []
+    @Published var activeTeam: FantasyTeam?
+    @Published var error: Error?
+    
     private let apiService = APIService()
     private let keychainService = KeychainService.shared
     
@@ -81,14 +86,18 @@ final class TeamManager: ObservableObject {
     
     // MARK: - Data Loading
     
-    func refreshTeam() async {
+    func refreshTeams() async {
         isLoading = true
         defer { isLoading = false }
         
         // TODO: Load from API
-        await Task.sleep(nanoseconds: 1_000_000_000)
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
         
         loadMockTeam()
+    }
+    
+    func refreshTeam() async {
+        await refreshTeams()
     }
     
     func saveTeam() async {
@@ -96,7 +105,7 @@ final class TeamManager: ObservableObject {
         defer { isLoading = false }
         
         // TODO: Save to API
-        await Task.sleep(nanoseconds: 500_000_000)
+        try? await Task.sleep(nanoseconds: 500_000_000)
     }
     
     // MARK: - Team Analysis
@@ -123,7 +132,9 @@ final class TeamManager: ObservableObject {
     
     private func loadMockTeam() {
         // Load some mock players for demonstration
-        selectedTeam = Array(MockData.samplePlayers.prefix(18))
+        // Load some mock players - for now create empty array
+        // TODO: Implement proper mock data loading
+        selectedTeam = []
         
         if let firstPlayer = selectedTeam.first {
             captain = firstPlayer
@@ -134,5 +145,84 @@ final class TeamManager: ObservableObject {
         
         remainingBudget = 10_000_000 - teamValue
         tradesRemaining = 30 - currentRound + 1
+    }
+    
+    // MARK: - Multiple Team Management
+    
+    func addTeam(code: String, barcodeType: String) async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        // TODO: Scan and validate team code
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        
+        let newTeam = FantasyTeam(
+            id: UUID().uuidString,
+            name: "Team \(code)",
+            code: code,
+            league: "AFL",
+            totalSalary: 10_000_000,
+            remainingSalary: 2_000_000,
+            playerCount: 18,
+            averageScore: 85.5,
+            currentRank: Int.random(in: 1000...50000)
+        )
+        
+        teams.append(newTeam)
+        if activeTeam == nil {
+            activeTeam = newTeam
+        }
+    }
+    
+    func addTeam(name: String, code: String, league: String) {
+        let newTeam = FantasyTeam(
+            id: UUID().uuidString,
+            name: name,
+            code: code,
+            league: league,
+            totalSalary: 10_000_000,
+            remainingSalary: 2_000_000,
+            playerCount: 0,
+            averageScore: 0.0,
+            currentRank: nil
+        )
+        
+        teams.append(newTeam)
+        if activeTeam == nil {
+            activeTeam = newTeam
+        }
+    }
+    
+    func setActiveTeam(_ team: FantasyTeam) {
+        activeTeam = team
+    }
+    
+    func removeTeam(_ team: FantasyTeam) {
+        teams.removeAll { $0.id == team.id }
+        if activeTeam?.id == team.id {
+            activeTeam = teams.first
+        }
+    }
+    
+    // MARK: - Mock
+    
+    static var mock: TeamManager {
+        let manager = TeamManager()
+        // Add some mock teams
+        manager.teams = [
+            FantasyTeam(
+                id: UUID().uuidString,
+                name: "Demo Team 1",
+                code: "ABC123",
+                league: "AFL",
+                totalSalary: 10_000_000,
+                remainingSalary: 156_000,
+                playerCount: 22,
+                averageScore: 87.3,
+                currentRank: 12543
+            )
+        ]
+        manager.activeTeam = manager.teams.first
+        return manager
     }
 }

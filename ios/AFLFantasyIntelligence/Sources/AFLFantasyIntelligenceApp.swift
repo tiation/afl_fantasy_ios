@@ -15,7 +15,7 @@ struct AFLFantasyIntelligenceApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if authService.isAuthenticated {
+                if authService.isLoggedIn {
                     ContentView()
                         .environmentObject(apiService)
                         .environmentObject(alertsViewModel)
@@ -123,7 +123,6 @@ struct ContentView: View {
                     .tag(5)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .ignoresSafeArea(.all, edges: .bottom)
             .disabled(isTabChanging) // Prevent interaction during transition
             
             // Enhanced floating tab bar with premium effects
@@ -146,7 +145,7 @@ struct ContentView: View {
                             title: "Players",
                             icon: "person.3",
                             activeIcon: "person.3.fill",
-                            color: DesignSystem.Colors.secondary
+                            color: DesignSystem.Colors.aflBlue
                         ),
                         TabItem(
                             id: 2,
@@ -168,7 +167,7 @@ struct ContentView: View {
                             icon: "bell",
                             activeIcon: "bell.fill",
                             color: DesignSystem.Colors.error,
-                            badgeCount: alertsViewModel.unreadCount > 0 ? alertsViewModel.unreadCount : nil
+                            badgeCount: alertsViewModel.totalUnreadCount > 0 ? alertsViewModel.totalUnreadCount : nil
                         ),
                         TabItem(
                             id: 5,
@@ -184,7 +183,7 @@ struct ContentView: View {
                 .dsCardHover(isHovered: false) // Add subtle shadow
             }
         }
-        .onChange(of: selectedTab) { newValue in
+        .onChange(of: selectedTab) { _, newValue in
             handleTabChange(to: newValue)
         }
         .onAppear {
@@ -199,7 +198,7 @@ struct ContentView: View {
         
         // Different haptic feedback based on tab type
         switch newTab {
-        case 4 where alertsViewModel.unreadCount > 0: // Alerts with unread
+        case 4 where alertsViewModel.totalUnreadCount > 0: // Alerts with unread
             DSHaptics.warning()
         case 3: // AI Tools
             DSHaptics.medium()
@@ -315,7 +314,7 @@ struct TabBarButton: View {
         .dsAccessibility(
             label: tab.title,
             hint: isSelected ? "Currently selected" : "Tap to switch to \(tab.title)",
-            traits: isSelected ? [.button, .selected] : .button
+            traits: isSelected ? [.isButton, .isSelected] : .isButton
         )
     }
 }
@@ -331,7 +330,7 @@ struct TabBarButton: View {
                 .environmentObject(APIService.mock)
                 .environmentObject(AuthenticationService())
                 .environmentObject(AlertsViewModel())
-                .environmentObject(TeamManager.mock)
+                .environmentObject(TeamManager())
                 .preferredColorScheme(.light)
         }
     }

@@ -47,6 +47,7 @@ struct TeamsView: View {
                     }
                 }
                 .padding(DS.Spacing.m)
+                .dsFloatingTabBarPadding()
             }
             .navigationTitle("My Teams")
             .navigationBarTitleDisplayMode(.large)
@@ -90,7 +91,7 @@ struct TeamsView: View {
             BarcodeScannerView { code, type in
                 showingScanner = false
                 Task {
-                    await teamManager.addTeam(code: code, barcodeType: type)
+                    await teamManager.addTeam(code: code, barcodeType: type.rawValue)
                 }
             }
         }

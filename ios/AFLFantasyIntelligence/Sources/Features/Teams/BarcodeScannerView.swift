@@ -11,6 +11,7 @@ struct BarcodeScannerView: View {
     
     @State private var showingManualEntry = false
     @State private var flashOn = false
+    @State private var scannerDelegate: ScannerDelegate?
     
     var body: some View {
         GeometryReader { geometry in
@@ -144,7 +145,9 @@ struct BarcodeScannerView: View {
             }
         }
         .onAppear {
-            scanner.delegate = ScannerDelegate(onTeamScanned: onTeamScanned)
+            let delegate = ScannerDelegate(onTeamScanned: onTeamScanned)
+            scannerDelegate = delegate
+            scanner.delegate = delegate
             scanner.startScanning()
         }
         .onDisappear {

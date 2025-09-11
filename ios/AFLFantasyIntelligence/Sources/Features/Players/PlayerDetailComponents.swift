@@ -1,24 +1,6 @@
 import SwiftUI
 
-// MARK: - PlayerDetailTab
-
-enum PlayerDetailTab: String, CaseIterable {
-    case overview = "Overview"
-    case form = "Form"
-    case splits = "Splits"
-    case games = "Games"
-    case insights = "Insights"
-    
-    var icon: String {
-        switch self {
-        case .overview: return "chart.bar.fill"
-        case .form: return "chart.line.uptrend.xyaxis"
-        case .splits: return "square.split.2x2.fill"
-        case .games: return "list.bullet"
-        case .insights: return "brain.head.profile"
-        }
-    }
-}
+// Use PlayerDetailTab from shared models
 
 // MARK: - PlayerDetailTabButton
 
@@ -280,26 +262,6 @@ struct FixtureRow: View {
     }
 }
 
-// MARK: - PlayerDetailViewModel
-
-@MainActor
-final class PlayerDetailViewModel: ObservableObject {
-    @Published var isLoading = false
-    @Published var playerData: PlayerData?
-    @Published var errorMessage: String?
-    
-    func loadPlayerDetails(for player: Player) async {
-        isLoading = true
-        defer { isLoading = false }
-        
-        // Simulate API call
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-        
-        // Mock data for now
-        playerData = PlayerData.mock(for: player)
-    }
-}
-
 // MARK: - PlayerData
 
 struct PlayerData {
@@ -426,8 +388,8 @@ struct PlayerDetailComponents_Previews: PreviewProvider {
         VStack(spacing: DS.Spacing.l) {
             HStack {
                 PlayerDetailTabButton(tab: .overview, isSelected: true) {}
-                PlayerDetailTabButton(tab: .form, isSelected: false) {}
-                PlayerDetailTabButton(tab: .insights, isSelected: false) {}
+                PlayerDetailTabButton(tab: .statistics, isSelected: false) {}
+                PlayerDetailTabButton(tab: .similar, isSelected: false) {}
             }
             
             MetricCard(title: "Ownership", value: "23.4%", trend: "+2.1%", color: DS.Colors.info)

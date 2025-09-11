@@ -1,14 +1,1 @@
-import Foundation
-
-// MARK: - PlayerDetailTab
-
-enum PlayerDetailTab: String, CaseIterable {
-    case overview = "Overview"
-    case stats = "Statistics"
-    case analysis = "Analysis"
-    case news = "News"
-    
-    var displayName: String {
-        return self.rawValue
-    }
-}
+// File removed - using PlayerDetailTab from PlayerDetailViewModel.swift

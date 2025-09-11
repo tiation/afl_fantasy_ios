@@ -891,3 +891,41 @@ if __name__ == '__main__':
     else:
         print("❌ No player data found! Please check the dfs_player_summary folder exists.")
         print("Expected: ./dfs_player_summary/*.xlsx files")
+
+# Dashboard serving (consolidated from Node.js)
+@app.route('/dashboard')
+def dashboard():
+    """Serve the main dashboard"""
+    return send_from_directory('templates', 'dashboard.html')
+
+@app.route('/api/docker/status')
+def docker_status():
+    """Docker service status (moved from Node.js)"""
+    try:
+        import subprocess
+        result = subprocess.run(['docker', 'ps'], capture_output=True, text=True)
+        running_containers = len([line for line in result.stdout.split('\n') if 'afl-fantasy' in line])
+        return jsonify({
+            "status": "running" if running_containers > 0 else "stopped",
+            "containers": running_containers
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    log_info("🚀 AFL Fantasy API Server (Consolidated)")
+    log_info(f"   📊 Dashboard: http://localhost:8080/dashboard")
+    log_info(f"   🔌 API: http://localhost:8080/api/")
+    log_info(f"   📡 WebSocket: ws://localhost:8081")
+    
+    # Load player data on startup
+    load_players_data()
+    
+    # Start WebSocket server in background
+    import threading
+    websocket_thread = threading.Thread(target=start_websocket_server)
+    websocket_thread.daemon = True
+    websocket_thread.start()
+    
+    # Start Flask API server
+    app.run(host='0.0.0.0', port=8080, debug=True)

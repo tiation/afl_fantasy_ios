@@ -233,7 +233,7 @@ struct TradeAnalyzerView: View {
                         .font(DS.Typography.headline)
                         .foregroundColor(.white)
                     
-                    Text("\(result.overallRating, specifier: "%.1f")/10")
+                    Text(String(format: "%.1f/10", result.overallRating))
                         .font(DS.Typography.brandTitle)
                         .foregroundColor(.white)
                     
@@ -260,7 +260,7 @@ struct TradeAnalyzerView: View {
                         
                         FinancialMetric(
                             title: "Points/Week",
-                            value: "\(result.pointsPerWeek >= 0 ? "+" : "")\(result.pointsPerWeek, specifier: "%.1f")",
+                            value: "\(result.pointsPerWeek >= 0 ? "+" : "")\(String(format: "%.1f", result.pointsPerWeek))",
                             color: result.pointsPerWeek >= 0 ? DS.Colors.success : DS.Colors.error
                         )
                         

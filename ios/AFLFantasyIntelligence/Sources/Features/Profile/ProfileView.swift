@@ -149,6 +149,7 @@ struct ProfileView: View {
                     }
                 }
             }
+            .dsFloatingTabBarPadding()
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.large)
         }

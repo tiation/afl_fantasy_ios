@@ -2,11 +2,12 @@ import Foundation
 import UserNotifications
 
 /// WebSocket manager for real-time updates
+@MainActor
 class WebSocketManager: ObservableObject {
     static let shared = WebSocketManager()
     
     private var webSocket: URLSessionWebSocketTask?
-    private let baseURL = "ws://localhost:4000/ws"
+    private let baseURL = "ws://localhost:8081/ws"
     
     // State publishers
     @Published var isConnected = false
@@ -62,21 +63,29 @@ class WebSocketManager: ObservableObject {
             case .success(let message):
                 switch message {
                 case .string(let text):
-                    self.handleMessage(text)
+                    Task { @MainActor in
+                        self.handleMessage(text)
+                    }
                 case .data(let data):
                     if let text = String(data: data, encoding: .utf8) {
-                        self.handleMessage(text)
+                        Task { @MainActor in
+                            self.handleMessage(text)
+                        }
                     }
                 @unknown default:
                     break
                 }
                 
                 // Continue receiving messages
-                self.receiveMessage()
+                Task { @MainActor in
+                    self.receiveMessage()
+                }
                 
             case .failure(let error):
                 print("WebSocket receive error:", error)
-                self.reconnect()
+                Task { @MainActor in
+                    self.reconnect()
+                }
             }
         }
     }
@@ -122,23 +131,29 @@ class WebSocketManager: ObservableObject {
             return
         }
         
-        webSocket?.send(.string(text)) { error in
+        webSocket?.send(.string(text)) { [weak self] error in
             if let error = error {
                 print("WebSocket send error:", error)
-                self.reconnect()
+                Task { @MainActor in
+                    self?.reconnect()
+                }
             }
         }
     }
     
     private func ping() {
         let workItem = DispatchWorkItem { [weak self] in
-            self?.webSocket?.sendPing { error in
+            self?.webSocket?.sendPing { [weak self] error in
                 if let error = error {
                     print("WebSocket ping error:", error)
-                    self?.reconnect()
+                    Task { @MainActor in
+                        self?.reconnect()
+                    }
                 }
             }
-            self?.ping()
+            Task { @MainActor in
+                self?.ping()
+            }
         }
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 30, execute: workItem)
@@ -187,7 +202,7 @@ private extension AlertType {
         switch self {
         case .priceChange:
             return "Price Alert"
-        case .injuryUpdate, .injury:
+        case .injury:
             return "Injury Update"
         case .lateOut:
             return "Late Out"
@@ -199,10 +214,20 @@ private extension AlertType {
             return "Trade Deadline"
         case .captainReminder:
             return "Captain Reminder"
-        case .selection:
-            return "Selection Alert"
-        case .milestone:
+        case .milestoneReached:
             return "Milestone"
+        case .priceThreshold:
+            return "Price Target"
+        case .formAlert:
+            return "Form Alert"
+        case .fixtureChange:
+            return "Fixture Change"
+        case .aiRecommendation:
+            return "AI Insight"
+        case .breakoutPerformance:
+            return "Breakout Performance"
+        case .tradeOpportunity:
+            return "Trade Opportunity"
         case .system:
             return "System Alert"
         }

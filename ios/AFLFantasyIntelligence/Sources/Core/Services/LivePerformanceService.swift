@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 // MARK: - LivePerformanceService Protocol
+@MainActor
 public protocol LivePerformanceServiceProtocol {
     // Publishers for real-time data
     var liveMatchesPublisher: AnyPublisher<[LiveMatchState], Never> { get }
@@ -25,7 +26,7 @@ public protocol LivePerformanceServiceProtocol {
 }
 
 // MARK: - LivePerformanceService Implementation
-public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableObject {
+@MainActor public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableObject {
     
     private let baseURL: String
     private let updateInterval: TimeInterval
@@ -34,7 +35,7 @@ public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableO
     
     // Publishers
     private let liveMatchesSubject = CurrentValueSubject<[LiveMatchState], Never>([])
-    private let performanceSummarySubject = CurrentValueSubject<LivePerformanceSummary, Never>(Self.mockPerformanceSummary)
+    private let performanceSummarySubject: CurrentValueSubject<LivePerformanceSummary, Never>
     private let performanceAlertsSubject = CurrentValueSubject<[PerformanceAlert], Never>([])
     
     public var liveMatchesPublisher: AnyPublisher<[LiveMatchState], Never> {
@@ -56,6 +57,19 @@ public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableO
     public init(baseURL: String = "http://localhost:8080", updateInterval: TimeInterval = 10.0) {
         self.baseURL = baseURL
         self.updateInterval = updateInterval
+        // Initialize with empty data - will be populated when startLiveTracking is called
+        let initialSummary = LivePerformanceSummary(
+            totalFantasyScore: 0,
+            projectedTotalScore: 0,
+            averageComparison: 0,
+            rankProjection: RankProjection(
+                projectedRank: 0,
+                rankChange: 0,
+                confidence: 0,
+                percentile: 0
+            )
+        )
+        self.performanceSummarySubject = CurrentValueSubject<LivePerformanceSummary, Never>(initialSummary)
     }
     
     // MARK: - Public Methods
@@ -66,11 +80,9 @@ public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableO
         isConnected = true
         
         // Start periodic updates
-        await MainActor.run {
-            updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
-                Task {
-                    try? await self?.refreshData()
-                }
+        updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                try? await self?.refreshData()
             }
         }
         
@@ -153,7 +165,7 @@ public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableO
             return performance
         } catch {
             // Fall back to mock data
-            return Self.mockTeamPerformances.first { $0.team.name.lowercased() == teamId.lowercased() } ?? Self.mockTeamPerformances[0]
+            return Self.mockTeamPerformances.first { $0.team.displayName.lowercased() == teamId.lowercased() } ?? Self.mockTeamPerformances[0]
         }
     }
     
@@ -209,50 +221,50 @@ public class LivePerformanceService: LivePerformanceServiceProtocol, ObservableO
 // MARK: - Mock Data
 extension LivePerformanceService {
     
-    static let mockLiveMatches: [LiveMatchState] = [
+    nonisolated static let mockLiveMatches: [LiveMatchState] = [
         LiveMatchState(
             id: "match1",
             roundNumber: 23,
-            homeTeam: .collingwood,
-            awayTeam: .melbourne,
+            homeTeam: "Collingwood",
+            awayTeam: "Melbourne",
             venue: "MCG",
             status: .live,
             clock: GameClock(quarter: 2, timeRemaining: 600, timeElapsed: 600, isPaused: false),
-            weather: WeatherConditions(
+weather: WeatherConditions(
                 temperature: 18,
                 humidity: 65,
                 windSpeed: 15,
                 windDirection: "NE",
                 conditions: "Partly Cloudy"
-            ),
+            ).description,
             homeScore: TeamScore(goals: 8, behinds: 4, quarterBreakdown: [28, 24]),
             awayScore: TeamScore(goals: 6, behinds: 8, quarterBreakdown: [22, 22])
         ),
         LiveMatchState(
             id: "match2",
             roundNumber: 23,
-            homeTeam: .richmond,
-            awayTeam: .geelong,
+            homeTeam: "Richmond",
+            awayTeam: "Geelong",
             venue: "Gabba",
             status: .quarterTime,
             clock: GameClock(quarter: 1, timeRemaining: 0, timeElapsed: 1200, isPaused: true),
-            weather: WeatherConditions(
+weather: WeatherConditions(
                 temperature: 22,
                 humidity: 70,
                 windSpeed: 8,
                 windDirection: "W",
                 conditions: "Clear"
-            ),
+            ).description,
             homeScore: TeamScore(goals: 3, behinds: 2, quarterBreakdown: [20]),
             awayScore: TeamScore(goals: 4, behinds: 1, quarterBreakdown: [25])
         )
     ]
     
-    static let mockPlayerDeltas: [PlayerStatDelta] = [
+    nonisolated static let mockPlayerDeltas: [PlayerStatDelta] = [
         PlayerStatDelta(
             playerId: "player1",
             playerName: "Max Gawn",
-            team: .melbourne,
+            team: "Melbourne",
             position: .ruck,
             salary: 750000,
             currentStats: LivePlayerStats(
@@ -302,8 +314,8 @@ extension LivePerformanceService {
         PlayerStatDelta(
             playerId: "player2",
             playerName: "Scott Pendlebury",
-            team: .collingwood,
-            position: .midfielder,
+            team: "Collingwood",
+            position: Position.midfielder,
             salary: 680000,
             currentStats: LivePlayerStats(
                 disposals: 15,
@@ -351,9 +363,9 @@ extension LivePerformanceService {
         )
     ]
     
-    static let mockTeamPerformances: [LiveTeamPerformance] = [
-        LiveTeamPerformance(
-            team: .collingwood,
+    nonisolated static let mockTeamPerformances: [LiveTeamPerformance] = [
+LiveTeamPerformance(
+            team: Team.collingwood,
             fantasyTotal: 1456.0,
             projectedTotal: 2912.0,
             averageComparison: 1.12,
@@ -364,7 +376,7 @@ extension LivePerformanceService {
         )
     ]
     
-    static let mockCaptainCandidates: [CaptainCandidate] = [
+    nonisolated static let mockCaptainCandidates: [CaptainCandidate] = [
         CaptainCandidate(
             playerId: "player2",
             playerName: "Scott Pendlebury",
@@ -385,32 +397,32 @@ extension LivePerformanceService {
         )
     ]
     
-    static let mockTradeTargets: [TradeTarget] = [
-        TradeTarget(
+    nonisolated static let mockTradeTargets: [TradeTarget] = [
+TradeTarget(
             playerId: "player3",
             playerName: "Clayton Oliver",
-            team: .melbourne,
-            position: .midfielder,
+            team: Team.melbourne,
+            position: Position.midfielder,
             currentPrice: 720000,
             projectedPriceChange: 15000,
             confidence: 0.85,
             reasoning: "Strong form trend, favorable upcoming fixtures",
-            timeframe: .thisWeek
+            timeframe: TradeTimeframe.thisWeek
         ),
-        TradeTarget(
+TradeTarget(
             playerId: "player4",
             playerName: "Nick Daicos",
-            team: .collingwood,
-            position: .midfielder,
+            team: Team.collingwood,
+            position: Position.midfielder,
             currentPrice: 680000,
             projectedPriceChange: -8000,
             confidence: 0.72,
             reasoning: "Price correction expected after recent poor games",
-            timeframe: .nextWeek
+            timeframe: TradeTimeframe.nextWeek
         )
     ]
     
-    static let mockPerformanceAlerts: [PerformanceAlert] = [
+    nonisolated static let mockPerformanceAlerts: [PerformanceAlert] = [
         PerformanceAlert(
             type: .breakoutPerformance,
             severity: .high,
@@ -429,7 +441,7 @@ extension LivePerformanceService {
         )
     ]
     
-    static let mockPerformanceSummary = LivePerformanceSummary(
+    nonisolated static let mockPerformanceSummary = LivePerformanceSummary(
         totalFantasyScore: 1456.0,
         projectedTotalScore: 2912.0,
         averageComparison: 1.12,

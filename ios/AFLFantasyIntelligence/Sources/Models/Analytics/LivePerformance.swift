@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - Live Match State
-public struct LiveMatchState: Codable, Identifiable, Hashable {
+public struct LiveMatchState: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let roundNumber: Int
     public let homeTeam: String
@@ -41,7 +41,7 @@ public struct LiveMatchState: Codable, Identifiable, Hashable {
     }
 }
 
-public enum MatchStatus: String, Codable, CaseIterable {
+public enum MatchStatus: String, Codable, CaseIterable, Sendable {
     case scheduled = "SCHEDULED"
     case warmup = "WARMUP"
     case live = "LIVE"
@@ -76,7 +76,7 @@ public enum MatchStatus: String, Codable, CaseIterable {
     }
 }
 
-public struct GameClock: Codable, Hashable {
+public struct GameClock: Codable, Hashable, Sendable {
     public let quarter: Int
     public let timeRemaining: TimeInterval // seconds
     public let timeElapsed: TimeInterval // seconds in quarter
@@ -109,7 +109,7 @@ public struct GameClock: Codable, Hashable {
     }
 }
 
-public struct TeamScore: Codable, Hashable {
+public struct TeamScore: Codable, Hashable, Sendable {
     public let goals: Int
     public let behinds: Int
     public let totalPoints: Int
@@ -124,7 +124,7 @@ public struct TeamScore: Codable, Hashable {
 }
 
 // MARK: - Player Live Performance
-public struct PlayerStatDelta: Codable, Identifiable, Hashable {
+public struct PlayerStatDelta: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let playerId: String
     public let playerName: String
@@ -185,7 +185,7 @@ public struct PlayerStatDelta: Codable, Identifiable, Hashable {
     }
 }
 
-public struct LivePlayerStats: Codable, Hashable {
+public struct LivePlayerStats: Codable, Hashable, Sendable {
     public let disposals: Int
     public let kicks: Int
     public let handballs: Int
@@ -228,7 +228,7 @@ public struct LivePlayerStats: Codable, Hashable {
     }
 }
 
-public enum PlayerMomentum: String, Codable, CaseIterable {
+public enum PlayerMomentum: String, Codable, CaseIterable, Sendable {
     case surging = "SURGING"
     case building = "BUILDING"
     case steady = "STEADY"
@@ -256,7 +256,7 @@ public enum PlayerMomentum: String, Codable, CaseIterable {
     }
 }
 
-public struct RiskFactor: Codable, Identifiable, Hashable {
+public struct RiskFactor: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let type: RiskType
     public let severity: Severity
@@ -278,7 +278,7 @@ public struct RiskFactor: Codable, Identifiable, Hashable {
     }
 }
 
-public enum RiskType: String, Codable, CaseIterable {
+public enum RiskType: String, Codable, CaseIterable, Sendable {
     case injury = "INJURY"
     case subbed = "SUBBED"
     case tagged = "TAGGED"
@@ -287,14 +287,14 @@ public enum RiskType: String, Codable, CaseIterable {
     case rotationReduced = "ROTATION_REDUCED"
 }
 
-public enum Severity: String, Codable, CaseIterable {
+public enum Severity: String, Codable, CaseIterable, Sendable {
     case low = "LOW"
     case medium = "MEDIUM"
     case high = "HIGH"
     case critical = "CRITICAL"
 }
 
-public struct Opportunity: Codable, Identifiable, Hashable {
+public struct Opportunity: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let type: OpportunityType
     public let confidence: Double
@@ -316,7 +316,7 @@ public struct Opportunity: Codable, Identifiable, Hashable {
     }
 }
 
-public enum OpportunityType: String, Codable, CaseIterable {
+public enum OpportunityType: String, Codable, CaseIterable, Sendable {
     case positionalChange = "POSITIONAL_CHANGE"
     case increasedRole = "INCREASED_ROLE"
     case favorableMatchup = "FAVORABLE_MATCHUP"
@@ -326,7 +326,7 @@ public enum OpportunityType: String, Codable, CaseIterable {
 }
 
 // MARK: - Team Performance
-public struct LiveTeamPerformance: Codable, Identifiable, Hashable {
+public struct LiveTeamPerformance: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let team: Team
     public let fantasyTotal: Double
@@ -360,7 +360,7 @@ public struct LiveTeamPerformance: Codable, Identifiable, Hashable {
     }
 }
 
-public struct CaptainCandidate: Codable, Identifiable, Hashable {
+public struct CaptainCandidate: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let playerId: String
     public let playerName: String
@@ -391,7 +391,7 @@ public struct CaptainCandidate: Codable, Identifiable, Hashable {
     }
 }
 
-public struct TradeTarget: Codable, Identifiable, Hashable {
+public struct TradeTarget: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let playerId: String
     public let playerName: String
@@ -428,7 +428,7 @@ public struct TradeTarget: Codable, Identifiable, Hashable {
     }
 }
 
-public enum TradeTimeframe: String, Codable, CaseIterable {
+public enum TradeTimeframe: String, Codable, CaseIterable, Sendable {
     case immediate = "IMMEDIATE"
     case thisWeek = "THIS_WEEK"
     case nextWeek = "NEXT_WEEK"
@@ -445,7 +445,7 @@ public enum TradeTimeframe: String, Codable, CaseIterable {
 }
 
 // MARK: - Live Performance Summary
-public struct LivePerformanceSummary: Codable {
+public struct LivePerformanceSummary: Codable, Sendable {
     public let totalFantasyScore: Double
     public let projectedTotalScore: Double
     public let averageComparison: Double
@@ -476,7 +476,7 @@ public struct LivePerformanceSummary: Codable {
     }
 }
 
-public struct RankProjection: Codable, Hashable {
+public struct RankProjection: Codable, Hashable, Sendable {
     public let currentRank: Int?
     public let projectedRank: Int
     public let rankChange: Int
@@ -498,7 +498,7 @@ public struct RankProjection: Codable, Hashable {
     }
 }
 
-public struct CaptainPerformance: Codable, Hashable {
+public struct CaptainPerformance: Codable, Hashable, Sendable {
     public let playerId: String
     public let playerName: String
     public let currentScore: Double
@@ -522,7 +522,7 @@ public struct CaptainPerformance: Codable, Hashable {
     }
 }
 
-public struct PerformanceAlert: Codable, Identifiable, Hashable {
+public struct PerformanceAlert: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let type: AlertType
     public let severity: Severity
@@ -553,13 +553,4 @@ public struct PerformanceAlert: Codable, Identifiable, Hashable {
     }
 }
 
-public enum AlertType: String, Codable, CaseIterable {
-    case captainChange = "CAPTAIN_CHANGE"
-    case playerInjured = "PLAYER_INJURED"
-    case playerSubbed = "PLAYER_SUBBED"
-    case breakoutPerformance = "BREAKOUT_PERFORMANCE"
-    case disappointing = "DISAPPOINTING"
-    case tradeOpportunity = "TRADE_OPPORTUNITY"
-    case rankThreat = "RANK_THREAT"
-    case weatherChange = "WEATHER_CHANGE"
-}
+// Using AlertType from Shared/Models/Models.swift to avoid duplicate definition

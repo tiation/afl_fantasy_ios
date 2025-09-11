@@ -30,6 +30,7 @@ struct AIToolsView: View {
                     }
                 }
                 .padding(DS.Spacing.l)
+                .dsFloatingTabBarPadding()
             }
             .navigationTitle("AI Tools")
             .navigationBarTitleDisplayMode(.large)

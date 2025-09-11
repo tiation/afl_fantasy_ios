@@ -25,7 +25,7 @@ struct LoginView: View {
                         
                         Text("AFL Fantasy Intelligence")
                             .font(DS.Typography.largeTitle)
-                            .foregroundColor(DS.Colors.onBackground)
+                            .foregroundColor(DS.Colors.onSurface)
                         
                         Text("Your ultimate fantasy companion")
                             .font(DS.Typography.body)
@@ -127,30 +127,8 @@ struct LoginView: View {
                         }
                         .disabled(email.isEmpty || password.isEmpty || authService.isLoading)
                         
-                        // Biometric Login Button
-                        if authService.biometricType != .none && authService.isBiometricEnabled {
-                            Button {
-                                Task {
-                                    await authService.loginWithBiometrics()
-                                }
-                            } label: {
-                                HStack(spacing: DS.Spacing.s) {
-                                    Image(systemName: biometricIcon)
-                                    Text("Sign In with \(biometricText)")
-                                }
-                                .font(DS.Typography.headline)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(DS.Colors.surface)
-                                .foregroundColor(DS.Colors.primary)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(DS.Colors.primary, lineWidth: 1)
-                                )
-                                .cornerRadius(12)
-                            }
-                            .disabled(authService.isLoading)
-                        }
+                        // Biometric Login Button (disabled for demo)
+                        // Biometric authentication would be implemented here
                     }
                     
                     // Demo Login Helper
@@ -187,13 +165,13 @@ struct LoginView: View {
                 .padding(DS.Spacing.l)
             }
             .navigationBarHidden(true)
-            .alert("Login Error", isPresented: .constant(authService.error != nil)) {
+            .alert("Login Error", isPresented: .constant(authService.errorMessage != nil)) {
                 Button("OK") {
-                    authService.error = nil
+                    authService.errorMessage = nil
                 }
             } message: {
-                if let error = authService.error {
-                    Text(error.localizedDescription)
+                if let error = authService.errorMessage {
+                    Text(error)
                 }
             }
         }
@@ -202,27 +180,7 @@ struct LoginView: View {
     
     // MARK: - Computed Properties
     
-    private var biometricIcon: String {
-        switch authService.biometricType {
-        case .faceID:
-            return "faceid"
-        case .touchID:
-            return "touchid"
-        default:
-            return "person.badge.key"
-        }
-    }
-    
-    private var biometricText: String {
-        switch authService.biometricType {
-        case .faceID:
-            return "Face ID"
-        case .touchID:
-            return "Touch ID"
-        default:
-            return "Biometrics"
-        }
-    }
+    // Biometric authentication would be implemented here
 }
 
 // MARK: - CustomTextFieldStyle

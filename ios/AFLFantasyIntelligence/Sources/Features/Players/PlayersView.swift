@@ -172,6 +172,7 @@ struct PlayersView: View {
             }
         }
         .listStyle(PlainListStyle())
+        .dsFloatingTabBarPadding()
         .overlay {
             if viewModel.isLoading {
                 ProgressView("Loading players...")
@@ -235,9 +236,9 @@ struct PlayersView: View {
 
         // Filter by search text
         if !prefs.searchText.isEmpty {
-            players = players.filter {
-                $0.name.localizedCaseInsensitiveContains(prefs.searchText) ||
-                    $0.team.localizedCaseInsensitiveContains(prefs.searchText)
+            players = players.filter { player in
+                player.name.localizedCaseInsensitiveContains(prefs.searchText) ||
+                    player.team.localizedCaseInsensitiveContains(prefs.searchText)
             }
         }
 
@@ -288,7 +289,7 @@ struct PlayerRowView: View {
         Button {
             showingDetails = true
         } label: {
-            DSCard(style: .elevated, padding: DS.Spacing.l) {
+            DSCard(padding: DS.Spacing.l, style: .elevated) {
                 HStack(spacing: DS.Spacing.m) {
                     // Enhanced position indicator with gradient
                     ZStack {
@@ -362,13 +363,13 @@ struct PlayerRowView: View {
         }
         .buttonStyle(.plain)
         .scaleEffect(isPressed ? 0.98 : 1.0)
-        .onLongPressGesture(minimumDuration: 0) { _ in
+        .onLongPressGesture(minimumDuration: 0, perform: {
             // On press
-        } onPressingChanged: { pressing in
+        }, onPressingChanged: { pressing in
             withAnimation(DS.Motion.springFast) {
                 isPressed = pressing
             }
-        }
+        })
         .overlay(alignment: .topTrailing) {
             // Watchlist star overlay
             Button(action: { 
@@ -480,7 +481,7 @@ struct PlayerDetailView: View {
             }
         }
         .task {
-            await viewModel.loadPlayerDetails(for: player)
+            viewModel.loadPlayerDetails(player)
         }
     }
     
@@ -527,8 +528,8 @@ struct PlayerDetailView: View {
                 // Key Stats Row
                 HStack(spacing: DS.Spacing.xl) {
                     PlayerDetailStat(title: "Price", value: "$\(player.price / 1000)K", color: .white)
-                    PlayerDetailStat(title: "Average", value: "\(player.average, specifier: "%.1f")", color: .white)
-                    PlayerDetailStat(title: "Projected", value: "\(player.projected, specifier: "%.1f")", color: .white)
+                    PlayerDetailStat(title: "Average", value: String(format: "%.1f", player.average), color: .white)
+                    PlayerDetailStat(title: "Projected", value: String(format: "%.1f", player.projected), color: .white)
                     PlayerDetailStat(title: "Breakeven", value: "\(player.breakeven)", color: player.breakeven < 0 ? DS.Colors.successLight : DS.Colors.errorLight)
                 }
             }
@@ -564,14 +565,14 @@ struct PlayerDetailView: View {
             switch selectedTab {
             case .overview:
                 overviewTab
-            case .form:
-                formTab
-            case .splits:
-                splitsTab
-            case .games:
-                gamesTab
-            case .insights:
-                insightsTab
+            case .statistics:
+                statisticsTab
+            case .fixtures:
+                fixturesTab
+            case .priceHistory:
+                priceHistoryTab
+            case .similar:
+                similarTab
             }
         }
         .animation(DS.Motion.spring, value: selectedTab)
@@ -611,10 +612,10 @@ struct PlayerDetailView: View {
         }
     }
     
-    // MARK: - Form Tab
+    // MARK: - Statistics Tab
     
     @ViewBuilder
-    private var formTab: some View {
+    private var statisticsTab: some View {
         VStack(spacing: DS.Spacing.l) {
             DSCard {
                 DSLineChart(
@@ -648,10 +649,10 @@ struct PlayerDetailView: View {
         }
     }
     
-    // MARK: - Splits Tab
+    // MARK: - Fixtures Tab
     
     @ViewBuilder
-    private var splitsTab: some View {
+    private var fixturesTab: some View {
         VStack(spacing: DS.Spacing.l) {
             DSCard {
                 DSBarChart(
@@ -721,10 +722,10 @@ struct PlayerDetailView: View {
         }
     }
     
-    // MARK: - Games Tab
+    // MARK: - Price History Tab
     
     @ViewBuilder
-    private var gamesTab: some View {
+    private var priceHistoryTab: some View {
         DSCard {
             VStack(alignment: .leading, spacing: DS.Spacing.m) {
                 Text("Game Log (Season)")
@@ -750,10 +751,10 @@ struct PlayerDetailView: View {
         }
     }
     
-    // MARK: - Insights Tab
+    // MARK: - Similar Tab
     
     @ViewBuilder
-    private var insightsTab: some View {
+    private var similarTab: some View {
         VStack(spacing: DS.Spacing.l) {
             // AI Insights Card
             DSGradientCard(gradient: LinearGradient(

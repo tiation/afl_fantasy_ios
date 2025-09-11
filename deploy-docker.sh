@@ -51,7 +51,8 @@ deploy_to_vps() {
     
     # Create deployment archive
     print_status "Creating deployment package..."
-    tar -czf /tmp/afl-deploy.tar.gz \
+    # Avoid macOS extended attributes in tarball to reduce noisy warnings on Linux
+    COPYFILE_DISABLE=1 tar -czf /tmp/afl-deploy.tar.gz \
         --exclude='node_modules' \
         --exclude='__pycache__' \
         --exclude='.git' \

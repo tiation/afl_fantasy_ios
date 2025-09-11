@@ -6,6 +6,7 @@ import Combine
 struct AlertsView: View {
     @EnvironmentObject var alertsViewModel: AlertsViewModel
     @State private var showingSettings = false
+    @State private var presentingDetail: AlertNotification?
 
 private var displayedAlerts: [AlertNotification] {
         return alertsViewModel.filteredAlerts
@@ -35,6 +36,7 @@ private var displayedAlerts: [AlertNotification] {
                     Text("Alerts")
                 }
             }
+            .dsFloatingTabBarPadding()
             .navigationTitle("Smart Alerts")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -90,7 +92,11 @@ private var displayedAlerts: [AlertNotification] {
     private var alertsSummarySection: some View {
         VStack(spacing: DS.Spacing.m) {
             // Header with connection status
-            DSGradientCard {
+            DSGradientCard(gradient: LinearGradient(
+                colors: [DS.Colors.primary, DS.Colors.primary.opacity(0.7)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )) {
                 HStack(spacing: DS.Spacing.m) {
                     VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                         Text("Alert Center")
@@ -110,7 +116,7 @@ private var displayedAlerts: [AlertNotification] {
                                     value: alertsViewModel.isConnected
                                 )
                             
-                            Text(alertsViewModel.isConnected ? "Live Updates" : alertsViewModel.connectionStatus)
+                            Text(alertsViewModel.isConnected ? "Live Updates" : alertsViewModel.connectionStatus.rawValue)
                                 .font(DS.Typography.caption)
                                 .foregroundColor(.white.opacity(0.9))
                         }
@@ -142,8 +148,7 @@ private var displayedAlerts: [AlertNotification] {
                     value: "\(alertsViewModel.unreadCount)",
                     trend: alertsViewModel.unreadCount > 0 ? .up("New alerts") : nil,
                     icon: "bell.badge",
-                    style: alertsViewModel.unreadCount > 0 ? .prominent : .minimal,
-                    useAnimatedCounter: true
+                    style: alertsViewModel.unreadCount > 0 ? .prominent : .minimal
                 )
                 
                 DSStatCard(
@@ -151,8 +156,7 @@ private var displayedAlerts: [AlertNotification] {
                     value: "\(alertsViewModel.alertStats.total)",
                     trend: nil,
                     icon: "bell",
-                    style: .standard,
-                    useAnimatedCounter: true
+                    style: .standard
                 )
                 
                 DSStatCard(
@@ -160,8 +164,7 @@ private var displayedAlerts: [AlertNotification] {
                     value: "\(alertsViewModel.alertStats.critical)",
                     trend: alertsViewModel.alertStats.critical > 0 ? .down("Action needed") : .neutral,
                     icon: "exclamationmark.triangle",
-                    style: alertsViewModel.alertStats.critical > 0 ? .gradient : .minimal,
-                    useAnimatedCounter: true
+                    style: alertsViewModel.alertStats.critical > 0 ? .gradient : .minimal
                 )
             }
         }
@@ -202,30 +205,15 @@ private var displayedAlerts: [AlertNotification] {
                         .frame(width: 1, height: 24)
                         .padding(.horizontal, DS.Spacing.xs)
 
-                    // Sort picker menu
-                    Menu {
-                        ForEach(AlertManager.SortOption.allCases, id: \.self) { option in
-                            Button(action: {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    alertsViewModel.sortOption = option
-                                }
-                            }) {
-                                HStack {
-                                    Text(option.displayName)
-                                    if alertsViewModel.sortOption == option {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
-                            }
-                        }
-                    } label: {
-                        enhancedChip(
-                            title: "Sort",
-                            icon: "arrow.up.arrow.down",
-                            count: nil,
-                            isSelected: true,
-                            color: DS.Colors.secondary
-                        ) { /* Menu handles tap */ }
+                    // Sort picker menu - simplified for now
+                    enhancedChip(
+                        title: "Latest",
+                        icon: "arrow.up.arrow.down",
+                        count: nil,
+                        isSelected: false,
+                        color: DS.Colors.secondary
+                    ) {
+                        // TODO: Implement sort options
                     }
                 }
                 .padding(.horizontal, DS.Spacing.m)
@@ -501,13 +489,17 @@ struct AlertRowView: View {
     
     @ViewBuilder
     private var cardStyleView: some View {
-        switch alert.priority {
+        switch alert.type.priority {
         case .critical:
             DSCard(style: .elevated) {
                 alertRowContent
             }
         case .high:
-            DSGradientCard(gradient: DS.Colors.primaryGradient) {
+            DSGradientCard(gradient: LinearGradient(
+                colors: [DS.Colors.warning.opacity(0.8), DS.Colors.warning.opacity(0.6)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )) {
                 alertRowContent
             }
         case .medium:
@@ -526,20 +518,28 @@ struct AlertRowView: View {
         HStack(alignment: .top, spacing: DS.Spacing.m) {
                 // Enhanced alert icon with priority ring
                 ZStack {
-                    if alert.isHighPriority {
-                        DSProgressRing(
-                            progress: 1.0,
-                            lineWidth: 2
-                        )
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(alert.type.color.opacity(0.3))
+                    if alert.type.priority == .critical || alert.type.priority == .high {
+                        Circle()
+                            .stroke(
+                                alert.type.priority == .critical ? DS.Colors.error : DS.Colors.warning,
+                                lineWidth: 2
+                            )
+                            .frame(width: 40, height: 40)
                     }
                     
-                    Image(systemName: alert.type.iconName)
+                    Image(systemName: alert.type.systemImageName)
                         .font(.title2)
-                        .foregroundColor(alert.type.color)
+                        .foregroundColor(
+                            alert.type.priority == .critical ? DS.Colors.error :
+                            alert.type.priority == .high ? DS.Colors.warning :
+                            DS.Colors.primary
+                        )
                         .frame(width: 32, height: 32)
-                        .background(alert.type.color.opacity(0.1))
+                        .background(
+                            (alert.type.priority == .critical ? DS.Colors.error :
+                             alert.type.priority == .high ? DS.Colors.warning :
+                             DS.Colors.primary).opacity(0.1)
+                        )
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
 
@@ -548,27 +548,38 @@ struct AlertRowView: View {
                         HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.s) {
                         Text(alert.title)
                             .font(DS.Typography.headline)
-                            .foregroundColor(alert.priority == .high ? .white : DS.Colors.onSurface)
+                            .foregroundColor(alert.type.priority == .high ? .white : DS.Colors.onSurface)
                             .lineLimit(2)
                         
                         Spacer()
                         
                         // Enhanced priority indicators
                         HStack(spacing: DS.Spacing.xs) {
-                            if alert.priority == .critical {
-                                DSStatusBadge(text: "CRITICAL", style: .error)
-                            } else if alert.priority == .high {
-                                DSStatusBadge(text: "HIGH", style: .warning)
+                            if alert.type.priority == .critical {
+                                Text("CRITICAL")
+                                    .font(DS.Typography.caption2)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(DS.Colors.error)
+                                    .foregroundColor(.white)
+                                    .clipShape(Capsule())
+                            } else if alert.type.priority == .high {
+                                Text("HIGH")
+                                    .font(DS.Typography.caption2)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(DS.Colors.warning)
+                                    .foregroundColor(.white)
+                                    .clipShape(Capsule())
                             }
-                            
-                            // Type badge for specific alert types
-                            DSStatusBadge(text: alert.type.displayName.uppercased(), style: .info)
                         }
                     }
 
                     Text(alert.message)
                         .font(DS.Typography.body)
-                        .foregroundColor(alert.priority == .high ? .white.opacity(0.9) : DS.Colors.onSurfaceSecondary)
+                        .foregroundColor(alert.type.priority == .high ? .white.opacity(0.9) : DS.Colors.onSurfaceSecondary)
                         .lineLimit(3)
                         .fixedSize(horizontal: false, vertical: true)
 
@@ -576,11 +587,11 @@ struct AlertRowView: View {
                     HStack(spacing: DS.Spacing.xs) {
                         Image(systemName: "clock")
                             .font(.caption2)
-                            .foregroundColor(alert.priority == .high ? .white.opacity(0.7) : DS.Colors.onSurfaceVariant)
+                            .foregroundColor(alert.type.priority == .high ? .white.opacity(0.7) : DS.Colors.onSurfaceVariant)
                         
                         Text(alert.timestamp.formatted(.relative(presentation: .named)))
                             .font(DS.Typography.caption)
-                            .foregroundColor(alert.priority == .high ? .white.opacity(0.8) : DS.Colors.onSurfaceVariant)
+                            .foregroundColor(alert.type.priority == .high ? .white.opacity(0.8) : DS.Colors.onSurfaceVariant)
                         
                         Spacer()
                         
@@ -588,7 +599,7 @@ struct AlertRowView: View {
                         if !alert.isRead {
                             HStack(spacing: DS.Spacing.xs) {
                                 Circle()
-                                    .fill(alert.priority == .high ? Color.white : DS.Colors.primary)
+                                    .fill(alert.type.priority == .high ? Color.white : DS.Colors.primary)
                                     .frame(width: 8, height: 8)
                                     .scaleEffect(1.0)
                                     .animation(
@@ -599,13 +610,13 @@ struct AlertRowView: View {
                                 Text("NEW")
                                     .font(.caption2)
                                     .fontWeight(.bold)
-                                    .foregroundColor(alert.priority == .high ? .white : DS.Colors.primary)
+                                    .foregroundColor(alert.type.priority == .high ? .white : DS.Colors.primary)
                             }
                         }
                     }
                 }
         }
-        .padding(alert.isHighPriority ? DS.Spacing.m : DS.Spacing.s)
+        .padding(alert.type.priority == .critical || alert.type.priority == .high ? DS.Spacing.m : DS.Spacing.s)
     }
     
     var body: some View {
@@ -618,255 +629,15 @@ struct AlertRowView: View {
             } onPressingChanged: { pressing in
                 isPressed = pressing
             }
-        .accessibilityLabel("\(alert.type.displayName): \(alert.title). \(alert.message). Priority: \(alert.priority.displayName)")
+        .accessibilityLabel("\(alert.type.displayName): \(alert.title). \(alert.message). Priority: \(alert.type.priority.displayName)")
         .accessibilityAddTraits(.isButton)
     }
 }
 
-// MARK: - Alert Detail
-
-struct AlertDetailView: View {
-    let alert: Alert
-    @Environment(\.dismiss) var dismiss
-
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: DS.Spacing.l) {
-                    // Enhanced hero header
-                    DSGradientCard(gradient: LinearGradient(
-                        colors: [alert.type.color, alert.type.color.opacity(0.7)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )) {
-                        VStack(spacing: DS.Spacing.l) {
-                            // Priority indicator with progress ring
-                            ZStack {
-                                if alert.isHighPriority {
-                                    DSProgressRing(
-                                        progress: 1.0,
-                                        lineWidth: 3
-                                    )
-                                    .frame(width: 90, height: 90)
-                                    .foregroundColor(.white.opacity(0.3))
-                                }
-                                
-                                Image(systemName: alert.type.iconName)
-                                    .font(.system(size: 44, weight: .semibold))
-                                    .foregroundColor(.white)
-                                    .frame(width: 76, height: 76)
-                                    .background(Color.white.opacity(0.2))
-                                    .clipShape(Circle())
-                            }
-
-                            VStack(spacing: DS.Spacing.s) {
-                                Text(alert.title)
-                                    .font(DS.Typography.title2)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .multilineTextAlignment(.center)
-                                
-                                HStack(spacing: DS.Spacing.s) {
-                                    Image(systemName: "clock")
-                                        .font(.caption)
-                                    Text(alert.timestamp.formatted(.dateTime))
-                                        .font(DS.Typography.caption)
-                                }
-                                .foregroundColor(.white.opacity(0.8))
-                                
-                                // Priority badge
-                                if alert.isHighPriority {
-                                    DSStatusBadge(
-                                        text: alert.priority == .critical ? "CRITICAL" : "HIGH PRIORITY",
-                                        style: .error
-                                    )
-                                    .scaleEffect(0.9)
-                                }
-                            }
-                        }
-                        .padding(DS.Spacing.xl)
-                    }
-
-                    // Enhanced details card
-                    DSCard(style: .elevated) {
-                        VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                            HStack {
-                                Image(systemName: "doc.text")
-                                    .font(.title3)
-                                    .foregroundColor(DS.Colors.primary)
-                                
-                                Text("Alert Details")
-                                    .font(DS.Typography.title3)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(DS.Colors.onSurface)
-                                
-                                Spacer()
-                                
-                                DSStatusBadge(
-                                    text: alert.type.displayName,
-                                    style: .info
-                                )
-                            }
-                            
-                            Divider()
-                            
-                            Text(alert.message)
-                                .font(DS.Typography.body)
-                                .foregroundColor(DS.Colors.onSurface)
-                                .lineSpacing(4)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-
-                    // Enhanced contextual actions
-                    if shouldShowActions {
-                        DSCard(style: .bordered) {
-                            VStack(alignment: .leading, spacing: DS.Spacing.m) {
-                                HStack {
-                                    Image(systemName: "bolt")
-                                        .font(.title3)
-                                        .foregroundColor(DS.Colors.secondary)
-                                    
-                                    Text("Quick Actions")
-                                        .font(DS.Typography.title3)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(DS.Colors.onSurface)
-                                    
-                                    Spacer()
-                                }
-                                
-                                LazyVGrid(
-                                    columns: Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.s), count: 2),
-                                    spacing: DS.Spacing.s
-                                ) {
-                                    enhancedActionButton(title: "Open Trades", icon: "arrow.left.arrow.right", color: DS.Colors.primary)
-                                    enhancedActionButton(title: "Add to Watchlist", icon: "eye", color: DS.Colors.secondary)
-                                    
-                                    if alert.type == .aiRecommendation {
-                                        enhancedActionButton(title: "AI Analysis", icon: "brain.head.profile", color: DS.Colors.info)
-                                        enhancedActionButton(title: "Player Stats", icon: "chart.bar", color: DS.Colors.success)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .padding(DS.Spacing.l)
-            }
-            .navigationTitle("Alert Details")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-    
-    private var shouldShowActions: Bool {
-        [.priceChange, .aiRecommendation, .formAlert].contains(alert.type)
-    }
-
-    private func enhancedActionButton(title: String, icon: String, color: Color) -> some View {
-        Button(action: {
-            // Handle action
-        }) {
-            VStack(spacing: DS.Spacing.xs) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(color)
-                    .frame(width: 36, height: 36)
-                    .background(color.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                
-                Text(title)
-                    .font(DS.Typography.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(DS.Colors.onSurface)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, DS.Spacing.s)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(DS.Colors.surface)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(color.opacity(0.3), lineWidth: 1)
-                    )
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-
-
-// MARK: - AlertSettingsView
-
-struct AlertSettingsView: View {
-    @Environment(\.dismiss) var dismiss
-    @State private var notificationsEnabled = true
-    @State private var quietHoursEnabled = false
-    @State private var quietHoursStart = Date()
-    @State private var quietHoursEnd = Date()
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                // Notifications
-                Section("Notifications") {
-                    Toggle("Push Notifications", isOn: $notificationsEnabled)
-                    Toggle("Enable Quiet Hours", isOn: $quietHoursEnabled)
-                    if quietHoursEnabled {
-                        DatePicker("Start", selection: $quietHoursStart, displayedComponents: .hourAndMinute)
-                        DatePicker("End", selection: $quietHoursEnd, displayedComponents: .hourAndMinute)
-                    }
-                }
-                
-                // Alert Types
-                Section("Alert Types") {
-                    ForEach(AlertType.allCases, id: \.self) { type in
-                        HStack {
-                            Image(systemName: type.systemImageName)
-                                .foregroundColor(.primary)
-                                .frame(width: 20)
-                            Text(type.displayName)
-                            Spacer()
-                            Toggle("", isOn: .constant(true))
-                        }
-                    }
-                }
-                
-                // Priority Levels
-                Section("Priority Levels") {
-                    ForEach(AlertPriority.allCases, id: \.self) { priority in
-                        HStack {
-                            Text(priority.displayName)
-                            Spacer()
-                            Toggle("", isOn: .constant(true))
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Alert Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        // Save settings would be handled by AlertManager
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
+// MARK: - Duplicate AlertDetailView and AlertSettingsView removed
+// These views are now in separate files:
+// - AlertDetailView in Sources/Features/Alerts/AlertDetailView.swift
+// - AlertSettingsView in Sources/Features/Alerts/AlertSettingsView.swift
 
 // MARK: - Custom Alert Rules
 

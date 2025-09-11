@@ -108,21 +108,24 @@ struct AdvancedFiltersView: View {
                             title: "Min Average",
                             value: $performanceThresholds.minAverage,
                             range: 40.0...120.0,
-                            color: DS.Colors.primary
+                            step: 1.0,
+                            unit: ""
                         )
                         
                         PerformanceSlider(
                             title: "Min Projected", 
                             value: $performanceThresholds.minProjected,
                             range: 40.0...120.0,
-                            color: DS.Colors.accent
+                            step: 1.0,
+                            unit: ""
                         )
                         
                         PerformanceSlider(
                             title: "Max Breakeven",
                             value: $performanceThresholds.maxBreakeven,
                             range: -50.0...100.0,
-                            color: DS.Colors.warning
+                            step: 1.0,
+                            unit: ""
                         )
                     }
                 }

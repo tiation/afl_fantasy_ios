@@ -2,21 +2,32 @@ import Foundation
 
 // MARK: - Player
 
-struct Player: Codable, Identifiable, Hashable, Sendable {
-    let id: String
-    let name: String
-    let team: String
-    let position: Position
-    let price: Int
-    let average: Double
-    let projected: Double
-    let breakeven: Int
+public struct Player: Codable, Identifiable, Hashable, Sendable {
+    public let id: String
+    public let name: String
+    public let team: String
+    public let position: Position
+    public let price: Int
+    public let average: Double
+    public let projected: Double
+    public let breakeven: Int
+    
+    public init(id: String, name: String, team: String, position: Position, price: Int, average: Double, projected: Double, breakeven: Int) {
+        self.id = id
+        self.name = name
+        self.team = team
+        self.position = position
+        self.price = price
+        self.average = average
+        self.projected = projected
+        self.breakeven = breakeven
+    }
 
-    static func == (lhs: Player, rhs: Player) -> Bool {
+    public static func == (lhs: Player, rhs: Player) -> Bool {
         lhs.id == rhs.id
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
     
@@ -76,7 +87,7 @@ struct Player: Codable, Identifiable, Hashable, Sendable {
 
 // MARK: - Position
 
-enum Position: String, Codable, CaseIterable, Sendable {
+public enum Position: String, Codable, CaseIterable, Sendable {
     case defender = "DEF"
     case midfielder = "MID"
     case ruck = "RUC"
@@ -304,6 +315,7 @@ struct WeeklyStats: Codable, Sendable {
     )
 }
 
+
 // MARK: - TeamStructure
 
 struct TeamStructure: Codable, Sendable {
@@ -360,7 +372,7 @@ struct AlertNotification: Codable, Identifiable, Equatable, Sendable {
 
 // MARK: - AlertType
 
-enum AlertType: String, Codable, CaseIterable, Sendable {
+public enum AlertType: String, Codable, CaseIterable, Sendable {
     case priceChange = "PRICE_CHANGE"
     case injury = "INJURY"
     case lateOut = "LATE_OUT"
@@ -376,6 +388,10 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
     case formAlert = "FORM_ALERT"
     case fixtureChange = "FIXTURE_CHANGE"
     case aiRecommendation = "AI_RECOMMENDATION"
+    
+    // Live performance alerts
+    case breakoutPerformance = "BREAKOUT_PERFORMANCE"
+    case tradeOpportunity = "TRADE_OPPORTUNITY"
 
     var displayName: String {
         switch self {
@@ -392,6 +408,8 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
         case .formAlert: "Form Alert"
         case .fixtureChange: "Fixture Change"
         case .aiRecommendation: "AI Insight"
+        case .breakoutPerformance: "Breakout Performance"
+        case .tradeOpportunity: "Trade Opportunity"
         }
     }
 
@@ -410,6 +428,8 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
         case .formAlert: "chart.line.uptrend.xyaxis.circle"
         case .fixtureChange: "calendar.badge.exclamationmark"
         case .aiRecommendation: "brain.head.profile"
+        case .breakoutPerformance: "star.fill"
+        case .tradeOpportunity: "arrow.triangle.2.circlepath"
         }
     }
     
@@ -419,7 +439,7 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
             return .critical
         case .tradeDeadline, .breakingNews, .fixtureChange:
             return .high
-        case .priceChange, .roleChange, .priceThreshold, .formAlert, .aiRecommendation:
+        case .priceChange, .roleChange, .priceThreshold, .formAlert, .aiRecommendation, .breakoutPerformance, .tradeOpportunity:
             return .medium
         case .captainReminder, .milestoneReached, .system:
             return .low
@@ -429,7 +449,7 @@ enum AlertType: String, Codable, CaseIterable, Sendable {
 
 // MARK: - AlertPriority
 
-enum AlertPriority: Int, Codable, CaseIterable, Sendable {
+public enum AlertPriority: Int, Codable, CaseIterable, Sendable {
     case low = 0
     case medium = 1
     case high = 2
@@ -689,6 +709,14 @@ enum OpenAIError: Error, LocalizedError, Sendable {
 
 struct AlertSettings: Codable, Sendable {
     // Basic notification types
+    var priceChangeEnabled = true
+    var injuryEnabled = true
+    var teamSelectionEnabled = true
+    var breakevenEnabled = false
+    var tradeEnabled = true
+    var captainEnabled = true
+    
+    // Legacy properties (mapped for compatibility)
     var priceChanges = true
     var injuries = true
     var tradeDeadlines = true
@@ -703,6 +731,8 @@ struct AlertSettings: Codable, Sendable {
     var fixtureChanges = false
     
     // Delivery preferences
+    var pushNotificationsEnabled = true
+    var soundEnabled = true
     var pushNotifications = true
     var inAppAlerts = true
     var emailDigest = false
@@ -711,6 +741,7 @@ struct AlertSettings: Codable, Sendable {
     var minimumPriority: AlertPriority = .low
     
     // Custom thresholds
+    var minimumPriceChange: Int = 10000 // $10k
     var priceChangeThreshold: Double = 10000 // $10k
     var maxAlertsPerDay: Int = 20
     

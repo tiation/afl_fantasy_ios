@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Animation System
 
@@ -35,24 +36,24 @@ public struct DSAnimations {
     // MARK: - Common Transitions
     
     public enum Transition {
-        public static let fade: AnyTransition = .opacity
-        public static let scale: AnyTransition = .scale(scale: 0.8)
-        public static let slide: AnyTransition = .slide
-        public static let move: AnyTransition = .move(edge: .trailing)
+        @MainActor public static let fade: AnyTransition = .opacity
+        @MainActor public static let scale: AnyTransition = .scale(scale: 0.8)
+        @MainActor public static let slide: AnyTransition = .slide
+        @MainActor public static let move: AnyTransition = .move(edge: .trailing)
         
         // Combined transitions
-        public static let fadeScale: AnyTransition = .opacity.combined(with: .scale(scale: 0.9))
-        public static let slideUp: AnyTransition = .move(edge: .bottom).combined(with: .opacity)
-        public static let slideDown: AnyTransition = .move(edge: .top).combined(with: .opacity)
+        @MainActor public static let fadeScale: AnyTransition = .opacity.combined(with: .scale(scale: 0.9))
+        @MainActor public static let slideUp: AnyTransition = .move(edge: .bottom).combined(with: .opacity)
+        @MainActor public static let slideDown: AnyTransition = .move(edge: .top).combined(with: .opacity)
         
         // Card-like transitions
-        public static let cardEntry: AnyTransition = .asymmetric(
+        @MainActor public static let cardEntry: AnyTransition = .asymmetric(
             insertion: .opacity.combined(with: .scale(scale: 0.95)).animation(Easing.springSnappy),
             removal: .opacity.combined(with: .scale(scale: 0.8)).animation(Easing.easeOut)
         )
         
         // List item transitions with staggered delay
-        public static func listItem(delay: Double = 0.0) -> AnyTransition {
+        @MainActor public static func listItem(delay: Double = 0.0) -> AnyTransition {
             return .asymmetric(
                 insertion: .opacity.combined(with: .move(edge: .leading))
                     .animation(Easing.springSnappy.delay(delay)),
@@ -324,36 +325,43 @@ extension View {
 
 public struct DSHaptics {
     
+    @MainActor
     public static func light() {
         let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
     }
     
+    @MainActor
     public static func medium() {
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.impactOccurred()
     }
     
+    @MainActor
     public static func heavy() {
         let impact = UIImpactFeedbackGenerator(style: .heavy)
         impact.impactOccurred()
     }
     
+    @MainActor
     public static func success() {
         let notification = UINotificationFeedbackGenerator()
         notification.notificationOccurred(.success)
     }
     
+    @MainActor
     public static func warning() {
         let notification = UINotificationFeedbackGenerator()
         notification.notificationOccurred(.warning)
     }
     
+    @MainActor
     public static func error() {
         let notification = UINotificationFeedbackGenerator()
         notification.notificationOccurred(.error)
     }
     
+    @MainActor
     public static func selection() {
         let selection = UISelectionFeedbackGenerator()
         selection.selectionChanged()

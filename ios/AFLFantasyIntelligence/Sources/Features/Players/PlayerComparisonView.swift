@@ -374,7 +374,7 @@ struct CompactPlayerCard: View {
     let onRemove: () -> Void
     
     var body: some View {
-        DSCard(style: .elevated, padding: DS.Spacing.m) {
+        DSCard(padding: DS.Spacing.m, style: .elevated) {
             VStack(alignment: .leading, spacing: DS.Spacing.s) {
                 HStack {
                     // Position indicator

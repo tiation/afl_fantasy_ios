@@ -107,7 +107,7 @@ class AlertManager: ObservableObject {
     }
     
     func getSettings() -> AlertSettings {
-        return AlertSettings() // Return default settings for now
+        return AlertSettings.default // Use the default settings from shared type
     }
     
     func reconnectWebSocket() {
@@ -193,18 +193,7 @@ class AlertManager: ObservableObject {
 
 // MARK: - Supporting Types
 
-struct AlertSettings {
-    var priceChangeEnabled: Bool = true
-    var injuryEnabled: Bool = true
-    var teamSelectionEnabled: Bool = true
-    var breakevenEnabled: Bool = true
-    var tradeEnabled: Bool = true
-    var captainEnabled: Bool = true
-    
-    var minimumPriceChange: Int = 5000
-    var pushNotificationsEnabled: Bool = true
-    var soundEnabled: Bool = true
-}
+// Use AlertNotificationSettings from Models.swift instead of duplicate
 
 // MARK: - Additional Types for AlertsView
 

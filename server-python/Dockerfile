@@ -1,25 +1,15 @@
 FROM python:3.12-slim
 
-# Install system dependencies for Selenium and Chrome
+# Install system dependencies and Chromium (to match scraper image)
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    unzip \
+    ca-certificates \
     curl \
+    unzip \
     xvfb \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/chrome-keyring.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    chromium \
+    chromium-driver \
     && rm -rf /var/lib/apt/lists/*
-
-# Install ChromeDriver
-RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1) \
-    && wget -q -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}/chromedriver_linux64.zip \
-    || wget -q -O /tmp/chromedriver.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$(curl -s https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE)/linux64/chromedriver-linux64.zip \
-    && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
-    && rm /tmp/chromedriver.zip \
-    && chmod +x /usr/local/bin/chromedriver || true
 
 WORKDIR /app
 
@@ -36,8 +26,8 @@ RUN mkdir -p /app/data /app/logs
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV DISPLAY=:99
-ENV CHROME_BIN=/usr/bin/google-chrome-stable
-ENV CHROME_DRIVER=/usr/local/bin/chromedriver
+ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROME_DRIVER=/usr/bin/chromedriver
 
 # Expose port
 EXPOSE 8000

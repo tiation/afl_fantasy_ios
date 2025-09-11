@@ -11,6 +11,7 @@ final class AuthenticationService: ObservableObject {
     @Published var currentUser: User?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var isBiometricEnabled = false
     
     // MARK: - Private Properties
     
@@ -46,7 +47,7 @@ final class AuthenticationService: ObservableObject {
             // In a real app, this would make an API call
             // For now, simulate login with basic validation
             
-            await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
             
             if email.contains("@") && password.count >= 6 {
                 // Simulate successful login
@@ -97,7 +98,7 @@ final class AuthenticationService: ObservableObject {
         errorMessage = nil
         
         do {
-            await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
             
             // Simulate successful signup
             let user = User(
@@ -140,6 +141,23 @@ final class AuthenticationService: ObservableObject {
     /// Check if user has premium subscription
     var isPremiumUser: Bool {
         currentUser?.isPremium ?? false
+    }
+    
+    /// Biometric authentication type
+    var biometricType: BiometricType {
+        .touchID // Simplified for now
+    }
+    
+    /// Enable biometric authentication
+    func enableBiometricAuth() async {
+        // Simplified implementation
+        isBiometricEnabled = true
+    }
+    
+    /// Disable biometric authentication
+    func disableBiometricAuth() {
+        // Simplified implementation
+        isBiometricEnabled = false
     }
     
     /// Refresh user authentication if needed
@@ -197,6 +215,16 @@ struct User: Codable, Identifiable {
     let name: String
     let joinDate: Date
     let isPremium: Bool
+    
+    var createdAt: Date {
+        joinDate
+    }
+}
+
+enum BiometricType {
+    case none
+    case touchID
+    case faceID
 }
 
 // MARK: - Keychain Extensions
@@ -209,29 +237,26 @@ extension KeychainService {
     }
     
     func storeCredentials(email: String, password: String) throws {
-        let credentials = "\(email):\(password)".data(using: .utf8)!
-        try storeData(credentials, key: "user_credentials")
+        let credentials = "\(email):\(password)"
+        store(credentials, for: "user_credentials")
     }
     
     func getStoredCredentials() throws -> UserCredentials {
-        let data = try getData(key: "user_credentials")
-        let credentialString = String(data: data, encoding: .utf8)!
+        guard let credentialString = getString(for: "user_credentials") else {
+            throw KeychainError.unexpectedData
+        }
+        
         let components = credentialString.components(separatedBy: ":")
         
         guard components.count == 2 else {
-            throw KeychainError.invalidCredentials
+            throw KeychainError.unexpectedData
         }
         
         return UserCredentials(email: components[0], password: components[1])
     }
     
     func clearCredentials() throws {
-        try deleteData(key: "user_credentials")
+        delete("user_credentials")
     }
 }
 
-// MARK: - Keychain Error Extensions
-
-extension KeychainError {
-    static let invalidCredentials = KeychainError.unableToStore
-}

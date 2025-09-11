@@ -6,10 +6,12 @@ final class PlayerDetailViewModel: ObservableObject {
     @Published var player: Player?
     @Published var selectedTab: PlayerDetailTab = .overview
     @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
     @Published var statistics: PlayerStatistics?
     @Published var upcomingFixtures: [Fixture] = []
     @Published var priceHistory: [PricePoint] = []
     @Published var similarPlayers: [Player] = []
+    @Published var playerData: PlayerData?
     
     private let apiService = APIService()
     private var cancellables = Set<AnyCancellable>()
@@ -33,7 +35,7 @@ final class PlayerDetailViewModel: ObservableObject {
         
         // Mock statistics for now
         Task {
-            await Task.sleep(nanoseconds: 500_000_000)
+            try await Task.sleep(nanoseconds: 500_000_000)
             
             statistics = PlayerStatistics(
                 playerId: player.id,
@@ -108,7 +110,7 @@ final class PlayerDetailViewModel: ObservableObject {
         guard let player = player else { return }
         
         // Mock similar players (same position, similar price range)
-        similarPlayers = MockData.samplePlayers.filter { otherPlayer in
+        similarPlayers = Player.mockPlayers.filter { otherPlayer in
             otherPlayer.id != player.id &&
             otherPlayer.position == player.position &&
             abs(otherPlayer.price - player.price) < 50000
@@ -128,10 +130,20 @@ enum PlayerDetailTab: String, CaseIterable {
     var displayName: String {
         return rawValue
     }
+    
+    var icon: String {
+        switch self {
+        case .overview: return "chart.bar.fill"
+        case .statistics: return "chart.line.uptrend.xyaxis"
+        case .fixtures: return "calendar"
+        case .priceHistory: return "dollarsign.circle.fill"
+        case .similar: return "person.2.fill"
+        }
+    }
 }
 
 struct PlayerStatistics {
-    let playerId: UUID
+    let playerId: String
     let totalPoints: Int
     let averagePoints: Double
     let highestScore: Int

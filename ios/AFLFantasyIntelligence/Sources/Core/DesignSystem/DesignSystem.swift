@@ -11,6 +11,7 @@ enum DesignSystem {
     // MARK: - Spacing
 
     enum Spacing {
+        static let xxs: CGFloat = 2 // 2pt
         static let xs: CGFloat = 4 // 4pt
         static let small: CGFloat = 8 // 8pt
         static let medium: CGFloat = 12 // 12pt
@@ -74,6 +75,8 @@ enum DesignSystem {
         static let primary = aflBlue
         static let primaryVariant = Color(red: 0.05, green: 0.4, blue: 0.75)
         static let primaryLight = Color(red: 0.4, green: 0.6, blue: 0.9)
+        static let secondary = Color(.systemGray)
+        static let secondaryVariant = Color(.systemGray2)
         static let accent = aflGold
         static let accentSecondary = aflRed
         
@@ -101,6 +104,7 @@ enum DesignSystem {
         static let surfaceSecondary = Color(.secondarySystemBackground)
         static let surfaceVariant = Color(.tertiarySystemBackground)
         static let surfaceElevated = Color(.systemBackground)
+        static let background = Color(.systemBackground)
 
         // Content colors - Better contrast
         static let onSurface = Color(.label)
@@ -181,6 +185,9 @@ enum DesignSystem {
         static let high = warning
         static let medium = Color(red: 0.2, green: 0.5, blue: 1.0)
         static let low = neutral
+        
+        // Shadow color
+        static let shadow = Color.black
     }
 
     // MARK: - Corner Radius
@@ -504,7 +511,7 @@ struct DSProgressRing: View {
                 animatedProgress = progress
             }
         }
-        .onChange(of: progress) { newValue in
+        .onChange(of: progress) { _, newValue in
             withAnimation(.easeInOut(duration: 0.6)) {
                 animatedProgress = newValue
             }
@@ -550,7 +557,7 @@ struct DSAnimatedCounter: View {
             .onAppear {
                 animateCounter()
             }
-            .onChange(of: value) { _ in
+            .onChange(of: value) { _, _ in
                 animateCounter()
             }
     }

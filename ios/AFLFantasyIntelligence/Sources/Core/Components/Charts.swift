@@ -115,7 +115,7 @@ struct DSLineChart: View {
     }
     
     private func updateSelectedPoint(at location: CGPoint, proxy: ChartProxy) {
-        let x = proxy.value(atX: location.x) as? Double ?? 0
+        let x = proxy.value(atX: location.x, as: Double.self) ?? 0
         let closestPoint = data.min(by: { abs($0.x - x) < abs($1.x - x) })
         
         withAnimation(.easeInOut(duration: 0.2)) {

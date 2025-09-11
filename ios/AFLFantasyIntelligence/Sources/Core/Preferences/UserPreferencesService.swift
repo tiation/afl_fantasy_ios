@@ -1,7 +1,8 @@
 import Foundation
 import Combine
 
-final class UserPreferencesService: ObservableObject, Sendable {
+@MainActor
+final class UserPreferencesService: ObservableObject {
     static let shared = UserPreferencesService()
     
     @Published var favoriteTeams: Set<String> = []
@@ -12,6 +13,9 @@ final class UserPreferencesService: ObservableObject, Sendable {
     @Published var sortBy: PlayerSortOption = .projected
     @Published var sortAscending: Bool = false
     @Published var apiBaseURL: String = "http://localhost:8080"
+    @Published var watchlist: Set<String> = []
+    @Published var selectedPosition: Position? = nil
+    @Published var searchText: String = ""
     
     private let userDefaults = UserDefaults.standard
     private let encoder = JSONEncoder()
@@ -26,6 +30,9 @@ final class UserPreferencesService: ObservableObject, Sendable {
         static let sortBy = "sort_by"
         static let sortAscending = "sort_ascending"
         static let apiBaseURL = "api_base_url"
+        static let watchlist = "watchlist"
+        static let selectedPosition = "selected_position"
+        static let searchText = "search_text"
     }
     
     private init() {
@@ -102,6 +109,43 @@ final class UserPreferencesService: ObservableObject, Sendable {
         userDefaults.set(url, forKey: Keys.apiBaseURL)
     }
     
+    // MARK: - Watchlist Preferences
+    
+    func toggleWatchlist(_ playerId: String) {
+        if watchlist.contains(playerId) {
+            watchlist.remove(playerId)
+        } else {
+            watchlist.insert(playerId)
+        }
+        saveWatchlist()
+    }
+    
+    func isInWatchlist(_ playerId: String) -> Bool {
+        watchlist.contains(playerId)
+    }
+    
+    func addToWatchlist(_ playerId: String) {
+        watchlist.insert(playerId)
+        saveWatchlist()
+    }
+    
+    func removeFromWatchlist(_ playerId: String) {
+        watchlist.remove(playerId)
+        saveWatchlist()
+    }
+    
+    // MARK: - Search and Position Preferences
+    
+    func setSelectedPosition(_ position: Position?) {
+        selectedPosition = position
+        saveSelectedPosition()
+    }
+    
+    func setSearchText(_ text: String) {
+        searchText = text
+        saveSearchText()
+    }
+    
     // MARK: - Reset Preferences
     
     func resetToDefaults() {
@@ -113,9 +157,12 @@ final class UserPreferencesService: ObservableObject, Sendable {
         sortBy = .projected
         sortAscending = false
         apiBaseURL = "http://localhost:8080"
+        watchlist.removeAll()
+        selectedPosition = nil
+        searchText = ""
         
         // Clear from UserDefaults
-        let keys = [Keys.favoriteTeams, Keys.preferredPositions, Keys.priceRangeMin, Keys.priceRangeMax, Keys.showOnlyAvailable, Keys.sortBy, Keys.sortAscending, Keys.apiBaseURL]
+        let keys = [Keys.favoriteTeams, Keys.preferredPositions, Keys.priceRangeMin, Keys.priceRangeMax, Keys.showOnlyAvailable, Keys.sortBy, Keys.sortAscending, Keys.apiBaseURL, Keys.watchlist, Keys.selectedPosition, Keys.searchText]
         keys.forEach { userDefaults.removeObject(forKey: $0) }
     }
     
@@ -128,6 +175,9 @@ final class UserPreferencesService: ObservableObject, Sendable {
         loadFilterPreferences()
         loadSortingPreferences()
         loadAPIBaseURL()
+        loadWatchlist()
+        loadSelectedPosition()
+        loadSearchText()
     }
     
     private func loadFavoriteTeams() {
@@ -175,6 +225,40 @@ final class UserPreferencesService: ObservableObject, Sendable {
     
     private func loadAPIBaseURL() {
         apiBaseURL = userDefaults.string(forKey: Keys.apiBaseURL) ?? "http://localhost:8080"
+    }
+    
+    private func loadWatchlist() {
+        if let data = userDefaults.data(forKey: Keys.watchlist),
+           let watchlistSet = try? decoder.decode(Set<String>.self, from: data) {
+            watchlist = watchlistSet
+        }
+    }
+    
+    private func saveWatchlist() {
+        if let data = try? encoder.encode(watchlist) {
+            userDefaults.set(data, forKey: Keys.watchlist)
+        }
+    }
+    
+    private func loadSelectedPosition() {
+        if let data = userDefaults.data(forKey: Keys.selectedPosition),
+           let position = try? decoder.decode(Position?.self, from: data) {
+            selectedPosition = position
+        }
+    }
+    
+    private func saveSelectedPosition() {
+        if let data = try? encoder.encode(selectedPosition) {
+            userDefaults.set(data, forKey: Keys.selectedPosition)
+        }
+    }
+    
+    private func loadSearchText() {
+        searchText = userDefaults.string(forKey: Keys.searchText) ?? ""
+    }
+    
+    private func saveSearchText() {
+        userDefaults.set(searchText, forKey: Keys.searchText)
     }
 }
 

@@ -1,0 +1,58 @@
+# AFL Fantasy Platform - Simplified Single Backend
+# Consolidated Python-only architecture
+
+name: afl-fantasy-simple
+
+services:
+  # Single Python Backend - Handles everything
+  api-server:
+    build:
+      context: ./server-python
+      dockerfile: Dockerfile
+    image: afl-fantasy/python-api:latest
+    ports:
+      - "8080:8080"  # Main API
+      - "8081:8081"  # WebSocket
+      - "3000:3000"  # Dashboard (if needed)
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=true
+      - PORT=8080
+      - WS_PORT=8081
+    volumes:
+      - ./server-python:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - afl-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL Database (optional - can use SQLite for simplicity)
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=afl_fantasy
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/backups:/backups
+    networks:
+      - afl-network
+    restart: unless-stopped
+    profiles: ["db"]
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  afl-network:
+    driver: bridge

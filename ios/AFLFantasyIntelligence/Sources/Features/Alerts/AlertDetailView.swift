@@ -11,11 +11,11 @@ struct AlertDetailView: View {
                     // Header
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Image(systemName: alert.type.iconName)
+                            Image(systemName: alert.type.systemImageName)
                                 .font(.title2)
-                                .foregroundColor(alert.type.color)
+                                .foregroundColor(.primary)
                                 .frame(width: 32, height: 32)
-                                .background(alert.type.color.opacity(0.1))
+                                .background(Color.primary.opacity(0.1))
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                             
                             VStack(alignment: .leading, spacing: 4) {
@@ -50,7 +50,7 @@ struct AlertDetailView: View {
                     }
                     
                     // Player Information (if available)
-                    if let playerName = alert.playerName {
+                    if let playerId = alert.playerId {
                         Divider()
                         
                         VStack(alignment: .leading, spacing: 12) {
@@ -62,7 +62,7 @@ struct AlertDetailView: View {
                                     .font(.title2)
                                     .foregroundColor(.blue)
                                 
-                                Text(playerName)
+                                Text("Player ID: \(playerId)")
                                     .font(.body)
                                     .fontWeight(.medium)
                                 
@@ -97,34 +97,4 @@ struct AlertDetailView: View {
     }
 }
 
-// MARK: - Extensions for Alert Detail
-
-extension AlertType {
-    var iconName: String {
-        switch self {
-        case .priceChange: return "dollarsign.circle"
-        case .injury: return "bandage"
-        case .teamSelection: return "person.2"
-        case .breakeven: return "chart.line.uptrend.xyaxis"
-        case .trade: return "arrow.swap.horizontal"
-        case .captain: return "star"
-        }
-    }
-    
-    var displayName: String {
-        return rawValue
-    }
-}
-
-extension AlertPriority {
-    var displayName: String {
-        switch self {
-        case .critical: return "CRITICAL"
-        case .high: return "HIGH"
-        case .medium: return "MEDIUM"
-        case .low: return "LOW"
-        }
-    }
-}
-
-// Alert extension methods moved to Models/Alert.swift to avoid conflicts
+// Extensions are now provided by the shared models in Sources/Shared/Models/Models.swift

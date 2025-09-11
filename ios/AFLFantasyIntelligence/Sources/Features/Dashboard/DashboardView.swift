@@ -28,6 +28,7 @@ struct DashboardView: View {
                     quickActionsSection
                 }
                 .padding(.horizontal, DS.Spacing.l)
+                .dsFloatingTabBarPadding()
             }
             .navigationTitle("AFL Fantasy Intelligence")
             .navigationBarTitleDisplayMode(.large)
@@ -226,7 +227,7 @@ struct DashboardView: View {
                         value: "$\(viewModel.teamStructure.totalValue.formatted())",
                         trend: nil,
                         icon: "chart.pie",
-                        style: .elevated,
+                        style: .prominent,
                         animated: true
                     )
                     
@@ -383,7 +384,7 @@ struct DashboardView: View {
                     value: "Grundy", // Mock data
                     trend: .up("127 pts"),
                     icon: "star.circle",
-                    style: .elevated
+                    style: .prominent
                 )
                 
                 DSStatCard(
@@ -422,7 +423,7 @@ struct DashboardView: View {
                         selectedTab = 3 // AI Tools
                     }
                 } label: {
-                    DSGradientCard {
+                    DSGradientCard(gradient: DS.Colors.primaryGradient) {
                         HStack(spacing: DS.Spacing.m) {
                             Image(systemName: "brain.head.profile")
                                 .font(.title2)
@@ -593,15 +594,17 @@ final class DashboardViewModel: ObservableObject {
     @Published var teamStructure = TeamStructure.mock
     @Published var isLoading = false
     
-    private var webSocketManager: WebSocketManager?
+    private var webSocketManager: WebSocketManager = WebSocketManager.shared
     private var isConnected = false
 
     func loadData(apiService: APIService) async {
         isLoading = true
         defer { isLoading = false }
 
-        // Connect WebSocket for live updates if available
-        connectWebSocket(baseURL: apiService.currentEndpoint)
+        // Use existing WebSocket connection for live updates
+        if !isConnected {
+            isConnected = true
+        }
         
         // In a real app, these would come from API
         // For now, using mock data
@@ -619,57 +622,8 @@ final class DashboardViewModel: ObservableObject {
     
     // MARK: - WebSocket Support
     
-    private func connectWebSocket(baseURL: String) {
-        // Convert HTTP to WS URL
-        let wsURL = baseURL
-            .replacingOccurrences(of: "http://", with: "ws://")
-            .replacingOccurrences(of: "https://", with: "wss://")
-        
-        guard let url = URL(string: "\(wsURL)/ws/live") else { return }
-        
-        webSocketManager = WebSocketManager(url: url)
-        webSocketManager?.onReceiveData = { [weak self] data in
-            Task { @MainActor in
-                self?.handleWebSocketData(data)
-            }
-        }
-        
-        webSocketManager?.connect()
-        isConnected = true
-    }
-    
-    private func handleWebSocketData(_ data: Data) {
-        // Parse WebSocket updates for live stats
-        struct LiveUpdate: Codable {
-            let type: String
-            let liveStats: LiveStats?
-            let alert: AlertNotification?
-        }
-        
-        do {
-            let update = try JSONDecoder().decode(LiveUpdate.self, from: data)
-            
-            if let stats = update.liveStats {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    liveStats = stats
-                }
-            }
-            
-            if let alert = update.alert {
-                // Publish alert notification
-                NotificationCenter.default.post(
-                    name: NSNotification.Name("NewAlert"),
-                    object: alert
-                )
-            }
-        } catch {
-            print("Failed to parse WebSocket data: \(error)")
-        }
-    }
-    
-    deinit {
-        webSocketManager?.disconnect()
-    }
+    // Note: WebSocket connection is managed by the singleton WebSocketManager.shared
+    // No need for custom connection logic since it auto-connects on initialization
 }
 
 // MARK: - Previews

@@ -43,21 +43,23 @@ final class BarcodeScanner: NSObject, ObservableObject {
         }
         
         sessionQueue.async { [weak self] in
-            self?.setupCaptureSession()
-            self?.session.startRunning()
+            guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                self?.isScanning = true
+            Task { @MainActor in
+                await self.setupCaptureSession()
+                self.session.startRunning()
+                self.isScanning = true
             }
         }
     }
     
     func stopScanning() {
         sessionQueue.async { [weak self] in
-            self?.session.stopRunning()
+            guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                self?.isScanning = false
+            Task { @MainActor in
+                self.session.stopRunning()
+                self.isScanning = false
             }
         }
     }
@@ -85,7 +87,7 @@ final class BarcodeScanner: NSObject, ObservableObject {
     
     private func requestPermission() {
         AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self?.hasPermission = granted
                 if !granted {
                     self?.error = .cameraPermissionDenied
@@ -94,7 +96,7 @@ final class BarcodeScanner: NSObject, ObservableObject {
         }
     }
     
-    private func setupCaptureSession() {
+    private func setupCaptureSession() async {
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
             DispatchQueue.main.async {
                 self.error = .cameraNotAvailable
@@ -211,14 +213,16 @@ extension BarcodeScanner: AVCaptureMetadataOutputObjectsDelegate {
               let stringValue = metadataObject.stringValue else {
             return
         }
-        
-        // Provide haptic feedback
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+        // Copy required value before entering Task to avoid race on task-isolated metadataObject
+        let detectedType = metadataObject.type
         
         // Process the scanned code
         Task { @MainActor in
-            processScannedCode(stringValue, type: metadataObject.type)
+            // Provide haptic feedback on main actor
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
+            
+            processScannedCode(stringValue, type: detectedType)
         }
     }
 }
